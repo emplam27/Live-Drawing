@@ -2,9 +2,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Map</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" />
-    <link rel="stylesheet" href="index.css" />
+    <title>Let's Draw Together</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css"
+    />
+    <link rel="stylesheet" href="/static/index.css" />
+    <link rel="alternate icon" type="image/png" href="/static/logo.png" />
+    <link rel="icon" type="image/svg+xml" href="/static/logo.png" />
   </head>
   <body>
     <div class="flush vstack">
@@ -13,13 +18,21 @@
           <i class="ri-lg ri-landscape-line"></i>
         </a>
         <div class="spacer"></div>
+        <a class="icon-link active center">
+          <i class="ri-lg ri-pencil-fill"></i>
+        </a>
+        <div class="spacer"></div>
+        <a class="icon-link center">
+          <i class="ri-lg ri-palette-line"></i>
+          <i class="ri-lg ri-checkbox-blank-fill"></i>
+        </a>
+        <div class="spacer"></div>
       </div>
       <div class="spacer app">
         <canvas></canvas>
       </div>
     </div>
-    <script type="text/javascript" src="draw.js"></script>
-    <script type="text/javascript" src="/data.js"></script>
-    <script src="https://unpkg.com/simple-peer@9.7.2/simplepeer.min.js"></script>
   </body>
+  <script type="text/javascript" src="/static/load.js"></script>
+  <script type="text/jsavascript" src="/static/draw.js"></script>
 </html>

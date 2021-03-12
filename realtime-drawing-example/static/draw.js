@@ -1,79 +1,87 @@
-const canvas = document.querySelector("canvas")
-const context = canvas.getContext("2d")
+const canvas = document.querySelector('canvas');
+const ctx = canvas.getContext('2d');
 
-var nodes = []
-var lastPoint
-var currentForce = 1
+var lastPoint;
+var force;
 
 function randomColor() {
-  let r = Math.random() * 255
-  let g = Math.random() * 255
-  let b = Math.random() * 255
-  return `rgb(${r}, ${g}, ${b})`
+    let r = Math.random() * 255;
+    let g = Math.random() * 255;
+    let b = Math.random() * 255;
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
-var color = randomColor()
-
-function onPeerData(id, data) {
-  draw(JSON.parse(data))
-}
+var color = randomColor();
+var colorPicker = document.querySelector('[data-color]');
+// colorPicker.dataset.color = color;
+// colorPicker.style.color = color;
 
 function resize() {
-  canvas.width = window.innerWidth
-  canvas.height = window.innerHeight
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function onPeerData(id, data) {
+    draw(JSON.parse(data));
 }
 
 function draw(data) {
-  context.beginPath()
-  context.moveTo(data.lastPoint.x, data.lastPoint.y)
-  context.lineTo(data.x, data.y)
-  context.strokeStyle = data.color
-  context.lineWidth = Math.pow(data.force || 1, 4) * 2
-  context.lineCap = "round"
-  context.stroke()
-}
-
-function force(e) {
-  currentForce = e.webkitForce || 1
+    ctx.beginPath();
+    ctx.moveTo(data.lastPoint.x, data.lastPoint.y);
+    ctx.lineTo(data.x, data.y);
+    ctx.strokeStyle = data.color;
+    ctx.lineWidth = Math.pow(data.force || 1, 4) * 2;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    ctx.closePath();
 }
 
 function move(e) {
-  if (e.buttons) {
-    if (!lastPoint) {
-      lastPoint = { x: e.offsetX, y: e.offsetY }
-      return
+    if (e.buttons) {
+        if (!lastPoint) {
+            lastPoint = { x: e.offsetX, y: e.offsetY };
+            return;
+        }
+
+        draw({
+            lastPoint,
+            x: e.offsetX,
+            y: e.offsetY,
+            force: force,
+            color: color
+        });
+
+        broadcast(JSON.stringify({
+            lastPoint,
+            x: e.offsetX,
+            y: e.offsetY,
+            force: force,
+            color: color
+        }));
+
+        lastPoint = { x: e.offsetX, y: e.offsetY };
     }
-    draw({
-      lastPoint,
-      x: e.offsetX,
-      y: e.offsetY,
-      force: force,
-      color: color || "green",
-    })
+}
 
-    broadcast(
-      JSON.stringify({
-        lastPoint,
-        x: e.offsetX,
-        y: e.offsetY,
-        color: color || "green",
-        force: force,
-      })
-    )
-
-    lastPoint = { x: e.offsetX, y: e.offsetY }
-  }
+function up() {
+    lastPoint = undefined;
 }
 
 function key(e) {
-  if (e.key === "Backspace") {
-    context.clearRect(0, 0, canvas.width, canvas.height)
-  }
+    if (e.key === 'Backspace') {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 }
 
-window.onresize = resize
-window.onmousemove = move
-window.onkeydown = key
-window.onwebkitmouseforcechanged = force
+function forceChanged(e) {
+    force = e.webkitForce || 1;
+}
 
-resize()
+window.onresize = resize;
+window.onmousemove = move;
+window.onmouseup = up;
+window.onkeydown = key;
+
+window.onwebkitmouseforcechanged = forceChanged;
+
+resize();
