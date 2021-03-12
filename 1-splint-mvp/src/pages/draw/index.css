@@ -1,0 +1,45 @@
+/** Utilities */
+.hstack {
+  display: flex;
+  flex-direction: row;
+}
+.vstack {
+  display: flex;
+  flex-direction: column;
+}
+.center {
+  display: flex;
+  align-items: center;
+}
+.spacer {
+  flex: 1;
+}
+.flush {
+  height: 100%;
+}
+.icon-link {
+  padding: calc(var(--standard-padding) / 2);
+  margin: calc(var(--standard-padding) * -1) 0px;
+  font-size: 1rem;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  top: 2px;
+  cursor: pointer;
+}
+.icon-link:hover {
+  color: var(--active-color);
+}
+.icon-link.active {
+  color: var(--active-color);
+  border-bottom: 2px solid var(--active-color);
+}
+
+/** Sections */
+.menubar {
+  padding: var(--standard-padding);
+  box-shadow: var(--menubar-shadow);
+  background: var(--menubar-bg);
+}
+.app {
+  width: 100%;
+}
