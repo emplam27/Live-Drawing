@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import './index.css';
 
 const Draw = () => {
+  // For Connection Variables
   let { roomKey } = useParams();
 
-  console.log('Rerender~~~~~~~~~~~~~~');
   let context = {
     username: 'user' + parseInt(Math.random() * 100000),
     roomId: roomKey,
@@ -23,23 +23,17 @@ const Draw = () => {
     ],
   };
 
-  // const canvas = document.querySelector('canvas');
+  // For Canvas Variables
   let canvasRef = useRef(null);
   let activeCanvasRef = useRef(null);
-  let canvas;
-  let activeCanvas;
-  let ctx;
-  let activeCtx;
   let activeToolElementRef = useRef(null);
-  let activeToolElement;
-  let activeTool;
-  // const canvas = canvasRef.current;
-  // const ctx = canvas.getContext('2d');
+  let canvas, activeCanvas, ctx, activeCtx, activeTool, activeToolElement;
 
-  var lastPoint;
-  var originPoint;
-  var force = 1;
-  var mouseDown = false;
+  let lastPoint;
+  let originPoint;
+  let force = 1;
+  let mouseDown = false;
+  let activeShape;
 
   const swatch = [
     ['#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef', '#f3f3f3', '#ffffff'],
@@ -53,11 +47,8 @@ const Draw = () => {
   ];
   const colorMap = swatch.flat();
 
-  var activeShape;
-
+  // For Connection Functions
   async function getToken() {
-    console.log('getToken');
-
     let res = await fetch('http://localhost:8081/access', {
       method: 'POST',
       headers: {
@@ -69,13 +60,9 @@ const Draw = () => {
     });
     let data = await res.json();
     context.token = data.token;
-    // setContextToken(data.token);
   }
 
   async function join() {
-    console.log('join :: context.roomId');
-    console.log(context.roomId);
-
     return fetch(`http://localhost:8081/${context.roomId}/join`, {
       method: 'POST',
       headers: {
@@ -86,11 +73,8 @@ const Draw = () => {
   }
 
   async function connect() {
-    console.log('connect');
-
     await getToken();
     context.eventSource = new EventSource(`http://localhost:8081/connect?token=${context.token}`);
-    // setContextEventSource(new EventSource(`http://localhost:8081/connect?token=${context.token}`));
     context.eventSource.addEventListener('add-peer', addPeer, false);
     context.eventSource.addEventListener('remove-peer', removePeer, false);
     context.eventSource.addEventListener('session-description', sessionDescription, false);
@@ -101,9 +85,6 @@ const Draw = () => {
   }
 
   function addPeer(data) {
-    console.log('addPeer :: data');
-    console.log(data);
-
     let message = JSON.parse(data.data);
     if (context.peers[message.peer.id]) {
       return;
@@ -141,16 +122,12 @@ const Draw = () => {
   }
 
   async function createOffer(peerId, peer) {
-    console.log('createOffer');
-
     let offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     await relay(peerId, 'session-description', offer);
   }
 
   function relay(peerId, event, data) {
-    console.log('relay');
-
     fetch(`http://localhost:8081/relay/${peerId}/${event}`, {
       method: 'POST',
       headers: {
@@ -162,16 +139,12 @@ const Draw = () => {
   }
 
   function peerDataUpdates(peerId, data) {
-    console.log('peerDataUpdates');
-
     onPeerData(peerId, data.data);
   }
 
   function broadcast(data) {
-    console.log('broadcast :: context');
-    console.log(context);
     for (let peerId in context.channels) {
-      context.channels[peerId].send(data);
+      // context.channels[peerId].send(data);
       if (context.channels[peerId].readyState === 'open') {
         context.channels[peerId].send(data);
       }
@@ -179,8 +152,6 @@ const Draw = () => {
   }
 
   function removePeer(data) {
-    console.log('removePeer');
-
     let message = JSON.parse(data.data);
     if (context.peers[message.peer.id]) {
       context.peers[message.peer.id].close();
@@ -190,8 +161,6 @@ const Draw = () => {
   }
 
   async function sessionDescription(data) {
-    console.log('sessionDescription');
-
     let message = JSON.parse(data.data);
     let peer = context.peers[message.peer.id];
 
@@ -205,12 +174,12 @@ const Draw = () => {
   }
 
   function iceCandidate(data) {
-    console.log('iceCandidate');
-
     let message = JSON.parse(data.data);
     let peer = context.peers[message.peer.id];
     peer.addIceCandidate(new RTCIceCandidate(message.data));
   }
+
+  // For Canvas Functions
 
   // let swatchContainer = document.querySelector('#color-picker');
   // let colorElements = {};
@@ -414,9 +383,7 @@ const Draw = () => {
   }
 
   useEffect(() => {
-    console.log('!!!!!!!!!!!!!!!!!!!!!useEffect!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     connect();
-    console.log('!!!!!!!!!!!!!!!!!!!!!useEffect :: after connect!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 
     canvas = canvasRef.current;
     activeCanvas = activeCanvasRef.current;
