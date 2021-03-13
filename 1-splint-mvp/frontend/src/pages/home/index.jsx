@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Link } from 'react-router-dom';
 
 const axios = require('axios');
 
-// const dummy = axios.get('/');
-const dummy = axios.get('localhost:8080/');
 const Home = () => {
+  const [dummy, setDummy] = useState([]);
+  
+  useEffect(() => {
+    axios.get('http://localhost:8080')
+      .then((res) => {
+        setDummy(res.data)
+      });
+  }, [])
+
   return (
     <div>
       <p>Home component</p>
