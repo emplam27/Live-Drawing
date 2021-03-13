@@ -10,13 +10,8 @@ function App() {
     <div className='App'>
       <main>
         <div>
-          <Link to='/'>Home</Link>
-          &nbsp;
-          <Link to='/draw'>Draw</Link>
-        </div>
-        <div>
           <Route path='/' component={Home} exact />
-          <Route path='/draw/:roomKey' component={Draw} exact />
+          <Route path='/draw' component={Draw} exact />
         </div>
       </main>
     </div>
