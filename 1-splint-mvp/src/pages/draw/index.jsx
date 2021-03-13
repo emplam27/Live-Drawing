@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import './index.css';
 
 const Draw = () => {
+  console.log('Rerender~~~~~~~~~~~~~~');
   var context = {
     username: 'user' + parseInt(Math.random() * 100000),
     roomId: window.location.pathname.substr(1),
@@ -20,6 +21,8 @@ const Draw = () => {
   };
 
   async function getToken() {
+    console.log('getToken');
+
     let res = await fetch('http://localhost:8081/access', {
       method: 'POST',
       headers: {
@@ -34,6 +37,9 @@ const Draw = () => {
   }
 
   async function join() {
+    console.log('join');
+    console.log(context.roomId);
+
     return fetch(`http://localhost:8081/${context.roomId}/join`, {
       method: 'POST',
       headers: {
@@ -44,6 +50,8 @@ const Draw = () => {
   }
 
   async function connect() {
+    console.log('connect');
+
     await getToken();
     context.eventSource = new EventSource(`http://localhost:8081/connect?token=${context.token}`);
     context.eventSource.addEventListener('add-peer', addPeer, false);
@@ -56,6 +64,9 @@ const Draw = () => {
   }
 
   function addPeer(data) {
+    console.log('addPeer');
+    console.log(data);
+
     let message = JSON.parse(data.data);
     if (context.peers[message.peer.id]) {
       return;
@@ -93,12 +104,16 @@ const Draw = () => {
   }
 
   async function createOffer(peerId, peer) {
+    console.log('createOffer');
+
     let offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     await relay(peerId, 'session-description', offer);
   }
 
   function relay(peerId, event, data) {
+    console.log('relay');
+
     fetch(`http://localhost:8081/relay/${peerId}/${event}`, {
       method: 'POST',
       headers: {
@@ -110,10 +125,14 @@ const Draw = () => {
   }
 
   function peerDataUpdates(peerId, data) {
+    console.log('peerDataUpdates');
+
     onPeerData(peerId, data.data);
   }
 
   function broadcast(data) {
+    console.log('broadcast');
+    console.log(context);
     for (let peerId in context.channels) {
       context.channels[peerId].send(data);
       if (context.channels[peerId].readyState === 'open') {
@@ -123,6 +142,8 @@ const Draw = () => {
   }
 
   function removePeer(data) {
+    console.log('removePeer');
+
     let message = JSON.parse(data.data);
     if (context.peers[message.peer.id]) {
       context.peers[message.peer.id].close();
@@ -132,6 +153,8 @@ const Draw = () => {
   }
 
   async function sessionDescription(data) {
+    console.log('sessionDescription');
+
     let message = JSON.parse(data.data);
     let peer = context.peers[message.peer.id];
 
@@ -145,12 +168,12 @@ const Draw = () => {
   }
 
   function iceCandidate(data) {
+    console.log('iceCandidate');
+
     let message = JSON.parse(data.data);
     let peer = context.peers[message.peer.id];
     peer.addIceCandidate(new RTCIceCandidate(message.data));
   }
-
-  connect();
 
   // const canvas = document.querySelector('canvas');
   let canvasRef = useRef(null);
@@ -159,33 +182,52 @@ const Draw = () => {
   let activeCanvas;
   let ctx;
   let activeCtx;
+  let activeToolElementRef = useRef(null);
+  let activeToolElement;
+  let activeTool;
   // const canvas = canvasRef.current;
   // const ctx = canvas.getContext('2d');
 
   useEffect(() => {
+    connect();
+
     canvas = canvasRef.current;
-    activeCanvas = canvasRef.current;
+    activeCanvas = activeCanvasRef.current;
     ctx = canvas.getContext('2d');
     activeCtx = activeCanvas.getContext('2d');
+
+    // window.onresize = resize;
+    // window.onmousedown = down;
+    // window.onmousemove = move;
+    // window.onmouseup = up;
+    // window.onkeydown = key;
+    // window.onwebkitmouseforcechanged = forceChanged;
+    canvas.addEventListener('mousedown', down);
+    canvas.addEventListener('mousemove', move);
+    canvas.addEventListener('mouseup', up);
+    canvas.addEventListener('keydown', key);
+    canvas.addEventListener('webkitmouseforcechanged', forceChanged);
+
+    activeToolElement = activeToolElementRef.current;
+    activeTool = activeToolElement.dataset.tool;
+
+    document.querySelectorAll('[data-tool]').forEach((tool) => {
+      tool.onclick = function (e) {
+        activeToolElement.classList.toggle('active');
+        activeToolElement = tool;
+        activeToolElement.classList.toggle('active');
+        activeTool = activeToolElement.dataset.tool;
+      };
+    });
+
     //Our first draw
     resize();
   }, []);
 
   var lastPoint;
+  var originPoint;
   var force = 1;
   var mouseDown = false;
-
-  var activeToolElement = document.querySelector('[data-tool].active');
-  var activeTool = activeToolElement.dataset.tool;
-
-  document.querySelectorAll('[data-tool]').forEach((tool) => {
-    tool.onclick = function (e) {
-      activeToolElement.classList.toggle('active');
-      activeToolElement = tool;
-      activeToolElement.classList.toggle('active');
-      activeTool = activeToolElement.dataset.tool;
-    };
-  });
 
   const swatch = [
     ['#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef', '#f3f3f3', '#ffffff'],
@@ -201,43 +243,43 @@ const Draw = () => {
 
   var activeShape;
 
-  let swatchContainer = document.querySelector('#color-picker');
-  let colorElements = {};
-  swatch.forEach((row) => {
-    let rowElem = document.createElement('div');
-    rowElem.classList.add('hstack');
-    row.forEach((c) => {
-      let elem = document.createElement('div');
-      elem.classList.add('box');
-      elem.classList.add('color-' + c.substr(1));
-      elem.style.backgroundColor = c;
-      elem.onclick = function (e) {
-        colorPicker.dataset.color = c;
-        colorPicker.style.color = c;
-        if (colorElements[color]) {
-          colorElements[color].classList.remove('active');
-        }
-        color = c;
-        elem.classList.toggle('active');
-        e.preventDefault();
-      };
-      colorElements[c] = elem;
-      rowElem.appendChild(elem);
-    });
+  // let swatchContainer = document.querySelector('#color-picker');
+  // let colorElements = {};
+  // swatch.forEach((row) => {
+  //   let rowElem = document.createElement('div');
+  //   rowElem.classList.add('hstack');
+  //   row.forEach((c) => {
+  //     let elem = document.createElement('div');
+  //     elem.classList.add('box');
+  //     elem.classList.add('color-' + c.substr(1));
+  //     elem.style.backgroundColor = c;
+  //     elem.onclick = function (e) {
+  //       colorPicker.dataset.color = c;
+  //       colorPicker.style.color = c;
+  //       if (colorElements[color]) {
+  //         colorElements[color].classList.remove('active');
+  //       }
+  //       color = c;
+  //       elem.classList.toggle('active');
+  //       e.preventDefault();
+  //     };
+  //     colorElements[c] = elem;
+  //     rowElem.appendChild(elem);
+  //   });
 
-    swatchContainer.appendChild(rowElem);
-  });
+  //   swatchContainer.appendChild(rowElem);
+  // });
 
-  function randomColor() {
-    return parseInt(Math.random() * colorMap.length);
-  }
+  // function randomColor() {
+  //   return parseInt(Math.random() * colorMap.length);
+  // }
 
-  var colorIndex = randomColor();
-  var color = colorMap[colorIndex];
-  var colorPicker = document.querySelector('[data-color]');
-  colorPicker.dataset.color = color;
-  colorPicker.style.color = color;
-  colorElements[color].classList.add('active');
+  // var colorIndex = randomColor();
+  // var color = colorMap[colorIndex];
+  // var colorPicker = document.querySelector('[data-color]');
+  // colorPicker.dataset.color = color;
+  // colorPicker.style.color = color;
+  // colorElements[color].classList.add('active');
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -295,7 +337,7 @@ const Draw = () => {
           x: e.offsetX,
           y: e.offsetY,
           force: force,
-          color: color,
+          color: '#f1c232',
         });
 
         broadcast(
@@ -305,7 +347,7 @@ const Draw = () => {
             x: e.offsetX,
             y: e.offsetY,
             force: force,
-            color: color,
+            color: '#f1c232',
           }),
         );
       } else if (activeTool === 'rect') {
@@ -315,7 +357,7 @@ const Draw = () => {
         };
         drawRect({
           origin: origin,
-          color: color,
+          color: '#f1c232',
           width: Math.abs(originPoint.x - e.offsetX),
           height: Math.abs(originPoint.y - e.offsetY),
         });
@@ -323,7 +365,7 @@ const Draw = () => {
           JSON.stringify({
             event: 'drawRect',
             origin: origin,
-            color: color,
+            color: '#f1c232',
             width: Math.abs(originPoint.x - e.offsetX),
             height: Math.abs(originPoint.y - e.offsetY),
           }),
@@ -369,27 +411,27 @@ const Draw = () => {
         }),
       );
     }
-    if (e.key === 'ArrowRight') {
-      colorIndex++;
-    }
-    if (e.key === 'ArrowLeft') {
-      colorIndex--;
-    }
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      if (colorIndex >= colorMap.length) {
-        colorIndex = 0;
-      }
-      if (colorIndex < 0) {
-        colorIndex = colorMap.length - 1;
-      }
-      if (colorElements[color]) {
-        colorElements[color].classList.remove('active');
-      }
-      color = colorMap[colorIndex];
-      colorPicker.dataset.color = color;
-      colorPicker.style.color = color;
-      colorElements[color].classList.toggle('active');
-    }
+    // if (e.key === 'ArrowRight') {
+    //   colorIndex++;
+    // }
+    // if (e.key === 'ArrowLeft') {
+    //   colorIndex--;
+    // }
+    // if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    //   if (colorIndex >= colorMap.length) {
+    //     colorIndex = 0;
+    //   }
+    //   if (colorIndex < 0) {
+    //     colorIndex = colorMap.length - 1;
+    //   }
+    //   if (colorElements[color]) {
+    //     colorElements[color].classList.remove('active');
+    //   }
+    //   color = colorMap[colorIndex];
+    //   colorPicker.dataset.color = color;
+    //   colorPicker.style.color = color;
+    //   colorElements[color].classList.toggle('active');
+    // }
     if (mouseDown && (e.key === 'ArrowUp' || (e.shiftKey && ['ArrowLeft', 'ArrowRight'].includes(e.key)))) {
       force += 0.025;
     }
@@ -402,15 +444,6 @@ const Draw = () => {
     force = e.webkitForce || 1;
   }
 
-  window.onresize = resize;
-  window.onmousedown = down;
-  window.onmousemove = move;
-  window.onmouseup = up;
-  window.onkeydown = key;
-
-  window.onwebkitmouseforcechanged = forceChanged;
-
-  resize();
   return (
     <div>
       <p>Draw component</p>
@@ -420,7 +453,7 @@ const Draw = () => {
             <i className='ri-lg ri-landscape-line'></i>
           </a>
           <div className='spacer'></div>
-          <a className='icon-link active center' data-tool='pencil'>
+          <a ref={activeToolElementRef} className='icon-link active center' data-tool='pencil'>
             <i className='ri-lg ri-pencil-fill'></i>
           </a>
           <a className='icon-link center' data-tool='rect'>
@@ -443,8 +476,8 @@ const Draw = () => {
           <div className='spacer'></div>
         </div>
         <div className='spacer app'>
-          <canvas></canvas>
-          <canvas className='active'></canvas>
+          <canvas ref={canvasRef}></canvas>
+          <canvas ref={activeCanvasRef} className='active'></canvas>
         </div>
       </div>
     </div>
