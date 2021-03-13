@@ -1,11 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import './index.css';
 
 const Draw = () => {
+  let { roomKey } = useParams();
+
   console.log('Rerender~~~~~~~~~~~~~~');
-  var context = {
+  let context = {
     username: 'user' + parseInt(Math.random() * 100000),
-    roomId: window.location.pathname.substr(1),
+    roomId: roomKey,
     token: null,
     eventSource: null,
     peers: {},
@@ -19,6 +22,38 @@ const Draw = () => {
       },
     ],
   };
+
+  // const canvas = document.querySelector('canvas');
+  let canvasRef = useRef(null);
+  let activeCanvasRef = useRef(null);
+  let canvas;
+  let activeCanvas;
+  let ctx;
+  let activeCtx;
+  let activeToolElementRef = useRef(null);
+  let activeToolElement;
+  let activeTool;
+  // const canvas = canvasRef.current;
+  // const ctx = canvas.getContext('2d');
+
+  var lastPoint;
+  var originPoint;
+  var force = 1;
+  var mouseDown = false;
+
+  const swatch = [
+    ['#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef', '#f3f3f3', '#ffffff'],
+    ['#980000', '#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#4a86e8', '#0000ff', '#9900ff', '#ff00ff'],
+    ['#e6b8af', '#f4cccc', '#fce5cd', '#fff2cc', '#d9ead3', '#d0e0e3', '#c9daf8', '#cfe2f3', '#d9d2e9', '#ead1dc'],
+    ['#dd7e6b', '#ea9999', '#f9cb9c', '#ffe599', '#b6d7a8', '#a2c4c9', '#a4c2f4', '#9fc5e8', '#b4a7d6', '#d5a6bd'],
+    ['#cc4125', '#e06666', '#f6b26b', '#ffd966', '#93c47d', '#76a5af', '#6d9eeb', '#6fa8dc', '#8e7cc3', '#c27ba0'],
+    ['#a61c00', '#cc0000', '#e69138', '#f1c232', '#6aa84f', '#45818e', '#3c78d8', '#3d85c6', '#674ea7', '#a64d79'],
+    ['#85200c', '#990000', '#b45f06', '#bf9000', '#38761d', '#134f5c', '#1155cc', '#0b5394', '#351c75', '#741b47'],
+    ['#5b0f00', '#660000', '#783f04', '#7f6000', '#274e13', '#0c343d', '#1c4587', '#073763', '#20124d', '#4c1130'],
+  ];
+  const colorMap = swatch.flat();
+
+  var activeShape;
 
   async function getToken() {
     console.log('getToken');
@@ -34,10 +69,11 @@ const Draw = () => {
     });
     let data = await res.json();
     context.token = data.token;
+    // setContextToken(data.token);
   }
 
   async function join() {
-    console.log('join');
+    console.log('join :: context.roomId');
     console.log(context.roomId);
 
     return fetch(`http://localhost:8081/${context.roomId}/join`, {
@@ -54,6 +90,7 @@ const Draw = () => {
 
     await getToken();
     context.eventSource = new EventSource(`http://localhost:8081/connect?token=${context.token}`);
+    // setContextEventSource(new EventSource(`http://localhost:8081/connect?token=${context.token}`));
     context.eventSource.addEventListener('add-peer', addPeer, false);
     context.eventSource.addEventListener('remove-peer', removePeer, false);
     context.eventSource.addEventListener('session-description', sessionDescription, false);
@@ -64,7 +101,7 @@ const Draw = () => {
   }
 
   function addPeer(data) {
-    console.log('addPeer');
+    console.log('addPeer :: data');
     console.log(data);
 
     let message = JSON.parse(data.data);
@@ -131,7 +168,7 @@ const Draw = () => {
   }
 
   function broadcast(data) {
-    console.log('broadcast');
+    console.log('broadcast :: context');
     console.log(context);
     for (let peerId in context.channels) {
       context.channels[peerId].send(data);
@@ -174,74 +211,6 @@ const Draw = () => {
     let peer = context.peers[message.peer.id];
     peer.addIceCandidate(new RTCIceCandidate(message.data));
   }
-
-  // const canvas = document.querySelector('canvas');
-  let canvasRef = useRef(null);
-  let activeCanvasRef = useRef(null);
-  let canvas;
-  let activeCanvas;
-  let ctx;
-  let activeCtx;
-  let activeToolElementRef = useRef(null);
-  let activeToolElement;
-  let activeTool;
-  // const canvas = canvasRef.current;
-  // const ctx = canvas.getContext('2d');
-
-  useEffect(() => {
-    connect();
-
-    canvas = canvasRef.current;
-    activeCanvas = activeCanvasRef.current;
-    ctx = canvas.getContext('2d');
-    activeCtx = activeCanvas.getContext('2d');
-
-    // window.onresize = resize;
-    // window.onmousedown = down;
-    // window.onmousemove = move;
-    // window.onmouseup = up;
-    // window.onkeydown = key;
-    // window.onwebkitmouseforcechanged = forceChanged;
-    canvas.addEventListener('mousedown', down);
-    canvas.addEventListener('mousemove', move);
-    canvas.addEventListener('mouseup', up);
-    canvas.addEventListener('keydown', key);
-    canvas.addEventListener('webkitmouseforcechanged', forceChanged);
-
-    activeToolElement = activeToolElementRef.current;
-    activeTool = activeToolElement.dataset.tool;
-
-    document.querySelectorAll('[data-tool]').forEach((tool) => {
-      tool.onclick = function (e) {
-        activeToolElement.classList.toggle('active');
-        activeToolElement = tool;
-        activeToolElement.classList.toggle('active');
-        activeTool = activeToolElement.dataset.tool;
-      };
-    });
-
-    //Our first draw
-    resize();
-  }, []);
-
-  var lastPoint;
-  var originPoint;
-  var force = 1;
-  var mouseDown = false;
-
-  const swatch = [
-    ['#000000', '#434343', '#666666', '#999999', '#b7b7b7', '#cccccc', '#d9d9d9', '#efefef', '#f3f3f3', '#ffffff'],
-    ['#980000', '#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#4a86e8', '#0000ff', '#9900ff', '#ff00ff'],
-    ['#e6b8af', '#f4cccc', '#fce5cd', '#fff2cc', '#d9ead3', '#d0e0e3', '#c9daf8', '#cfe2f3', '#d9d2e9', '#ead1dc'],
-    ['#dd7e6b', '#ea9999', '#f9cb9c', '#ffe599', '#b6d7a8', '#a2c4c9', '#a4c2f4', '#9fc5e8', '#b4a7d6', '#d5a6bd'],
-    ['#cc4125', '#e06666', '#f6b26b', '#ffd966', '#93c47d', '#76a5af', '#6d9eeb', '#6fa8dc', '#8e7cc3', '#c27ba0'],
-    ['#a61c00', '#cc0000', '#e69138', '#f1c232', '#6aa84f', '#45818e', '#3c78d8', '#3d85c6', '#674ea7', '#a64d79'],
-    ['#85200c', '#990000', '#b45f06', '#bf9000', '#38761d', '#134f5c', '#1155cc', '#0b5394', '#351c75', '#741b47'],
-    ['#5b0f00', '#660000', '#783f04', '#7f6000', '#274e13', '#0c343d', '#1c4587', '#073763', '#20124d', '#4c1130'],
-  ];
-  const colorMap = swatch.flat();
-
-  var activeShape;
 
   // let swatchContainer = document.querySelector('#color-picker');
   // let colorElements = {};
@@ -443,6 +412,38 @@ const Draw = () => {
   function forceChanged(e) {
     force = e.webkitForce || 1;
   }
+
+  useEffect(() => {
+    console.log('!!!!!!!!!!!!!!!!!!!!!useEffect!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    connect();
+    console.log('!!!!!!!!!!!!!!!!!!!!!useEffect :: after connect!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
+    canvas = canvasRef.current;
+    activeCanvas = activeCanvasRef.current;
+    ctx = canvas.getContext('2d');
+    activeCtx = activeCanvas.getContext('2d');
+
+    canvas.addEventListener('mousedown', down);
+    canvas.addEventListener('mousemove', move);
+    canvas.addEventListener('mouseup', up);
+    canvas.addEventListener('keydown', key);
+    canvas.addEventListener('webkitmouseforcechanged', forceChanged);
+
+    activeToolElement = activeToolElementRef.current;
+    activeTool = activeToolElement.dataset.tool;
+
+    document.querySelectorAll('[data-tool]').forEach((tool) => {
+      tool.onclick = function (e) {
+        activeToolElement.classList.toggle('active');
+        activeToolElement = tool;
+        activeToolElement.classList.toggle('active');
+        activeTool = activeToolElement.dataset.tool;
+      };
+    });
+
+    //Our first draw
+    resize();
+  }, []);
 
   return (
     <div>

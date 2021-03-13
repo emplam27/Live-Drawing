@@ -16,7 +16,7 @@ function App() {
         </div>
         <div>
           <Route path='/' component={Home} exact />
-          <Route path='/draw' component={Draw} exact />
+          <Route path='/draw/:roomKey' component={Draw} exact />
         </div>
       </main>
     </div>
