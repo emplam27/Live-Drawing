@@ -1,21 +1,21 @@
-import React from 'react';
-import { Link, Route } from 'react-router-dom';
-import Home from './pages/home';
-import Draw from './pages/draw';
-import logo from './logo.svg';
-import './App.css';
+import React from "react"
+import { Link, Route } from "react-router-dom"
+import Home from "./pages/home"
+import Draw from "./pages/draw"
+import logo from "./logo.svg"
+import "./App.css"
 
 function App() {
   return (
-    <div className='App'>
+    <div className="App">
       <main>
         <div>
-          <Route path='/' component={Home} exact />
-          <Route path='/draw' component={Draw} exact />
+          <Route path="/" component={Home} exact />
+          <Route path="/draw/:roomKey" component={Draw} exact />
         </div>
       </main>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
