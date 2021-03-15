@@ -1,10 +1,8 @@
 package backend.restserver.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Optional;
 
 @Getter
 @Entity
