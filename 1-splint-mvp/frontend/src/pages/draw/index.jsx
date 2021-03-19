@@ -536,7 +536,13 @@ const Draw = () => {
     targetCanvas.remove();
     const targetButton = document.getElementById(activeLayer.buttonId);
     targetButton.remove();
-    let index = layers.indexOf(activeLayer);
+    let index = 0;
+    layers.forEach((layer, i) => {
+      if (layer.name === activeLayer.name) {
+        index = i;
+      }
+    });
+
     layers.splice(index, 1);
     if (index === layers.length) {
       index -= 1;
