@@ -35,17 +35,26 @@ public class EntityController {
     }
 
     // POST create room
-    @PostMapping("/create")
-    public Room createRoom(@RequestBody Map<String, Object> userJson, @RequestParam String title) {
-        logger.info("create room : " + title);
+    @PostMapping("/room")
+    public Room createRoom(@RequestBody Map<String, Object> userJson) {
         Random rand = new Random();
+
+        logger.info("createRoom enter");
+
+//        long userId = (long)Integer.parseInt(userJson.get("id").toString());
+//        User target = userRepo.findById(userId).get();
+
         long keyValue = (long)rand.nextInt(randBound);
+        String title = userJson.get("title").toString();
+        String userName = userJson.get("userId").toString();
 
-        long userId = (long)Integer.parseInt(userJson.get("id").toString());
-        User target = userRepo.findById(userId).get();
+        logger.info("room name : " + title + " host name : " + userName);
 
-        logger.info("find user : " + target.getName() + " keyVal : " + keyValue);
-        Room newRoom = new Room(title, keyValue, target);
+        User tmp = new User(userName);
+        userRepo.save(tmp);
+
+        Room newRoom = new Room(title, keyValue, tmp);
+        logger.info("create new room");
 
         return roomRepo.save(newRoom);
     }
