@@ -1,0 +1,10 @@
+.entrance {
+    width: '300px';
+    height: '300px';
+    border: '2px solid black'
+}
+
+.roomList {
+    display: 'flex';
+    flex-flow: 'row wrap'
+}
