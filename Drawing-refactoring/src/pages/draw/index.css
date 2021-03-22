@@ -6,7 +6,7 @@ body {
 .cursor {
   /* width: 40px; */
   /* height: 40px; */
-  border: 2px solid #fefefe;
+  border: 1px solid #fefefe;
   border-radius: 100%;
   position: fixed;
   transform: translate(-50%, -50%);
@@ -88,6 +88,9 @@ body {
   color: var(--active-color);
   border-bottom: 2px solid var(--active-color);
   animation: animate--rainbow-border 2s ease-in-out infinite;
+}
+.hidden {
+  visibility: hidden;
 }
 
 /** Sections */

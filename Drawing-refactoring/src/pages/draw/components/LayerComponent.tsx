@@ -9,19 +9,40 @@ interface Layer {
 }
 
 interface LayerComponentProps {
+  activeTool: string;
+  color: string;
+  lineWidth: number;
+  eraserWidth: number;
   layers: Layer[];
+  canvas: HTMLCanvasElement;
   layerCount: number;
-  ctx: any;
+  canvasContext: any;
   activeLayer: any;
+  setLayers: any;
+  setCanvas: any;
+  setLayerCount: any;
+  setActiveLayer: any;
+  setCanvasContext: any;
 }
 
-function LayerComponent({ layers, layerCount, ctx, activeLayer }: LayerComponentProps) {
-  const canvasContainerRef = useRef(null);
-  const layerButtonContainerRef = useRef(null);
-  function createLayer() {
+function LayerComponent({
+  activeTool,
+  color,
+  lineWidth,
+  eraserWidth,
+  layers,
+  canvas,
+  layerCount,
+  canvasContext,
+  activeLayer,
+  setLayers,
+  setCanvas,
+  setLayerCount,
+  setActiveLayer,
+  setCanvasContext,
+}: LayerComponentProps) {
+  async function createLayer() {
     console.log('create layer');
-    const canvasContainer: any = canvasContainerRef.current;
-    const layerButtonContainer: any = layerButtonContainerRef.current;
 
     const newLayer: Layer = {
       name: `layer-${layerCount}`,
@@ -29,105 +50,105 @@ function LayerComponent({ layers, layerCount, ctx, activeLayer }: LayerComponent
       buttonId: `layer-id-${layerCount}-button`,
     };
 
-    const canvas = document.createElement('canvas');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.classList.add('layer');
-    canvas.id = `layer-id-${layerCount}`;
-    canvas.addEventListener('mousedown', down);
-    canvas.addEventListener('mousemove', move);
-    canvas.addEventListener('mouseup', up);
-    canvas.addEventListener('keydown', key);
-    canvas.addEventListener('webkitmouseforcechanged', forceChanged);
-    canvasContainer.appendChild(canvas);
-
-    const button = document.createElement('span');
-    button.classList.add('layer_space');
-    button.dataset.name = newLayer.name;
-    button.dataset.id = newLayer.id;
-    button.dataset.buttonId = newLayer.buttonId;
-    button.addEventListener('click', function (e: any) {
-      const tmpLayer = {
-        name: e.target.dataset.name,
-        id: e.target.dataset.id,
-        buttonId: e.target.dataset.buttonId,
-      };
-      selectActiveLayer(tmpLayer);
-    });
-    button.id = `${newLayer.id}-button`;
-    button.innerText = `${newLayer.name}`;
-    layerButtonContainer.appendChild(button);
-
     // 새로 만들어진 layer를 activeLayer로 바꾸기
     if (activeLayer === null) {
-      button.classList.add('active-layer');
-      ctx = canvas.getContext('2d');
-      activeLayer = newLayer;
-    } else {
-      selectActiveLayer(newLayer);
+      await setActiveLayer(newLayer);
     }
-    // setCtx(canvas.getContext('2d'));
-    // layers에 추가해주고, count 갱신
-    layers.push(newLayer);
-    layerCount += 1;
+    setLayers([...layers, newLayer]);
+    setLayerCount(layerCount + 1);
     // resize();
   }
 
   function deleteLayer() {
-    // 액티브 된 캔버스 삭제
-    if (layers.length === 1) {
-      return;
-    }
-    // 맨 뒤에 있는 액티브로 getcontext 변경한다.
-    const targetCanvas: any = document.getElementById(activeLayer.id);
-    targetCanvas.remove();
-    const targetButton: any = document.getElementById(activeLayer.buttonId);
-    targetButton.remove();
-    let index = layers.indexOf(activeLayer);
-    console.log('delete layer : active layer');
-    console.log(activeLayer);
-    layers.splice(index, 1);
-    if (index === layers.length) {
-      index -= 1;
-      if (index === -1) {
-        index = 0;
+    console.log('delete layer');
+    if (layers.length === 1) return;
+
+    let index = 0;
+    layers.forEach((layer, i) => {
+      if (layer.name === activeLayer.name) {
+        index = i;
       }
+    });
+    layers.splice(index, 1);
+    setLayers(layers);
+
+    if (index === layers.length && index >= 1) {
+      index -= 1;
     }
-    console.log('delete_layer : layers');
-    console.log(layers);
-    selectActiveLayer(layers[0]);
+    selectActiveLayer(layers[index]);
   }
 
-  function selectActiveLayer(layer: any) {
-    const oldButton = document.getElementById(activeLayer.buttonId);
-    if (oldButton) {
-      oldButton.classList.remove('active-layer');
-    }
+  function selectActiveLayer(layer: Layer) {
+    console.log('select active layer');
 
     const newCanvas: any = document.getElementById(layer.id);
-    const newButton: any = document.getElementById(layer.buttonId);
-    newButton.classList.add('active-layer');
-
-    ctx = newCanvas.getContext('2d');
-    activeLayer = layer;
+    setCanvas(newCanvas);
+    setCanvasContext(newCanvas.getContext('2d'));
+    setActiveLayer(layer);
   }
 
   useEffect(() => {
     createLayer();
   }, []);
 
+  useEffect(() => {
+    if (layers.length !== 0) {
+      selectActiveLayer(layers[layers.length - 1]);
+    }
+  }, [layers]);
+
   return (
     <>
       <div>
-        <button className='button' onClick={createLayer}>
+        <button className='button layer_space' onClick={createLayer}>
           make layer
         </button>
         <button className='button' onClick={deleteLayer}>
           delete layer
         </button>
-        <div ref={layerButtonContainerRef} id='layerButtonContainer'></div>
+        <div id='layerButtonContainer'>
+          {layers.map((layer) => {
+            return (
+              <span
+                key={layer.name}
+                id={layer.buttonId}
+                className={`layer_space ${
+                  activeLayer.name === layer.name ? 'active-layer' : ''
+                }`}
+                onClick={() => selectActiveLayer(layer)}
+              >
+                {layer.name}
+              </span>
+            );
+          })}
+        </div>
       </div>
-      <div ref={canvasContainerRef} id='canvasContainer' className='spacer app relative'></div>
+      <div id='canvasContainer' className='spacer app relative'>
+        {layers.map((layer) => {
+          return (
+            <canvas
+              key={layer.name}
+              id={layer.id}
+              className={'layer'}
+              width={window.innerWidth}
+              height={window.innerHeight}
+              onMouseDown={(e) => down(e)}
+              onMouseMove={(e) =>
+                move(
+                  e,
+                  canvasContext,
+                  activeTool,
+                  color,
+                  lineWidth,
+                  eraserWidth,
+                )
+              }
+              onMouseUp={() => up(canvasContext)}
+              onKeyDown={key}
+            />
+          );
+        })}
+      </div>
     </>
   );
 }

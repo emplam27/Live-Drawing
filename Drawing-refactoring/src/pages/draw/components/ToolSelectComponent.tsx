@@ -3,21 +3,72 @@ import { down, move, up, key, forceChanged } from '../../../functions/draw';
 import '../index.css';
 
 interface ToolSelectComponentProps {
+  activeTool: string;
+  lineWidth: number;
+  eraserWidth: number;
+  setCursorWidth: any;
   setActiveTool: any;
 }
 
-function ToolSelectComponent({ setActiveTool }: ToolSelectComponentProps) {
-  const activeToolElementRef = useRef(null);
-  let activeToolElement: any = activeToolElementRef.current;
+interface Tool {
+  name: string;
+  iconClass: string;
+}
 
-  document.querySelectorAll('[data-tool]').forEach((tool: any) => {
-    tool.onclick = function (e: any) {
-      activeToolElement.classList.toggle('active');
-      activeToolElement = tool;
-      activeToolElement.classList.toggle('active');
-      setActiveTool(activeToolElement.dataset.tool);
-    };
-  });
+function ToolSelectComponent({
+  lineWidth,
+  eraserWidth,
+  setCursorWidth,
+  activeTool,
+  setActiveTool,
+}: ToolSelectComponentProps) {
+  const Tools: Tool[] = [
+    {
+      name: 'pencil',
+      iconClass: 'ri-pencil-line',
+    },
+    {
+      name: 'rect',
+      iconClass: 'ri-shape-line',
+    },
+    {
+      name: 'circle',
+      iconClass: 'ri-checkbox-blank-circle-line',
+    },
+    {
+      name: 'text',
+      iconClass: 'ri-font-size-2',
+    },
+    {
+      name: 'layer',
+      iconClass: 'ri-stack-line',
+    },
+    {
+      name: 'eraser',
+      iconClass: 'ri-eraser-line',
+    },
+    {
+      name: 'paint',
+      iconClass: 'ri-paint-fill',
+    },
+    {
+      name: 'undo',
+      iconClass: 'ri-arrow-go-back-line',
+    },
+  ];
+
+  function changeActiveTool(tool: Tool) {
+    setActiveTool(tool.name);
+    if (tool.name === 'pencil') {
+      setCursorWidth(lineWidth);
+    } else if (tool.name === 'eraser') {
+      setCursorWidth(eraserWidth);
+    }
+  }
+
+  useEffect(() => {
+    console.log(activeTool);
+  }, [activeTool]);
 
   return (
     <>
@@ -26,30 +77,20 @@ function ToolSelectComponent({ setActiveTool }: ToolSelectComponentProps) {
       </p>
       <div className='spacer'></div>
 
-      <p ref={activeToolElementRef} className='icon-link active center' data-tool='pencil'>
-        <i className='ri-xl ri-pencil-fill'></i>
-      </p>
-      <p className='icon-link center' data-tool='rect'>
-        <i className='ri-xl ri-shape-line'></i>
-      </p>
-      <p className='icon-link center' data-tool='circle'>
-        <i className='ri-xl ri-checkbox-blank-circle-line'></i>
-      </p>
-      <p className='icon-link center' data-tool='text'>
-        <i className='ri-xl ri-font-size-2'></i>
-      </p>
-      <p className='icon-link center' data-tool='layer'>
-        <i className='ri-xl ri-stack-line'></i>
-      </p>
-      {/* <p className='icon-link center' data-tool='undo'>
-        <i className='ri-xl ri-arrow-go-back-line' onClick={Undo}></i>
-      </p> */}
-      <p className='icon-link center' data-tool='eraser'>
-        <i className='ri-xl ri-eraser-line'></i>
-      </p>
-      <p className='icon-link center' data-tool='paint'>
-        <i className='ri-xl ri-paint-fill'></i>
-      </p>
+      {Tools.map((tool) => {
+        return (
+          <p
+            key={tool.name}
+            id={tool.name}
+            className={`icon-link center ${
+              activeTool === tool.name ? 'active' : ''
+            }`}
+            onClick={() => changeActiveTool(tool)}
+          >
+            <i className={`ri-xl ${tool.iconClass}`}></i>
+          </p>
+        );
+      })}
     </>
   );
 }

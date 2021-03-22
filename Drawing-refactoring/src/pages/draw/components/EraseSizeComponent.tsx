@@ -1,25 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { down, move, up, key, forceChanged } from '../../../functions/draw';
+import React from 'react';
 import '../index.css';
 
 interface EraseSizeComponentProps {
+  eraserWidth: number;
   cursorWidth: number;
   setEraserWidth: any;
   setCursorWidth: any;
 }
 
-function EraseSizeComponent({ cursorWidth, setEraserWidth, setCursorWidth }: EraseSizeComponentProps) {
+function EraseSizeComponent({
+  eraserWidth,
+  cursorWidth,
+  setEraserWidth,
+  setCursorWidth,
+}: EraseSizeComponentProps) {
   function changeEraserSize(e: any) {
     setEraserWidth(e.target.value);
-
-    // setCursorWidth(val.target.value)
-
-    // eraserWidth = val.target.value
-    // console.log('eraserwidth', eraserWidth)
-    // console.log('cursorwidth', cursorWidth)
-  }
-
-  function changeCursorSize(e: any) {
     setCursorWidth(e.target.value);
   }
 
@@ -30,11 +26,10 @@ function EraseSizeComponent({ cursorWidth, setEraserWidth, setCursorWidth }: Era
         type='range'
         min='5'
         max='100'
-        value='5'
-        onMouseUp={changeEraserSize}
-        onChange={changeCursorSize}
+        value={eraserWidth}
+        onChange={changeEraserSize}
       />
-      {cursorWidth}
+      {eraserWidth}
     </>
   );
 }

@@ -1,22 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { down, move, up, key, forceChanged } from '../../../functions/draw';
+import React from 'react';
 import '../index.css';
 
 interface LineSizeComponentProps {
+  lineWidth: number;
   cursorWidth: number;
   setLineWidth: any;
   setCursorWidth: any;
 }
 
-function LineSizeComponent({ cursorWidth, setLineWidth, setCursorWidth }: LineSizeComponentProps) {
-  const changeLineSize = (e: any) => {
-    // lineWidth = val.target.value
+function LineSizeComponent({
+  lineWidth,
+  cursorWidth,
+  setLineWidth,
+  setCursorWidth,
+}: LineSizeComponentProps) {
+  function changeLineSize(e: any) {
     setLineWidth(e.target.value);
-  };
-
-  function changeCursorSize(e: any) {
     setCursorWidth(e.target.value);
   }
+
   return (
     <>
       <input
@@ -24,11 +26,10 @@ function LineSizeComponent({ cursorWidth, setLineWidth, setCursorWidth }: LineSi
         type='range'
         min='5'
         max='100'
-        value='5'
-        onMouseUp={changeLineSize}
-        onChange={changeCursorSize}
+        value={lineWidth}
+        onChange={changeLineSize}
       />
-      {cursorWidth}
+      {lineWidth}
     </>
   );
 }
