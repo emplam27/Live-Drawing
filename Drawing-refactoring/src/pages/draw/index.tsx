@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { setRoomKey, connect } from '../../connections/load';
+import { CanvasCtxProvider } from './DrawContext';
 import './index.css';
+// import styled from 'styled-components';
+
 import LayerComponent from './components/LayerComponent';
 import CursorComponent from './components/CursorComponent';
 import EraseSizeComponent from './components/EraseSizeComponent';
 import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
-// import styled from 'styled-components';
 
 interface Params {
   roomKey: string;
@@ -27,7 +29,6 @@ interface Layer {
 
 function Draw() {
   const { roomKey } = useParams<Params>();
-
   setRoomKey(roomKey);
 
   const [lineWidth, setLineWidth] = useState(5);
@@ -41,8 +42,12 @@ function Draw() {
   const [layers, setLayers] = useState<Layer[]>([]);
   const [layerCount, setLayerCount] = useState<number>(1);
   const [activeLayer, setActiveLayer] = useState(null);
-  const [canvasContext, setCanvasContext] = useState({});
   const [canvas, setCanvas] = useState<any>(null);
+
+  //! 하나의 ctx를 사용, 전역으로 사용하기 위해 Context API 사용
+  //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
+  // const [canvasCtxs] = useContext(canvasCtxContext);
+  // const [canvasCtx, setCanvasCtx] = useState(null);
 
   // function drawPaths() {
   //   // delete everything
@@ -103,22 +108,24 @@ function Draw() {
           <ColorPaletteComponent color={color} setColor={setColor} />
           <div className='spacer'></div>
         </div>
-        <LayerComponent
-          activeTool={activeTool}
-          color={color}
-          lineWidth={lineWidth}
-          eraserWidth={eraserWidth}
-          layers={layers}
-          canvas={canvas}
-          layerCount={layerCount}
-          activeLayer={activeLayer}
-          canvasContext={canvasContext}
-          setLayers={setLayers}
-          setCanvas={setCanvas}
-          setLayerCount={setLayerCount}
-          setActiveLayer={setActiveLayer}
-          setCanvasContext={setCanvasContext}
-        />
+        <CanvasCtxProvider>
+          <LayerComponent
+            activeTool={activeTool}
+            color={color}
+            lineWidth={lineWidth}
+            eraserWidth={eraserWidth}
+            layers={layers}
+            canvas={canvas}
+            layerCount={layerCount}
+            activeLayer={activeLayer}
+            // canvasCtx={canvasCtx}
+            setLayers={setLayers}
+            setCanvas={setCanvas}
+            setLayerCount={setLayerCount}
+            setActiveLayer={setActiveLayer}
+            // setCanvasCtx={setCanvasCtx}
+          />
+        </CanvasCtxProvider>
       </div>
     </div>
   );

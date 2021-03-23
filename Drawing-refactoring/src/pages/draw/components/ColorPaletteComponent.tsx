@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { down, move, up, key, forceChanged } from '../../../functions/draw';
+import React, { useState, useEffect } from 'react';
 import '../index.css';
 
 interface ColorPaletteComponentProps {

@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { down, move, up, key, forceChanged } from '../../../functions/draw';
+import React, { useEffect } from 'react';
+import { mouseDown, mouseMove, mouseUp, key } from '../../../functions/draw';
 import '../index.css';
+import { useCanvasCtxDispatch } from '../DrawContext';
 
 interface Layer {
   name: string;
@@ -16,13 +17,13 @@ interface LayerComponentProps {
   layers: Layer[];
   canvas: HTMLCanvasElement;
   layerCount: number;
-  canvasContext: any;
+  // canvasCtx: any;
   activeLayer: any;
   setLayers: any;
   setCanvas: any;
   setLayerCount: any;
   setActiveLayer: any;
-  setCanvasContext: any;
+  // setCanvasCtx: any;
 }
 
 function LayerComponent({
@@ -33,14 +34,15 @@ function LayerComponent({
   layers,
   canvas,
   layerCount,
-  canvasContext,
   activeLayer,
   setLayers,
   setCanvas,
   setLayerCount,
   setActiveLayer,
-  setCanvasContext,
 }: LayerComponentProps) {
+  // const [canvasCtx, setCanvasCtx] = useContext(CanvasCtxContext);
+  const canvasCtxDispatch = useCanvasCtxDispatch();
+
   async function createLayer() {
     console.log('create layer');
 
@@ -82,8 +84,7 @@ function LayerComponent({
     console.log('select active layer');
 
     const newCanvas: any = document.getElementById(layer.id);
-    setCanvas(newCanvas);
-    setCanvasContext(newCanvas.getContext('2d'));
+    canvasCtxDispatch({ type: 'SET_CTX', ctx: newCanvas.getContext('2d') });
     setActiveLayer(layer);
   }
 
@@ -132,18 +133,11 @@ function LayerComponent({
               className={'layer'}
               width={window.innerWidth}
               height={window.innerHeight}
-              onMouseDown={(e) => down(e)}
+              onMouseDown={(e) => mouseDown(e)}
               onMouseMove={(e) =>
-                move(
-                  e,
-                  canvasContext,
-                  activeTool,
-                  color,
-                  lineWidth,
-                  eraserWidth,
-                )
+                mouseMove(e, activeTool, color, lineWidth, eraserWidth)
               }
-              onMouseUp={() => up(canvasContext)}
+              onMouseUp={() => mouseUp()}
               onKeyDown={key}
             />
           );

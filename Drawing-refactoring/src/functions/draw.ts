@@ -1,22 +1,19 @@
+import React, { useContext } from 'react';
 import { broadcast } from '../connections/load';
+import { useCanvasCtxState } from '../pages/draw/DrawContext';
 
 // pencil_slider = document.getElementById('pencilSlider');
 // pencil_slider.addEventListener('mouseup', changePencilSize)
 
-interface point {
-  x: number;
-  y: number;
-}
+// interface point {
+//   x: number;
+//   y: number;
+// }
 
 //! any 수정
-let canvasContext: any;
 // let points: any = [];
 // const pathsry: any = [];
-let color: any;
-let cursorWidth: any;
 let activeShape: any;
-let eraserWidth: any;
-let mouseDown: any = false;
 let lastPoint: any;
 let originPoint: any;
 let force: any = 1;
@@ -28,22 +25,81 @@ export function actionPeerData(msg: any) {
   } else if (msg.event === 'drawRect') {
     drawRect(msg, false, null);
   } else if (msg.event === 'clear') {
-    // canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  } else if (msg.event === 'drawHistoryData') {
+    // drawHistoryData(msg);
   }
 }
 
-export function down(e: any) {
+// function drawHistoryData(data: any) {
+//   if (is_new) {
+//     data.history.forEach((elem: any) => {
+//       //! 이벤트 종류 추가해야 함
+//       draw(elem);
+//     });
+
+//     is_new = false;
+//   }
+// }
+
+//! msg: any 수정
+export function draw(data: any, canvasCtx: any) {
+  // console.log('draw');
+  canvasCtx.lineCap = 'round';
+  canvasCtx.lineJoin = 'round';
+  // points.push({ x: data.x, y: data.y });
+  canvasCtx.beginPath();
+  canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
+  canvasCtx.lineTo(data.x, data.y);
+  canvasCtx.strokeStyle = data.color;
+  canvasCtx.lineWidth = data.lineWidth;
+  canvasCtx.stroke();
+  canvasCtx.closePath();
+}
+
+//! msg: any 수정
+export function drawRect(data: any, commit: any, canvasCtx: any) {
+  // activeCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
+  if (data.commit || commit) {
+    canvasCtx.strokeStyle = data.color;
+    canvasCtx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
+  } else {
+    // activeCtx.strokeStyle = data.color;
+    // activeCtx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
+  }
+  activeShape = data;
+}
+
+export function erase(data: any, canvasCtx: any) {
+  // console.log('erase');
+  const x = data.x;
+  const y = data.y;
+  const r = data.r / 2;
+  for (let i = 0; i < Math.round(Math.PI * r); i++) {
+    const angle = (i / Math.round(Math.PI * r)) * 360;
+    canvasCtx.clearRect(
+      x,
+      y,
+      Math.sin(angle * (Math.PI / 180)) * r,
+      Math.cos(angle * (Math.PI / 180)) * r,
+    );
+  }
+}
+
+export function mouseDown(e: any) {
   // console.log('down');
   originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   // points = [];
   // points.push(originPoint);
 }
 
-export function up(canvasContext: any) {
+export function mouseUp() {
   // console.log('up');
   // pathsry.push(points);
+  const canvasCtx = useCanvasCtxState();
+
   if (activeShape) {
-    drawRect(activeShape, true, canvasContext);
+    drawRect(activeShape, true, canvasCtx);
     broadcast(
       JSON.stringify(
         Object.assign(
@@ -61,17 +117,16 @@ export function up(canvasContext: any) {
   originPoint = undefined;
 }
 
-export function move(
+export function mouseMove(
   e: any,
-  canvasContext: any,
   activeTool: string,
   color: string,
   lineWidth: number,
   eraserWidth: number,
 ) {
   // console.log('move');
+  const canvasCtx = useCanvasCtxState();
 
-  mouseDown = e.buttons;
   if (e.buttons) {
     if (!lastPoint) {
       lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -89,7 +144,7 @@ export function move(
           color: color,
           lineWidth: lineWidth,
         },
-        canvasContext,
+        canvasCtx,
       );
 
       broadcast(
@@ -115,7 +170,7 @@ export function move(
           height: Math.abs(originPoint.y - e.nativeEvent.offsetY),
         },
         false,
-        canvasContext,
+        canvasCtx,
       );
       broadcast(
         JSON.stringify({
@@ -135,7 +190,7 @@ export function move(
           y: e.nativeEvent.offsetY,
           r: eraserWidth,
         },
-        canvasContext,
+        canvasCtx,
       );
     }
     lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -144,60 +199,11 @@ export function move(
   }
 }
 
-//! msg: any 수정
-export function draw(data: any, canvasContext: any) {
-  // console.log('draw');
-  canvasContext.lineCap = 'round';
-  canvasContext.lineJoin = 'round';
-  // points.push({ x: data.x, y: data.y });
-  canvasContext.beginPath();
-  canvasContext.moveTo(data.lastPoint.x, data.lastPoint.y);
-  canvasContext.lineTo(data.x, data.y);
-  canvasContext.strokeStyle = data.color;
-  canvasContext.lineWidth = data.lineWidth;
-  canvasContext.stroke();
-  canvasContext.closePath();
-}
-
-//! msg: any 수정
-export function drawRect(data: any, commit: any, canvasContext: any) {
-  // activeCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
-  if (data.commit || commit) {
-    canvasContext.strokeStyle = data.color;
-    canvasContext.strokeRect(
-      data.origin.x,
-      data.origin.y,
-      data.width,
-      data.height,
-    );
-  } else {
-    // activeCtx.strokeStyle = data.color;
-    // activeCtx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
-  }
-  activeShape = data;
-}
-
-export function erase(data: any, canvasContext: any) {
-  // console.log('erase');
-  const x = data.x;
-  const y = data.y;
-  const r = data.r / 2;
-  for (let i = 0; i < Math.round(Math.PI * r); i++) {
-    const angle = (i / Math.round(Math.PI * r)) * 360;
-    canvasContext.clearRect(
-      x,
-      y,
-      Math.sin(angle * (Math.PI / 180)) * r,
-      Math.cos(angle * (Math.PI / 180)) * r,
-    );
-  }
-}
-
 export function key(e: any) {
   // console.log('key');
   // console.log(e);
   // if (e.key === 'Backspace') {
-  //   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+  //   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   //   broadcast(
   //     JSON.stringify({
   //       event: 'clear',
