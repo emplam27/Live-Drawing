@@ -114,7 +114,7 @@ function ColorPaletteComponent({
   }
 
   useEffect(() => {
-    console.log('color :', color);
+    // console.log('color :', color);
   }, [color]);
 
   return (

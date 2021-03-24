@@ -1,6 +1,6 @@
 import React from 'react';
-import { Switch, Link, Route } from 'react-router-dom';
-import logo from './logo.svg';
+import { Switch, Route } from 'react-router-dom';
+// import logo from './logo.svg';
 import Draw from './pages/draw';
 import './App.css';
 

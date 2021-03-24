@@ -66,7 +66,7 @@ function ToolSelectComponent({
   }
 
   useEffect(() => {
-    console.log(activeTool);
+    // console.log(activeTool);
   }, [activeTool]);
 
   return (

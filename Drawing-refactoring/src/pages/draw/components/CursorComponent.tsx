@@ -53,7 +53,7 @@ function CursorComponent({ cursorWidth }: CursorComponentProps) {
   }, []);
 
   useEffect(() => {
-    console.log('cursor : ', cursorWidth);
+    // console.log('cursor : ', cursorWidth);
   }, [cursorWidth]);
 
   return (

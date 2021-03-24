@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { mouseDown, mouseMove, mouseUp, key } from '../../../functions/draw';
 import '../index.css';
-import { useCanvasCtxDispatch } from '../DrawContext';
+// import { useCanvasCtxsDispatch } from '../DrawContext';
 
 interface Layer {
   name: string;
-  id: string;
+  canvasId: string;
   buttonId: string;
+  canvasCtx: CanvasRenderingContext2D | null;
 }
 
 interface LayerComponentProps {
@@ -17,13 +18,16 @@ interface LayerComponentProps {
   layers: Layer[];
   canvas: HTMLCanvasElement;
   layerCount: number;
-  // canvasCtx: any;
+  canvasCtxTable: { [key: string]: CanvasRenderingContext2D };
+  canvasCtx: any;
   activeLayer: any;
   setLayers: any;
   setCanvas: any;
   setLayerCount: any;
   setActiveLayer: any;
-  // setCanvasCtx: any;
+  setCanvasCtx: any;
+  peerConnectionContext: any;
+  setCanvasCtxTable: any;
 }
 
 function LayerComponent({
@@ -33,28 +37,35 @@ function LayerComponent({
   eraserWidth,
   layers,
   canvas,
+  canvasCtx,
+  canvasCtxTable,
   layerCount,
   activeLayer,
   setLayers,
   setCanvas,
   setLayerCount,
   setActiveLayer,
+  setCanvasCtx,
+  setCanvasCtxTable,
+  peerConnectionContext,
 }: LayerComponentProps) {
   // const [canvasCtx, setCanvasCtx] = useContext(CanvasCtxContext);
-  const canvasCtxDispatch = useCanvasCtxDispatch();
+  // const canvasCtxDispatch = useCanvasCtxsDispatch();
 
   async function createLayer() {
     console.log('create layer');
+    console.log(activeLayer);
 
     const newLayer: Layer = {
       name: `layer-${layerCount}`,
-      id: `layer-id-${layerCount}`,
+      canvasId: `layer-id-${layerCount}`,
       buttonId: `layer-id-${layerCount}-button`,
+      canvasCtx: null,
     };
 
     // 새로 만들어진 layer를 activeLayer로 바꾸기
     if (activeLayer === null) {
-      await setActiveLayer(newLayer);
+      setActiveLayer(newLayer);
     }
     setLayers([...layers, newLayer]);
     setLayerCount(layerCount + 1);
@@ -63,6 +74,8 @@ function LayerComponent({
 
   function deleteLayer() {
     console.log('delete layer');
+    console.log(activeLayer);
+
     if (layers.length === 1) return;
 
     let index = 0;
@@ -82,21 +95,31 @@ function LayerComponent({
 
   function selectActiveLayer(layer: Layer) {
     console.log('select active layer');
+    console.log(activeLayer);
 
-    const newCanvas: any = document.getElementById(layer.id);
-    canvasCtxDispatch({ type: 'SET_CTX', ctx: newCanvas.getContext('2d') });
+    // setCanvasCtx(layer.canvasCtx);
     setActiveLayer(layer);
   }
 
   useEffect(() => {
-    createLayer();
-  }, []);
-
-  useEffect(() => {
+    // 마지막에 추가되는 canvas에 대해서 layers에 ctx 저장하기
     if (layers.length !== 0) {
-      selectActiveLayer(layers[layers.length - 1]);
+      // console.log(layers);
+      const newLayer = layers[layers.length - 1];
+      const newCanvas: any = document.getElementById(newLayer.canvasId);
+      const newCanvasCtx = newCanvas.getContext('2d');
+      newLayer.canvasCtx = newCanvasCtx;
+      selectActiveLayer(newLayer);
+
+      const tmpCanvasCtxTable = { ...canvasCtxTable };
+      tmpCanvasCtxTable[newLayer.name] = newCanvasCtx;
+      setCanvasCtxTable(tmpCanvasCtxTable);
     }
   }, [layers]);
+
+  useEffect(() => {
+    createLayer();
+  }, []);
 
   return (
     <>
@@ -129,15 +152,25 @@ function LayerComponent({
           return (
             <canvas
               key={layer.name}
-              id={layer.id}
+              id={layer.canvasId}
               className={'layer'}
               width={window.innerWidth}
               height={window.innerHeight}
               onMouseDown={(e) => mouseDown(e)}
               onMouseMove={(e) =>
-                mouseMove(e, activeTool, color, lineWidth, eraserWidth)
+                mouseMove(
+                  e,
+                  activeLayer.canvasCtx,
+                  activeTool,
+                  color,
+                  lineWidth,
+                  eraserWidth,
+                  peerConnectionContext,
+                )
               }
-              onMouseUp={() => mouseUp()}
+              onMouseUp={() =>
+                mouseUp(activeLayer.canvasCtx, peerConnectionContext)
+              }
               onKeyDown={key}
             />
           );

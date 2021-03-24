@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
-import { broadcast } from '../connections/load';
-import { useCanvasCtxState } from '../pages/draw/DrawContext';
+// import { useCanvasCtxsState } from '../pages/draw/DrawContext';
+// import { broadcast } from '../connections/load';
 
+// const canvasCtxs = useCanvasCtxsState();
 // pencil_slider = document.getElementById('pencilSlider');
 // pencil_slider.addEventListener('mouseup', changePencilSize)
 
@@ -19,17 +19,17 @@ let originPoint: any;
 let force: any = 1;
 
 //! msg: any 수정
-export function actionPeerData(msg: any) {
-  if (msg.event === 'draw') {
-    draw(msg, null);
-  } else if (msg.event === 'drawRect') {
-    drawRect(msg, false, null);
-  } else if (msg.event === 'clear') {
-    // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  } else if (msg.event === 'drawHistoryData') {
-    // drawHistoryData(msg);
-  }
-}
+// export function actionPeerData(msg: any) {
+//   if (msg.event === 'draw') {
+//     draw(msg, null);
+//   } else if (msg.event === 'drawRect') {
+//     drawRect(msg, false, null);
+//   } else if (msg.event === 'clear') {
+//     // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+//   } else if (msg.event === 'drawHistoryData') {
+//     // drawHistoryData(msg);
+//   }
+// }
 
 // function drawHistoryData(data: any) {
 //   if (is_new) {
@@ -42,8 +42,20 @@ export function actionPeerData(msg: any) {
 //   }
 // }
 
+function broadcast(data: string, peerConnectionContext: any) {
+  for (const peerId in peerConnectionContext.channels) {
+    // peerConnectionContext.channels[peerId].send(data);
+    if (peerConnectionContext.channels[peerId].readyState === 'open') {
+      peerConnectionContext.channels[peerId].send(data);
+    }
+  }
+}
+
+interface MsgData {}
+
 //! msg: any 수정
-export function draw(data: any, canvasCtx: any) {
+export function draw(data: any, canvasCtx: CanvasRenderingContext2D): void {
+  // console.log(canvasCtxs);
   // console.log('draw');
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
@@ -58,7 +70,11 @@ export function draw(data: any, canvasCtx: any) {
 }
 
 //! msg: any 수정
-export function drawRect(data: any, commit: any, canvasCtx: any) {
+export function drawRect(
+  data: any,
+  commit: boolean,
+  canvasCtx: CanvasRenderingContext2D,
+): void {
   // activeCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
   if (data.commit || commit) {
     canvasCtx.strokeStyle = data.color;
@@ -70,7 +86,7 @@ export function drawRect(data: any, commit: any, canvasCtx: any) {
   activeShape = data;
 }
 
-export function erase(data: any, canvasCtx: any) {
+export function erase(data: any, canvasCtx: CanvasRenderingContext2D): void {
   // console.log('erase');
   const x = data.x;
   const y = data.y;
@@ -86,18 +102,19 @@ export function erase(data: any, canvasCtx: any) {
   }
 }
 
-export function mouseDown(e: any) {
+export function mouseDown(e: any): void {
   // console.log('down');
   originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   // points = [];
   // points.push(originPoint);
 }
 
-export function mouseUp() {
+export function mouseUp(
+  canvasCtx: CanvasRenderingContext2D,
+  peerConnectionContext: any,
+): void {
   // console.log('up');
   // pathsry.push(points);
-  const canvasCtx = useCanvasCtxState();
-
   if (activeShape) {
     drawRect(activeShape, true, canvasCtx);
     broadcast(
@@ -110,6 +127,7 @@ export function mouseUp() {
           activeShape,
         ),
       ),
+      peerConnectionContext,
     );
     activeShape = undefined;
   }
@@ -119,13 +137,14 @@ export function mouseUp() {
 
 export function mouseMove(
   e: any,
+  canvasCtx: CanvasRenderingContext2D,
   activeTool: string,
   color: string,
   lineWidth: number,
   eraserWidth: number,
-) {
+  peerConnectionContext: any,
+): void {
   // console.log('move');
-  const canvasCtx = useCanvasCtxState();
 
   if (e.buttons) {
     if (!lastPoint) {
@@ -156,6 +175,7 @@ export function mouseMove(
           force: force,
           color: color,
         }),
+        peerConnectionContext,
       );
     } else if (activeTool === 'rect') {
       const origin = {
@@ -180,6 +200,7 @@ export function mouseMove(
           width: Math.abs(originPoint.x - e.nativeEvent.offsetX),
           height: Math.abs(originPoint.y - e.nativeEvent.offsetY),
         }),
+        peerConnectionContext,
       );
     } else if (activeTool === 'eraser') {
       console.log(eraserWidth);
@@ -199,7 +220,7 @@ export function mouseMove(
   }
 }
 
-export function key(e: any) {
+export function key(e: any): void {
   // console.log('key');
   // console.log(e);
   // if (e.key === 'Backspace') {
@@ -247,6 +268,6 @@ export function key(e: any) {
   // }
 }
 
-export function forceChanged(e: any) {
+export function forceChanged(e: any): void {
   force = e.webkitForce || 1;
 }
