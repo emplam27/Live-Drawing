@@ -1,27 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import styles from './room-list.module.css';
-import { ResponseEntranceProps, EntranceComponent, EntranceProps } from './entrance';
-const axios = require('axios');
-
-interface Temp {
-  roomPk: number;
-  roomKey: string;
-  roomTitle: string;
-  members: {
-    memberPk: number;
-    memberName: string;
-    // room_pk: number;
-  };
-}
-
-interface ResponseTemp {
-  data: Temp[];
-}
+import './room-list.css';
+import { EntranceComponent } from './entrance';
+import { ResponseRoomInfo, roomInfo } from '../interfaces/room-info-interface';
+import axios from 'axios';
 
 export function RoomListComponet() {
-  const [rooms, setRooms] = useState<Temp[]>([]);
+  const [rooms, setRooms] = useState<roomInfo[]>([]);
   useEffect(() => {
-    axios.get('http://localhost:8080/').then((res: ResponseTemp) => {
+    axios.get('http://localhost:8080/').then((res: ResponseRoomInfo) => {
       console.log(res.data);
       setRooms(res.data);
     });
@@ -29,8 +15,8 @@ export function RoomListComponet() {
   return (
     <>
       <div>room list</div>
-      <div className={styles.roomList}>
-        {rooms.map((room: Temp, index: number) => {
+      <div className='roomList'>
+        {rooms.map((room: roomInfo, index: number) => {
           console.log(room);
           return (
             <div key={index}>

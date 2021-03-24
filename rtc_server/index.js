@@ -7,67 +7,125 @@ var dotenv = require('dotenv')
 var redis = require('redis')
 var bluebird = require('bluebird')
 var cors = require('cors')
+var socket = require('socket.io')
+var {
+  addUser,
+  removeUser,
+  getUsersInRoom,
+  getRoom,
+  getUser,
+} = require('./users')
 
 bluebird.promisifyAll(redis)
-
 dotenv.config()
 
 const app = express()
+const server = http.createServer(app)
+const io = socket(server)
+
+io.on('connection', socket => {
+  console.log('소켓 연결 완료')
+
+  socket.on('join', message => {
+    const user = addUser({
+      id: socket.id,
+      name: message.userId,
+      room: message.room,
+    })
+    // if (error) return callback(error)
+
+    socket.join(user.room)
+    socket.emit('message', {
+      user: 'admin',
+      text: `${user.name} 님, ${user.room} 방에 오신걸 환영합니다!`,
+    })
+    socket.broadcast.to(user.room).emit('message', {
+      user: 'admin',
+      text: `${user.name}님이 참가했습니다!`,
+    })
+    io.to(user.room).emit('roomData', {
+      room: user.room,
+      users: getUsersInRoom(user.room),
+    })
+  })
+
+  socket.on('send message', message => {
+    console.log('sendmsg socket', socket.id)
+    const user = getUser(socket.id)
+    io.to(user.room).emit('message', message)
+  })
+
+  socket.on('disconnect', () => {
+    const user = removeUser(socket.id)
+    console.log('유저의 연결이 끊어졌습니다.')
+    if (user) {
+      io.to(user.room).emit('message', {
+        userId: user.name,
+        text: `${user.name}님이 나가셨습니다.`,
+      })
+      io.to(user.room).emit('roomData', {
+        room: user.room,
+        users: getUsersInRoom(user.room),
+      })
+    }
+  })
+})
+
 app.use('/static', express.static(`${__dirname}/static`))
 app.use(express.json())
 app.use(cors())
 
 app.locals.index = 100000000000
 
-const server = http.createServer(app)
-const socket = require('socket.io')
-const io = socket(server)
+// const server = http.createServer(app)
+// const socket = require('socket.io')
+// const io = socket(server)
 
-const users = {}
+// const users = {}
 
-const socketToRoom = {}
+// const socketToRoom = {}
 
-io.on('connection', socket => {
-  socket.on('join room', roomID => {
-    if (users[roomID]) {
-      const length = users[roomID].length
-      if (length === 4) {
-        socket.emit('room full')
-        return
-      }
-      users[roomID].push(socket.id)
-    } else {
-      users[roomID] = [socket.id]
-    }
-    socketToRoom[socket.id] = roomID
-    const usersInThisRoom = users[roomID].filter(id => id !== socket.id)
+// io.on('connection', socket => {
+//   socket.on('join room', roomID => {
+//     if (users[roomID]) {
+//       const length = users[roomID].length
+//       if (length === 4) {
+//         socket.emit('room full')
+//         return
+//       }
+//       users[roomID].push(socket.id)
+//     } else {
+//       users[roomID] = [socket.id]
+//     }
+//     socketToRoom[socket.id] = roomID
+//     const usersInThisRoom = users[roomID].filter(id => id !== socket.id)
 
-    socket.emit('all users', usersInThisRoom)
-  })
+//     socket.emit('all users', usersInThisRoom)
+//   })
 
-  socket.on('sending signal', payload => {
-    io.to(payload.userToSignal).emit('user joined', {
-      signal: payload.signal,
-      callerID: payload.callerID,
-    })
-  })
+//   socket.on('sending signal', payload => {
+//     io.to(payload.userToSignal).emit('user joined', {
+//       signal: payload.signal,
+//       callerID: payload.callerID,
+//     })
+//   })
 
-  socket.on('returning signal', payload => {
-    io.to(payload.callerID).emit('receiving returned signal', {
-      signal: payload.signal,
-      id: socket.id,
-    })
-  })
+//   socket.on('returning signal', payload => {
+//     io.to(payload.callerID).emit('receiving returned signal', {
+//       signal: payload.signal,
+//       id: socket.id,
+//     })
+//   })
 
-  socket.on('disconnect', () => {
-    const roomID = socketToRoom[socket.id]
-    let room = users[roomID]
-    if (room) {
-      room = room.filter(id => id !== socket.id)
-      users[roomID] = room
-    }
-  })
-})
+//   socket.on('disconnect', () => {
+//     const roomID = socketToRoom[socket.id]
+//     let room = users[roomID]
+//     if (room) {
+//       room = room.filter(id => id !== socket.id)
+//       users[roomID] = room
+//     }
+//   })
+// })
 
 const clients = {}
 
@@ -238,6 +296,6 @@ app.post('/relay/:peerId/:event', auth, (req, res) => {
   return res.sendStatus(200)
 })
 
-server.listen(process.env.PORT || 8081, () => {
+server.listen(process.env.PORT || 8080, () => {
   console.log(`Started server on port ${server.address().port}`)
 })

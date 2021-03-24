@@ -8,6 +8,7 @@ import EraseSizeComponent from './components/EraseSizeComponent';
 import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
+
 // import styled from 'styled-components';
 
 interface Params {
@@ -75,7 +76,7 @@ function Draw() {
   }, []);
 
   return (
-    <div>
+    <div className='drawComponent'>
       <p>Draw component</p>
       <CursorComponent cursorWidth={cursorWidth} />
       <div className='flush vstack'>

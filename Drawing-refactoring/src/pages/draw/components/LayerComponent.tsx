@@ -130,8 +130,8 @@ function LayerComponent({
               key={layer.name}
               id={layer.id}
               className={'layer'}
-              width={window.innerWidth}
-              height={window.innerHeight}
+              width={window.innerWidth * 0.8}
+              height={window.innerHeight * 0.8}
               onMouseDown={(e) => down(e)}
               onMouseMove={(e) =>
                 move(

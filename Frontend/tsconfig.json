@@ -21,10 +21,9 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
-    "isolatedModules": false,
     "noEmit": true,
     "jsx": "react-jsx",
-    "isolatedModules": false
+    "isolatedModules": true
   },
   "exclude": [
     "node_modules"

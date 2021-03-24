@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CreateRoomComponent } from './components/create-room-btn';
 import { RoomListComponet } from './components/room-list';
 
-function HomeComponent() {
+export function HomeComponent() {
   return (
     <div>
       <CreateRoomComponent></CreateRoomComponent>
@@ -10,5 +10,3 @@ function HomeComponent() {
     </div>
   );
 }
-
-export default HomeComponent;

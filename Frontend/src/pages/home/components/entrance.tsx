@@ -1,37 +1,27 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './room-list.module.css';
+import './room-list.css';
+import { EntranceProps } from '../interfaces/entrance-props-interface';
 
-interface EntranceProps {
-  roomKey: string;
-  roomTitle: string;
-  roomPk: number;
-  // room_host: number;
-}
-
-interface ResponseEntranceProps {
-  data: EntranceProps[];
-}
-
-function EntranceComponent({ roomPk, roomKey, roomTitle }: EntranceProps) {
-  const uuidHandler = (e: any) => {
-    const values = { roomPk: roomPk, roomKey: roomKey };
+export function EntranceComponent(props: EntranceProps) {
+  const uuidHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const values = { roomPk: props.roomPk, roomKey: props.roomKey };
     console.log('send val', values);
     axios.post('http://localhost:8080/room/entrance', values).then((res) => {
       console.log('post val', values);
       console.log(res);
-      window.location.href = `/room/${roomKey}`;
+      window.location.href = `/room/${props.roomKey}`;
     });
   };
 
   return (
     <>
-      <button onClick={uuidHandler}>{roomTitle}</button>
+      <button onClick={uuidHandler}>{props.roomTitle}</button>
     </>
 
     //  <Link to={`/room/${roomKey}`}>
-    //     <div className={styles.entrance}>
+    //     <div className='entrance'>
     //       <h3>{room_title}</h3>
     //       {/* <h4>방주인 : {room_host}</h4> */}
     //     </div>
@@ -39,5 +29,3 @@ function EntranceComponent({ roomPk, roomKey, roomTitle }: EntranceProps) {
     //   </Link>
   );
 }
-
-export { EntranceProps, ResponseEntranceProps, EntranceComponent };
