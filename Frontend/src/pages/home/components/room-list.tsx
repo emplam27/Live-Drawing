@@ -1,27 +1,26 @@
-import React, {useState, useEffect} from 'react'
-import styles from './room-list.module.css'
-import {ResponseEntranceProps, EntranceComponent, EntranceProps} from './entrance'
+import React, { useState, useEffect } from 'react';
+import './room-list.css';
+import { EntranceComponent } from './entrance';
+import { EntranceProps } from '../interfaces/entrance-props-interface';
 
-const axios = require('axios')
-
+const axios = require('axios');
 
 export function RoomListComponet() {
-    const [rooms, setRooms] = useState<EntranceProps[]>([]);
+  const [rooms, setRooms] = useState<EntranceProps[]>([]);
 
-    useEffect(() => {
-        axios.get('/')
-            .then((res: ResponseEntranceProps) => 
-                setRooms(res.data)
-            )
-    })
-    return (
-        <div className={styles.roomList}>
-            {rooms.forEach((room: EntranceProps) => {
-                    return (
-                        <EntranceComponent roomKey={room.roomKey} roomTitle={room.roomTitle} roomHost={room.roomHost} />
-                    )
-                })
-            })
-        </div>
-    )
+  useEffect(() => {
+    // axios.get('/').then((res: ResponseEntranceProps) => setRooms(res.data));
+    setRooms([{ roomKey: 'a', roomTitle: 'b', roomHost: 'c' }]);
+  });
+  return (
+    <div className='roomList'>
+      {rooms.map((room: EntranceProps, index: number) => {
+        return (
+          <div key={index}>
+            <EntranceComponent roomKey={room.roomKey} roomTitle={room.roomTitle} roomHost={room.roomHost} />;
+          </div>
+        );
+      })}
+    </div>
+  );
 }

@@ -1,0 +1,35 @@
+.chatScreen{
+    border-bottom: solid 2px cornflowerblue;
+    height: 373px;
+    overflow-y: auto;
+}
+
+.chatContainer{
+    border: cornflowerblue 2px solid;
+    width: 300px;
+    height: 400px;
+    float: right;
+    border-radius: 20px;
+}
+
+.message{
+    text-align: left;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+.message>p{
+    margin: 2px;
+}
+
+.message>.userName{
+    font-size: 12px;
+}
+
+.input{
+    margin:2px;
+}
+
+.message.my{
+    text-align: right;
+}
