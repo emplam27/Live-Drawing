@@ -20,15 +20,7 @@ public class IndexController {
     Draw UI, 초대링크, 사용자목록, 음성-영상-채팅
      */
 
-    // GET
-    // 리스트 목록 조회
-    @GetMapping("/")
-    @ResponseBody
-    public RoomList showList() {
-        logger.info("show room list");
-        RoomList list = new RoomList();
-        return list;
-    }
+
 
     // 입장
 //    @GetMapping("list/{id}")
