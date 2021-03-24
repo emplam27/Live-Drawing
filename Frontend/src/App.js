@@ -1,19 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Route } from 'react-router-dom';
+
 import './App.css';
+import HomeComponent from './pages/home';
+import RoomCreateComponent from './pages/home/components/room-create-form';
+import testComponent from './pages/home/components/testcomponent';
+import { EntranceComponent } from './pages/home/components/entrance';
 
 function App() {
   return (
     <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
+      <main>
+        <div>
+          <Route path='/' component={HomeComponent} exact />
+          <Route path='/member/sign-in' component={HomeComponent} exact />
+          <Route path='/member/sign-up' component={HomeComponent} exact />
+          <Route path='/room/:roomKey' component={testComponent} exact />
+          <Route path='/room' component={RoomCreateComponent} exact />
+          <Route path='/mypage' component={HomeComponent} exact />
+        </div>
+      </main>
     </div>
   );
 }
