@@ -1,37 +1,52 @@
 package backend.restserver.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "room")
-@NamedQuery(
-    name = "Room.findByTitle",
-    query = "select a from Room a where a.title = :title"
-)
 public class Room {
     @Id
     @GeneratedValue
-    private Long id;
+    @Column(name = "room_pk") //Camel 표기법이 db에서 반영안되는듯;
+    private Long roomPk;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "room_title")
+    private String roomTitle;
 
-    @Column(name = "`key`")
-    private Long key;
+    @Column(name = "room_key")
+    private String roomKey;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "room_host")
+    private String roomHost;
 
-    public Room() {
+//    @OneToMany(mappedBy = "room")
+//    private List<Member> members = new ArrayList<>();
+
+    public Room() {}
+
+    public Room(String roomTitle, String roomKey, String roomHost) {
+        this.roomTitle = roomTitle;
+        this.roomKey = roomKey;
+        this.roomHost = roomHost;
+//        this.members = members;
     }
 
-    public Room(String title, Long key, User user) {
-        this.title = title;
-        this.key = key;
-        this.user = user;
+
+    public void add(Member member) {
+        member.setRoom(this);
+//        getMembers().add(member);
     }
+
+    //    public Room(String room_title, String room_key, List<Member> members) {
+//        this.room_title = room_title;
+//        this.room_key = room_key;
+//        this.members = members;
+//    }
 }
