@@ -42,7 +42,7 @@ let force: any = 1;
 //   }
 // }
 
-function broadcast(data: string, peerConnectionContext: any) {
+export function broadcast(data: string, peerConnectionContext: any) {
   for (const peerId in peerConnectionContext.channels) {
     // peerConnectionContext.channels[peerId].send(data);
     if (peerConnectionContext.channels[peerId].readyState === 'open') {
@@ -110,12 +110,12 @@ export function mouseDown(e: any): void {
 }
 
 export function mouseUp(
-  canvasCtx: CanvasRenderingContext2D,
+  canvasCtx: CanvasRenderingContext2D | null,
   peerConnectionContext: any,
 ): void {
   // console.log('up');
   // pathsry.push(points);
-  if (activeShape) {
+  if (activeShape && canvasCtx !== null) {
     drawRect(activeShape, true, canvasCtx);
     broadcast(
       JSON.stringify(
@@ -137,7 +137,7 @@ export function mouseUp(
 
 export function mouseMove(
   e: any,
-  canvasCtx: CanvasRenderingContext2D,
+  canvasCtx: CanvasRenderingContext2D | null,
   activeTool: string,
   color: string,
   lineWidth: number,
@@ -146,7 +146,7 @@ export function mouseMove(
 ): void {
   // console.log('move');
 
-  if (e.buttons) {
+  if (e.buttons && canvasCtx !== null) {
     if (!lastPoint) {
       lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
       originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -174,6 +174,7 @@ export function mouseMove(
           y: e.nativeEvent.offsetY,
           force: force,
           color: color,
+          lineWidth: lineWidth,
         }),
         peerConnectionContext,
       );
@@ -203,7 +204,7 @@ export function mouseMove(
         peerConnectionContext,
       );
     } else if (activeTool === 'eraser') {
-      console.log(eraserWidth);
+      // console.log(eraserWidth);
       erase(
         {
           lastPoint,

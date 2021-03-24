@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { mouseDown, mouseMove, mouseUp, key } from '../../../functions/draw';
 import '../index.css';
-// import { useCanvasCtxsDispatch } from '../DrawContext';
+// import { useActiveLayerState, useActiveLayerDispatch } from '../DrawContext';
 
 interface Layer {
   name: string;
@@ -21,6 +21,7 @@ interface LayerComponentProps {
   canvasCtxTable: { [key: string]: CanvasRenderingContext2D };
   canvasCtx: any;
   activeLayer: any;
+  drawHistory: any;
   setLayers: any;
   setCanvas: any;
   setLayerCount: any;
@@ -28,6 +29,8 @@ interface LayerComponentProps {
   setCanvasCtx: any;
   peerConnectionContext: any;
   setCanvasCtxTable: any;
+  setDrawHistory: any;
+  // updateActiveLayer: any;
 }
 
 function LayerComponent({
@@ -38,23 +41,28 @@ function LayerComponent({
   layers,
   canvas,
   canvasCtx,
-  canvasCtxTable,
-  layerCount,
   activeLayer,
+  canvasCtxTable,
+  drawHistory,
+  layerCount,
   setLayers,
   setCanvas,
   setLayerCount,
-  setActiveLayer,
   setCanvasCtx,
+  setActiveLayer,
   setCanvasCtxTable,
   peerConnectionContext,
+  setDrawHistory,
 }: LayerComponentProps) {
   // const [canvasCtx, setCanvasCtx] = useContext(CanvasCtxContext);
   // const canvasCtxDispatch = useCanvasCtxsDispatch();
 
-  async function createLayer() {
+  // const activeLayer = useActiveLayerState();
+  // const setActiveLayer = useActiveLayerDispatch();
+
+  function createLayer() {
     console.log('create layer');
-    console.log(activeLayer);
+    // console.log(activeLayer);
 
     const newLayer: Layer = {
       name: `layer-${layerCount}`,
@@ -65,6 +73,7 @@ function LayerComponent({
 
     // 새로 만들어진 layer를 activeLayer로 바꾸기
     if (activeLayer === null) {
+      // setActiveLayer({ type: 'SET_ACTIVE_LAYER', layer: newLayer });
       setActiveLayer(newLayer);
     }
     setLayers([...layers, newLayer]);
@@ -74,7 +83,7 @@ function LayerComponent({
 
   function deleteLayer() {
     console.log('delete layer');
-    console.log(activeLayer);
+    // console.log(activeLayer);
 
     if (layers.length === 1) return;
 
@@ -94,10 +103,12 @@ function LayerComponent({
   }
 
   function selectActiveLayer(layer: Layer) {
-    console.log('select active layer');
-    console.log(activeLayer);
+    console.log('*************** select active layer ***************');
+    // console.log(activeLayer);
 
     // setCanvasCtx(layer.canvasCtx);
+    // updateActiveLayer(layer);
+    // setActiveLayer({ type: 'SET_ACTIVE_LAYER', layer: layer });
     setActiveLayer(layer);
   }
 
@@ -109,11 +120,14 @@ function LayerComponent({
       const newCanvas: any = document.getElementById(newLayer.canvasId);
       const newCanvasCtx = newCanvas.getContext('2d');
       newLayer.canvasCtx = newCanvasCtx;
+      console.log('useEffect :: setActiveLayer');
+      setActiveLayer(newLayer);
+      // setActiveLayer({ type: 'SET_ACTIVE_LAYER', layer: newLayer });
       selectActiveLayer(newLayer);
 
-      const tmpCanvasCtxTable = { ...canvasCtxTable };
-      tmpCanvasCtxTable[newLayer.name] = newCanvasCtx;
-      setCanvasCtxTable(tmpCanvasCtxTable);
+      // const tmpCanvasCtxTable = { ...canvasCtxTable };
+      // tmpCanvasCtxTable[newLayer.name] = newCanvasCtx;
+      // setCanvasCtxTable(tmpCanvasCtxTable);
     }
   }, [layers]);
 
