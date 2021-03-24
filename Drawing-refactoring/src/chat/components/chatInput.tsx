@@ -3,7 +3,10 @@ import { MessageForm } from '../interfaces/message-form-interface';
 import { ChatComponentChildrenProps } from '../interfaces/chat-component-props-interface';
 
 export function ChatInputComponent(props: ChatComponentChildrenProps) {
-  const [messageForm, setMessageForm] = useState<MessageForm>({ userId: props.userId, text: '' });
+  const [messageForm, setMessageForm] = useState<MessageForm>({
+    userId: props.userId,
+    text: '',
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const { userId, text } = messageForm;
 
@@ -11,7 +14,11 @@ export function ChatInputComponent(props: ChatComponentChildrenProps) {
     setMessageForm({ userId: messageForm.userId, text: e.target.value });
   };
 
-  const sendMessage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.KeyboardEvent<HTMLInputElement>) => {
+  const sendMessage = (
+    e:
+      | React.MouseEvent<HTMLButtonElement, MouseEvent>
+      | React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (props.socket) {
       if (e) {
         e.preventDefault();

@@ -7,7 +7,9 @@ export function LiveRoomComponent() {
   const roomId = useParams();
   const [userInfo, setUserInfo] = useState<UserInfo>();
   useEffect(() => {
-    axios.get(`/room/${roomId}`).then((res: ResponseUserInfo) => setUserInfo(res.data));
+    axios
+      .get(`/room/${roomId}`)
+      .then((res: ResponseUserInfo) => setUserInfo(res.data));
   });
   console.log(userInfo);
 }

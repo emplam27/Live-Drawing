@@ -32,7 +32,12 @@ export function ChatScreenComponent(props: ChatComponentChildrenProps) {
     <div className='chatScreen'>
       {screen.map((message: MessageForm, index: number) => {
         return (
-          <div key={index} className={message.userId === props.userId ? 'message my' : 'message'}>
+          <div
+            key={index}
+            className={
+              message.userId === props.userId ? 'message my' : 'message'
+            }
+          >
             <p className='userName'>{message.userId}</p>
             <p>{message.text}</p>
             <div ref={scrollRef} />

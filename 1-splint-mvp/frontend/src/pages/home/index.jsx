@@ -6,7 +6,7 @@ const axios = require('axios');
 const Home = () => {
   const [dummy, setDummy] = useState([]);
   
-  useEffect(() => {
+  useEffect(() => { // 방 리스트 가져오기 
     axios.get('http://localhost:8080')
       .then((res) => {
         setDummy(res.data)
@@ -20,10 +20,10 @@ const Home = () => {
         return (
           // <Link to='/'>Home</Link>
           <div key={index} style={{ margin_bottom: '20px' }}>
-            <Link to='/draw'>
+            <Link to={`/draw/${data.key}`}>
               <div style={{ border: '2px solid', display: 'inline-block' }}>
                 Title: {data.title}
-                Id: {data.roomId}
+                Id: {data.key}
               </div>
             </Link>
           </div>

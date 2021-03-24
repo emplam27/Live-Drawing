@@ -5,11 +5,14 @@
 }
 
 .chatContainer{
+
     border: cornflowerblue 2px solid;
-    width: 300px;
     height: 400px;
-    float: right;
+    /* right: 0; */
     border-radius: 20px;
+    z-index: 1;
+    /* position: absolute; */
+    grid-column: 4/5;
 }
 
 .message{

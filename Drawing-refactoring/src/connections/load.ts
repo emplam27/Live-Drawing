@@ -22,7 +22,10 @@ const peerConnectionContext: PeerConnectionContext = {
 const rtcConfig = {
   iceServers: [
     {
-      urls: ['stun:stun.l.google.com:19302', 'stun:global.stun.twilio.com:3478'],
+      urls: [
+        'stun:stun.l.google.com:19302',
+        'stun:global.stun.twilio.com:3478',
+      ],
     },
   ],
 };
@@ -60,10 +63,26 @@ export async function connect() {
   peerConnectionContext.eventSource = new EventSource(
     `http://localhost:8081/connect?token=${peerConnectionContext.token}`,
   );
-  peerConnectionContext.eventSource.addEventListener('add-peer', addPeer, false);
-  peerConnectionContext.eventSource.addEventListener('remove-peer', removePeer, false);
-  peerConnectionContext.eventSource.addEventListener('session-description', sessionDescription, false);
-  peerConnectionContext.eventSource.addEventListener('ice-candidate', iceCandidate, false);
+  peerConnectionContext.eventSource.addEventListener(
+    'add-peer',
+    addPeer,
+    false,
+  );
+  peerConnectionContext.eventSource.addEventListener(
+    'remove-peer',
+    removePeer,
+    false,
+  );
+  peerConnectionContext.eventSource.addEventListener(
+    'session-description',
+    sessionDescription,
+    false,
+  );
+  peerConnectionContext.eventSource.addEventListener(
+    'ice-candidate',
+    iceCandidate,
+    false,
+  );
   peerConnectionContext.eventSource.addEventListener('connected', () => {
     join();
   });

@@ -13,7 +13,9 @@ export function ChatComponent(props: ChatComponentProps) {
   const room = useParams<{ roomKey: string }>();
 
   useEffect(() => {
-    const socketIo = io('http://localhost:8081/', { transports: ['websocket'] });
+    const socketIo = io('http://localhost:8080/', {
+      transports: ['websocket'],
+    });
     console.log({ ...socketIo });
     console.log(socketIo);
 
@@ -41,8 +43,14 @@ export function ChatComponent(props: ChatComponentProps) {
 
   return (
     <div className='chatContainer'>
-      <ChatScreenComponent userId={props.userId} socket={socket}></ChatScreenComponent>
-      <ChatInputComponent userId={props.userId} socket={socket}></ChatInputComponent>
+      <ChatScreenComponent
+        userId={props.userId}
+        socket={socket}
+      ></ChatScreenComponent>
+      <ChatInputComponent
+        userId={props.userId}
+        socket={socket}
+      ></ChatInputComponent>
     </div>
   );
 }
