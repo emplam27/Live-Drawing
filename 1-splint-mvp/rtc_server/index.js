@@ -1,24 +1,74 @@
-var express = require("express")
-var http = require("http")
-var path = require("path")
-var jwt = require("jsonwebtoken")
-var uuid = require("uuid")
-var dotenv = require("dotenv")
-var redis = require("redis")
-var bluebird = require("bluebird")
-var cors = require("cors")
+var express = require('express')
+var http = require('http')
+var path = require('path')
+var jwt = require('jsonwebtoken')
+var uuid = require('uuid')
+var dotenv = require('dotenv')
+var redis = require('redis')
+var bluebird = require('bluebird')
+var cors = require('cors')
+
 bluebird.promisifyAll(redis)
 
 dotenv.config()
 
 const app = express()
-app.use("/static", express.static(`${__dirname}/static`))
+app.use('/static', express.static(`${__dirname}/static`))
 app.use(express.json())
 app.use(cors())
 
 app.locals.index = 100000000000
 
 const server = http.createServer(app)
+const socket = require('socket.io')
+const io = socket(server)
+
+const users = {}
+
+const socketToRoom = {}
+
+io.on('connection', socket => {
+  socket.on('join room', roomID => {
+    if (users[roomID]) {
+      const length = users[roomID].length
+      if (length === 4) {
+        socket.emit('room full')
+        return
+      }
+      users[roomID].push(socket.id)
+    } else {
+      users[roomID] = [socket.id]
+    }
+    socketToRoom[socket.id] = roomID
+    const usersInThisRoom = users[roomID].filter(id => id !== socket.id)
+
+    socket.emit('all users', usersInThisRoom)
+  })
+
+  socket.on('sending signal', payload => {
+    io.to(payload.userToSignal).emit('user joined', {
+      signal: payload.signal,
+      callerID: payload.callerID,
+    })
+  })
+
+  socket.on('returning signal', payload => {
+    io.to(payload.callerID).emit('receiving returned signal', {
+      signal: payload.signal,
+      id: socket.id,
+    })
+  })
+
+  socket.on('disconnect', () => {
+    const roomID = socketToRoom[socket.id]
+    let room = users[roomID]
+    if (room) {
+      room = room.filter(id => id !== socket.id)
+      users[roomID] = room
+    }
+  })
+})
+
 const clients = {}
 
 const redisClient = redis.createClient()
@@ -31,18 +81,18 @@ async function disconnected(client) {
   await redisClient.delAsync(`${client.id}:channels`)
 
   await Promise.all(
-    roomIds.map(async (roomId) => {
+    roomIds.map(async roomId => {
       await redisClient.sremAsync(`channels:${roomId}`, client.id)
       let peerIds = await redisClient.smembersAsync(`channels:${roomId}`)
       let msg = JSON.stringify({
-        event: "remove-peer",
+        event: 'remove-peer',
         data: {
           peer: client.user,
           roomId: roomId,
         },
       })
       await Promise.all(
-        peerIds.map(async (peerId) => {
+        peerIds.map(async peerId => {
           if (peerId !== client.id) {
             await redisClient.publish(`messages:${peerId}`, msg)
           }
@@ -55,11 +105,11 @@ async function disconnected(client) {
 function auth(req, res, next) {
   let token
   if (req.headers.authorization) {
-    token = req.headers.authorization.split(" ")[1]
+    token = req.headers.authorization.split(' ')[1]
   } else if (req.query.token) {
     token = req.query.token
   }
-  if (typeof token !== "string") {
+  if (typeof token !== 'string') {
     return res.sendStatus(401)
   }
 
@@ -72,12 +122,12 @@ function auth(req, res, next) {
   })
 }
 
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   let id = (app.locals.index++).toString(36)
   res.redirect(`/${id}`)
 })
 
-app.post("/access", (req, res) => {
+app.post('/access', (req, res) => {
   if (!req.body.username) {
     return res.sendStatus(403)
   }
@@ -86,19 +136,19 @@ app.post("/access", (req, res) => {
     username: req.body.username,
   }
 
-  const token = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: "3600s" })
+  const token = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '3600s' })
   return res.json({ token })
 })
 
-app.get("/connect", auth, (req, res) => {
-  if (req.headers.accept !== "text/event-stream") {
+app.get('/connect', auth, (req, res) => {
+  if (req.headers.accept !== 'text/event-stream') {
     return res.sendStatus(404)
   }
 
   // write the event stream headers
-  res.setHeader("Cache-Control", "no-cache")
-  res.setHeader("Content-Type", "text/event-stream")
-  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader('Cache-Control', 'no-cache')
+  res.setHeader('Content-Type', 'text/event-stream')
+  res.setHeader('Access-Control-Allow-Origin', '*')
   res.flushHeaders()
 
   // setup a client
@@ -117,40 +167,40 @@ app.get("/connect", auth, (req, res) => {
   clients[client.id] = client
 
   // subscribe to redis events for user
-  client.redis.on("message", (channel, message) => {
+  client.redis.on('message', (channel, message) => {
     let msg = JSON.parse(message)
     client.emit(msg.event, msg.data)
   })
   client.redis.subscribe(`messages:${client.id}`)
 
   // emit the connected state
-  client.emit("connected", { user: req.user })
+  client.emit('connected', { user: req.user })
 
   // ping to the client every so often
   setInterval(() => {
-    client.emit("ping")
+    client.emit('ping')
   }, 10000)
 
-  req.on("close", () => {
+  req.on('close', () => {
     disconnected(client)
   })
 })
 
-app.get("/:roomId", (req, res) => {
-  res.sendFile(path.join(__dirname, "static/index.html"))
+app.get('/:roomId', (req, res) => {
+  res.sendFile(path.join(__dirname, 'static/index.html'))
 })
 
-app.post("/:roomId/join", auth, async (req, res) => {
+app.post('/:roomId/join', auth, async (req, res) => {
   let roomId = req.params.roomId
 
   await redisClient.saddAsync(`${req.user.id}:channels`, roomId)
 
   let peerIds = await redisClient.smembersAsync(`channels:${roomId}`)
-  peerIds.forEach((peerId) => {
+  peerIds.forEach(peerId => {
     redisClient.publish(
       `messages:${peerId}`,
       JSON.stringify({
-        event: "add-peer",
+        event: 'add-peer',
         data: {
           peer: req.user,
           roomId,
@@ -161,7 +211,7 @@ app.post("/:roomId/join", auth, async (req, res) => {
     redisClient.publish(
       `messages:${req.user.id}`,
       JSON.stringify({
-        event: "add-peer",
+        event: 'add-peer',
         data: {
           peer: { id: peerId },
           roomId,
@@ -175,7 +225,7 @@ app.post("/:roomId/join", auth, async (req, res) => {
   return res.sendStatus(200)
 })
 
-app.post("/relay/:peerId/:event", auth, (req, res) => {
+app.post('/relay/:peerId/:event', auth, (req, res) => {
   let peerId = req.params.peerId
   let msg = {
     event: req.params.event,
