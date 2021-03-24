@@ -9,7 +9,8 @@
       "es2017",
       "es2018",
       "es2019",
-      "es2020"
+      "es2020",
+      "dom"
     ],
     "target": "ES5",
     "outDir": "./dist",
@@ -20,9 +21,9 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
-    "isolatedModules": false,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "isolatedModules": true
   },
   "exclude": [
     "node_modules"

@@ -154,8 +154,8 @@ function LayerComponent({
               key={layer.name}
               id={layer.canvasId}
               className={'layer'}
-              width={window.innerWidth}
-              height={window.innerHeight}
+              width={window.innerWidth * 0.8}
+              height={window.innerHeight * 0.8}
               onMouseDown={(e) => mouseDown(e)}
               onMouseMove={(e) =>
                 mouseMove(

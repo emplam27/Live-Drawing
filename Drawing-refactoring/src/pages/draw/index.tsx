@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // import { CanvasCtxsProvider } from './DrawContext';
 import { draw, drawRect } from '../../functions/draw';
@@ -14,6 +14,8 @@ import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
 import axios from 'axios';
+
+// import styled from 'styled-components';
 
 interface Params {
   roomKey: string;
@@ -349,7 +351,8 @@ function Draw() {
   }, []);
 
   return (
-    <div>
+    <div className='drawComponent'>
+      <p>Draw component</p>
       <CursorComponent cursorWidth={cursorWidth} />
       <div className='flush vstack'>
         <div className='menubar hstack'>
