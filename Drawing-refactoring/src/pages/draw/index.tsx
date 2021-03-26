@@ -5,7 +5,6 @@ import { broadcast, draw, drawRect } from '../../functions/draw';
 import { v4 as uuid } from 'uuid';
 
 import './index.css';
-// import styled from 'styled-components';
 
 import LayerComponent from './components/LayerComponent';
 import CursorComponent from './components/CursorComponent';
@@ -14,35 +13,13 @@ import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
 import axios from 'axios';
-
-// import styled from 'styled-components';
-
-interface Params {
-  roomKey: string;
-}
-
-interface Layer {
-  name: string;
-  canvasId: string;
-  buttonId: string;
-  canvasCtx: CanvasRenderingContext2D | null;
-}
-
-interface PeerConnectionContext {
-  username: string;
-  roomId: string;
-  token: string | null;
-  eventSource: EventSource | null;
-  peers: { [key: string]: RTCPeerConnection };
-  channels: any;
-  is_new: boolean;
-  is_host: boolean;
-  hostId: string | null;
-}
-
-interface CanvasCtxTable {
-  [key: string]: CanvasRenderingContext2D;
-}
+import {
+  Params,
+  Layer,
+  PeerConnectionContext,
+  CanvasCtxTable,
+} from './interfaces/index-interfaces';
+import { DrawData } from './interfaces/draw-interfaces';
 
 // interface point {
 //   x: number;
@@ -63,7 +40,6 @@ function Draw() {
   const [layers, setLayers] = useState<Layer[]>([]);
   const [layerCount, setLayerCount] = useState<number>(1);
   const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
-  const [canvas, setCanvas] = useState<any>(null);
   const [canvasCtx, setCanvasCtx] = useState<CanvasRenderingContext2D | null>(
     null,
   );
@@ -72,7 +48,7 @@ function Draw() {
   //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
   const [newMsg, setNewMsg] = useState<string>();
-  const [drawHistory, setDrawHistory] = useState([]);
+  const [drawHistory, setDrawHistory] = useState<DrawData[]>([]);
 
   /*
    * context API
@@ -138,9 +114,12 @@ function Draw() {
     }
   }, [newMsg]);
 
-  function actionDrawHistory(data: any, canvasCtx: any) {
+  function actionDrawHistory(
+    data: { event: string; history: DrawData[] },
+    canvasCtx: CanvasRenderingContext2D,
+  ) {
     if (peerConnectionContext.is_new) {
-      data.history.forEach((elem: any) => {
+      data.history.forEach((elem: DrawData) => {
         //! 이벤트 종류 추가해야 함
         draw(elem, canvasCtx);
       });
@@ -213,7 +192,7 @@ function Draw() {
   //   console.log(pathsry);
   // }
 
-  async function getToken() {
+  async function getToken(): Promise<string> {
     console.log('========= getToken ==========');
     // console.log(activeLayer);
     const config = {
@@ -520,7 +499,6 @@ function Draw() {
           lineWidth={lineWidth}
           eraserWidth={eraserWidth}
           layers={layers}
-          canvas={canvas}
           layerCount={layerCount}
           activeLayer={activeLayer}
           canvasCtx={canvasCtx}
@@ -528,7 +506,6 @@ function Draw() {
           peerConnectionContext={peerConnectionContext}
           drawHistory={drawHistory}
           setLayers={setLayers}
-          setCanvas={setCanvas}
           setLayerCount={setLayerCount}
           setActiveLayer={setActiveLayer}
           setCanvasCtx={setCanvasCtx}

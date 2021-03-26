@@ -1,22 +1,11 @@
 import React from 'react';
 import '../index.css';
+import { LineSizeComponentProps } from '../interfaces/line-size-interfaces';
 
-interface LineSizeComponentProps {
-  lineWidth: number;
-  cursorWidth: number;
-  setLineWidth: any;
-  setCursorWidth: any;
-}
-
-function LineSizeComponent({
-  lineWidth,
-  cursorWidth,
-  setLineWidth,
-  setCursorWidth,
-}: LineSizeComponentProps) {
-  function changeLineSize(e: any) {
-    setLineWidth(e.target.value);
-    setCursorWidth(e.target.value);
+function LineSizeComponent(props: LineSizeComponentProps) {
+  function changeLineSize(e: React.ChangeEvent<HTMLInputElement>) {
+    props.setLineWidth(Number(e.target.value));
+    props.setCursorWidth(Number(e.target.value));
   }
 
   return (
@@ -26,10 +15,10 @@ function LineSizeComponent({
         type='range'
         min='5'
         max='100'
-        value={lineWidth}
+        value={props.lineWidth}
         onChange={changeLineSize}
       />
-      {lineWidth}
+      {props.lineWidth}
     </>
   );
 }
