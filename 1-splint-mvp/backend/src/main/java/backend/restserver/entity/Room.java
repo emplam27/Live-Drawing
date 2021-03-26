@@ -1,35 +1,35 @@
 package backend.restserver.entity;
 
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "room")
+@NoArgsConstructor
 public class Room {
     @Id
     @GeneratedValue
-    @Column(name = "room_pk") //Camel 표기법이 db에서 반영안되는듯;
+    @Column(name = "roomPk") //Camel 표기법이 db에서 반영안되는듯;
     private Long roomPk;
 
-    @Column(name = "room_title")
+    @Column(name = "roomTitle")
     private String roomTitle;
 
-    @Column(name = "room_key")
+    @Column(name = "roomKey")
     private String roomKey;
 
-    @Column(name = "room_host")
+    @Column(name = "roomHost")
     private String roomHost;
 
 //    @OneToMany(mappedBy = "room")
 //    private List<Member> members = new ArrayList<>();
 
-    public Room() {}
+//    public Room() {}
 
     public Room(String roomTitle, String roomKey, String roomHost) {
         this.roomTitle = roomTitle;
@@ -39,8 +39,8 @@ public class Room {
     }
 
 
-    public void add(Member member) {
-        member.setRoom(this);
+    public void add(User user) {
+        user.setRoom(this);
 //        getMembers().add(member);
     }
 
