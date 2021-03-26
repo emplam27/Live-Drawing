@@ -1,16 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { down, move, up, key, forceChanged } from '../../../functions/draw';
+import React, { useState, useEffect } from 'react';
 import '../index.css';
+import { ColorPaletteComponentProps } from '../interfaces/color-palette-interfaces';
 
-interface ColorPaletteComponentProps {
-  color: string;
-  setColor: any;
-}
-
-function ColorPaletteComponent({
-  color,
-  setColor,
-}: ColorPaletteComponentProps) {
+function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   const [swatch] = useState<string[][]>([
     [
       '#000000',
@@ -111,12 +103,12 @@ function ColorPaletteComponent({
   ]);
 
   function changeColor(colorCode: string) {
-    setColor(colorCode);
+    props.setColor(colorCode);
   }
 
   useEffect(() => {
-    console.log('color :', color);
-  }, [color]);
+    // console.log('color :', color);
+  }, [props.color]);
 
   return (
     <div className='relative'>
@@ -124,7 +116,7 @@ function ColorPaletteComponent({
         <i className='ri-xl ri-palette-line'></i>
         <i
           className='ri-xl ri-checkbox-blank-fill center'
-          style={{ color: color }}
+          style={{ color: props.color }}
         ></i>
       </p>
       <div id='color-picker' className='dropdown vstack'>
@@ -137,7 +129,7 @@ function ColorPaletteComponent({
                     key={column_index}
                     id={colorCode}
                     className={`box color-${row[0]} ${
-                      color === colorCode ? 'active' : ''
+                      props.color === colorCode ? 'active' : ''
                     }`}
                     style={{ backgroundColor: colorCode }}
                     onClick={() => changeColor(colorCode)}

@@ -1,22 +1,11 @@
 import React from 'react';
 import '../index.css';
+import { EraseSizeComponentProps } from '../interfaces/erase-size-interfaces';
 
-interface EraseSizeComponentProps {
-  eraserWidth: number;
-  cursorWidth: number;
-  setEraserWidth: any;
-  setCursorWidth: any;
-}
-
-function EraseSizeComponent({
-  eraserWidth,
-  cursorWidth,
-  setEraserWidth,
-  setCursorWidth,
-}: EraseSizeComponentProps) {
-  function changeEraserSize(e: any) {
-    setEraserWidth(e.target.value);
-    setCursorWidth(e.target.value);
+function EraseSizeComponent(props: EraseSizeComponentProps) {
+  function changeEraserSize(e: React.ChangeEvent<HTMLInputElement>) {
+    props.setEraserWidth(Number(e.target.value));
+    props.setCursorWidth(Number(e.target.value));
   }
 
   return (
@@ -26,10 +15,10 @@ function EraseSizeComponent({
         type='range'
         min='5'
         max='100'
-        value={eraserWidth}
+        value={props.eraserWidth}
         onChange={changeEraserSize}
       />
-      {eraserWidth}
+      {props.eraserWidth}
     </>
   );
 }

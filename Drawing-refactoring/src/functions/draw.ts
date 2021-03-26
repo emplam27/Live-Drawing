@@ -1,49 +1,139 @@
-import { broadcast } from '../connections/load';
+// import { useCanvasCtxsState } from '../pages/draw/DrawContext';
+// import { broadcast } from '../connections/load';
 
+import {
+  DrawData,
+  EraseData,
+  Point,
+  RectData,
+} from '../pages/draw/interfaces/draw-interfaces';
+import { PeerConnectionContext } from '../pages/draw/interfaces/index-interfaces';
+
+// const canvasCtxs = useCanvasCtxsState();
 // pencil_slider = document.getElementById('pencilSlider');
 // pencil_slider.addEventListener('mouseup', changePencilSize)
 
-interface point {
-  x: number;
-  y: number;
-}
+// interface point {
+//   x: number;
+//   y: number;
+// }
 
 //! any 수정
-let canvasContext: any;
 // let points: any = [];
 // const pathsry: any = [];
-let color: any;
-let cursorWidth: any;
-let activeShape: any;
-let eraserWidth: any;
-let mouseDown: any = false;
-let lastPoint: any;
-let originPoint: any;
-let force: any = 1;
+let activeShape: RectData | undefined;
+let lastPoint: Point | undefined;
+let originPoint: Point | undefined;
+let force: number = 1;
 
 //! msg: any 수정
-export function actionPeerData(msg: any) {
-  if (msg.event === 'draw') {
-    draw(msg, null);
-  } else if (msg.event === 'drawRect') {
-    drawRect(msg, false, null);
-  } else if (msg.event === 'clear') {
-    // canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+// export function actionPeerData(msg: any) {
+//   if (msg.event === 'draw') {
+//     draw(msg, null);
+//   } else if (msg.event === 'drawRect') {
+//     drawRect(msg, false, null);
+//   } else if (msg.event === 'clear') {
+//     // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+//   } else if (msg.event === 'drawHistoryData') {
+//     // drawHistoryData(msg);
+//   }
+// }
+
+// function drawHistoryData(data: any) {
+//   if (is_new) {
+//     data.history.forEach((elem: any) => {
+//       //! 이벤트 종류 추가해야 함
+//       draw(elem);
+//     });
+
+//     is_new = false;
+//   }
+// }
+
+export function broadcast(
+  data: string,
+  peerConnectionContext: PeerConnectionContext,
+) {
+  for (const peerId in peerConnectionContext.channels) {
+    // peerConnectionContext.channels[peerId].send(data);
+    if (peerConnectionContext.channels[peerId].readyState === 'open') {
+      peerConnectionContext.channels[peerId].send(data);
+    }
   }
 }
 
-export function down(e: any) {
+//! msg: any 수정
+export function draw(
+  data: DrawData,
+  canvasCtx: CanvasRenderingContext2D,
+): void {
+  // console.log(canvasCtxs);
+  // console.log('draw');
+  canvasCtx.lineCap = 'round';
+  canvasCtx.lineJoin = 'round';
+  // points.push({ x: data.x, y: data.y });
+  canvasCtx.beginPath();
+  canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
+  canvasCtx.lineTo(data.x, data.y);
+  canvasCtx.strokeStyle = data.color;
+  canvasCtx.lineWidth = data.lineWidth;
+  canvasCtx.stroke();
+  canvasCtx.closePath();
+}
+
+//! msg: any 수정
+export function drawRect(
+  data: RectData,
+  commit: boolean,
+  canvasCtx: CanvasRenderingContext2D,
+): void {
+  // activeCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
+  if (data.commit || commit) {
+    canvasCtx.strokeStyle = data.color;
+    canvasCtx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
+  } else {
+    // activeCtx.strokeStyle = data.color;
+    // activeCtx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
+  }
+  activeShape = data;
+}
+
+export function erase(
+  data: EraseData,
+  canvasCtx: CanvasRenderingContext2D,
+): void {
+  // console.log('erase');
+  const x = data.x;
+  const y = data.y;
+  const r = data.r / 2;
+  for (let i = 0; i < Math.round(Math.PI * r); i++) {
+    const angle = (i / Math.round(Math.PI * r)) * 360;
+    canvasCtx.clearRect(
+      x,
+      y,
+      Math.sin(angle * (Math.PI / 180)) * r,
+      Math.cos(angle * (Math.PI / 180)) * r,
+    );
+  }
+}
+
+export function mouseDown(
+  e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+): void {
   // console.log('down');
   originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   // points = [];
   // points.push(originPoint);
 }
 
-export function up(canvasContext: any) {
+export function mouseUp(
+  canvasCtx: CanvasRenderingContext2D | null,
+  peerConnectionContext: PeerConnectionContext,
+): void {
   // console.log('up');
   // pathsry.push(points);
-  if (activeShape) {
-    drawRect(activeShape, true, canvasContext);
+  if (activeShape && canvasCtx !== null) {
+    drawRect(activeShape, true, canvasCtx);
     broadcast(
       JSON.stringify(
         Object.assign(
@@ -54,6 +144,7 @@ export function up(canvasContext: any) {
           activeShape,
         ),
       ),
+      peerConnectionContext,
     );
     activeShape = undefined;
   }
@@ -61,18 +152,18 @@ export function up(canvasContext: any) {
   originPoint = undefined;
 }
 
-export function move(
-  e: any,
-  canvasContext: any,
+export function mouseMove(
+  e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+  canvasCtx: CanvasRenderingContext2D | null,
   activeTool: string,
   color: string,
   lineWidth: number,
   eraserWidth: number,
-) {
+  peerConnectionContext: PeerConnectionContext,
+): void {
   // console.log('move');
 
-  mouseDown = e.buttons;
-  if (e.buttons) {
+  if (e.buttons && canvasCtx !== null) {
     if (!lastPoint) {
       lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
       originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -89,7 +180,7 @@ export function move(
           color: color,
           lineWidth: lineWidth,
         },
-        canvasContext,
+        canvasCtx,
       );
 
       broadcast(
@@ -100,9 +191,11 @@ export function move(
           y: e.nativeEvent.offsetY,
           force: force,
           color: color,
+          lineWidth: lineWidth,
         }),
+        peerConnectionContext,
       );
-    } else if (activeTool === 'rect') {
+    } else if (activeTool === 'rect' && originPoint) {
       const origin = {
         x: Math.min(originPoint.x, e.nativeEvent.offsetX),
         y: Math.min(originPoint.y, e.nativeEvent.offsetY),
@@ -115,7 +208,7 @@ export function move(
           height: Math.abs(originPoint.y - e.nativeEvent.offsetY),
         },
         false,
-        canvasContext,
+        canvasCtx,
       );
       broadcast(
         JSON.stringify({
@@ -125,9 +218,10 @@ export function move(
           width: Math.abs(originPoint.x - e.nativeEvent.offsetX),
           height: Math.abs(originPoint.y - e.nativeEvent.offsetY),
         }),
+        peerConnectionContext,
       );
     } else if (activeTool === 'eraser') {
-      console.log(eraserWidth);
+      // console.log(eraserWidth);
       erase(
         {
           lastPoint,
@@ -135,69 +229,20 @@ export function move(
           y: e.nativeEvent.offsetY,
           r: eraserWidth,
         },
-        canvasContext,
+        canvasCtx,
       );
     }
     lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   } else {
-    lastPoint = undefined;
+    lastPoint = { x: 0, y: 0 };
   }
 }
 
-//! msg: any 수정
-export function draw(data: any, canvasContext: any) {
-  // console.log('draw');
-  canvasContext.lineCap = 'round';
-  canvasContext.lineJoin = 'round';
-  // points.push({ x: data.x, y: data.y });
-  canvasContext.beginPath();
-  canvasContext.moveTo(data.lastPoint.x, data.lastPoint.y);
-  canvasContext.lineTo(data.x, data.y);
-  canvasContext.strokeStyle = data.color;
-  canvasContext.lineWidth = data.lineWidth;
-  canvasContext.stroke();
-  canvasContext.closePath();
-}
-
-//! msg: any 수정
-export function drawRect(data: any, commit: any, canvasContext: any) {
-  // activeCtx.clearRect(0, 0, activeCanvas.width, activeCanvas.height);
-  if (data.commit || commit) {
-    canvasContext.strokeStyle = data.color;
-    canvasContext.strokeRect(
-      data.origin.x,
-      data.origin.y,
-      data.width,
-      data.height,
-    );
-  } else {
-    // activeCtx.strokeStyle = data.color;
-    // activeCtx.strokeRect(data.origin.x, data.origin.y, data.width, data.height);
-  }
-  activeShape = data;
-}
-
-export function erase(data: any, canvasContext: any) {
-  // console.log('erase');
-  const x = data.x;
-  const y = data.y;
-  const r = data.r / 2;
-  for (let i = 0; i < Math.round(Math.PI * r); i++) {
-    const angle = (i / Math.round(Math.PI * r)) * 360;
-    canvasContext.clearRect(
-      x,
-      y,
-      Math.sin(angle * (Math.PI / 180)) * r,
-      Math.cos(angle * (Math.PI / 180)) * r,
-    );
-  }
-}
-
-export function key(e: any) {
+export function key(e: any): void {
   // console.log('key');
   // console.log(e);
   // if (e.key === 'Backspace') {
-  //   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+  //   canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
   //   broadcast(
   //     JSON.stringify({
   //       event: 'clear',
@@ -241,6 +286,6 @@ export function key(e: any) {
   // }
 }
 
-export function forceChanged(e: any) {
+export function forceChanged(e: any): void {
   force = e.webkitForce || 1;
 }

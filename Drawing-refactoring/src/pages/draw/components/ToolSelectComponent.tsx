@@ -1,27 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { down, move, up, key, forceChanged } from '../../../functions/draw';
+import React, { useEffect } from 'react';
 import '../index.css';
+import {
+  ToolSelectComponentProps,
+  Tool,
+} from '../interfaces/tool-select-interfaces';
 
-interface ToolSelectComponentProps {
-  activeTool: string;
-  lineWidth: number;
-  eraserWidth: number;
-  setCursorWidth: any;
-  setActiveTool: any;
-}
-
-interface Tool {
-  name: string;
-  iconClass: string;
-}
-
-function ToolSelectComponent({
-  lineWidth,
-  eraserWidth,
-  setCursorWidth,
-  activeTool,
-  setActiveTool,
-}: ToolSelectComponentProps) {
+function ToolSelectComponent(props: ToolSelectComponentProps) {
   const Tools: Tool[] = [
     {
       name: 'pencil',
@@ -58,17 +42,17 @@ function ToolSelectComponent({
   ];
 
   function changeActiveTool(tool: Tool) {
-    setActiveTool(tool.name);
+    props.setActiveTool(tool.name);
     if (tool.name === 'pencil') {
-      setCursorWidth(lineWidth);
+      props.setCursorWidth(props.lineWidth);
     } else if (tool.name === 'eraser') {
-      setCursorWidth(eraserWidth);
+      props.setCursorWidth(props.eraserWidth);
     }
   }
 
-  useEffect(() => {
-    console.log(activeTool);
-  }, [activeTool]);
+  // useEffect(() => {
+  // console.log(activeTool);
+  // }, [props.activeTool]);
 
   return (
     <>
@@ -83,7 +67,7 @@ function ToolSelectComponent({
             key={tool.name}
             id={tool.name}
             className={`icon-link center ${
-              activeTool === tool.name ? 'active' : ''
+              props.activeTool === tool.name ? 'active' : ''
             }`}
             onClick={() => changeActiveTool(tool)}
           >
