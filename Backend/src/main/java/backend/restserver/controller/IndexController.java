@@ -27,7 +27,8 @@ public class IndexController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("test/login")
-    public @ResponseBody String testLogin(
+    @ResponseBody
+    public String testLogin(
             Authentication authentication, //! DI(의존성 주입)
             @AuthenticationPrincipal PrincipalDetails userDetails) { //! AuthenticationPrincipal 이 어노테이션을 통해 session정보에 접근할 수 있음.
         System.out.println("/test/login ==============");
@@ -39,7 +40,8 @@ public class IndexController {
     }
 
     @GetMapping("test/oauth/login")
-    public @ResponseBody String testOAuthLogin(
+    @ResponseBody
+    public String testOAuthLogin(
             Authentication authentication, //! DI(의존성 주입)
             @AuthenticationPrincipal PrincipalDetails userDetails, //! AuthenticationPrincipal 이 어노테이션을 통해 session정보에 접근할 수 있음.
             @AuthenticationPrincipal OAuth2User oauth) {
@@ -78,27 +80,27 @@ public class IndexController {
         return "user";
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/user/admin")
     public @ResponseBody String admin() {
         return "admin";
     }
 
-    @GetMapping("/manager")
+    @GetMapping("/user/manager")
     public @ResponseBody String manager() {
         return "manager";
     }
 
-    @GetMapping("/loginForm")
+    @GetMapping("/user/login-form")
     public String loginForm() {
         return "loginForm";
     }
 
-    @GetMapping("/joinForm")
+    @GetMapping("/user/join-form")
     public String joinForm() {
         return "joinForm";
     }
 
-    @PostMapping("/join")
+    @PostMapping("/user/join")
     public String join(User user) {
         user.setRole("ROLE_USER");
         System.out.println(user);
@@ -107,7 +109,7 @@ public class IndexController {
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         user.setPassword(encPassword);
         userRepo.save(user);
-        return "redirect:/loginForm";
+        return "redirect:/user/login-form";
     }
 
 //    @GetMapping("/joinProc")

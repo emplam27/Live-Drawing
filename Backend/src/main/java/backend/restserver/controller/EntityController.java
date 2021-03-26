@@ -80,17 +80,17 @@ public class EntityController {
         } else {
             logger.info(" uuid is : " + uuid);
 
-            Random rand = new Random();
-            long randVal = (long) rand.nextInt(randBound);
-            String userVal = Integer.toString((int) randVal);
-            String userName = "Kim" + userVal;
+        Random rand = new Random();
+        long randVal = (long) rand.nextInt(randBound);
+        String userVal = Integer.toString((int) randVal);
+        String userName = "Kim" + userVal;
 
-            User newUser = new User(userName);
-            newUser.setUserPk(roomPk);
-            Optional<Room> target = roomRepo.findById(roomPk);
-            target.get().add(newUser);
+        User newUser = new User(userName);
+        newUser.setUserPk(roomPk);
+        Optional<Room> target = roomRepo.findById(roomPk);
+        target.get().add(newUser);
 
-            userRepo.save(newUser);
+        userRepo.save(newUser);
 //            List<Member> members = new ArrayList<>();
 //            members.add(tmp);
 
