@@ -33,6 +33,7 @@ out/
 /nbdist/
 /.nb-gradle/
 
+<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -143,5 +144,7 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/react,vscode,windows,macos
 
+=======
+>>>>>>> bfb3b0bef328f2c7d980c7a6f675b08804063076
 ### VS Code ###
 .vscode/

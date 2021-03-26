@@ -1,9 +1,9 @@
 package backend.restserver.controller;
 
 import backend.restserver.entity.Room;
-import backend.restserver.entity.Member;
+import backend.restserver.entity.User;
 import backend.restserver.repository.RoomRepository;
-import backend.restserver.repository.MemberRepository;
+import backend.restserver.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,33 +15,27 @@ import java.util.*;
 public class EntityController {
     static int randBound = 10000;
     private final Logger logger = LoggerFactory.getLogger(IndexController.class);
-    private final MemberRepository memberRepo;
+    private final UserRepository userRepo;
     private final RoomRepository roomRepo;
 
     @Autowired
-    public EntityController(MemberRepository memberRepo, RoomRepository roomRepo) {
-        this.memberRepo = memberRepo;
+    public EntityController(UserRepository userRepo, RoomRepository roomRepo) {
+        this.userRepo = userRepo;
         this.roomRepo = roomRepo;
     }
 
 //     GET
 //     방 리스트 목록 조회
-    @GetMapping("/")
-    @ResponseBody
-    public List<Room> showRoomList() {
-        logger.info("show room list");
-//        RoomList list = new RoomList();
-//        RoomList list = (RoomList) roomRepo.findAll();
-//        return list;
-
-        return roomRepo.findAll();
-
-
-//        logger.info("param id " + list);
-//        System.out.println(list);
-//        return roomList;
-
-    }
+//    @GetMapping("/")
+//    @ResponseBody
+//    public List<Room> showRoomList() {
+//        logger.info("show room list");
+////        RoomList list = new RoomList();
+////        RoomList list = (RoomList) roomRepo.findAll();
+////        return list;
+//
+//        return roomRepo.findAll();
+//    }
 
 
 //    @GetMapping("/room/{id}")
@@ -52,14 +46,14 @@ public class EntityController {
 
     @GetMapping("/room/entrance")
     @ResponseBody
-    public List<Member> showMemberInfo(@RequestParam String uuid) {
-        logger.info("show member list and number!!" + uuid);
+    public List<User> showUserInfo(@RequestParam String uuid) {
+        logger.info("show user list and number!!" + uuid);
 //        List<Member> memberList =  new ArrayList<>();
 
 //        List<Member> memberList = memberRepo.findByRoom_RoomPk(roomPk);
-        List<Room> newRoom = roomRepo.findByRoomKey(uuid);
+        List<Room> newRoom = roomRepo.findByRoomKey(uuid); // 예가 인덱싱 처리가 안되있어서 해줘야 함 (물론 이번서비스에서는 그정도로 속도 저하가 일어날것 같진않지만..)
         Long roomPk = newRoom.get(0).getRoomPk();
-        return memberRepo.findByRoom_RoomPk(roomPk);
+        return userRepo.findByRoom_RoomPk(roomPk);
     }
 
 
@@ -88,15 +82,15 @@ public class EntityController {
 
             Random rand = new Random();
             long randVal = (long) rand.nextInt(randBound);
-            String memberVal = Integer.toString((int) randVal);
-            String memberName = "Kim" + memberVal;
+            String userVal = Integer.toString((int) randVal);
+            String userName = "Kim" + userVal;
 
-            Member newMember = new Member(memberName);
-            newMember.setMemberPk(roomPk);
+            User newUser = new User(userName);
+            newUser.setUserPk(roomPk);
             Optional<Room> target = roomRepo.findById(roomPk);
-            target.get().add(newMember);
+            target.get().add(newUser);
 
-            memberRepo.save(newMember);
+            userRepo.save(newUser);
 //            List<Member> members = new ArrayList<>();
 //            members.add(tmp);
 
@@ -127,17 +121,17 @@ public class EntityController {
 //        String keyValue = "1234안녕";
         String roomTitle = roomJson.get("room_title").toString();
 //        logger.info("is here?1");
-        String memberName = roomJson.get("member_name").toString();
+        String userName = roomJson.get("user_name").toString();
 //        String hostName = memberJson.get("room_host").toString();
-        logger.info("room name : " + roomTitle + " host name : " + memberName);
+        logger.info("room name : " + roomTitle + " host name : " + userName);
 
-        Member tmp = new Member(memberName);
-        memberRepo.save(tmp);
+        User tmp = new User(userName);
+        userRepo.save(tmp);
 
 //        List<Member> members = new ArrayList<>();
 //        members.add(tmp);
 //        Room newRoom = new Room(roomTitle, keyValue, memberName, members);
-        Room newRoom = new Room(roomTitle, roomKeyValue, memberName);
+        Room newRoom = new Room(roomTitle, roomKeyValue, userName);
         newRoom.add(tmp);
 
         logger.info("create new room");
