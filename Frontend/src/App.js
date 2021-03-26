@@ -6,6 +6,7 @@ import RoomCreateComponent from './pages/home/components/room-create-form';
 import testComponent from './pages/home/components/testcomponent';
 import { EntranceComponent } from './pages/home/components/entrance';
 import { ChatComponent } from './pages/live-room/components/chat';
+import { SignInComponent } from './pages/home/components/sign-in';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           {/* <Route path='/room/:roomKey' render={() => <ChatComponent userId={id} />} exact />s */}
           <Route path='/room' component={RoomCreateComponent} exact />
           <Route path='/mypage' component={HomeComponent} exact />
+          <Route path='/join' component={SignInComponent} exact />
         </div>
       </main>
     </div>

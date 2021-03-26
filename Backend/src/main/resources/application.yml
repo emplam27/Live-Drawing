@@ -3,14 +3,13 @@ logging:
     root: info
 
 server:
-    address: localhost
     port: 8080
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://13.125.97.234:3306/livedrawing
-    username: root
+    username: live
     password: swjungle!
   jpa:
     database: mysql
