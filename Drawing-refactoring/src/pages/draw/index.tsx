@@ -225,7 +225,7 @@ function Draw() {
       username: peerConnectionContext.username,
     };
     const response = await axios.post(
-      'http://localhost:8081/access',
+      'http://localhost:8080/access',
       data,
       config,
     );
@@ -247,7 +247,7 @@ function Draw() {
       },
     };
     await axios.post(
-      `http://localhost:8081/${peerConnectionContext.roomId}/join`,
+      `http://localhost:8080/${peerConnectionContext.roomId}/join`,
       null,
       config,
     );
@@ -261,7 +261,7 @@ function Draw() {
     tmpContext.token = token;
 
     tmpContext.eventSource = new EventSource(
-      `http://localhost:8081/connect?token=${token}`,
+      `http://localhost:8080/connect?token=${token}`,
     );
     tmpContext.eventSource.addEventListener(
       'add-peer',
@@ -363,7 +363,7 @@ function Draw() {
       },
     };
 
-    axios.post(`http://localhost:8081/relay/${peerId}/${event}`, data, config);
+    axios.post(`http://localhost:8080/relay/${peerId}/${event}`, data, config);
   }
 
   function onPeerData(id: string, data: string) {

@@ -37,7 +37,7 @@ function load() {}
 // }
 
 // async function getToken() {
-//   const res = await fetch('http://localhost:8081/access', {
+//   const res = await fetch('http://localhost:8080/access', {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function load() {}
 // }
 
 // async function join() {
-//   return fetch(`http://localhost:8081/${peerConnectionContext.roomId}/join`, {
+//   return fetch(`http://localhost:8080/${peerConnectionContext.roomId}/join`, {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ function load() {}
 // async function connect() {
 //   await getToken();
 //   peerConnectionContext.eventSource = new EventSource(
-//     `http://localhost:8081/connect?token=${peerConnectionContext.token}`,
+//     `http://localhost:8080/connect?token=${peerConnectionContext.token}`,
 //   );
 //   peerConnectionContext.eventSource.addEventListener(
 //     'add-peer',
@@ -135,7 +135,7 @@ function load() {}
 // }
 
 // function relay(peerId: string, event: string, data: any) {
-//   fetch(`http://localhost:8081/relay/${peerId}/${event}`, {
+//   fetch(`http://localhost:8080/relay/${peerId}/${event}`, {
 //     method: 'POST',
 //     headers: {
 //       'Content-Type': 'application/json',
