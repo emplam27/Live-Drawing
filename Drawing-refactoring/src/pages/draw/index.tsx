@@ -5,7 +5,6 @@ import { broadcast, draw, drawRect } from '../../functions/draw';
 import { v4 as uuid } from 'uuid';
 
 import './index.css';
-// import styled from 'styled-components';
 
 import LayerComponent from './components/LayerComponent';
 import CursorComponent from './components/CursorComponent';
@@ -14,35 +13,13 @@ import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
 import axios from 'axios';
-
-// import styled from 'styled-components';
-
-interface Params {
-  roomKey: string;
-}
-
-interface Layer {
-  name: string;
-  canvasId: string;
-  buttonId: string;
-  canvasCtx: CanvasRenderingContext2D | null;
-}
-
-interface PeerConnectionContext {
-  username: string;
-  roomId: string;
-  token: string | null;
-  eventSource: EventSource | null;
-  peers: { [key: string]: RTCPeerConnection };
-  channels: any;
-  is_new: boolean;
-  is_host: boolean;
-  hostId: string | null;
-}
-
-interface CanvasCtxTable {
-  [key: string]: CanvasRenderingContext2D;
-}
+import {
+  Params,
+  Layer,
+  PeerConnectionContext,
+  CanvasCtxTable,
+} from './interfaces/index-interfaces';
+import { DrawData } from './interfaces/draw-interfaces';
 
 // interface point {
 //   x: number;
@@ -63,7 +40,6 @@ function Draw() {
   const [layers, setLayers] = useState<Layer[]>([]);
   const [layerCount, setLayerCount] = useState<number>(1);
   const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
-  const [canvas, setCanvas] = useState<any>(null);
   const [canvasCtx, setCanvasCtx] = useState<CanvasRenderingContext2D | null>(
     null,
   );
@@ -71,7 +47,12 @@ function Draw() {
   //! 하나의 ctx를 사용, 전역으로 사용하기 위해 Context API 사용
   //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
+<<<<<<< HEAD
   const [drawHistory, setDrawHistory] = useState([]);
+=======
+  const [newMsg, setNewMsg] = useState<string>();
+  const [drawHistory, setDrawHistory] = useState<DrawData[]>([]);
+>>>>>>> e9a1086e1f25d93177357cc0f9b1f4472f3f9433
 
   const [onPeerDataSignal, setOnPeerDataSignal] = useState<string>();
   const [addPeerSignal, setAddPeerSignal] = useState<string | null>(null);
@@ -130,6 +111,45 @@ function Draw() {
 
   // let activeLayerDummy: Layer | null = null;
 
+
+  // function actionPeerData(msg: any) {
+  //   console.log('========= actionPeerData ==========');
+  //   forceUpdate();
+  //   // const activeLayerDummy = useActiveLayerState();
+
+  //   // console.log(activeLayerDummy);
+  //   console.log(activeLayer);
+  //   console.log(peerConnectionContext);
+  //   console.log(eraserWidth);
+  //   console.log(cursorWidth);
+  //   console.log(color);
+  //   console.log(activeTool);
+  //   console.log(layers);
+  //   console.log(layerCount);
+  //   console.log(canvas);
+  //   console.log(canvasCtx);
+  //   if (activeLayer === null || activeLayer.canvasCtx === null) return;
+
+  //   console.log(activeLayer.canvasCtx);
+  //   console.log(msg);
+  //   if (msg.event === 'draw') {
+  //     draw(msg, activeLayer.canvasCtx);
+  //   } else if (msg.event === 'drawRect') {
+  //     drawRect(msg, false, activeLayer.canvasCtx);
+  //   } else if (msg.event === 'clear') {
+  //     // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  //   } else if (msg.event === 'drawHistoryData') {
+  //     // drawHistoryData(msg);
+  //   }
+  // }
+
+  // async function updateActiveLayer(tmp: Layer) {
+  //   console.log('***************** updateActiveLayer ***********');
+  //   console.log(tmp);
+  //   activeLayerDummy = tmp;
+  //   setActiveLayer(tmp);
+  // }
+
   // function drawPaths() {
   //   // delete everything
   //   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -156,7 +176,7 @@ function Draw() {
   //   console.log(pathsry);
   // }
 
-  async function getToken() {
+  async function getToken(): Promise<string> {
     console.log('========= getToken ==========');
     // console.log(activeLayer);
     console.log(peerConnectionContext.username);
@@ -784,7 +804,6 @@ function Draw() {
           lineWidth={lineWidth}
           eraserWidth={eraserWidth}
           layers={layers}
-          canvas={canvas}
           layerCount={layerCount}
           activeLayer={activeLayer}
           canvasCtx={canvasCtx}
@@ -792,7 +811,6 @@ function Draw() {
           peerConnectionContext={peerConnectionContext}
           drawHistory={drawHistory}
           setLayers={setLayers}
-          setCanvas={setCanvas}
           setLayerCount={setLayerCount}
           setActiveLayer={setActiveLayer}
           setCanvasCtx={setCanvasCtx}

@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../index.css';
+import { CursorComponentProps } from '../interfaces/cursor-interfaces';
 
-interface CursorComponentProps {
-  cursorWidth: number;
-}
-
-function CursorComponent({ cursorWidth }: CursorComponentProps) {
+function CursorComponent(props: CursorComponentProps) {
   const [hidden, setHidden] = useState(false);
   const [position, setPosition] = useState({
     x: window.innerWidth / 2,
@@ -25,21 +22,37 @@ function CursorComponent({ cursorWidth }: CursorComponentProps) {
   };
 
   const addEventListeners = () => {
-    const targetCanvasContainer: any = document.getElementById(
+    const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
+<<<<<<< HEAD
     targetCanvasContainer?.addEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.addEventListener('mouseenter', onMouseEnter);
     targetCanvasContainer?.addEventListener('mouseleave', onMouseLeave);
+=======
+    if (targetCanvasContainer != null) {
+      targetCanvasContainer.addEventListener('mousemove', onMouseMove);
+      targetCanvasContainer.addEventListener('mouseenter', onMouseEnter);
+      targetCanvasContainer.addEventListener('mouseleave', onMouseLeave);
+    }
+>>>>>>> e9a1086e1f25d93177357cc0f9b1f4472f3f9433
   };
 
   const removeEventListeners = () => {
-    const targetCanvasContainer: any = document.getElementById(
+    const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
+<<<<<<< HEAD
     targetCanvasContainer?.removeEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.removeEventListener('mouseenter', onMouseEnter);
     targetCanvasContainer?.removeEventListener('mouseleave', onMouseLeave);
+=======
+    if (targetCanvasContainer != null) {
+      targetCanvasContainer.removeEventListener('mousemove', onMouseMove);
+      targetCanvasContainer.removeEventListener('mouseenter', onMouseEnter);
+      targetCanvasContainer.removeEventListener('mouseleave', onMouseLeave);
+    }
+>>>>>>> e9a1086e1f25d93177357cc0f9b1f4472f3f9433
   };
 
   // const range = document.getElementById('pencilSlider')
@@ -54,7 +67,7 @@ function CursorComponent({ cursorWidth }: CursorComponentProps) {
 
   useEffect(() => {
     // console.log('cursor : ', cursorWidth);
-  }, [cursorWidth]);
+  }, [props.cursorWidth]);
 
   return (
     <div
@@ -62,8 +75,8 @@ function CursorComponent({ cursorWidth }: CursorComponentProps) {
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
-        width: `${cursorWidth}px`,
-        height: `${cursorWidth}px`,
+        width: `${props.cursorWidth}px`,
+        height: `${props.cursorWidth}px`,
       }}
     />
   );

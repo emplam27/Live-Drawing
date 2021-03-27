@@ -1,6 +1,14 @@
 // import { useCanvasCtxsState } from '../pages/draw/DrawContext';
 // import { broadcast } from '../connections/load';
 
+import {
+  DrawData,
+  EraseData,
+  Point,
+  RectData,
+} from '../pages/draw/interfaces/draw-interfaces';
+import { PeerConnectionContext } from '../pages/draw/interfaces/index-interfaces';
+
 // const canvasCtxs = useCanvasCtxsState();
 // pencil_slider = document.getElementById('pencilSlider');
 // pencil_slider.addEventListener('mouseup', changePencilSize)
@@ -13,10 +21,10 @@
 //! any 수정
 // let points: any = [];
 // const pathsry: any = [];
-let activeShape: any;
-let lastPoint: any;
-let originPoint: any;
-let force: any = 1;
+let activeShape: RectData | undefined;
+let lastPoint: Point | undefined;
+let originPoint: Point | undefined;
+let force: number = 1;
 
 //! msg: any 수정
 // export function actionPeerData(msg: any) {
@@ -42,7 +50,10 @@ let force: any = 1;
 //   }
 // }
 
-export function broadcast(data: string, peerConnectionContext: any) {
+export function broadcast(
+  data: string,
+  peerConnectionContext: PeerConnectionContext,
+) {
   for (const peerId in peerConnectionContext.channels) {
     // peerConnectionContext.channels[peerId].send(data);
     if (peerConnectionContext.channels[peerId].readyState === 'open') {
@@ -51,10 +62,11 @@ export function broadcast(data: string, peerConnectionContext: any) {
   }
 }
 
-interface MsgData {}
-
 //! msg: any 수정
-export function draw(data: any, canvasCtx: CanvasRenderingContext2D): void {
+export function draw(
+  data: DrawData,
+  canvasCtx: CanvasRenderingContext2D,
+): void {
   // console.log(canvasCtxs);
   // console.log('draw');
   canvasCtx.lineCap = 'round';
@@ -71,7 +83,7 @@ export function draw(data: any, canvasCtx: CanvasRenderingContext2D): void {
 
 //! msg: any 수정
 export function drawRect(
-  data: any,
+  data: RectData,
   commit: boolean,
   canvasCtx: CanvasRenderingContext2D,
 ): void {
@@ -86,7 +98,10 @@ export function drawRect(
   activeShape = data;
 }
 
-export function erase(data: any, canvasCtx: CanvasRenderingContext2D): void {
+export function erase(
+  data: EraseData,
+  canvasCtx: CanvasRenderingContext2D,
+): void {
   // console.log('erase');
   const x = data.x;
   const y = data.y;
@@ -102,7 +117,9 @@ export function erase(data: any, canvasCtx: CanvasRenderingContext2D): void {
   }
 }
 
-export function mouseDown(e: any): void {
+export function mouseDown(
+  e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+): void {
   // console.log('down');
   originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   // points = [];
@@ -111,7 +128,7 @@ export function mouseDown(e: any): void {
 
 export function mouseUp(
   canvasCtx: CanvasRenderingContext2D | null,
-  peerConnectionContext: any,
+  peerConnectionContext: PeerConnectionContext,
 ): void {
   // console.log('up');
   // pathsry.push(points);
@@ -136,13 +153,13 @@ export function mouseUp(
 }
 
 export function mouseMove(
-  e: any,
+  e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
   canvasCtx: CanvasRenderingContext2D | null,
   activeTool: string,
   color: string,
   lineWidth: number,
   eraserWidth: number,
-  peerConnectionContext: any,
+  peerConnectionContext: PeerConnectionContext,
 ): void {
   // console.log('move');
 
@@ -178,7 +195,7 @@ export function mouseMove(
         }),
         peerConnectionContext,
       );
-    } else if (activeTool === 'rect') {
+    } else if (activeTool === 'rect' && originPoint) {
       const origin = {
         x: Math.min(originPoint.x, e.nativeEvent.offsetX),
         y: Math.min(originPoint.y, e.nativeEvent.offsetY),
@@ -217,7 +234,7 @@ export function mouseMove(
     }
     lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   } else {
-    lastPoint = undefined;
+    lastPoint = { x: 0, y: 0 };
   }
 }
 
