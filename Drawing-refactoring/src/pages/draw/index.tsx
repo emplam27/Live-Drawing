@@ -71,8 +71,22 @@ function Draw() {
   //! 하나의 ctx를 사용, 전역으로 사용하기 위해 Context API 사용
   //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
-  const [newMsg, setNewMsg] = useState<string>();
   const [drawHistory, setDrawHistory] = useState([]);
+
+  const [onPeerDataSignal, setOnPeerDataSignal] = useState<string>();
+  const [addPeerSignal, setAddPeerSignal] = useState<string | null>(null);
+  const [removePeerSignal, setRemovePeerSignal] = useState<string | null>(null);
+  const [sessionDescriptionSignal, setSessionDescriptionSignal] = useState<
+    string | null
+  >(null);
+  const [iceCandidateSignal, setIceCandidateSignal] = useState<string | null>(
+    null,
+  );
+  const [joinSignal, setJoinSignal] = useState<string | null>(null);
+  const [sendHistoryDataSignal, setSendHistoryDataSignal] = useState<
+    string | null
+  >(null);
+  const [setHostSignal, setSetHostSignal] = useState<string | null>(null);
 
   /*
    * context API
@@ -116,77 +130,6 @@ function Draw() {
 
   // let activeLayerDummy: Layer | null = null;
 
-  useEffect(() => {
-    if (
-      activeLayer === null ||
-      activeLayer.canvasCtx === null ||
-      newMsg == '' ||
-      newMsg == null
-    )
-      return;
-    const tempMsg = JSON.parse(newMsg);
-    // console.log('-----------------', activeLayer.canvasCtx);
-    console.log(tempMsg);
-    if (tempMsg.event === 'draw') {
-      draw(tempMsg, activeLayer.canvasCtx);
-    } else if (tempMsg.event === 'drawRect') {
-      drawRect(tempMsg, false, activeLayer.canvasCtx);
-    } else if (tempMsg.event === 'clear') {
-      // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    } else if (tempMsg.event === 'drawHistoryData') {
-      actionDrawHistory(tempMsg, activeLayer.canvasCtx);
-    }
-  }, [newMsg]);
-
-  function actionDrawHistory(data: any, canvasCtx: any) {
-    if (peerConnectionContext.is_new) {
-      data.history.forEach((elem: any) => {
-        //! 이벤트 종류 추가해야 함
-        draw(elem, canvasCtx);
-      });
-
-      peerConnectionContext.is_new = false;
-    }
-  }
-
-  // function actionPeerData(msg: any) {
-  //   console.log('========= actionPeerData ==========');
-  //   forceUpdate();
-  //   // const activeLayerDummy = useActiveLayerState();
-
-  //   // console.log(activeLayerDummy);
-  //   console.log(activeLayer);
-  //   console.log(peerConnectionContext);
-  //   console.log(eraserWidth);
-  //   console.log(cursorWidth);
-  //   console.log(color);
-  //   console.log(activeTool);
-  //   console.log(layers);
-  //   console.log(layerCount);
-  //   console.log(canvas);
-  //   console.log(canvasCtx);
-  //   if (activeLayer === null || activeLayer.canvasCtx === null) return;
-
-  //   console.log(activeLayer.canvasCtx);
-  //   console.log(msg);
-  //   if (msg.event === 'draw') {
-  //     draw(msg, activeLayer.canvasCtx);
-  //   } else if (msg.event === 'drawRect') {
-  //     drawRect(msg, false, activeLayer.canvasCtx);
-  //   } else if (msg.event === 'clear') {
-  //     // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  //   } else if (msg.event === 'drawHistoryData') {
-  //     // drawHistoryData(msg);
-  //   }
-  // }
-
-  // async function updateActiveLayer(tmp: Layer) {
-  //   console.log('***************** updateActiveLayer ***********');
-  //   console.log(tmp);
-  //   activeLayerDummy = tmp;
-  //   setActiveLayer(tmp);
-  // }
-
   // function drawPaths() {
   //   // delete everything
   //   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
@@ -216,6 +159,8 @@ function Draw() {
   async function getToken() {
     console.log('========= getToken ==========');
     // console.log(activeLayer);
+    console.log(peerConnectionContext.username);
+    console.table(peerConnectionContext);
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -229,75 +174,320 @@ function Draw() {
       data,
       config,
     );
-    // console.log(response.data.token);
+    console.log(response.data.token);
 
     // return data.token;
     return response.data.token;
   }
 
-  async function join(token: string) {
-    console.log('========= join ==========');
-    // console.log(activeLayer);
-    // console.log(peerConnectionContext);
-    // console.log(token);
+  // function addRTCEvents(peerConnectionContext: any) {
+  //   console.log('이벤트 리스너를 새로 달았습니다.');
+  //   console.table(peerConnectionContext);
+
+  //   const tmpAddPeer = function (data: any) {
+  //     addPeer(data, peerConnectionContext);
+  //   };
+  //   const tmpRemovePeer = function (data: any) {
+  //     removePeer(data);
+  //   };
+  //   const tmpSessionDescription = function (data: any) {
+  //     sessionDescription(data, peerConnectionContext);
+  //   };
+  //   const tmpIceCandidate = function (data: any) {
+  //     iceCandidate(data, peerConnectionContext);
+  //   };
+  //   const tmpJoin = function () {
+  //     join(peerConnectionContext);
+  //   };
+  //   const tmpSendHistoryData = function () {
+  //     sendHistoryData(peerConnectionContext);
+  //   };
+  //   const tmpSetHost = function () {
+  //     setHost(peerConnectionContext);
+  //   };
+
+  //   //! removeEventListener
+  //   peerConnectionContext.eventSource.removeEventListener(
+  //     'add-peer',
+  //     tmpAddPeer,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.removeEventListener(
+  //     'remove-peer',
+  //     tmpRemovePeer,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.removeEventListener(
+  //     'session-description',
+  //     tmpSessionDescription,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.removeEventListener(
+  //     'ice-candidate',
+  //     tmpIceCandidate,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.removeEventListener('connected', tmpJoin);
+  //   peerConnectionContext.eventSource.removeEventListener(
+  //     'send-history-data',
+  //     tmpSendHistoryData,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.removeEventListener(
+  //     'youAreTheHost',
+  //     tmpSetHost,
+  //     false,
+  //   );
+
+  //   //! addEventListener
+  //   peerConnectionContext.eventSource.addEventListener(
+  //     'add-peer',
+  //     tmpAddPeer,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.addEventListener(
+  //     'remove-peer',
+  //     tmpRemovePeer,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.addEventListener(
+  //     'session-description',
+  //     tmpSessionDescription,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.addEventListener(
+  //     'ice-candidate',
+  //     tmpIceCandidate,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.addEventListener('connected', tmpJoin);
+  //   peerConnectionContext.eventSource.addEventListener(
+  //     'send-history-data',
+  //     tmpSendHistoryData,
+  //     false,
+  //   );
+  //   peerConnectionContext.eventSource.addEventListener(
+  //     'youAreTheHost',
+  //     tmpSetHost,
+  //     false,
+  //   );
+  //   console.table(peerConnectionContext);
+  //   setPeerConnectionContext(peerConnectionContext);
+  // }
+
+  async function connect() {
+    console.log('========= connect ==========');
+    const token = await getToken();
+    const tmpContext = { ...peerConnectionContext };
+    tmpContext.token = token;
+    tmpContext.eventSource = new EventSource(
+      `http://localhost:8080/connect?token=${token}`,
+    );
+
+    tmpContext.eventSource.addEventListener('add-peer', addPeer, false);
+    tmpContext.eventSource.addEventListener('remove-peer', removePeer, false);
+    tmpContext.eventSource.addEventListener(
+      'session-description',
+      sessionDescription,
+      false,
+    );
+    tmpContext.eventSource.addEventListener(
+      'ice-candidate',
+      iceCandidate,
+      false,
+    );
+    tmpContext.eventSource.addEventListener('connected', join);
+    tmpContext.eventSource.addEventListener(
+      'send-history-data',
+      sendHistoryData,
+      false,
+    );
+    tmpContext.eventSource.addEventListener('youAreTheHost', setHost, false);
+    console.table(tmpContext);
+    setPeerConnectionContext(tmpContext);
+    console.log(tmpContext);
+    // addRTCEvents(tmpContext);
+  }
+
+  //! data:any 수정
+  function addPeer(data: any) {
+    setAddPeerSignal(data.data);
+  }
+
+  async function createOffer(
+    peerId: string,
+    peer: RTCPeerConnection,
+    token: any,
+  ) {
+    console.log('========= createOffer ==========');
+
+    const offer = await peer.createOffer();
+    await peer.setLocalDescription(offer);
+    await relay(peerId, 'session-description', offer, token);
+  }
+
+  function relay(peerId: string, event: string, data: any, token: string) {
+    console.log('========= relay ==========');
+    console.log('peerId ::', peerId, 'event ::', event);
+
     const config = {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     };
-    await axios.post(
-      `http://localhost:8080/${peerConnectionContext.roomId}/join`,
-      null,
-      config,
-    );
+
+    axios.post(`http://localhost:8080/relay/${peerId}/${event}`, data, config);
   }
 
-  async function connect() {
-    console.log('========= connect ==========');
+  function onPeerData(id: string, data: string) {
+    // console.log('========= onPeerData ==========');
     // console.log(activeLayer);
-    const token = await getToken();
-    const tmpContext = { ...peerConnectionContext };
-    tmpContext.token = token;
 
-    tmpContext.eventSource = new EventSource(
-      `http://localhost:8080/connect?token=${token}`,
-    );
-    tmpContext.eventSource.addEventListener(
-      'add-peer',
-      (data) => addPeer(data, token),
-      false,
-    );
-    tmpContext.eventSource.addEventListener('remove-peer', removePeer, false);
-    tmpContext.eventSource.addEventListener(
-      'session-description',
-      (data) => sessionDescription(data, token),
-      false,
-    );
-    tmpContext.eventSource.addEventListener(
-      'ice-candidate',
-      (data) => iceCandidate(data, token),
-      false,
-    );
-    tmpContext.eventSource.addEventListener('connected', () => join(token));
-    tmpContext.eventSource.addEventListener(
-      'send-history-data',
-      () => sendHistoryData(token),
-      false,
-    );
-    tmpContext.eventSource.addEventListener('youAreTheHost', setHost, false);
-    setPeerConnectionContext(tmpContext);
+    // const msg = JSON.parse(data);
+    // actionPeerData(msg);
+    setOnPeerDataSignal(data);
   }
 
   //! data:any 수정
-  function addPeer(data: any, token: string) {
-    console.log('========= addPeer ==========');
-    // console.log(activeLayer);
+  function removePeer(data: any) {
+    console.log('========= removePeer ==========');
+    setRemovePeerSignal(data.data);
+    // const tmpPeerConnectionContext = { ...peerConnectionContext };
+    // console.log(tmpPeerConnectionContext);
 
-    const message = JSON.parse(data.data);
+    // const message = JSON.parse(data.data);
+    // if (tmpPeerConnectionContext.peers[message.peer.id]) {
+    //   tmpPeerConnectionContext.peers[message.peer.id].close();
+    // }
+    // delete tmpPeerConnectionContext.peers[message.peer.id];
+
+    // setPeerConnectionContext(tmpPeerConnectionContext);
+  }
+
+  //! data:any 수정
+  async function sessionDescription(data: any) {
+    setSessionDescriptionSignal(data.data);
+    // console.log('========= sessionDescription ==========');
+    // console.log(peerConnectionContext);
+
+    // const message = JSON.parse(data.data);
+    // const peer = peerConnectionContext.peers[message.peer.id];
+    // const remoteDescription = new RTCSessionDescription(message.data);
+
+    // await peer.setRemoteDescription(remoteDescription);
+    // if (remoteDescription.type === 'offer') {
+    //   const answer = await peer.createAnswer();
+    //   await peer.setLocalDescription(answer);
+    //   await relay(
+    //     message.peer.id,
+    //     'session-description',
+    //     answer,
+    //     peerConnectionContext.token,
+    //   );
+    // }
+  }
+
+  //! data:any 수정
+  function iceCandidate(data: any) {
+    setIceCandidateSignal(data.data);
+    // console.log('========= iceCandidate ==========');
+    // console.log(peerConnectionContext);
+
+    // const message = JSON.parse(data.data);
+    // const peer = peerConnectionContext.peers[message.peer.id];
+    // peer.addIceCandidate(new RTCIceCandidate(message.data));
+    // console.log(
+    //   'peerConnectionContext.is_host ::',
+    //   peerConnectionContext.is_host,
+    // );
+    // console.log(
+    //   'peerConnectionContext.is_new ::',
+    //   peerConnectionContext.is_new,
+    // );
+    // if (!peerConnectionContext.is_host && peerConnectionContext.is_new) {
+    //   requireDrawHistory(peerConnectionContext);
+    // }
+  }
+
+  async function join(data: any) {
+    setJoinSignal('asdf');
+    // console.log('========= join ==========');
+    // // console.log(activeLayer);
+    // // console.log(peerConnectionContext);
+    // // console.log(token);
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer ${peerConnectionContext.token}`,
+    //   },
+    // };
+    // await axios.post(
+    //   `http://localhost:8080/${peerConnectionContext.roomId}/join`,
+    //   null,
+    //   config,
+    // );
+  }
+
+  function sendHistoryData(data: any) {
+    setSendHistoryDataSignal('asdf');
+    // console.log('========== load.js :: sendHistoryData ==========');
+    // console.log(peerConnectionContext);
+    // if (!peerConnectionContext.is_host) {
+    //   return;
+    // }
+
+    // const historyData = {
+    //   event: 'drawHistoryData',
+    //   drawHistory: drawHistory,
+    // };
+    // console.log(historyData);
+    // broadcast(JSON.stringify(historyData), peerConnectionContext);
+  }
+
+  function setHost(data: any) {
+    setSetHostSignal('asdf');
+  }
+
+  function requireDrawHistory(peerConnectionContext: any) {
+    console.log('========== load.js :: requireDrawHistory ==========');
+    console.log('peerConnectionContext', peerConnectionContext);
+    console.log('hostId', peerConnectionContext.hostId);
+    if (peerConnectionContext.hostId !== null) {
+      relay(
+        peerConnectionContext.hostId,
+        'send-history-data',
+        { data: null },
+        peerConnectionContext.token,
+      );
+    }
+  }
+
+  function actionDrawHistory(data: any, canvasCtx: any) {
+    console.log(data);
+    if (peerConnectionContext.is_new) {
+      data.drawHistory.forEach((elem: any) => {
+        //! 이벤트 종류 추가해야 함
+        draw(elem, canvasCtx);
+      });
+
+      peerConnectionContext.is_new = false;
+    }
+  }
+
+  //! addPeer
+  useEffect(() => {
+    if (addPeerSignal === null) return;
+    console.log('========= addPeer ==========');
+    console.table(peerConnectionContext);
+
+    const message = JSON.parse(addPeerSignal);
     if (peerConnectionContext.peers[message.peer.id]) {
       return;
     }
+
+    console.log('호스트가 아닌데?');
+    console.log(message.hostId);
 
     const updatePeerConnectionContext = { ...peerConnectionContext };
     updatePeerConnectionContext.hostId = message.hostId;
@@ -308,8 +498,14 @@ function Draw() {
 
     // handle ice candidate
     peer.onicecandidate = function (event) {
+      if (peerConnectionContext.token === null) return;
       if (event.candidate) {
-        relay(message.peer.id, 'ice-candidate', event.candidate, token);
+        relay(
+          message.peer.id,
+          'ice-candidate',
+          event.candidate,
+          peerConnectionContext.token,
+        );
       }
     };
 
@@ -324,7 +520,7 @@ function Draw() {
         onPeerData(message.peer.id, event.data);
       };
       updatePeerConnectionContext.channels[message.peer.id] = channel;
-      createOffer(message.peer.id, peer, token);
+      createOffer(message.peer.id, peer, peerConnectionContext.token);
     } else {
       peer.ondatachannel = function (event) {
         updatePeerConnectionContext.channels[message.peer.id] = event.channel;
@@ -334,96 +530,128 @@ function Draw() {
       };
     }
     setPeerConnectionContext(updatePeerConnectionContext);
-  }
+  }, [addPeerSignal]);
 
-  async function createOffer(
-    peerId: string,
-    peer: RTCPeerConnection,
-    token: string,
-  ) {
-    console.log('========= createOffer ==========');
-    // console.log(activeLayer);
-
-    const offer = await peer.createOffer();
-    await peer.setLocalDescription(offer);
-    await relay(peerId, 'session-description', offer, token);
-  }
-
-  function relay(peerId: string, event: string, data: any, token: string) {
-    // console.log('========= relay ==========');
-    // console.log(peerConnectionContext.peers);
-    // console.log('peerId ::', peerId);
-    // console.log('event ::', event);
-    // console.log('peerConnectionContext.token ::', token);
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    axios.post(`http://localhost:8080/relay/${peerId}/${event}`, data, config);
-  }
-
-  function onPeerData(id: string, data: string) {
-    console.log('========= onPeerData ==========');
-    // console.log(activeLayer);
-
-    // const msg = JSON.parse(data);
-    // actionPeerData(msg);
-    setNewMsg(data);
-  }
-
-  //! data:any 수정
-  function removePeer(data: any) {
+  //! removePeer
+  useEffect(() => {
+    if (removePeerSignal === null) return;
     console.log('========= removePeer ==========');
 
     const tmpPeerConnectionContext = { ...peerConnectionContext };
     console.log(tmpPeerConnectionContext);
 
-    const message = JSON.parse(data.data);
+    const message = JSON.parse(removePeerSignal);
     if (tmpPeerConnectionContext.peers[message.peer.id]) {
       tmpPeerConnectionContext.peers[message.peer.id].close();
     }
     delete tmpPeerConnectionContext.peers[message.peer.id];
 
     setPeerConnectionContext(tmpPeerConnectionContext);
-  }
+  }, [removePeerSignal]);
 
-  //! data:any 수정
-  async function sessionDescription(data: any, token: string) {
+  //! sessionDescription
+  useEffect(() => {
+    if (sessionDescriptionSignal === null) return;
     console.log('========= sessionDescription ==========');
     console.log(peerConnectionContext);
 
-    const message = JSON.parse(data.data);
-    const peer = peerConnectionContext.peers[message.peer.id];
-    const remoteDescription = new RTCSessionDescription(message.data);
+    const message = JSON.parse(sessionDescriptionSignal);
 
-    await peer.setRemoteDescription(remoteDescription);
-    if (remoteDescription.type === 'offer') {
-      const answer = await peer.createAnswer();
-      await peer.setLocalDescription(answer);
-      await relay(message.peer.id, 'session-description', answer, token);
+    async function relaySessionDescription(message: any) {
+      const peer = peerConnectionContext.peers[message?.peer.id];
+      const remoteDescription = new RTCSessionDescription(message.data);
+
+      if (peerConnectionContext.token === null) return;
+      await peer.setRemoteDescription(remoteDescription);
+      if (remoteDescription.type === 'offer') {
+        const answer = await peer.createAnswer();
+        await peer.setLocalDescription(answer);
+        await relay(
+          message.peer.id,
+          'session-description',
+          answer,
+          peerConnectionContext.token,
+        );
+      }
     }
-  }
 
-  //! data:any 수정
-  function iceCandidate(data: any, token: string) {
+    relaySessionDescription(message);
+    // await peer.setRemoteDescription(remoteDescription);
+    // if (remoteDescription.type === 'offer') {
+    //   const answer = await peer.createAnswer();
+    //   await peer.setLocalDescription(answer);
+    //   await relay(
+    //     message.peer.id,
+    //     'session-description',
+    //     answer,
+    //     peerConnectionContext.token,
+    //   );
+    // }
+  }, [sessionDescriptionSignal]);
+
+  //! iceCandidate
+  useEffect(() => {
+    if (iceCandidateSignal === null) return;
+    console.log('========= iceCandidate ==========');
+    console.log('========= iceCandidate ==========');
+    console.log('========= iceCandidate ==========');
+    console.log('========= iceCandidate ==========');
+    console.log('========= iceCandidate ==========');
+    console.log('========= iceCandidate ==========');
+    console.log('========= iceCandidate ==========');
     console.log('========= iceCandidate ==========');
     console.log(peerConnectionContext);
 
-    const message = JSON.parse(data.data);
+    const message = JSON.parse(iceCandidateSignal);
+    console.log(message);
     const peer = peerConnectionContext.peers[message.peer.id];
+    if (!peer) return;
     peer.addIceCandidate(new RTCIceCandidate(message.data));
+    console.log(
+      'peerConnectionContext.is_host ::',
+      peerConnectionContext.is_host,
+    );
+    console.log(
+      'peerConnectionContext.is_new ::',
+      peerConnectionContext.is_new,
+    );
     if (!peerConnectionContext.is_host && peerConnectionContext.is_new) {
-      requireDrawHistory(token);
+      requireDrawHistory(peerConnectionContext);
     }
-  }
+  }, [iceCandidateSignal]);
 
-  function sendHistoryData(data: any) {
+  //! join
+  useEffect(() => {
+    if (joinSignal === null) return;
+
+    console.log('========= join ==========');
+    // console.log(activeLayer);
+    // console.log(peerConnectionContext);
+    // console.log(token);
+
+    async function joinRequest() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${peerConnectionContext.token}`,
+        },
+      };
+      await axios.post(
+        `http://localhost:8080/${peerConnectionContext.roomId}/join`,
+        null,
+        config,
+      );
+    }
+    joinRequest();
+  }, [joinSignal]);
+
+  //! sendHistoryData
+  useEffect(() => {
+    if (sendHistoryDataSignal === null) return;
+
     console.log('========== load.js :: sendHistoryData ==========');
-    console.log(peerConnectionContext);
+    console.log(drawHistory);
+
     if (!peerConnectionContext.is_host) {
       return;
     }
@@ -434,23 +662,12 @@ function Draw() {
     };
     console.log(historyData);
     broadcast(JSON.stringify(historyData), peerConnectionContext);
-  }
+  }, [sendHistoryDataSignal]);
 
-  function requireDrawHistory(token: string) {
-    console.log('========== load.js :: requireDrawHistory ==========');
-    console.log('peerConnectionContext', peerConnectionContext);
-    console.log('hostId', peerConnectionContext.hostId);
-    if (peerConnectionContext.hostId !== null) {
-      relay(
-        peerConnectionContext.hostId,
-        'send-history-data',
-        { data: null },
-        token,
-      );
-    }
-  }
+  //! setHost
+  useEffect(() => {
+    if (setHostSignal === null) return;
 
-  function setHost() {
     console.log('========== load.js :: setHost ==========');
     console.log('========== load.js :: setHost ==========');
     console.log('========== load.js :: setHost ==========');
@@ -465,22 +682,69 @@ function Draw() {
     tmpPeerConnectionContext.is_host = true;
     tmpPeerConnectionContext.is_new = false;
     setPeerConnectionContext(tmpPeerConnectionContext);
-  }
-
-  // const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
+  }, [setHostSignal]);
 
   // useEffect(() => {
-  //   console.log('========= useEffect :: activeLayer ==========');
-  //   console.log(activeLayer);
-  //   forceUpdate();
+  //   if (activeLayer === null || peerConnectionContext.token === null) return;
+  //   console.log('!!!!!!!!!!!!!!!! activeLayer가 바뀌었다 !!!!!!!!!!!!!!!!!');
+  //   console.table(peerConnectionContext);
+  //   // addRTCEvents(peerConnectionContext);
   // }, [activeLayer]);
 
   // useEffect(() => {
-  //   console.log('========= useEffect :: canvasCtxTable ==========');
-  //   console.log(canvasCtxTable);
-  // }, [canvasCtxTable]);
+  //   if (peerConnectionContext.is_host === false) return;
+  //   console.log('!!!!!!!!!!!!!!!! is_host가 바뀌었다 !!!!!!!!!!!!!!!!!');
+  //   console.table(peerConnectionContext);
+  //   // addRTCEvents(peerConnectionContext);
+  // }, [peerConnectionContext.is_host]);
+
+  // useEffect(() => {
+  //   if (peerConnectionContext.is_new || peerConnectionContext.is_host) return;
+  //   console.log('!!!!!!!!!!!!!!!! is_new가 바뀌었다 !!!!!!!!!!!!!!!!!');
+  //   console.table(peerConnectionContext);
+  //   // addRTCEvents(peerConnectionContext);
+  // }, [peerConnectionContext.is_new]);
+
+  // useEffect(() => {
+  //   if (peerConnectionContext.hostId === null) return;
+  //   console.log('!!!!!!!!!!!!!!!! hostId가 바뀌었다 !!!!!!!!!!!!!!!!!');
+  //   console.table(peerConnectionContext);
+  //   // addRTCEvents(peerConnectionContext);
+  // }, [peerConnectionContext.hostId]);
 
   useEffect(() => {
+    console.log('peerConnectionContext가 바뀌었습니다!!!!!!!!!!!!!!!');
+    console.table(peerConnectionContext);
+  }, [peerConnectionContext]);
+
+  //!
+  useEffect(() => {
+    if (
+      activeLayer === null ||
+      activeLayer.canvasCtx === null ||
+      onPeerDataSignal == '' ||
+      onPeerDataSignal == null
+    )
+      return;
+    const tempMsg = JSON.parse(onPeerDataSignal);
+    // console.log('-----------------', activeLayer.canvasCtx);
+    // console.log(tempMsg);
+    if (tempMsg.event === 'draw') {
+      draw(tempMsg, activeLayer.canvasCtx);
+    } else if (tempMsg.event === 'drawRect') {
+      drawRect(tempMsg, false, activeLayer.canvasCtx);
+    } else if (tempMsg.event === 'clear') {
+      // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    } else if (tempMsg.event === 'drawHistoryData') {
+      actionDrawHistory(tempMsg, activeLayer.canvasCtx);
+    }
+  }, [onPeerDataSignal]);
+
+  useEffect(() => {
+    console.log('connect() 실행!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    console.log('connect() 실행!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    console.log('connect() 실행!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    console.log('connect() 실행!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     connect();
   }, []);
 

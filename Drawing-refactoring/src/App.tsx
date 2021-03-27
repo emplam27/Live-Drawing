@@ -15,7 +15,6 @@ interface Layer {
 
 function App() {
   const tempId = uuidv4();
-  // const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
 
   return (
     <div className='App'>

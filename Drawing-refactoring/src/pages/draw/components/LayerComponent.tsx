@@ -61,7 +61,7 @@ function LayerComponent({
   // const setActiveLayer = useActiveLayerDispatch();
 
   function createLayer() {
-    console.log('create layer');
+    // console.log('create layer');
     // console.log(activeLayer);
 
     const newLayer: Layer = {
@@ -82,7 +82,7 @@ function LayerComponent({
   }
 
   function deleteLayer() {
-    console.log('delete layer');
+    // console.log('delete layer');
     // console.log(activeLayer);
 
     if (layers.length === 1) return;
@@ -103,7 +103,7 @@ function LayerComponent({
   }
 
   function selectActiveLayer(layer: Layer) {
-    console.log('*************** select active layer ***************');
+    // console.log('*************** select active layer ***************');
     // console.log(activeLayer);
 
     // setCanvasCtx(layer.canvasCtx);
@@ -120,7 +120,7 @@ function LayerComponent({
       const newCanvas: any = document.getElementById(newLayer.canvasId);
       const newCanvasCtx = newCanvas.getContext('2d');
       newLayer.canvasCtx = newCanvasCtx;
-      console.log('useEffect :: setActiveLayer');
+      // console.log('useEffect :: setActiveLayer');
       setActiveLayer(newLayer);
       // setActiveLayer({ type: 'SET_ACTIVE_LAYER', layer: newLayer });
       selectActiveLayer(newLayer);

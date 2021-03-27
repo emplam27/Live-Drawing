@@ -16,8 +16,8 @@ export function ChatComponent(props: ChatComponentProps) {
     const socketIo = io('http://localhost:8080/', {
       transports: ['websocket'],
     });
-    console.log({ ...socketIo });
-    console.log(socketIo);
+    // console.log({ ...socketIo });
+    // console.log(socketIo);
 
     socketIo.emit('join', { userId: props.userId, room: room.roomKey });
 
@@ -28,18 +28,6 @@ export function ChatComponent(props: ChatComponentProps) {
       setSocket(socketIo);
     });
   }, []);
-
-  useEffect(() => {
-    if (socket) console.log('11111111', { ...socket });
-    // if (socket) {
-    //   console.log('socket', socket.id);
-    //   socket.emit('join', { userId: tempId, room: room });
-
-    //   socket.on('roomData', (message: RoomData) => {
-    //     setRoomData(message);
-    //   });
-    // }
-  }, [socket]);
 
   return (
     <div className='chatContainer'>

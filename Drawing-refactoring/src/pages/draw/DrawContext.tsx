@@ -27,7 +27,7 @@ const ActiveLayerDispatchContext = createContext<ActiveLayerDispatch>(
 function reducer(activeLayer: ActiveLayer, action: Action): ActiveLayer {
   switch (action.type) {
     case 'SET_ACTIVE_LAYER':
-      console.log('SET_ACTIVE_LAYER');
+      // console.log('SET_ACTIVE_LAYER');
       return {
         name: action.layer.name,
         canvasId: action.layer.canvasId,
@@ -60,14 +60,14 @@ export function ActiveLayerProvider({
 
 export function useActiveLayerState(): ActiveLayer {
   const state = useContext(ActiveLayerContext);
-  console.log('state :: ', state);
+  // console.log('state :: ', state);
   if (!state) throw new Error('Cannot find ActiveLayer');
   return state;
 }
 
 export function useActiveLayerDispatch(): ActiveLayerDispatch {
   const dispatch = useContext(ActiveLayerDispatchContext);
-  console.log('dispatch :: ', dispatch);
+  // console.log('dispatch :: ', dispatch);
   if (!dispatch) throw new Error('Cannot find ActiveLayer');
   return dispatch;
 }
