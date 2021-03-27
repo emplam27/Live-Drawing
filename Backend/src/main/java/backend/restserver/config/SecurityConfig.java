@@ -40,10 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/user/login-form") //! user, admin, manager의 역할이 아예없는 권한이 없는 친구들은 전부 로그인 페이지로 보냄
                 .loginProcessingUrl("/login") //! login 주소가 호출이 되면 시큐리티가 낚아채서 대신 로그인을 진행해줌
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("http://localhost:3000/")
                 .and()
                 .oauth2Login()
                 .loginPage("/user/login-form") //! 구글 로그인이 완료된 뒤의 후처리가 필요함.
+                .defaultSuccessUrl("http://localhost:3000/")
                 //! 1. 코드 받기(인증) 2. 액세스 토큰(권한) 3. 사용자 프로필 정보를 가져오고 4-1. 그 정보를 토대로 회원가입을 자동으로 진행시키기도 함
                 //! 4-2. 정보가 모자를경우? -> (이메일, 전화번호, 이름, 아이디) 쇼핑몰 -> (집주소), 백화점몰 ->(vip등급, 일반등급)
                 .userInfoEndpoint()

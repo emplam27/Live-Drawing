@@ -1,12 +1,13 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import './App.css';
-import HomeComponent from './pages/home';
+import { HomeComponent } from './pages/home';
 import RoomCreateComponent from './pages/home/components/room-create-form';
 import testComponent from './pages/home/components/testcomponent';
 import { EntranceComponent } from './pages/home/components/entrance';
-import { ChatComponent } from './pages/live-room/components/chat';
-import { SignInComponent } from './pages/home/components/sign-in';
+
+import { SignInComponent } from './pages/home/components/login-form';
+import { JoinComponent } from './pages/home/components/join-form';
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
           {/* <Route path='/room/:roomKey' render={() => <ChatComponent userId={id} />} exact />s */}
           <Route path='/room' component={RoomCreateComponent} exact />
           <Route path='/mypage' component={HomeComponent} exact />
-          <Route path='/join' component={SignInComponent} exact />
+          <Route path='/login-form' component={SignInComponent} exact />
+          <Route path='/user/join-form' component={JoinComponent} exact />
         </div>
       </main>
     </div>
