@@ -24,3 +24,11 @@ export function JumpToJoinComponent() {
     </Link>
   );
 }
+
+export function JumpToFeedbackComponent() {
+  return (
+    <Link to='/feedback'>
+      <button>피드백 작성하기</button>
+    </Link>
+  );
+}

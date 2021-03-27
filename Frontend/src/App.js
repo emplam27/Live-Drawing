@@ -5,7 +5,7 @@ import { HomeComponent } from './pages/home';
 import RoomCreateComponent from './pages/home/components/room-create-form';
 import testComponent from './pages/home/components/testcomponent';
 import { EntranceComponent } from './pages/home/components/entrance';
-
+import { FeedbackComponent } from './pages/home/components/feedback';
 import { SignInComponent } from './pages/home/components/login-form';
 import { JoinComponent } from './pages/home/components/join-form';
 
@@ -22,6 +22,7 @@ function App() {
           <Route path='/mypage' component={HomeComponent} exact />
           <Route path='/login-form' component={SignInComponent} exact />
           <Route path='/user/join-form' component={JoinComponent} exact />
+          <Route path='/feedback' component={FeedbackComponent} exact />
         </div>
       </main>
     </div>
