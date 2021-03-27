@@ -18,12 +18,8 @@ export default function RoomCreateComponent() {
     axios
       .post('http://localhost:8080/room', values)
       .then((response) => {
-        // console.log('VA', values);
-        // console.log('RESP', response);
         if (response.status === 200) {
-          // console.log(response.data);
           window.location.href = `/room/${response.data['roomKey']}`;
-          // console.log(response.data['key']);
         }
       })
       .catch((error) => {

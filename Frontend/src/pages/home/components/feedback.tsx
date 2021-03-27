@@ -5,11 +5,7 @@ import './feedback.css';
 
 export function FeedbackComponent(props: FeedbackComponentProps) {
   const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({ userId: props.userId, text: '' });
-  const [feedbackList, setFeedbackList] = useState<FeedbackForm[]>([
-    { userId: '1', text: '123' },
-    { userId: '2', text: '123' },
-    { userId: '3', text: '123' },
-  ]);
+  const [feedbackList, setFeedbackList] = useState<FeedbackForm[]>([]);
   useEffect(() => {
     axios.get('http://localhost:8080/feedback').then((res: ResponseGetFeedbackList) => {
       setFeedbackList(res.data);
