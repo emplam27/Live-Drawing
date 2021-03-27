@@ -1,20 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { mouseDown, mouseMove, mouseUp, key } from '../../../functions/draw';
 import '../index.css';
 import { Layer, LayerComponentProps } from '../interfaces/layer-interfaces';
-// import { useActiveLayerState, useActiveLayerDispatch } from '../DrawContext';
 
 function LayerComponent(props: LayerComponentProps) {
-  // const [canvasCtx, setCanvasCtx] = useContext(CanvasCtxContext);
-  // const canvasCtxDispatch = useCanvasCtxsDispatch();
-
-  // const activeLayer = useActiveLayerState();
-  // const setActiveLayer = useActiveLayerDispatch();
+  const [createLayerSignal, setCreateLayerSignal] = useState<number | null>(
+    null,
+  );
 
   function createLayer() {
-    // console.log('create layer');
-    // console.log(activeLayer);
+    if ((props.layers, length > 50)) {
+      console.log('layer가 50개가 넘어서 못 만들어.');
+      return;
+    }
 
+    // console.log('create layer');
     const newLayer: Layer = {
       name: `layer-${props.layerCount}`,
       canvasId: `layer-id-${props.layerCount}`,
@@ -24,70 +24,61 @@ function LayerComponent(props: LayerComponentProps) {
 
     // 새로 만들어진 layer를 activeLayer로 바꾸기
     if (props.activeLayer === null) {
-      // setActiveLayer({ type: 'SET_ACTIVE_LAYER', layer: newLayer });
       props.setActiveLayer(newLayer);
     }
     props.setLayers([...props.layers, newLayer]);
     props.setLayerCount(props.layerCount + 1);
-    // resize();
+    setCreateLayerSignal(new Date().getTime());
   }
 
   function deleteLayer() {
     // console.log('delete layer');
-    // console.log(activeLayer);
-
     if (props.layers.length === 1) return;
 
     let index = 0;
     props.layers.forEach((layer, i) => {
-      if (props.activeLayer != null && layer.name === props.activeLayer.name) {
+      if (props.activeLayer != null && layer.name === props.activeLayer.name)
         index = i;
-      }
     });
     props.layers.splice(index, 1);
     props.setLayers(props.layers);
 
-    if (index === props.layers.length && index >= 1) {
-      index -= 1;
-    }
+    if (index === props.layers.length && index >= 1) index -= 1;
     selectActiveLayer(props.layers[index]);
   }
 
   function selectActiveLayer(layer: Layer) {
-    // console.log('*************** select active layer ***************');
-    // console.log(activeLayer);
-
-    // setCanvasCtx(layer.canvasCtx);
-    // updateActiveLayer(layer);
-    // setActiveLayer({ type: 'SET_ACTIVE_LAYER', layer: layer });
+    // console.log(' select active layer');
     props.setActiveLayer(layer);
   }
 
   useEffect(() => {
+    console.log(props.layers);
     // 마지막에 추가되는 canvas에 대해서 layers에 ctx 저장하기
-    if (props.layers.length !== 0) {
-      // console.log(layers);
-      const newLayer = props.layers[props.layers.length - 1];
-      const newCanvas: HTMLElement | null = document.getElementById(
-        newLayer.canvasId,
-      );
-      const newCanvasCtx = (newCanvas as HTMLCanvasElement).getContext('2d');
-      newLayer.canvasCtx = newCanvasCtx;
-<<<<<<< HEAD
-      // console.log('useEffect :: setActiveLayer');
-      setActiveLayer(newLayer);
-=======
-      console.log('useEffect :: setActiveLayer');
-      props.setActiveLayer(newLayer);
->>>>>>> e9a1086e1f25d93177357cc0f9b1f4472f3f9433
-      // setActiveLayer({ type: 'SET_ACTIVE_LAYER', layer: newLayer });
-      selectActiveLayer(newLayer);
+    const layersLength: number = props.layers.length;
+    if (layersLength === 0 || createLayerSignal === null) return;
 
-      // const tmpCanvasCtxTable = { ...canvasCtxTable };
-      // tmpCanvasCtxTable[newLayer.name] = newCanvasCtx;
-      // setCanvasCtxTable(tmpCanvasCtxTable);
+    const tmpCanvasCtxTable = { ...props.canvasCtxTable };
+    const tmpLayers = [...props.layers];
+    for (const layer of tmpLayers) {
+      if (layer.canvasCtx) continue;
+
+      const canvas: HTMLElement | null = document.getElementById(
+        layer.canvasId,
+      );
+      if (!canvas) continue;
+
+      const ctx = (canvas as HTMLCanvasElement).getContext('2d');
+      if (!ctx) continue;
+
+      // layer와 CanvasCtxTable에 ctx 추가하기
+      layer.canvasCtx = ctx;
+      tmpCanvasCtxTable[layer.canvasId] = layer.canvasCtx;
     }
-  }, [props.layers]);
+    props.setLayers(tmpLayers);
+    props.setCanvasCtxTable(tmpCanvasCtxTable);
+    selectActiveLayer(props.layers[layersLength - 1]);
+  }, [createLayerSignal]);
 
   useEffect(() => {
     createLayer();
@@ -135,18 +126,22 @@ function LayerComponent(props: LayerComponentProps) {
               onMouseMove={(e) =>
                 mouseMove(
                   e,
-                  (props.activeLayer as Layer).canvasCtx,
+                  props.activeLayer,
                   props.activeTool,
                   props.color,
                   props.lineWidth,
                   props.eraserWidth,
                   props.peerConnectionContext,
+                  props.drawHistory,
+                  props.setDrawHistory,
                 )
               }
               onMouseUp={() =>
                 mouseUp(
                   (props.activeLayer as Layer).canvasCtx,
                   props.peerConnectionContext,
+                  props.drawHistory,
+                  props.setDrawHistory,
                 )
               }
               onKeyDown={key}

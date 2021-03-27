@@ -24,6 +24,7 @@ export interface PeerConnectionContext {
 export interface CanvasCtxTable {
   [key: string]: CanvasRenderingContext2D;
 }
+
 // interface point {
 //   x: number;
 //   y: number;

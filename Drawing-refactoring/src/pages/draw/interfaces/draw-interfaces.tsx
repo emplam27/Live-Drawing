@@ -4,6 +4,8 @@ export interface Point {
 }
 
 export interface DrawData extends Point {
+  event: string;
+  canvasId: string;
   lastPoint: Point;
   color: string;
   lineWidth: number;

@@ -4,7 +4,6 @@ import './App.css';
 import Draw from './pages/draw';
 import { ChatComponent } from './chat/components/chat';
 import { v4 as uuidv4 } from 'uuid';
-import { ActiveLayerProvider } from './pages/draw/DrawContext';
 
 interface Layer {
   name: string;
@@ -19,11 +18,9 @@ function App() {
   return (
     <div className='App'>
       <main className='grid'>
-        <ActiveLayerProvider>
-          <Switch>
-            <Route exact path='/draw/:roomKey' component={Draw} />
-          </Switch>
-        </ActiveLayerProvider>
+        <Switch>
+          <Route exact path='/draw/:roomKey' component={Draw} />
+        </Switch>
         <div className='side'>
           <div className='voice'></div>
           <ChatComponent userId={tempId}></ChatComponent>

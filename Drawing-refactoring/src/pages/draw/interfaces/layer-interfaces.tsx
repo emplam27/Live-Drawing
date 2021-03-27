@@ -16,17 +16,18 @@ export interface LayerComponentProps {
   layers: Layer[];
   layerCount: number;
   canvasCtxTable: { [key: string]: CanvasRenderingContext2D };
-  canvasCtx: CanvasRenderingContext2D | null;
   activeLayer: Layer | null;
   drawHistory: DrawData[];
+  peerConnectionContext: PeerConnectionContext;
+  readyToDrawHistorySignal: number;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setLayerCount: React.Dispatch<React.SetStateAction<number>>;
   setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
-  setCanvasCtx: React.Dispatch<
-    React.SetStateAction<CanvasRenderingContext2D | null>
-  >;
-  peerConnectionContext: PeerConnectionContext;
   setCanvasCtxTable: React.Dispatch<React.SetStateAction<CanvasCtxTable>>;
   setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>;
+  setReadyToDrawHistorySignal: React.Dispatch<React.SetStateAction<number>>;
+  // setCanvasCtx: React.Dispatch<
+  //   React.SetStateAction<CanvasRenderingContext2D | null>
+  // >;
   // updateActiveLayer: any;
 }

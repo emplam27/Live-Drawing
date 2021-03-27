@@ -1,6 +1,3 @@
-// import { useCanvasCtxsState } from '../pages/draw/DrawContext';
-// import { broadcast } from '../connections/load';
-
 import {
   DrawData,
   EraseData,
@@ -8,52 +5,31 @@ import {
   RectData,
 } from '../pages/draw/interfaces/draw-interfaces';
 import { PeerConnectionContext } from '../pages/draw/interfaces/index-interfaces';
+import { Layer } from '../pages/draw/interfaces/layer-interfaces';
 
-// const canvasCtxs = useCanvasCtxsState();
-// pencil_slider = document.getElementById('pencilSlider');
-// pencil_slider.addEventListener('mouseup', changePencilSize)
-
-// interface point {
-//   x: number;
-//   y: number;
-// }
-
-//! any 수정
 // let points: any = [];
 // const pathsry: any = [];
-let activeShape: RectData | undefined;
-let lastPoint: Point | undefined;
-let originPoint: Point | undefined;
-let force: number = 1;
+let activeShape: RectData | null;
+let lastPoint: Point | null;
+let originPoint: Point | null;
+let force: number;
+force = 1;
 
-//! msg: any 수정
-// export function actionPeerData(msg: any) {
-//   if (msg.event === 'draw') {
-//     draw(msg, null);
-//   } else if (msg.event === 'drawRect') {
-//     drawRect(msg, false, null);
-//   } else if (msg.event === 'clear') {
-//     // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-//   } else if (msg.event === 'drawHistoryData') {
-//     // drawHistoryData(msg);
-//   }
-// }
-
-// function drawHistoryData(data: any) {
-//   if (is_new) {
-//     data.history.forEach((elem: any) => {
-//       //! 이벤트 종류 추가해야 함
-//       draw(elem);
-//     });
-
-//     is_new = false;
-//   }
-// }
+export function actionDrawHistory(drawHistory: any, canvasCtxTable: any): void {
+  // console.log('========== actionDrawHistory ==========');
+  drawHistory.forEach((data: any) => {
+    // TODO: 들어온 이벤트에 맞는 캔버스에 그려야함
+    if (data.event === 'draw') {
+      draw(data, canvasCtxTable[data.canvasId]);
+    }
+    //! 이벤트 종류 추가해야 함
+  });
+}
 
 export function broadcast(
   data: string,
   peerConnectionContext: PeerConnectionContext,
-) {
+): void {
   for (const peerId in peerConnectionContext.channels) {
     // peerConnectionContext.channels[peerId].send(data);
     if (peerConnectionContext.channels[peerId].readyState === 'open') {
@@ -62,7 +38,6 @@ export function broadcast(
   }
 }
 
-//! msg: any 수정
 export function draw(
   data: DrawData,
   canvasCtx: CanvasRenderingContext2D,
@@ -81,7 +56,6 @@ export function draw(
   canvasCtx.closePath();
 }
 
-//! msg: any 수정
 export function drawRect(
   data: RectData,
   commit: boolean,
@@ -129,6 +103,8 @@ export function mouseDown(
 export function mouseUp(
   canvasCtx: CanvasRenderingContext2D | null,
   peerConnectionContext: PeerConnectionContext,
+  drawHistory: DrawData[],
+  setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>,
 ): void {
   // console.log('up');
   // pathsry.push(points);
@@ -146,24 +122,27 @@ export function mouseUp(
       ),
       peerConnectionContext,
     );
-    activeShape = undefined;
+    activeShape = null;
   }
-  lastPoint = undefined;
-  originPoint = undefined;
+  lastPoint = null;
+  originPoint = null;
 }
 
 export function mouseMove(
   e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
-  canvasCtx: CanvasRenderingContext2D | null,
+  activeLayer: Layer | null,
   activeTool: string,
   color: string,
   lineWidth: number,
   eraserWidth: number,
   peerConnectionContext: PeerConnectionContext,
+  drawHistory: DrawData[],
+  setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>,
 ): void {
   // console.log('move');
+  if (!activeLayer || !activeLayer.canvasCtx) return;
 
-  if (e.buttons && canvasCtx !== null) {
+  if (e.buttons) {
     if (!lastPoint) {
       lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
       originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -171,30 +150,19 @@ export function mouseMove(
     }
 
     if (activeTool === 'pencil') {
-      draw(
-        {
-          lastPoint,
-          x: e.nativeEvent.offsetX,
-          y: e.nativeEvent.offsetY,
-          force: force,
-          color: color,
-          lineWidth: lineWidth,
-        },
-        canvasCtx,
-      );
-
-      broadcast(
-        JSON.stringify({
-          event: 'draw',
-          lastPoint,
-          x: e.nativeEvent.offsetX,
-          y: e.nativeEvent.offsetY,
-          force: force,
-          color: color,
-          lineWidth: lineWidth,
-        }),
-        peerConnectionContext,
-      );
+      const data = {
+        event: 'draw',
+        canvasId: activeLayer.canvasId,
+        lastPoint,
+        x: e.nativeEvent.offsetX,
+        y: e.nativeEvent.offsetY,
+        force: force,
+        color: color,
+        lineWidth: lineWidth,
+      };
+      draw(data, activeLayer.canvasCtx);
+      broadcast(JSON.stringify(data), peerConnectionContext);
+      setDrawHistory([...drawHistory, data]);
     } else if (activeTool === 'rect' && originPoint) {
       const origin = {
         x: Math.min(originPoint.x, e.nativeEvent.offsetX),
@@ -208,7 +176,7 @@ export function mouseMove(
           height: Math.abs(originPoint.y - e.nativeEvent.offsetY),
         },
         false,
-        canvasCtx,
+        activeLayer.canvasCtx,
       );
       broadcast(
         JSON.stringify({
@@ -229,12 +197,12 @@ export function mouseMove(
           y: e.nativeEvent.offsetY,
           r: eraserWidth,
         },
-        canvasCtx,
+        activeLayer.canvasCtx,
       );
     }
     lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   } else {
-    lastPoint = { x: 0, y: 0 };
+    lastPoint = null;
   }
 }
 

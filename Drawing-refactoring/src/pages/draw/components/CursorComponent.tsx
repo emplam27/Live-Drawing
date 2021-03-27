@@ -25,34 +25,18 @@ function CursorComponent(props: CursorComponentProps) {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
-<<<<<<< HEAD
     targetCanvasContainer?.addEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.addEventListener('mouseenter', onMouseEnter);
     targetCanvasContainer?.addEventListener('mouseleave', onMouseLeave);
-=======
-    if (targetCanvasContainer != null) {
-      targetCanvasContainer.addEventListener('mousemove', onMouseMove);
-      targetCanvasContainer.addEventListener('mouseenter', onMouseEnter);
-      targetCanvasContainer.addEventListener('mouseleave', onMouseLeave);
-    }
->>>>>>> e9a1086e1f25d93177357cc0f9b1f4472f3f9433
   };
 
   const removeEventListeners = () => {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
-<<<<<<< HEAD
     targetCanvasContainer?.removeEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.removeEventListener('mouseenter', onMouseEnter);
     targetCanvasContainer?.removeEventListener('mouseleave', onMouseLeave);
-=======
-    if (targetCanvasContainer != null) {
-      targetCanvasContainer.removeEventListener('mousemove', onMouseMove);
-      targetCanvasContainer.removeEventListener('mouseenter', onMouseEnter);
-      targetCanvasContainer.removeEventListener('mouseleave', onMouseLeave);
-    }
->>>>>>> e9a1086e1f25d93177357cc0f9b1f4472f3f9433
   };
 
   // const range = document.getElementById('pencilSlider')
