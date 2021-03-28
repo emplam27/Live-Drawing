@@ -14,8 +14,12 @@ function LineSizeComponent(props: LineSizeComponentProps) {
     if (
       props.activeTool === 'pencil' ||
       props.activeTool === 'spray' ||
-      props.activeTool === 'circle' ||
-      props.activeTool === 'crayon'
+      props.activeTool === 'bubble' ||
+      props.activeTool === 'crayon' ||
+      props.activeTool === 'marker' ||
+      props.activeTool === 'ink' ||
+      props.activeTool === 'crayon' ||
+      props.activeTool === 'crayon' ||
     ) {
       props.canvas.freeDrawingBrush.width = props.lineWidth;
       props.setCursorWidth(props.lineWidth);
