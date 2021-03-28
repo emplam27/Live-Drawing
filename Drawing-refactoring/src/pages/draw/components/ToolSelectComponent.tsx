@@ -48,6 +48,7 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
   ];
 
   function changeActiveTool(tool: Tool) {
+    fabric.Object.prototype.objectCaching = false;
     props.setActiveTool(tool.name);
     if (!props.canvas) return;
 
@@ -63,7 +64,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         console.log('pencil');
         props.canvas.isDrawingMode = true;
         brush = new fabric.PencilBrush();
-        console.log(fabric);
         props.canvas.freeDrawingBrush = brush;
         props.canvas.freeDrawingBrush.canvas = props.canvas;
         props.canvas.freeDrawingBrush.color = props.color;
@@ -73,11 +73,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.setCursorWidth(props.lineWidth);
         break;
 
-      case 'eraser':
-        console.log('eraser');
-        props.canvas.isDrawingMode = false;
-        props.setCursorWidth(props.eraserWidth);
-        break;
       case 'spray':
         console.log('spray');
         props.canvas.isDrawingMode = true;
@@ -142,6 +137,22 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.setCursorWidth(props.lineWidth);
         console.log(props.canvas.freeDrawingBrush);
         break;
+
+      case 'eraser':
+        console.log('eraser');
+        props.canvas.isDrawingMode = true;
+        brush = new fabric.PencilBrush();
+        props.canvas.freeDrawingBrush = brush;
+        props.canvas.freeDrawingBrush.canvas = props.canvas;
+        props.canvas.freeDrawingBrush.color = '#ff0000';
+        props.canvas.freeDrawingBrush.opacity = 1;
+        props.canvas.freeDrawingBrush.width = props.eraserWidth;
+        props.canvas.contextContainer.globalCompositeOperation =
+          'destination-out';
+        props.canvas.contextCache.globalCompositeOperation = 'destination-out';
+        console.log(props.canvas);
+        props.setCursorWidth(props.eraserWidth);
+        break;
     }
   }
 
@@ -155,7 +166,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         <i className='ri-lg ri-landscape-line'></i>
       </p>
       <div className='spacer'></div>
-
       {Tools.map((tool) => {
         return (
           <p

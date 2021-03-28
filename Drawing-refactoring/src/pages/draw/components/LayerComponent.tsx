@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { mouseDown, mouseMove, mouseUp, key } from '../../../functions/draw';
+import React, { useEffect } from 'react';
+// import { mouseDown, mouseMove, mouseUp, key } from '../../../functions/draw';
 import '../index.css';
 import { LayerComponentProps } from '../interfaces/layer-interfaces';
-import { fabric } from 'fabric';
+const fabric = require('fabric').fabric;
+require('fabric-history');
 
 function LayerComponent(props: LayerComponentProps) {
   useEffect(() => {
@@ -10,6 +11,8 @@ function LayerComponent(props: LayerComponentProps) {
       isDrawingMode: false,
       freeDrawingCursor: 'none',
     });
+    console.log(canvas);
+    // canvas.historyInit();
     props.setCanvas(canvas);
   }, []);
 

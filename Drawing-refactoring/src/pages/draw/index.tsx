@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import LayerComponent from './components/LayerComponent';
+import AddImageComponent from './components/AddImageComponent';
+import ColorPaletteComponent from './components/ColorPaletteComponent';
 import CursorComponent from './components/CursorComponent';
+import DeleteObjectComponent from './components/DeleteObjectComponent';
 import EraseSizeComponent from './components/EraseSizeComponent';
+import LayerComponent from './components/LayerComponent';
 import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
-import ColorPaletteComponent from './components/ColorPaletteComponent';
+import UndoRedoComponent from './components/UndoRedoComponent';
 import axios from 'axios';
 import {
   broadcast,
@@ -479,6 +482,9 @@ function Draw() {
             setCanvas={setCanvas}
             setCursorWidth={setCursorWidth}
           />
+          <UndoRedoComponent canvas={canvas} />
+          <DeleteObjectComponent canvas={canvas} />
+          <div className='spacer'></div>
           <LineSizeComponent
             activeTool={activeTool}
             canvas={canvas}
@@ -505,6 +511,7 @@ function Draw() {
             setColor={setColor}
           />
           <div className='spacer'></div>
+          <AddImageComponent canvas={canvas} />
         </div>
         <LayerComponent
           canvas={canvas}
