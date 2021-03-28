@@ -103,11 +103,14 @@ function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   ]);
 
   function changeColor(colorCode: string) {
+    if (!props.canvas) return;
     props.setColor(colorCode);
+    props.canvas.freeDrawingBrush.color = props.color;
   }
 
   useEffect(() => {
-    // console.log('color :', color);
+    if (!props.canvas || !props.canvas) return;
+    props.canvas.freeDrawingBrush.color = props.color;
   }, [props.color]);
 
   return (

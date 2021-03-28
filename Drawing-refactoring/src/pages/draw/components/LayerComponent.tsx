@@ -1,153 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { mouseDown, mouseMove, mouseUp, key } from '../../../functions/draw';
 import '../index.css';
-import { Layer, LayerComponentProps } from '../interfaces/layer-interfaces';
+import { LayerComponentProps } from '../interfaces/layer-interfaces';
+import { fabric } from 'fabric';
 
 function LayerComponent(props: LayerComponentProps) {
-  const [createLayerSignal, setCreateLayerSignal] = useState<number | null>(
-    null,
-  );
-
-  function createLayer() {
-    if ((props.layers, length > 50)) {
-      console.log('layer가 50개가 넘어서 못 만들어.');
-      return;
-    }
-
-    // console.log('create layer');
-    const newLayer: Layer = {
-      name: `layer-${props.layerCount}`,
-      canvasId: `layer-id-${props.layerCount}`,
-      buttonId: `layer-id-${props.layerCount}-button`,
-      canvasCtx: null,
-    };
-
-    // 새로 만들어진 layer를 activeLayer로 바꾸기
-    if (props.activeLayer === null) {
-      props.setActiveLayer(newLayer);
-    }
-    props.setLayers([...props.layers, newLayer]);
-    props.setLayerCount(props.layerCount + 1);
-    setCreateLayerSignal(new Date().getTime());
-  }
-
-  function deleteLayer() {
-    // console.log('delete layer');
-    if (props.layers.length === 1) return;
-
-    let index = 0;
-    props.layers.forEach((layer, i) => {
-      if (props.activeLayer != null && layer.name === props.activeLayer.name)
-        index = i;
+  useEffect(() => {
+    const canvas = new fabric.Canvas('canvas', {
+      isDrawingMode: false,
+      freeDrawingCursor: 'none',
     });
-    props.layers.splice(index, 1);
-    props.setLayers(props.layers);
-
-    if (index === props.layers.length && index >= 1) index -= 1;
-    selectActiveLayer(props.layers[index]);
-  }
-
-  function selectActiveLayer(layer: Layer) {
-    // console.log(' select active layer');
-    props.setActiveLayer(layer);
-  }
-
-  useEffect(() => {
-    console.log(props.layers);
-    // 마지막에 추가되는 canvas에 대해서 layers에 ctx 저장하기
-    const layersLength: number = props.layers.length;
-    if (layersLength === 0 || createLayerSignal === null) return;
-
-    const tmpCanvasCtxTable = { ...props.canvasCtxTable };
-    const tmpLayers = [...props.layers];
-    for (const layer of tmpLayers) {
-      if (layer.canvasCtx) continue;
-
-      const canvas: HTMLElement | null = document.getElementById(
-        layer.canvasId,
-      );
-      if (!canvas) continue;
-
-      const ctx = (canvas as HTMLCanvasElement).getContext('2d');
-      if (!ctx) continue;
-
-      // layer와 CanvasCtxTable에 ctx 추가하기
-      layer.canvasCtx = ctx;
-      tmpCanvasCtxTable[layer.canvasId] = layer.canvasCtx;
-    }
-    props.setLayers(tmpLayers);
-    props.setCanvasCtxTable(tmpCanvasCtxTable);
-    selectActiveLayer(props.layers[layersLength - 1]);
-  }, [createLayerSignal]);
-
-  useEffect(() => {
-    createLayer();
+    props.setCanvas(canvas);
   }, []);
 
   return (
     <>
-      <div>
-        <button className='button layer_space' onClick={createLayer}>
-          make layer
-        </button>
-        <button className='button' onClick={deleteLayer}>
-          delete layer
-        </button>
-        <div id='layerButtonContainer'>
-          {props.layers.map((layer) => {
-            return (
-              <span
-                key={layer.name}
-                id={layer.buttonId}
-                className={`layer_space ${
-                  props.activeLayer != null &&
-                  props.activeLayer.name === layer.name
-                    ? 'active-layer'
-                    : ''
-                }`}
-                onClick={() => selectActiveLayer(layer)}
-              >
-                {layer.name}
-              </span>
-            );
-          })}
-        </div>
-      </div>
       <div id='canvasContainer' className='spacer app relative'>
-        {props.layers.map((layer) => {
-          return (
-            <canvas
-              key={layer.name}
-              id={layer.canvasId}
-              className={'layer'}
-              width={window.innerWidth * 0.8}
-              height={window.innerHeight * 0.8}
-              onMouseDown={(e) => mouseDown(e)}
-              onMouseMove={(e) =>
-                mouseMove(
-                  e,
-                  props.activeLayer,
-                  props.activeTool,
-                  props.color,
-                  props.lineWidth,
-                  props.eraserWidth,
-                  props.peerConnectionContext,
-                  props.drawHistory,
-                  props.setDrawHistory,
-                )
-              }
-              onMouseUp={() =>
-                mouseUp(
-                  (props.activeLayer as Layer).canvasCtx,
-                  props.peerConnectionContext,
-                  props.drawHistory,
-                  props.setDrawHistory,
-                )
-              }
-              onKeyDown={key}
-            />
-          );
-        })}
+        <canvas
+          id={`canvas`}
+          className={'layer'}
+          width={window.innerWidth * 0.8}
+          height={window.innerHeight * 0.8}
+        ></canvas>
       </div>
     </>
   );

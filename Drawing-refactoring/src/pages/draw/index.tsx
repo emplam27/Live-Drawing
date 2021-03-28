@@ -71,14 +71,11 @@ function Draw() {
   const [setHostSignal, setSetHostSignal] = useState<number | null>(null);
 
   //@ Drawing's States
-  const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
-  const [activeTool, setActiveTool] = useState('pencil');
-  const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
+  const [activeTool, setActiveTool] = useState<string>('');
+  const [canvas, setCanvas] = useState<any>(null);
   const [color, setColor] = useState('#000000');
   const [cursorWidth, setCursorWidth] = useState(5);
   const [eraserWidth, setEraserWidth] = useState(5);
-  const [layers, setLayers] = useState<Layer[]>([]);
-  const [layerCount, setLayerCount] = useState<number>(1);
   const [lineWidth, setLineWidth] = useState(5);
   // const [pathsry, setPathsry] = useState<point[][]>([]);
   // const [points, setPoints] = useState<point[]>([]);
@@ -249,45 +246,39 @@ function Draw() {
 
   //@ function: onPeerData
   useEffect(() => {
-    if (
-      activeLayer === null ||
-      activeLayer.canvasCtx === null ||
-      onPeerDataSignal == '' ||
-      onPeerDataSignal == null
-    ) {
+    if (canvas === null || onPeerDataSignal == '' || onPeerDataSignal == null) {
       return;
     }
 
     const message = JSON.parse(onPeerDataSignal);
     if (message.event === 'draw') {
       // TODO: 들어온 이벤트에 맞는 캔버스에 그려야함
-      draw(message, canvasCtxTable[message.canvasId]);
+      draw(message, canvas);
       setDrawHistory([...drawHistory, message]);
     } else if (message.event === 'drawRect') {
-      drawRect(message, false, activeLayer.canvasCtx);
+      drawRect(message, false, canvas);
     } else if (message.event === 'clear') {
       // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
     } else if (
       message.event === 'drawHistoryData' &&
       peerConnectionContext.is_new
     ) {
-      // TODO: 레이어 생성
-      const newLayers: Layer[] = message.layers.map((layer: any) => {
-        return {
-          name: layer.name,
-          canvasId: layer.canvasId,
-          buttonId: layer.buttonId,
-          canvasCtx: null,
-        };
-      });
-      setLayers(newLayers);
-      // TODO: 레이어 생성 완료되면 context data 변경
-      setDrawHistory([...drawHistory, ...message.drawHistory]);
-      const tmpPeerConnectionContext = { ...peerConnectionContext };
-      tmpPeerConnectionContext.is_new = false;
-      setPeerConnectionContext(tmpPeerConnectionContext);
-      // TODO: 레이어 생성 되면 useEffect 실행해서 지금까지 데이터 적기
-      setActionHistorySignal(message.drawHistory);
+      // // TODO: 레이어 생성
+      // const newLayers: Layer[] = message.layers.map((layer: any) => {
+      //   return {
+      //     name: layer.name,
+      //     canvasId: layer.canvasId,
+      //     buttonId: layer.buttonId,
+      //     canvasCtx: null,
+      //   };
+      // });
+      // // TODO: 레이어 생성 완료되면 context data 변경
+      // setDrawHistory([...drawHistory, ...message.drawHistory]);
+      // const tmpPeerConnectionContext = { ...peerConnectionContext };
+      // tmpPeerConnectionContext.is_new = false;
+      // setPeerConnectionContext(tmpPeerConnectionContext);
+      // // TODO: 레이어 생성 되면 useEffect 실행해서 지금까지 데이터 적기
+      // setActionHistorySignal(message.drawHistory);
     }
   }, [onPeerDataSignal]);
 
@@ -295,10 +286,7 @@ function Draw() {
   useEffect(() => {
     if (!actionHistorySignal.length) return;
     console.log('actionHistorySignal 을 받았다!');
-    console.log(layers);
-    console.log(actionHistorySignal);
-    console.log(canvasCtxTable);
-    actionDrawHistory(actionHistorySignal, canvasCtxTable);
+    // actionDrawHistory(actionHistorySignal, canvasCtxTable);
   }, [actionHistorySignal]);
 
   //@ function: addPeer
@@ -439,24 +427,22 @@ function Draw() {
 
   //@ function: sendHistoryData
   useEffect(() => {
-    if (sendHistoryDataSignal === null || !peerConnectionContext.is_host)
-      return;
-    // console.log('========== sendHistoryData ==========');
-
-    const layerHistory = layers.map((layer) => {
-      return {
-        name: layer.name,
-        canvasId: layer.canvasId,
-        buttonId: layer.buttonId,
-      };
-    });
-
-    const historyData = {
-      event: 'drawHistoryData',
-      layers: layerHistory,
-      drawHistory: drawHistory,
-    };
-    broadcast(JSON.stringify(historyData), peerConnectionContext);
+    // if (sendHistoryDataSignal === null || !peerConnectionContext.is_host)
+    //   return;
+    // // console.log('========== sendHistoryData ==========');
+    // const layerHistory = layers.map((layer) => {
+    //   return {
+    //     name: layer.name,
+    //     canvasId: layer.canvasId,
+    //     buttonId: layer.buttonId,
+    //   };
+    // });
+    // const historyData = {
+    //   event: 'drawHistoryData',
+    //   layers: layerHistory,
+    //   drawHistory: drawHistory,
+    // };
+    // broadcast(JSON.stringify(historyData), peerConnectionContext);
   }, [sendHistoryDataSignal]);
 
   //@ function: setHost
@@ -474,9 +460,9 @@ function Draw() {
     connect();
   }, []);
 
-  useEffect(() => {
-    console.log(drawHistory);
-  }, [drawHistory]);
+  // useEffect(() => {
+  //   console.log(drawHistory);
+  // }, [drawHistory]);
 
   return (
     <div className='drawComponent'>
@@ -485,45 +471,47 @@ function Draw() {
         <div className='menubar hstack'>
           <ToolSelectComponent
             activeTool={activeTool}
+            canvas={canvas}
+            color={color}
             eraserWidth={eraserWidth}
             lineWidth={lineWidth}
             setActiveTool={setActiveTool}
+            setCanvas={setCanvas}
             setCursorWidth={setCursorWidth}
           />
           <LineSizeComponent
+            activeTool={activeTool}
+            canvas={canvas}
             cursorWidth={cursorWidth}
             lineWidth={lineWidth}
+            setCanvas={setCanvas}
             setCursorWidth={setCursorWidth}
             setLineWidth={setLineWidth}
           />
           <EraseSizeComponent
+            activeTool={activeTool}
+            canvas={canvas}
             cursorWidth={cursorWidth}
             eraserWidth={eraserWidth}
+            setCanvas={setCanvas}
             setCursorWidth={setCursorWidth}
             setEraserWidth={setEraserWidth}
           />
           <div className='spacer'></div>
-          <ColorPaletteComponent color={color} setColor={setColor} />
+          <ColorPaletteComponent
+            canvas={canvas}
+            color={color}
+            setCanvas={setCanvas}
+            setColor={setColor}
+          />
           <div className='spacer'></div>
         </div>
         <LayerComponent
-          activeTool={activeTool}
-          activeLayer={activeLayer}
-          canvasCtxTable={canvasCtxTable}
-          color={color}
+          canvas={canvas}
           drawHistory={drawHistory}
-          eraserWidth={eraserWidth}
-          layerCount={layerCount}
-          layers={layers}
-          lineWidth={lineWidth}
           peerConnectionContext={peerConnectionContext}
-          readyToDrawHistorySignal={readyToDrawHistorySignal}
-          setActiveLayer={setActiveLayer}
-          setCanvasCtxTable={setCanvasCtxTable}
+          setCanvas={setCanvas}
           setDrawHistory={setDrawHistory}
-          setLayerCount={setLayerCount}
-          setLayers={setLayers}
-          setReadyToDrawHistorySignal={setReadyToDrawHistorySignal}
         />
       </div>
     </div>

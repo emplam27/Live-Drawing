@@ -1,12 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../index.css';
 import { LineSizeComponentProps } from '../interfaces/line-size-interfaces';
 
 function LineSizeComponent(props: LineSizeComponentProps) {
   function changeLineSize(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!props.canvas || !props.canvas) return;
     props.setLineWidth(Number(e.target.value));
-    props.setCursorWidth(Number(e.target.value));
+    // props.setCursorWidth(Number(e.target.value));
   }
+
+  useEffect(() => {
+    if (!props.canvas) return;
+    if (
+      props.activeTool === 'pencil' ||
+      props.activeTool === 'spray' ||
+      props.activeTool === 'circle' ||
+      props.activeTool === 'crayon'
+    ) {
+      props.canvas.freeDrawingBrush.width = props.lineWidth;
+      props.setCursorWidth(props.lineWidth);
+    }
+  }, [props.lineWidth]);
 
   return (
     <>

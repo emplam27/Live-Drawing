@@ -5,13 +5,6 @@ import Draw from './pages/draw';
 import { ChatComponent } from './chat/components/chat';
 import { v4 as uuidv4 } from 'uuid';
 
-interface Layer {
-  name: string;
-  canvasId: string;
-  buttonId: string;
-  canvasCtx: CanvasRenderingContext2D | null;
-}
-
 function App() {
   const tempId = uuidv4();
 

@@ -6,7 +6,7 @@ export interface Layer {
   name: string;
   canvasId: string;
   buttonId: string;
-  canvasCtx: CanvasRenderingContext2D | null;
+  canvasCtx: any | null;
 }
 
 export interface PeerConnectionContext {
@@ -22,7 +22,7 @@ export interface PeerConnectionContext {
 }
 
 export interface CanvasCtxTable {
-  [key: string]: CanvasRenderingContext2D;
+  [key: string]: any;
 }
 
 // interface point {
