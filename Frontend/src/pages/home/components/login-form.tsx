@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import { useCustomDispatch, useCustomState } from '../../../context';
 
 export function SignInComponent() {
   const [userId, setUserId] = useState<string>();
   const [password, setPassWord] = useState<string>();
+  const userState = useCustomState();
+  const userDispatch = useCustomDispatch();
+  const history = useHistory();
 
   const onChangeUserId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
@@ -12,9 +16,19 @@ export function SignInComponent() {
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassWord(e.target.value);
   };
-  // const onClick = () => {
-  //   axios.post('http://localhost:8080/login', { userId: userId, password: password }).then((res) => {});
-  // };
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    axios.post('http://localhost:8080/login', { userId: userId, password: password }).then((res) => {
+      userDispatch({ type: 'SET_ID', id: res.data.id, token: res.data.token });
+      console.log(res.data.token);
+      localStorage.setItem('id', res.data.id);
+      localStorage.setItem('token', res.data.token);
+      if (res.data.token) {
+        alert('로그인 되셨습니다.');
+        history.push('/');
+      }
+    });
+  };
 
   //   return (
   //     <div>
@@ -68,7 +82,10 @@ export function SignInComponent() {
                 <a href='http://localhost:8080/oauth2/authorization/naver'>
                   <button className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-naver'></button>
                 </a>
-                <button className='flex m-3 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'>
+                <button
+                  onClick={onClick}
+                  className='flex m-3 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
+                >
                   {/* <svg
                   className='w-5 h-5 inline'
                   fill='none'

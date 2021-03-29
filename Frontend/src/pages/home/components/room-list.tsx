@@ -3,6 +3,7 @@ import './room-list.css';
 import { EntranceComponent } from './entrance';
 import { ResponseRoomInfo, roomInfo } from '../interfaces/room-info-interface';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export function RoomListComponet() {
   const [rooms, setRooms] = useState<roomInfo[]>([]);
@@ -25,6 +26,7 @@ export function RoomListComponet() {
             </div>
           );
         })}
+        <Link to={'/'}>더보기</Link>
       </div>
     </>
   );

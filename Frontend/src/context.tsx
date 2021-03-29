@@ -5,7 +5,7 @@ type State = {
   token: string;
 };
 
-type Action = { type: 'SET_ID'; id: string } | { type: 'SET_TOKEN'; token: string };
+type Action = { type: 'SET_ID'; id: string; token: string };
 type DispatchType = Dispatch<Action>;
 
 const StateContext = createContext<State | null>(null);
@@ -17,10 +17,6 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         id: action.id,
-      };
-    case 'SET_TOKEN':
-      return {
-        ...state,
         token: action.token,
       };
     default:
@@ -28,7 +24,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-export const provider = ({ children }: { children: React.ReactNode }) => {
+export function Provider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, {
     id: '',
     token: '',
@@ -39,7 +35,7 @@ export const provider = ({ children }: { children: React.ReactNode }) => {
       <DispatchContext.Provider value={dispatch}>{children}</DispatchContext.Provider>
     </StateContext.Provider>
   );
-};
+}
 
 export const useCustomState = () => {
   const state = useContext(StateContext);
