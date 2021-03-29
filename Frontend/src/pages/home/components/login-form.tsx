@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useCustomDispatch, useCustomState } from '../../../context';
+import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 
 export function SignInComponent() {
   const [userId, setUserId] = useState<string>();
@@ -9,6 +10,19 @@ export function SignInComponent() {
   const userState = useCustomState();
   const userDispatch = useCustomDispatch();
   const history = useHistory();
+
+  const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+    axios.post('http://localhost:8080/login/google', res).then((res) => {
+      userDispatch({ type: 'SET_ID', id: res.data.id, token: res.data.token });
+      console.log(res.data.token);
+      localStorage.setItem('id', res.data.id);
+      localStorage.setItem('token', res.data.token);
+      if (res.data.token) {
+        alert('로그인 되셨습니다.');
+        history.push('/');
+      }
+    });
+  };
 
   const onChangeUserId = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value);
@@ -53,7 +67,7 @@ export function SignInComponent() {
     <div>
       <div className='w-full flex justify-center items-center bg-gradient-to-tr from-blue-200 to-blue-0 h-mainBox'>
         <div className='bg-image w-full sm:w-1/2 md:w-9/12 lg:w-1/2 mx-3 md:mx-5 lg:mx-0 shadow-md flex flex-col md:flex-row items-center rounded z-10 overflow-hidden bg-center bg-cover bg-blue-600'>
-          <div className='w-full md:w-1/2 flex flex-col justify-center items-center bg-opacity-25 bg-blue-600 backdrop'>
+          <div className='w-full md:w-1/2 flex flex-col justify-center items-center bg-opacity-25 bg-blue-600 backdrop p-1'>
             <h1 className='text-3xl md:text-4xl font-extrabold text-white my-2 md:my-0'>방구석 화방</h1>
             <p className='mb-2 text-white text-xl hidden md:block'>당신도 화가가 될 수 있습니다.</p>
           </div>
@@ -72,19 +86,22 @@ export function SignInComponent() {
                 placeholder='비밀번호..'
                 className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
               />
-              <div className='flex justify-between'>
-                <a href='http://localhost:8080/oauth2/authorization/google'>
-                  <button className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-google'></button>
-                </a>
-                <a href='http://localhost:8080/oauth2/authorization/facebook'>
-                  <button className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-facebook'></button>
-                </a>
-                <a href='http://localhost:8080/oauth2/authorization/naver'>
-                  <button className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-naver'></button>
-                </a>
+              <div className='flex items-center'>
+                {/* <button className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-google'></button> */}
+                {/* <button className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-facebook'></button> */}
+                {/* <button className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-naver'></button> */}
+                <GoogleLogin
+                  clientId='234586769421-7gqq45aokbu6mn00rbg6gdcbekmd5ert.apps.googleusercontent.com'
+                  // buttonText='login'
+                  className='h-10'
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  // className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-google'
+                  // cookiePolicy={'single_host_origin'}
+                />
                 <button
                   onClick={onClick}
-                  className='flex m-3 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
+                  className='ml-2 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-base font-semibold focus:outline-none focus:ring rounded px-2 py-2 shadow-2xl'
                 >
                   {/* <svg
                   className='w-5 h-5 inline'

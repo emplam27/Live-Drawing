@@ -14,7 +14,7 @@ export function JumpToCreateRoomComponent() {
 export function JumpToLoginComponent() {
   return (
     <Link to='/login-form'>
-      <button className='py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-blue-400 hover:bg-blue-500'>
+      <button className='py-1 px-3 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'>
         로그인
       </button>
     </Link>

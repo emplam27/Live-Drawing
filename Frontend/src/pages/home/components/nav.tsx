@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { JumpToLoginComponent } from './jump-buttons';
+import { LogoutComponent } from './logout-component';
 
 export function NavBarComponent() {
   return (
     <div className='header'>
       {/* // <!-- This example requires Tailwind CSS v2.0+ --> */}
-      <nav className='bg-blue-100'>
+      <nav className='bg-gradient-to-tr from-blue-100 to-blue-200'>
         <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
           <div className='relative flex items-center justify-between h-16'>
             <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
@@ -75,7 +76,7 @@ export function NavBarComponent() {
                     to='#'
                     className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
                   >
-                    마이페이지
+                    준비중
                   </Link>
 
                   <Link
@@ -95,15 +96,20 @@ export function NavBarComponent() {
               </div>
             </div>
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
-              <JumpToLoginComponent></JumpToLoginComponent>
+              {localStorage.getItem('token') ? (
+                <>
+                  <div className='mr-5'>{`${localStorage.getItem('id')}님 환영합니다.`}</div> <LogoutComponent />
+                </>
+              ) : (
+                <JumpToLoginComponent />
+              )}
               {/* <button className='bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'> */}
               {/* <span className='sr-only'>View notifications</span> */}
               {/* <!-- Heroicon name: outline/bell --> */}
               {/* </button> */}
-
               {/* <!-- Profile dropdown --> */}
               <div className='ml-3 relative'>
-                <div>
+                {/* <div>
                   <button
                     type='button'
                     className='bg-blue-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'
@@ -113,7 +119,7 @@ export function NavBarComponent() {
                   >
                     <span className='sr-only'>Open user menu</span>
                   </button>
-                </div>
+                </div> */}
 
                 {/* <!--
             Dropdown menu, show/hide based on menu state.
@@ -162,7 +168,7 @@ export function NavBarComponent() {
               href='#'
               className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
             >
-              마이페이지
+              준비중
             </a>
 
             <a

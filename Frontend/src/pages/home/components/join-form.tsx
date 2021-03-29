@@ -33,14 +33,19 @@ export function JoinComponent() {
     if (password1 === password2 && password1.length > 0) {
       setClassFlag1('text-green-700');
       setTextFlag1('비밀번호가 일치합니다.');
-    } else if (password1 != password2 || password1.length == 0) {
+    } else if (password1 != password2) {
       setClassFlag1('text-red-700');
       setTextFlag1('비밀번호가 일치하지 않습니다.');
+    } else {
+      setClassFlag1('transparent');
+      setTextFlag1('');
     }
-
     if (password1.length > 7 && password2.length > 7) {
       setClassFlag2('text-green-700');
       setTextFlag2('최소 글자수를 채웠습니다.');
+    } else if (password1.length === 0 && password2.length === 0) {
+      setClassFlag2('transparent');
+      setTextFlag2('');
     } else {
       setClassFlag2('text-red-700');
       setTextFlag2('적어도 8자 이상의 비밀번호를 입력하세요.');
@@ -73,7 +78,7 @@ export function JoinComponent() {
     <div>
       <div className='w-full flex justify-center items-center bg-gradient-to-tr from-blue-200 to-blue-0 h-mainBox'>
         <div className='bg-image w-full sm:w-1/2 md:w-9/12 lg:w-1/2 mx-3 md:mx-5 lg:mx-0 shadow-md flex flex-col md:flex-row items-center rounded z-10 overflow-hidden bg-center bg-cover bg-blue-600'>
-          <div className='w-full md:w-1/2 flex flex-col justify-center items-center bg-opacity-25 bg-blue-600 backdrop'>
+          <div className='w-full md:w-1/2 flex flex-col justify-center items-center bg-opacity-25 bg-blue-600 backdrop p-1'>
             <h1 className='text-3xl md:text-4xl font-extrabold text-white my-2 md:my-0'>방구석 화방</h1>
             <p className='mb-2 text-white text-xl hidden md:block'>당신도 화가가 될 수 있습니다.</p>
           </div>
@@ -104,9 +109,9 @@ export function JoinComponent() {
                 placeholder='비밀번호를 다시 입력하세요.'
                 className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
               />
-              <div>
-                <div className={`${classFlag1} font-medium text-sm ml-3 text-left`}>{textFlag1}</div>
-                <div className={`${classFlag2} font-medium text-sm ml-3 text-left`}>{textFlag2}</div>
+              <div className=''>
+                <div className={`${classFlag1} font-normal text-sm text-left`}>{textFlag1}</div>
+                <div className={`${classFlag2} font-normal text-sm text-left`}>{textFlag2}</div>
               </div>
               <button
                 onClick={onClick}

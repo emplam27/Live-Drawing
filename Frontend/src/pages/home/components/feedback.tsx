@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { FeedbackComponentProps, FeedbackForm } from '../interfaces/feedback-nterfaces';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
-import './feedback.css';
 
 export function FeedbackComponent(props: FeedbackComponentProps) {
   const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({ userName: props.userName, text: '' });

@@ -12,7 +12,7 @@ import { SignInComponent } from './pages/home/components/login-form';
 
 function App() {
   return (
-    <div className='App font-gamja text-2xl'>
+    <div className='App font-apply text-2xl'>
       <main>
         <NavBarComponent></NavBarComponent>
         <div className='p-6'>

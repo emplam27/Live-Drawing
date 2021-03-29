@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-google-login": "^5.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "socket.io": "^4.0.0",
@@ -23,6 +24,7 @@
     "sweetalert": "^2.1.2",
     "sweetalert2": "^10.15.7",
     "sweetalert2-react-content": "^3.3.1",
+    "ts-react-google-login-component": "^1.1.8",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.0"
   },

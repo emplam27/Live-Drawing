@@ -1,11 +1,15 @@
 @tailwind base;
 
-.font-gamja {
-  font-family: 'Gamja Flower', cursive;
+.font-apply {
+  font-family: 'NanumSquareRound',sans-serif;
 }
 
 .h-mainBox {
   height: 84vh;
+}
+
+.transparent{
+  display: hidden;
 }
 
 /* https://cdn.pixabay.com/photo/2017/04/03/14/02/acrylic-paint-2198458_1280.jpg */
