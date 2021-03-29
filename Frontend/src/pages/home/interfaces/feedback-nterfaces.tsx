@@ -1,12 +1,8 @@
 export interface FeedbackForm {
-  userId: string;
+  userName: string;
   text: string;
 }
 
 export interface FeedbackComponentProps {
-  userId: string;
-}
-
-export interface ResponseGetFeedbackList {
-  data: FeedbackForm[];
+  userName: string;
 }

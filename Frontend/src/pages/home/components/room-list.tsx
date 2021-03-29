@@ -14,10 +14,10 @@ export function RoomListComponet() {
   }, []);
   return (
     <>
-      <div>room list</div>
-      <div className='roomList'>
+      <div>진행중인 라이브</div>
+      <div className='roomList flex-wrap'>
+        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'1'}></EntranceComponent>
         {rooms.map((room: roomInfo, index: number) => {
-          console.log(room);
           return (
             <div key={index}>
               <EntranceComponent roomPk={room.roomPk} roomKey={room.roomKey} roomTitle={room.roomTitle} />

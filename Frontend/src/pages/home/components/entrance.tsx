@@ -5,19 +5,18 @@ import './room-list.css';
 import { EntranceProps } from '../interfaces/entrance-props-interface';
 
 export function EntranceComponent(props: EntranceProps) {
-  const uuidHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const values = { roomPk: props.roomPk, roomKey: props.roomKey };
-    console.log('send val', values);
     axios.post('http://localhost:8080/room/entrance', values).then((res) => {
-      console.log('post val', values);
-      console.log(res);
       window.location.href = `/room/${props.roomKey}`;
     });
   };
 
   return (
     <>
-      <button onClick={uuidHandler}>{props.roomTitle}</button>
+      <div className='border-2 w-48 h-48 m-3' onClick={onClick}>
+        <h2>{props.roomTitle}</h2>
+      </div>
     </>
 
     //  <Link to={`/room/${roomKey}`}>
