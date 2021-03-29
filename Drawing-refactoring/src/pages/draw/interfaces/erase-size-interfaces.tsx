@@ -1,6 +1,9 @@
 export interface EraseSizeComponentProps {
-  eraserWidth: number;
+  activeTool: string;
+  canvas: any | null;
   cursorWidth: number;
-  setEraserWidth: React.Dispatch<React.SetStateAction<number>>;
+  eraserWidth: number;
+  setCanvas: React.Dispatch<React.SetStateAction<any | null>>;
   setCursorWidth: React.Dispatch<React.SetStateAction<number>>;
+  setEraserWidth: React.Dispatch<React.SetStateAction<number>>;
 }

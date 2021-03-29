@@ -1,6 +1,9 @@
 export interface LineSizeComponentProps {
-  lineWidth: number;
+  activeTool: string;
+  canvas: any | null;
   cursorWidth: number;
-  setLineWidth: React.Dispatch<React.SetStateAction<number>>;
+  lineWidth: number;
+  setCanvas: React.Dispatch<React.SetStateAction<any | null>>;
   setCursorWidth: React.Dispatch<React.SetStateAction<number>>;
+  setLineWidth: React.Dispatch<React.SetStateAction<number>>;
 }

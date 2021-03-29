@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-// import { useActiveLayerState } from './DrawContext';
-import { broadcast, draw, drawRect } from '../../functions/draw';
-import { v4 as uuid } from 'uuid';
-
-import './index.css';
-
-import LayerComponent from './components/LayerComponent';
+import AddImageComponent from './components/AddImageComponent';
+import ColorPaletteComponent from './components/ColorPaletteComponent';
 import CursorComponent from './components/CursorComponent';
+import DeleteObjectComponent from './components/DeleteObjectComponent';
 import EraseSizeComponent from './components/EraseSizeComponent';
+import LayerComponent from './components/LayerComponent';
 import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
-import ColorPaletteComponent from './components/ColorPaletteComponent';
+import UndoRedoComponent from './components/UndoRedoComponent';
 import axios from 'axios';
+import {
+  broadcast,
+  draw,
+  drawRect,
+  actionDrawHistory,
+} from '../../functions/draw';
 import {
   Params,
   Layer,
@@ -20,50 +23,11 @@ import {
   CanvasCtxTable,
 } from './interfaces/index-interfaces';
 import { DrawData } from './interfaces/draw-interfaces';
-
-// interface point {
-//   x: number;
-//   y: number;
-// }
+import { v4 as uuid } from 'uuid';
+import './index.css';
 
 function Draw() {
-  // setRoomKey(roomKey);
-
-  const [lineWidth, setLineWidth] = useState(5);
-  const [eraserWidth, setEraserWidth] = useState(5);
-  const [cursorWidth, setCursorWidth] = useState(5);
-  // const [pathsry, setPathsry] = useState<point[][]>([]);
-  // const [points, setPoints] = useState<point[]>([]);
-
-  const [color, setColor] = useState('#000000');
-  const [activeTool, setActiveTool] = useState('pencil');
-  const [layers, setLayers] = useState<Layer[]>([]);
-  const [layerCount, setLayerCount] = useState<number>(1);
-  const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
-  const [canvasCtx, setCanvasCtx] = useState<CanvasRenderingContext2D | null>(
-    null,
-  );
-
-  //! 하나의 ctx를 사용, 전역으로 사용하기 위해 Context API 사용
-  //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
-  const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
-  const [newMsg, setNewMsg] = useState<string>();
-  const [drawHistory, setDrawHistory] = useState<DrawData[]>([]);
-
-  /*
-   * context API
-   */
-  // const activeLayer = useActiveLayerState();
-
-  // const useForceUpdate: any = () => {
-  //   const [count, setCount] = useState(0);
-  //   const increment = () => setCount((prevCount) => prevCount + 1);
-  //   console.log('33333333333 useForceUpdate 33333333333');
-  //   console.log(activeLayer);
-  //   return [increment, count];
-  // };
-  // const [forceUpdate] = useForceUpdate();
-
+  //@ Connection's States
   const rtcConfig = {
     iceServers: [
       {
@@ -89,82 +53,38 @@ function Draw() {
     is_host: false,
     hostId: null,
   });
+  const [onPeerDataSignal, setOnPeerDataSignal] = useState<string>();
+  const [actionHistorySignal, setActionHistorySignal] = useState<Event[]>([]);
+  const [drawHistory, setDrawHistory] = useState<DrawData[]>([]);
+  const [readyToDrawHistorySignal, setReadyToDrawHistorySignal] = useState<
+    number | null
+  >(null);
+  const [addPeerSignal, setAddPeerSignal] = useState<string | null>(null);
+  const [removePeerSignal, setRemovePeerSignal] = useState<string | null>(null);
+  const [sessionDescriptionSignal, setSessionDescriptionSignal] = useState<
+    string | null
+  >(null);
+  const [iceCandidateSignal, setIceCandidateSignal] = useState<string | null>(
+    null,
+  );
+  const [joinSignal, setJoinSignal] = useState<number | null>(null);
+  const [sendHistoryDataSignal, setSendHistoryDataSignal] = useState<
+    number | null
+  >(null);
+  const [setHostSignal, setSetHostSignal] = useState<number | null>(null);
 
-  // let activeLayerDummy: Layer | null = null;
+  //@ Drawing's States
+  const [activeTool, setActiveTool] = useState<string>('');
+  const [canvas, setCanvas] = useState<any>(null);
+  const [color, setColor] = useState('#000000');
+  const [cursorWidth, setCursorWidth] = useState(5);
+  const [eraserWidth, setEraserWidth] = useState(5);
+  const [lineWidth, setLineWidth] = useState(5);
+  // const [pathsry, setPathsry] = useState<point[][]>([]);
+  // const [points, setPoints] = useState<point[]>([]);
 
-  useEffect(() => {
-    if (
-      activeLayer === null ||
-      activeLayer.canvasCtx === null ||
-      newMsg == '' ||
-      newMsg == null
-    )
-      return;
-    const tempMsg = JSON.parse(newMsg);
-    // console.log('-----------------', activeLayer.canvasCtx);
-    console.log(tempMsg);
-    if (tempMsg.event === 'draw') {
-      draw(tempMsg, activeLayer.canvasCtx);
-    } else if (tempMsg.event === 'drawRect') {
-      drawRect(tempMsg, false, activeLayer.canvasCtx);
-    } else if (tempMsg.event === 'clear') {
-      // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    } else if (tempMsg.event === 'drawHistoryData') {
-      actionDrawHistory(tempMsg, activeLayer.canvasCtx);
-    }
-  }, [newMsg]);
-
-  function actionDrawHistory(
-    data: { event: string; history: DrawData[] },
-    canvasCtx: CanvasRenderingContext2D,
-  ) {
-    if (peerConnectionContext.is_new) {
-      data.history.forEach((elem: DrawData) => {
-        //! 이벤트 종류 추가해야 함
-        draw(elem, canvasCtx);
-      });
-
-      peerConnectionContext.is_new = false;
-    }
-  }
-
-  // function actionPeerData(msg: any) {
-  //   console.log('========= actionPeerData ==========');
-  //   forceUpdate();
-  //   // const activeLayerDummy = useActiveLayerState();
-
-  //   // console.log(activeLayerDummy);
-  //   console.log(activeLayer);
-  //   console.log(peerConnectionContext);
-  //   console.log(eraserWidth);
-  //   console.log(cursorWidth);
-  //   console.log(color);
-  //   console.log(activeTool);
-  //   console.log(layers);
-  //   console.log(layerCount);
-  //   console.log(canvas);
-  //   console.log(canvasCtx);
-  //   if (activeLayer === null || activeLayer.canvasCtx === null) return;
-
-  //   console.log(activeLayer.canvasCtx);
-  //   console.log(msg);
-  //   if (msg.event === 'draw') {
-  //     draw(msg, activeLayer.canvasCtx);
-  //   } else if (msg.event === 'drawRect') {
-  //     drawRect(msg, false, activeLayer.canvasCtx);
-  //   } else if (msg.event === 'clear') {
-  //     // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  //   } else if (msg.event === 'drawHistoryData') {
-  //     // drawHistoryData(msg);
-  //   }
-  // }
-
-  // async function updateActiveLayer(tmp: Layer) {
-  //   console.log('***************** updateActiveLayer ***********');
-  //   console.log(tmp);
-  //   activeLayerDummy = tmp;
-  //   setActiveLayer(tmp);
-  // }
+  //! 하나의 ctx를 사용, 전역으로 사용하기 위해 Context API 사용
+  //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
 
   // function drawPaths() {
   //   // delete everything
@@ -193,8 +113,7 @@ function Draw() {
   // }
 
   async function getToken(): Promise<string> {
-    console.log('========= getToken ==========');
-    // console.log(activeLayer);
+    // console.log('========= getToken ==========');
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -208,76 +127,180 @@ function Draw() {
       data,
       config,
     );
-    // console.log(response.data.token);
-
-    // return data.token;
     return response.data.token;
   }
 
-  async function join(token: string) {
-    console.log('========= join ==========');
-    // console.log(activeLayer);
-    // console.log(peerConnectionContext);
-    // console.log(token);
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    await axios.post(
-      `http://localhost:8080/${peerConnectionContext.roomId}/join`,
-      null,
-      config,
-    );
-  }
-
   async function connect() {
-    console.log('========= connect ==========');
-    // console.log(activeLayer);
+    // console.log('========= connect ==========');
     const token = await getToken();
     const tmpContext = { ...peerConnectionContext };
     tmpContext.token = token;
-
     tmpContext.eventSource = new EventSource(
       `http://localhost:8080/connect?token=${token}`,
     );
-    tmpContext.eventSource.addEventListener(
-      'add-peer',
-      (data) => addPeer(data, token),
-      false,
-    );
+
+    tmpContext.eventSource.addEventListener('add-peer', addPeer, false);
     tmpContext.eventSource.addEventListener('remove-peer', removePeer, false);
     tmpContext.eventSource.addEventListener(
       'session-description',
-      (data) => sessionDescription(data, token),
+      sessionDescription,
       false,
     );
     tmpContext.eventSource.addEventListener(
       'ice-candidate',
-      (data) => iceCandidate(data, token),
+      iceCandidate,
       false,
     );
-    tmpContext.eventSource.addEventListener('connected', () => join(token));
+    tmpContext.eventSource.addEventListener('connected', join);
     tmpContext.eventSource.addEventListener(
       'send-history-data',
-      () => sendHistoryData(token),
+      sendHistoryData,
       false,
     );
     tmpContext.eventSource.addEventListener('youAreTheHost', setHost, false);
     setPeerConnectionContext(tmpContext);
   }
 
-  //! data:any 수정
-  function addPeer(data: any, token: string) {
-    console.log('========= addPeer ==========');
-    // console.log(activeLayer);
+  async function createOffer(
+    peerId: string,
+    peer: RTCPeerConnection,
+    token: any,
+  ) {
+    // console.log('========= createOffer ==========');
 
-    const message = JSON.parse(data.data);
-    if (peerConnectionContext.peers[message.peer.id]) {
+    const offer = await peer.createOffer();
+    await peer.setLocalDescription(offer);
+    await relay(peerId, 'session-description', offer, token);
+  }
+
+  async function relay(
+    peerId: string,
+    event: string,
+    data: any,
+    token: string,
+  ) {
+    // console.log('========= relay ==========');
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    await axios.post(
+      `http://localhost:8080/relay/${peerId}/${event}`,
+      data,
+      config,
+    );
+  }
+
+  function requireDrawHistory(peerConnectionContext: any) {
+    // console.log('========== requireDrawHistory ==========');
+    if (peerConnectionContext.hostId !== null) {
+      relay(
+        peerConnectionContext.hostId,
+        'send-history-data',
+        { data: null },
+        peerConnectionContext.token,
+      );
+    }
+  }
+
+  function onPeerData(_: string, data: string) {
+    // console.log('========= onPeerData ==========');
+    setOnPeerDataSignal(data);
+  }
+
+  //! data:any 수정
+  function addPeer(data: any) {
+    setAddPeerSignal(data.data);
+  }
+
+  function removePeer(data: any) {
+    // console.log('========= removePeer ==========');
+    setRemovePeerSignal(data.data);
+  }
+
+  function sessionDescription(data: any) {
+    // console.log('========= sessionDescription ==========');
+    setSessionDescriptionSignal(data.data);
+  }
+
+  function iceCandidate(data: any) {
+    // console.log('========= iceCandidate ==========');
+    setIceCandidateSignal(data.data);
+  }
+
+  function join(data: any) {
+    // console.log('========= join ==========');
+    setJoinSignal(data.timeStamp);
+  }
+
+  function sendHistoryData(data: any) {
+    // console.log('========== sendHistoryData 이벤트는 들어오냐? ==========');
+    setSendHistoryDataSignal(data.timeStamp);
+  }
+
+  function setHost(data: any) {
+    // console.log('========== setHost ==========');
+    setSetHostSignal(data.timeStamp);
+  }
+
+  //@ function: onPeerData
+  useEffect(() => {
+    if (canvas === null || onPeerDataSignal == '' || onPeerDataSignal == null) {
       return;
     }
 
+    const message = JSON.parse(onPeerDataSignal);
+    if (message.event === 'draw') {
+      // TODO: 들어온 이벤트에 맞는 캔버스에 그려야함
+      draw(message, canvas);
+      setDrawHistory([...drawHistory, message]);
+    } else if (message.event === 'drawRect') {
+      drawRect(message, false, canvas);
+    } else if (message.event === 'clear') {
+      // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+    } else if (
+      message.event === 'drawHistoryData' &&
+      peerConnectionContext.is_new
+    ) {
+      // // TODO: 레이어 생성
+      // const newLayers: Layer[] = message.layers.map((layer: any) => {
+      //   return {
+      //     name: layer.name,
+      //     canvasId: layer.canvasId,
+      //     buttonId: layer.buttonId,
+      //     canvasCtx: null,
+      //   };
+      // });
+      // // TODO: 레이어 생성 완료되면 context data 변경
+      // setDrawHistory([...drawHistory, ...message.drawHistory]);
+      // const tmpPeerConnectionContext = { ...peerConnectionContext };
+      // tmpPeerConnectionContext.is_new = false;
+      // setPeerConnectionContext(tmpPeerConnectionContext);
+      // // TODO: 레이어 생성 되면 useEffect 실행해서 지금까지 데이터 적기
+      // setActionHistorySignal(message.drawHistory);
+    }
+  }, [onPeerDataSignal]);
+
+  //@ function: actionDrawHistory
+  useEffect(() => {
+    if (!actionHistorySignal.length) return;
+    console.log('actionHistorySignal 을 받았다!');
+    // actionDrawHistory(actionHistorySignal, canvasCtxTable);
+  }, [actionHistorySignal]);
+
+  //@ function: addPeer
+  useEffect(() => {
+    if (addPeerSignal === null) return;
+    // console.log('========= addPeer ==========');
+
+    const message = JSON.parse(addPeerSignal);
+    if (peerConnectionContext.peers[message.peer.id]) return;
+
+    // Deep Copy 'peerConnectionContext' state
     const updatePeerConnectionContext = { ...peerConnectionContext };
     updatePeerConnectionContext.hostId = message.hostId;
 
@@ -287,12 +310,16 @@ function Draw() {
 
     // handle ice candidate
     peer.onicecandidate = function (event) {
+      if (peerConnectionContext.token === null) return;
       if (event.candidate) {
-        relay(message.peer.id, 'ice-candidate', event.candidate, token);
+        relay(
+          message.peer.id,
+          'ice-candidate',
+          event.candidate,
+          peerConnectionContext.token,
+        );
       }
     };
-
-    // console.log(updatePeerConnectionContext);
 
     // generate offer if required (on join, this peer will create an offer
     // to every other peer in the network, thus forming a mesh)
@@ -303,7 +330,7 @@ function Draw() {
         onPeerData(message.peer.id, event.data);
       };
       updatePeerConnectionContext.channels[message.peer.id] = channel;
-      createOffer(message.peer.id, peer, token);
+      createOffer(message.peer.id, peer, peerConnectionContext.token);
     } else {
       peer.ondatachannel = function (event) {
         updatePeerConnectionContext.channels[message.peer.id] = event.channel;
@@ -312,208 +339,187 @@ function Draw() {
         };
       };
     }
+
+    // Set 'peerConnectionContext' state
     setPeerConnectionContext(updatePeerConnectionContext);
-  }
+  }, [addPeerSignal]);
 
-  async function createOffer(
-    peerId: string,
-    peer: RTCPeerConnection,
-    token: string,
-  ) {
-    console.log('========= createOffer ==========');
-    // console.log(activeLayer);
-
-    const offer = await peer.createOffer();
-    await peer.setLocalDescription(offer);
-    await relay(peerId, 'session-description', offer, token);
-  }
-
-  function relay(peerId: string, event: string, data: any, token: string) {
-    // console.log('========= relay ==========');
-    // console.log(peerConnectionContext.peers);
-    // console.log('peerId ::', peerId);
-    // console.log('event ::', event);
-    // console.log('peerConnectionContext.token ::', token);
-
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    axios.post(`http://localhost:8080/relay/${peerId}/${event}`, data, config);
-  }
-
-  function onPeerData(id: string, data: string) {
-    console.log('========= onPeerData ==========');
-    // console.log(activeLayer);
-
-    // const msg = JSON.parse(data);
-    // actionPeerData(msg);
-    setNewMsg(data);
-  }
-
-  //! data:any 수정
-  function removePeer(data: any) {
+  //@ function: removePeer
+  useEffect(() => {
+    if (removePeerSignal === null) return;
     console.log('========= removePeer ==========');
 
+    // Deep Copy 'peerConnectionContext' state
     const tmpPeerConnectionContext = { ...peerConnectionContext };
-    console.log(tmpPeerConnectionContext);
 
-    const message = JSON.parse(data.data);
+    const message = JSON.parse(removePeerSignal);
     if (tmpPeerConnectionContext.peers[message.peer.id]) {
       tmpPeerConnectionContext.peers[message.peer.id].close();
     }
     delete tmpPeerConnectionContext.peers[message.peer.id];
 
+    // Set 'peerConnectionContext' state
     setPeerConnectionContext(tmpPeerConnectionContext);
-  }
+  }, [removePeerSignal]);
 
-  //! data:any 수정
-  async function sessionDescription(data: any, token: string) {
-    console.log('========= sessionDescription ==========');
-    console.log(peerConnectionContext);
+  //@ function: sessionDescription
+  useEffect(() => {
+    if (sessionDescriptionSignal === null) return;
+    // console.log('========= sessionDescription ==========');
 
-    const message = JSON.parse(data.data);
-    const peer = peerConnectionContext.peers[message.peer.id];
-    const remoteDescription = new RTCSessionDescription(message.data);
+    const message = JSON.parse(sessionDescriptionSignal);
 
-    await peer.setRemoteDescription(remoteDescription);
-    if (remoteDescription.type === 'offer') {
-      const answer = await peer.createAnswer();
-      await peer.setLocalDescription(answer);
-      await relay(message.peer.id, 'session-description', answer, token);
+    async function relaySessionDescription(message: any) {
+      if (peerConnectionContext.token === null || !message) return;
+
+      const peer = peerConnectionContext.peers[message.peer.id];
+      const remoteDescription = new RTCSessionDescription(message.data);
+      if (!peer || !remoteDescription) return;
+
+      await peer.setRemoteDescription(remoteDescription);
+      if (remoteDescription.type === 'offer') {
+        const answer = await peer.createAnswer();
+        await peer.setLocalDescription(answer);
+        await relay(
+          message.peer.id,
+          'session-description',
+          answer,
+          peerConnectionContext.token,
+        );
+      }
     }
-  }
 
-  //! data:any 수정
-  function iceCandidate(data: any, token: string) {
-    console.log('========= iceCandidate ==========');
-    console.log(peerConnectionContext);
+    relaySessionDescription(message);
+  }, [sessionDescriptionSignal]);
 
-    const message = JSON.parse(data.data);
+  //@ function: iceCandidate
+  useEffect(() => {
+    if (iceCandidateSignal === null) return;
+    // console.log('========= iceCandidate ==========');
+
+    const message = JSON.parse(iceCandidateSignal);
     const peer = peerConnectionContext.peers[message.peer.id];
+    if (!peer) return;
     peer.addIceCandidate(new RTCIceCandidate(message.data));
     if (!peerConnectionContext.is_host && peerConnectionContext.is_new) {
-      requireDrawHistory(token);
+      requireDrawHistory(peerConnectionContext);
     }
-  }
+  }, [iceCandidateSignal]);
 
-  function sendHistoryData(data: any) {
-    console.log('========== load.js :: sendHistoryData ==========');
-    console.log(peerConnectionContext);
-    if (!peerConnectionContext.is_host) {
-      return;
-    }
+  //@ function: join
+  useEffect(() => {
+    if (joinSignal === null) return;
+    // console.log('========= join ==========');
 
-    const historyData = {
-      event: 'drawHistoryData',
-      drawHistory: drawHistory,
-    };
-    console.log(historyData);
-    broadcast(JSON.stringify(historyData), peerConnectionContext);
-  }
-
-  function requireDrawHistory(token: string) {
-    console.log('========== load.js :: requireDrawHistory ==========');
-    console.log('peerConnectionContext', peerConnectionContext);
-    console.log('hostId', peerConnectionContext.hostId);
-    if (peerConnectionContext.hostId !== null) {
-      relay(
-        peerConnectionContext.hostId,
-        'send-history-data',
-        { data: null },
-        token,
+    async function joinRequest() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${peerConnectionContext.token}`,
+        },
+      };
+      await axios.post(
+        `http://localhost:8080/${peerConnectionContext.roomId}/join`,
+        null,
+        config,
       );
     }
-  }
 
-  function setHost() {
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log('========== load.js :: setHost ==========');
-    console.log(peerConnectionContext);
+    joinRequest();
+  }, [joinSignal]);
+
+  //@ function: sendHistoryData
+  useEffect(() => {
+    // if (sendHistoryDataSignal === null || !peerConnectionContext.is_host)
+    //   return;
+    // // console.log('========== sendHistoryData ==========');
+    // const layerHistory = layers.map((layer) => {
+    //   return {
+    //     name: layer.name,
+    //     canvasId: layer.canvasId,
+    //     buttonId: layer.buttonId,
+    //   };
+    // });
+    // const historyData = {
+    //   event: 'drawHistoryData',
+    //   layers: layerHistory,
+    //   drawHistory: drawHistory,
+    // };
+    // broadcast(JSON.stringify(historyData), peerConnectionContext);
+  }, [sendHistoryDataSignal]);
+
+  //@ function: setHost
+  useEffect(() => {
+    if (setHostSignal === null) return;
+    console.log('========== setHost ==========');
+
     const tmpPeerConnectionContext = { ...peerConnectionContext };
     tmpPeerConnectionContext.is_host = true;
     tmpPeerConnectionContext.is_new = false;
     setPeerConnectionContext(tmpPeerConnectionContext);
-  }
-
-  // const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
-
-  // useEffect(() => {
-  //   console.log('========= useEffect :: activeLayer ==========');
-  //   console.log(activeLayer);
-  //   forceUpdate();
-  // }, [activeLayer]);
-
-  // useEffect(() => {
-  //   console.log('========= useEffect :: canvasCtxTable ==========');
-  //   console.log(canvasCtxTable);
-  // }, [canvasCtxTable]);
+  }, [setHostSignal]);
 
   useEffect(() => {
     connect();
   }, []);
 
+  // useEffect(() => {
+  //   console.log(drawHistory);
+  // }, [drawHistory]);
+
   return (
     <div className='drawComponent'>
-      <p>Draw component</p>
       <CursorComponent cursorWidth={cursorWidth} />
       <div className='flush vstack'>
         <div className='menubar hstack'>
           <ToolSelectComponent
-            lineWidth={lineWidth}
-            eraserWidth={eraserWidth}
-            setCursorWidth={setCursorWidth}
             activeTool={activeTool}
-            setActiveTool={setActiveTool}
-          />
-          <LineSizeComponent
+            canvas={canvas}
+            color={color}
+            eraserWidth={eraserWidth}
             lineWidth={lineWidth}
-            cursorWidth={cursorWidth}
-            setLineWidth={setLineWidth}
+            setActiveTool={setActiveTool}
+            setCanvas={setCanvas}
             setCursorWidth={setCursorWidth}
+          />
+          <UndoRedoComponent canvas={canvas} />
+          <DeleteObjectComponent canvas={canvas} />
+          <div className='spacer'></div>
+          <LineSizeComponent
+            activeTool={activeTool}
+            canvas={canvas}
+            cursorWidth={cursorWidth}
+            lineWidth={lineWidth}
+            setCanvas={setCanvas}
+            setCursorWidth={setCursorWidth}
+            setLineWidth={setLineWidth}
           />
           <EraseSizeComponent
-            eraserWidth={eraserWidth}
+            activeTool={activeTool}
+            canvas={canvas}
             cursorWidth={cursorWidth}
-            setEraserWidth={setEraserWidth}
+            eraserWidth={eraserWidth}
+            setCanvas={setCanvas}
             setCursorWidth={setCursorWidth}
+            setEraserWidth={setEraserWidth}
           />
           <div className='spacer'></div>
-          <ColorPaletteComponent color={color} setColor={setColor} />
+          <ColorPaletteComponent
+            canvas={canvas}
+            color={color}
+            setCanvas={setCanvas}
+            setColor={setColor}
+          />
           <div className='spacer'></div>
+          <AddImageComponent canvas={canvas} />
         </div>
-        {/* <CanvasCtxsProvider> */}
         <LayerComponent
-          activeTool={activeTool}
-          color={color}
-          lineWidth={lineWidth}
-          eraserWidth={eraserWidth}
-          layers={layers}
-          layerCount={layerCount}
-          activeLayer={activeLayer}
-          canvasCtx={canvasCtx}
-          canvasCtxTable={canvasCtxTable}
-          peerConnectionContext={peerConnectionContext}
+          canvas={canvas}
           drawHistory={drawHistory}
-          setLayers={setLayers}
-          setLayerCount={setLayerCount}
-          setActiveLayer={setActiveLayer}
-          setCanvasCtx={setCanvasCtx}
-          setCanvasCtxTable={setCanvasCtxTable}
-          // updateActiveLayer={updateActiveLayer}
+          peerConnectionContext={peerConnectionContext}
+          setCanvas={setCanvas}
           setDrawHistory={setDrawHistory}
         />
-        {/* </CanvasCtxsProvider> */}
       </div>
     </div>
   );

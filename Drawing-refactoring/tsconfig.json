@@ -22,7 +22,6 @@
     "noImplicitAny": true
   },
   "include": [
-    "src",
-    "DrawContext.tsx"
-, "src/pages/draw/DrawContext.tsx", "public/load.ts"  ]
+    "src"
+  ]
 }
