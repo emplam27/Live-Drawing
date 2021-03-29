@@ -25,22 +25,18 @@ function CursorComponent(props: CursorComponentProps) {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
-    if (targetCanvasContainer != null) {
-      targetCanvasContainer.addEventListener('mousemove', onMouseMove);
-      targetCanvasContainer.addEventListener('mouseenter', onMouseEnter);
-      targetCanvasContainer.addEventListener('mouseleave', onMouseLeave);
-    }
+    targetCanvasContainer?.addEventListener('mousemove', onMouseMove);
+    targetCanvasContainer?.addEventListener('mouseenter', onMouseEnter);
+    targetCanvasContainer?.addEventListener('mouseleave', onMouseLeave);
   };
 
   const removeEventListeners = () => {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
-    if (targetCanvasContainer != null) {
-      targetCanvasContainer.removeEventListener('mousemove', onMouseMove);
-      targetCanvasContainer.removeEventListener('mouseenter', onMouseEnter);
-      targetCanvasContainer.removeEventListener('mouseleave', onMouseLeave);
-    }
+    targetCanvasContainer?.removeEventListener('mousemove', onMouseMove);
+    targetCanvasContainer?.removeEventListener('mouseenter', onMouseEnter);
+    targetCanvasContainer?.removeEventListener('mouseleave', onMouseLeave);
   };
 
   // const range = document.getElementById('pencilSlider')

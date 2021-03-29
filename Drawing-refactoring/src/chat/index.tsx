@@ -11,5 +11,5 @@ export function LiveRoomComponent() {
       .get(`/room/${roomId}`)
       .then((res: ResponseUserInfo) => setUserInfo(res.data));
   });
-  console.log(userInfo);
+  userInfo;
 }
