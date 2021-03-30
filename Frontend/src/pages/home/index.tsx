@@ -4,22 +4,28 @@ import {
   JumpToFeedbackComponent,
   JumpToJoinComponent,
   JumpToLoginComponent,
+  JumpToShowMoreRoomComponent,
 } from './components/jump-buttons';
-import { RoomListComponet } from './components/room-list';
+import RoomCreateComponent from './components/room-create-form';
+import { RoomListComponent } from './components/room-list';
 
 export function HomeComponent() {
   return (
     <div>
-      <div className='container flex divide-x-2 border-2 h-mainBox'>
-        <div className='flex-column bg-gradient-to-tr from-blue-300 to-blue-0 rounded-xl w-full m-1'>
+      <div className='container flex divide-x-2 '>
+        <div className='flex-column w-full'>
           <div className='flex'>
-            <div className='p-2'>라이브 강의</div>
-            <JumpToCreateRoomComponent></JumpToCreateRoomComponent>
+            <div className='flex-auto font-bold text-left pt-1 pl-3'>라이브 강의</div>
+            <div className='flex flex-row pr-10'>
+              <JumpToCreateRoomComponent></JumpToCreateRoomComponent>
+              &nbsp;
+              <JumpToShowMoreRoomComponent></JumpToShowMoreRoomComponent>
+            </div>
           </div>
-          <RoomListComponet></RoomListComponet>
+          <RoomListComponent></RoomListComponent>
         </div>
-        <div className='flex bg-gradient-to-tr from-blue-200 to-blue-0 rounded-xl w-full m-1'>
-          <div className='p-2'>준비중</div>
+        <div className='flex rounded-xl w-full m-1'>
+          <div className='flex-auto font-bold text-left pl-3'>드로잉 강의</div>
         </div>
       </div>
     </div>

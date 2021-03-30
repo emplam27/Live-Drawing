@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './room-list.css';
+
 import { EntranceProps } from '../interfaces/entrance-props-interface';
 
 export function EntranceComponent(props: EntranceProps) {
@@ -14,8 +15,19 @@ export function EntranceComponent(props: EntranceProps) {
 
   return (
     <>
-      <div className='border-2 w-48 h-48 m-3' onClick={onClick}>
-        <h2>{props.roomTitle}</h2>
+      <div onClick={onClick}>
+        <div className={'roomMetadata'}>
+          <div className={'roomImage'}>
+            <img src='/Kakao_drawing.jpeg' alt=''></img>
+          </div>
+          <div className={'roomInfo'}>
+            <div className='roomTitle'>{props.roomTitle}</div>
+            <div className={'buttonandImage flex'}>
+              <img src='/profile.jpeg' alt=''></img>
+              <span className={'name'}>전민동고흐</span>
+            </div>
+          </div>
+        </div>
       </div>
     </>
 

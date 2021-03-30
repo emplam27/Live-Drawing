@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import withReactContent from 'sweetalert2-react-content';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-
+import './join-form.css';
 export function JoinComponent() {
   const [password1, setPassword1] = useState<string>('');
   const [password2, setPassword2] = useState<string>('');
@@ -118,7 +118,7 @@ export function JoinComponent() {
                 disabled={buttonFlag}
                 className='flex m-3 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
               >
-                회원가입 하기
+                회원가입
               </button>
             </form>
           </div>

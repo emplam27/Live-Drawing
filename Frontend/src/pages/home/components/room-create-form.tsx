@@ -72,7 +72,7 @@ export default function RoomCreateComponent() {
                 // disabled={buttonFlag}
                 className='flex m-3 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
               >
-                방에 들어가기
+                방 만들기
               </button>
             </form>
           </div>
