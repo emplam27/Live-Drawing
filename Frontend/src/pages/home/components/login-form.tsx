@@ -3,6 +3,8 @@ import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { useCustomDispatch, useCustomState } from '../../../context';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export function SignInComponent() {
   const [userId, setUserId] = useState<string>();
@@ -10,6 +12,7 @@ export function SignInComponent() {
   const userState = useCustomState();
   const userDispatch = useCustomDispatch();
   const history = useHistory();
+  const MySwal = withReactContent(Swal);
 
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     axios.post('http://localhost:8080/login/google', res).then((res) => {
@@ -18,8 +21,10 @@ export function SignInComponent() {
       localStorage.setItem('id', res.data.id);
       localStorage.setItem('token', res.data.token);
       if (res.data.token) {
-        alert('로그인 되셨습니다.');
-        history.push('/');
+        MySwal.fire({
+          title: <p>로그인 되었습니다.</p>,
+          text: '홈으로 돌아갑니다.',
+        }).then(() => history.push('/'));
       }
     });
   };
@@ -32,14 +37,16 @@ export function SignInComponent() {
   };
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    axios.post('http://localhost:8080/login', { userId: userId, password: password }).then((res) => {
+    axios.post('http://localhost:8080/login', { email: userId, password: password }).then((res) => {
       userDispatch({ type: 'SET_ID', id: res.data.id, token: res.data.token });
       console.log(res.data.token);
       localStorage.setItem('id', res.data.id);
       localStorage.setItem('token', res.data.token);
       if (res.data.token) {
-        alert('로그인 되셨습니다.');
-        history.push('/');
+        MySwal.fire({
+          title: <p>로그인 되었습니다.</p>,
+          text: '홈으로 돌아갑니다.',
+        }).then(() => history.push('/'));
       }
     });
   };

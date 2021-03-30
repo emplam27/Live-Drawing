@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { FeedbackComponentProps, FeedbackForm } from '../interfaces/feedback-nterfaces';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { useHistory } from 'react-router';
 
 export function FeedbackComponent(props: FeedbackComponentProps) {
   const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({ userName: props.userName, text: '' });
   const MySwal = withReactContent(Swal);
+  const history = useHistory();
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFeedbackForm({ userName: feedbackForm.userName, text: e.target.value });
@@ -19,7 +21,7 @@ export function FeedbackComponent(props: FeedbackComponentProps) {
         MySwal.fire({
           title: <p>피드백 등록이 완료되었습니다. 감사합니다.</p>,
           text: '홈으로 돌아갑니다.',
-        });
+        }).then(() => history.push(''));
       else
         MySwal.fire({
           title: <p>피드백 등록이 실패했습니다.</p>,
