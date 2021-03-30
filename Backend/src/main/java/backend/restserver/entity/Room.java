@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Room {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roomPk") //Camel 표기법이 db에서 반영안되는듯;
     private Long roomPk;
 

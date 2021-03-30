@@ -2,9 +2,13 @@ package backend.restserver.entity;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Data
 @Entity
@@ -12,7 +16,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class User {
     @Id // primary key
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="userPk")
     private Long userPk;
     @Column(name="username")
@@ -21,8 +25,15 @@ public class User {
     private String password;
     @Column(name="email")
     private String email;
-    @Column(name="role")
-    private String role; //ROLE_USER, ROLE_ADMIN, ROLE_MANAGER
+    @Column(name="roles")
+    private String roles; //ROLE_USER, ROLE_ADMIN, ROLE_MANAGER
+
+    public List<String> getRoleList() {
+        if(this.roles.length() > 0) {
+            return Arrays.asList(this.roles.split(","));
+        }
+        return new ArrayList<>();
+    }
 
 //    private Timestamp loginDate; // 얘는 로그인할때마다 저장된다. 근데 지금은 안한다. (1년뒤 만료되는거를 고려하기위해 넣어줌)
 
@@ -33,6 +44,8 @@ public class User {
     @CreationTimestamp
     private Timestamp createDate;
 
+    @UpdateTimestamp
+    private Timestamp updateDate;
 
 
 //    @OneToOne(mappedBy = "user")
@@ -53,11 +66,11 @@ public class User {
     }
 
     @Builder
-    public User(String username, String password, String email, String role, String provider, String providerId, Timestamp createDate) {
+    public User(String username, String password, String email, String roles, String provider, String providerId, Timestamp createDate) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.roles = roles;
         this.provider = provider;
         this.providerId = providerId;
         this.createDate = createDate;

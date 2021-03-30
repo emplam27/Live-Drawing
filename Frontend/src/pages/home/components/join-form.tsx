@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import withReactContent from 'sweetalert2-react-content';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import './join-form.css';
+import { useHistory } from 'react-router';
+
 export function JoinComponent() {
   const [password1, setPassword1] = useState<string>('');
   const [password2, setPassword2] = useState<string>('');
@@ -15,6 +16,7 @@ export function JoinComponent() {
   const [textFlag2, setTextFlag2] = useState<string>('적어도 8자 이상의 비밀번호를 입력하세요.');
   const [buttonFlag, setButtonFlag] = useState<boolean>(true);
   const MySwal = withReactContent(Swal);
+  const history = useHistory();
 
   const onChangePassword1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword1(e.target.value);
@@ -66,7 +68,7 @@ export function JoinComponent() {
           MySwal.fire({
             title: <p>회원가입이 되었습니다.</p>,
             text: '홈으로 돌아갑니다.',
-          });
+          }).then(() => history.push(''));
         else
           MySwal.fire({
             title: <p>회원가입에 실패했습니다.</p>,
