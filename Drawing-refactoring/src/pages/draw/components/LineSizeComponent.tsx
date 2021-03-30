@@ -3,7 +3,7 @@ import '../index.css';
 import { LineSizeComponentProps } from '../interfaces/line-size-interfaces';
 
 function LineSizeComponent(props: LineSizeComponentProps) {
-  function changeLineSize(e: React.ChangeEvent<HTMLInputElement>) {
+  function changeLineSize(e: React.ChangeEvent<HTMLInputElement>): void {
     if (!props.canvas || !props.canvas) return;
     props.setLineWidth(Number(e.target.value));
     // props.setCursorWidth(Number(e.target.value));

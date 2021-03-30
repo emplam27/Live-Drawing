@@ -3,7 +3,7 @@ import '../index.css';
 import { EraseSizeComponentProps } from '../interfaces/erase-size-interfaces';
 
 function EraseSizeComponent(props: EraseSizeComponentProps) {
-  function changeEraserSize(e: React.ChangeEvent<HTMLInputElement>) {
+  function changeEraserSize(e: React.ChangeEvent<HTMLInputElement>): void {
     props.setEraserWidth(Number(e.target.value));
     // props.setCursorWidth(Number(e.target.value));
   }
