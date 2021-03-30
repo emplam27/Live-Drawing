@@ -1,5 +1,6 @@
 package backend.restserver.controller;
 
+import backend.restserver.config.auth.PrincipalDetails;
 import backend.restserver.entity.Room;
 import backend.restserver.entity.User;
 import backend.restserver.repository.RoomRepository;
@@ -7,8 +8,13 @@ import backend.restserver.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @RestController
@@ -18,6 +24,8 @@ public class EntityController {
     private final UserRepository userRepo;
     private final RoomRepository roomRepo;
 
+
+
     @Autowired
     public EntityController(UserRepository userRepo, RoomRepository roomRepo) {
         this.userRepo = userRepo;
@@ -26,16 +34,55 @@ public class EntityController {
 
 //     GET
 //     방 리스트 목록 조회
-//    @GetMapping("/")
-//    @ResponseBody
-//    public List<Room> showRoomList() {
-//        logger.info("show room list");
-////        RoomList list = new RoomList();
-////        RoomList list = (RoomList) roomRepo.findAll();
-////        return list;
-//
-//        return roomRepo.findAll();
-//    }
+    @GetMapping("/")
+    public @ResponseBody List<Room> showRoomList(HttpSession session, HttpServletRequest httpServletRequest) {
+        logger.info("show room list");
+        logger.info(session.getId());
+
+        String session_name = "";
+        String session_value= "";
+
+        Enumeration enum_01 = session.getAttributeNames();
+        int i = 0;
+        while(enum_01.hasMoreElements()) {
+            i++;
+            session_name = enum_01.nextElement().toString();
+            session_value = session.getAttribute(session_name).toString();
+            System.out.println("SESSION NAME[ " + session_name +" ] SESSION VALUE [ " + session_value + " ]");
+        }
+        System.out.println(i);
+
+//        if(principalDetails != null) {
+//            System.out.println("principalDetails : " + principalDetails.getUser());
+//        } else {
+//            System.out.println("로그인 이 필요합니다.");
+//        }
+//        RoomList list = new RoomList();
+//        RoomList list = (RoomList) roomRepo.findAll();
+//        return list;
+
+//        User user = (User) httpSession.getAttribute("user");
+//        System.out.println(user.getUsername());
+
+//        System.out.println("---------->터지냐?1");
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        System.out.println("---------->터지냐?2");
+//        User user = (User)authentication.getPrincipal();
+//        System.out.println("---------->터지냐?3");
+
+//        System.out.println(user);
+//        String username = user.getUsername();
+//        System.out.println(username);
+
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+//        if(user!=null) {
+//            System.out.println(user.getUser());
+//        }
+
+
+        return roomRepo.findAll();
+    }
 
 
 //    @GetMapping("/room/{id}")
@@ -112,16 +159,19 @@ public class EntityController {
         Random rand = new Random();
 
         logger.info("createRoom enter");
-
+        logger.info("------------->is here? 1");
 //        long userId = (long)Integer.parseInt(userJson.get("id").toString());
 //        User target = userRepo.findById(userId).get();
 
 //        long keyValue = (long)rand.nextInt(randBound);
         String roomKeyValue = UUID.randomUUID().toString();
+        logger.info("------------->is here? 2");
 //        String keyValue = "1234안녕";
-        String roomTitle = roomJson.get("room_title").toString();
+        String roomTitle = roomJson.get("roomTitle").toString();
+        logger.info("------------->is here? 3");
 //        logger.info("is here?1");
-        String userName = roomJson.get("user_name").toString();
+        String userName = roomJson.get("username").toString();
+        logger.info("------------->is here? 4");
 //        String hostName = memberJson.get("room_host").toString();
         logger.info("room name : " + roomTitle + " host name : " + userName);
 

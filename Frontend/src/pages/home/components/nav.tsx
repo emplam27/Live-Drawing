@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCustomState } from '../../../context';
 import { JumpToLoginComponent } from './jump-buttons';
 import { LogoutComponent } from './logout-component';
 
 export function NavBarComponent() {
+  const userState = useCustomState();
+  const [isToken, setIsToken] = useState(localStorage.getItem('token'));
+  useEffect(() => {
+    setIsToken(localStorage.getItem('token'));
+  }, [userState]);
   return (
     <div className='header'>
       {/* // <!-- This example requires Tailwind CSS v2.0+ --> */}
@@ -96,7 +102,7 @@ export function NavBarComponent() {
               </div>
             </div>
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
-              {localStorage.getItem('token') ? (
+              {isToken ? (
                 <>
                   <div className='mr-5'>{`${localStorage.getItem('id')}님 환영합니다.`}</div> <LogoutComponent />
                 </>

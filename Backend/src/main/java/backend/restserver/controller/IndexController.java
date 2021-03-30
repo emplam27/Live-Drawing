@@ -3,6 +3,7 @@ package backend.restserver.controller;
 import backend.restserver.config.auth.PrincipalDetails;
 import backend.restserver.entity.User;
 import backend.restserver.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller // View를 리턴
+import javax.servlet.http.HttpSession;
+import java.util.Map;
+
+@RestController // View를 리턴
 public class IndexController {
     private final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
@@ -25,6 +29,21 @@ public class IndexController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @GetMapping("/logincheck")
+    public @ResponseBody
+    Map<String, Object> logincheck(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        if (principalDetails != null) {
+            System.out.println(principalDetails.getUser().getUsername());
+//            return "redirect:http://localhost:3000";
+            System.out.println("여기 맞아?" + principalDetails.getAttributes());
+            return principalDetails.getAttributes();
+        } else {
+            return null;
+        }
+    }
+
+
 
     @GetMapping("test/login")
     @ResponseBody
@@ -57,14 +76,14 @@ public class IndexController {
         return "OAuth 세션 정보 확인하기";
     }
 
-    //* localhost:8080/
-    //* localhost:8080
-    @GetMapping({"","/"})
-    public String index() {
-        //머스테치 기본폴더 src/main/resources/
-        //뷰리졸버 설정: templates(prefix), .mustache (suffix) 생략가능! (mustache 의존성에서 다해줌)
-        return "index"; // src/main/resources/templates/index.mustache
-    }
+//    //* localhost:8080/
+//    //* localhost:8080
+//    @GetMapping({"","/"})
+//    public String index() {
+//        //머스테치 기본폴더 src/main/resources/
+//        //뷰리졸버 설정: templates(prefix), .mustache (suffix) 생략가능! (mustache 의존성에서 다해줌)
+//        return "index"; // src/main/resources/templates/index.mustache
+//    }
 
 
     //! OAuth 로그인을 해도 PrincipalDetails로 받을 수 있고
@@ -74,42 +93,60 @@ public class IndexController {
     //! 또 더 좋은건 위 테스트 로그인함수에서 authentication으로 접근하면
     //! PrincipalDetails로 다운캐스팅 해줘야 하는데
     //! @AuthenticationPrincipal 어노테이션으로 접근하면 바로 접근가능하다.
+//    @GetMapping("/user")
+//    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+//        if(principalDetails != null) {
+//            System.out.println("principalDetails : " + principalDetails.getUser());
+//            System.out.println(principalDetails);
+//        } else {
+//            System.out.println("로그인 하세요");
+//        }
+//        return "user";
+//    }
+
     @GetMapping("/user")
-    public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("principalDetails : " + principalDetails.getUser());
+    public @ResponseBody String user() {
         return "user";
     }
 
-    @GetMapping("/user/admin")
+    @GetMapping("/admin")
     public @ResponseBody String admin() {
         return "admin";
     }
 
-    @GetMapping("/user/manager")
+    @GetMapping("/manager")
     public @ResponseBody String manager() {
         return "manager";
     }
 
-    @GetMapping("/user/login-form")
-    public String loginForm() {
-        return "loginForm";
-    }
+//    @GetMapping("/user/login-form")
+//    public String loginForm() {
+//        return "loginForm";
+//    }
+//
+//    @GetMapping("/user/join-form")
+//    public String joinForm() {
+//        return "joinForm";
+//    }
 
-    @GetMapping("/user/join-form")
-    public String joinForm() {
-        return "joinForm";
-    }
-
-    @PostMapping("/user/join")
-    public String join(User user) {
-        user.setRole("ROLE_USER");
+    @PostMapping("/api/join")
+    public String join(@RequestBody User user) {
+        System.out.println("------------>user :" + user);
+        user.setRoles("ROLE_USER");
         System.out.println(user);
 //        System.out.println(member);
         String rawPassword = user.getPassword();
+//        System.out.println("응?" + rawPassword);
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+//        System.out.println("나오냐?" + rawPassword);
         user.setPassword(encPassword);
+
+        
+        //! 여기서 아이디 중복체크 검사해야함
+        
         userRepo.save(user);
-        return "redirect:/user/login-form";
+//        return "redirect:http://localhost:3000/user/login-form";
+        return "success";
     }
 
 //    @GetMapping("/joinProc")

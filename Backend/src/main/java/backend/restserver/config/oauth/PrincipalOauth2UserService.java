@@ -61,7 +61,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         String password = bCryptPasswordEncoder.encode("livedrawing");
         String email = oAuth2UserInfo.getEmail();
-        String role = "ROLE_USER";
+        String roles = "ROLE_USER";
 
         User userEntity = userRepo.findByUsername(username);
 
@@ -71,7 +71,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
                     .username(username)
                     .password(password)
                     .email(email)
-                    .role(role)
+                    .roles(roles)
                     .provider(provider)
                     .providerId(providerId)
                     .build();

@@ -25,16 +25,19 @@ public class PrincipalDetailsService implements UserDetailsService {
     //! 시큐리티 session(내부 Authentication(내부 UserDetails))
     //! 함수 종료시 @AuthenticationPrincipal 어노테이션이 만들어진다.
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException { //* 여기서 username은 html에서 버튼에서 설정한 파라미터랑 반드시 일치해야 여기로 넘어온다. 조심해라
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException { //* 여기서 username은 html에서 버튼에서 설정한 파라미터랑 반드시 일치해야 여기로 넘어온다. 조심해라
     //* 만약 쟤를 내가 원하는대로 바꺼주고 싶다면 security 설정에서 .usernameParameter("원하는 변수") 로 설정해주면되는데, 그냥 html이랑 맞춰주자.
-        User userEntity = userRepo.findByUsername(username);
+        User userEntity = userRepo.findByEmail(email);
 //        System.out.println(username);
 //        System.out.println(userEntity.getUsername());
+        System.out.println("나다 시발" + userEntity.getEmail());
         if(userEntity != null) {
+
+            System.out.println("is not null?");
             return new PrincipalDetails(userEntity);
-//            System.out.println("is not null?");
         }
 //        System.out.println("is null?");
         return null;
     }
 }
+

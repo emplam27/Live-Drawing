@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -12,7 +12,7 @@ export function LogoutComponent() {
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     userDispatch({ type: 'SET_ID', id: '', token: '' });
-    localStorage.clear;
+    localStorage.clear();
     MySwal.fire({
       title: <p>로그아웃 되셨습니다.</p>,
     });
