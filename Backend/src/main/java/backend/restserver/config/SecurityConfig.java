@@ -40,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/api/user/join");
+                .antMatchers("/api/user/join")
+                .antMatchers("/oauth/jwt/google");
 //        .antMatchers("/login");
     }
 
@@ -68,6 +69,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .access("hasRole('ROLE_ADMIN')")
 //                .antMatchers("/user/join").permitAll()
                 .anyRequest().permitAll();
+//                .and()
+//                .oauth2Login()
+////                .loginPage("/login")
+//                .userInfoEndpoint()
+//                .userService(principalOauth2UserService);
     }
 
 }

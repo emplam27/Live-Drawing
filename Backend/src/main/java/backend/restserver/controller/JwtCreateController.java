@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import com.auth0.jwt.JWT;
 
@@ -26,7 +27,8 @@ public class JwtCreateController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/oauth/jwt/google")
-    public String jwtCreate(@RequestBody Map<String, Object> data) {
+    public Map<String, Object> jwtCreate(@RequestBody Map<String, Object> data) {
+        System.out.println("---------->" + data);
         System.out.println("jwtCreate 실행됨");
         System.out.println(data.get("profileObj"));
         OAuth2UserInfo googleUser =
@@ -37,14 +39,14 @@ public class JwtCreateController {
 
         if(userEntity == null) {
             User userRequest = User.builder()
-                    .username(googleUser.getProvider()+"_"+googleUser.getProviderId())
-                    .password(bCryptPasswordEncoder.encode("겟인데어"))
+//                    .username(googleUser.getProvider()+"_"+googleUser.getProviderId())
+                    .username(googleUser.getName())
+                    .password(bCryptPasswordEncoder.encode("livedrawing"))
                     .email(googleUser.getEmail())
                     .provider(googleUser.getProvider())
                     .providerId(googleUser.getProviderId())
                     .roles("ROLE_USER")
                     .build();
-
             userEntity = userRepository.save(userRequest);
         }
 
@@ -53,9 +55,12 @@ public class JwtCreateController {
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME))
                 .withClaim("userPk", userEntity.getUserPk())
                 .withClaim("username", userEntity.getUsername())
+                .withClaim("email", userEntity.getEmail())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
-
-        return jwtToken;
+        Map<String, Object> json = new HashMap<String, Object>();
+        json.put(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
+        json.put("username", userEntity.getUsername());
+        return json;
     }
 
 }

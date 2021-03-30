@@ -42,27 +42,28 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
         System.out.println("header Authorization : " + jwtHeader);
-        
+        System.out.println("----------->1<-------------");
         //! header가 있는지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response); //! 없으면 다시 필터를 타게함. 밑에 로직이 실행 안됨.
             return;
         }
+        System.out.println("----------->2<-------------");
 
         //! JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
         String jwtToken = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
-
+        System.out.println("----------->3<-------------");
         //! 토큰 검증 (이게 인증이기 때문에 AuthenticationManager도 필요 없음)
         //! 내가 SecurityContext에 직접 접근해서 세션을 만들때 자동으로 UserDetailsService에 있는
         //! loadByUsername이 호출됨.
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
                 .getClaim("username").asString();
-        
+        System.out.println("----------->4<-------------");
         
         //! 서명이 정상적으로 됨
         if (username != null) {
             User userEntity = userRepo.findByUsername(username);
-
+            System.out.println("----------->5<-------------");
             //! 인증은 토큰 검증시 끝. 인증을 하기 위해서가 아닌 스프링 시큐리티가 수행해주는 권한 처리를 위해
             //! 아래와 같이 토큰을 만들어서 Authentication 객체를 강제로 만들고 그걸 세션에 저장!
             PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
@@ -70,10 +71,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     // 쓸 때 사용하기 편함.
                     null, // 패스워드는 모르니까 null 처리, 어차피 지금 인증하는게 아니니까!!
                     principalDetails.getAuthorities());
-
+            System.out.println("----------->6<-------------");
             //! 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println("----------->7<-------------");
         }
+        System.out.println("----------->8<-------------");
 
         chain.doFilter(request, response);
     }
