@@ -1,15 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import '../index.css';
 import { UndoRedoComponentProps } from '../interfaces/undo-redo-interfaces';
-import { fabric } from 'fabric';
+import { broadcast } from '../../../functions/draw';
 
 function UndoRedoComponent(props: UndoRedoComponentProps) {
-  function undoHistory() {
+  function undoHistory(): void {
     props.canvas.undo();
+    const message = {
+      event: 'undo',
+      timeStamp: new Date().getTime(),
+    };
+    broadcast(JSON.stringify(message), props.peerConnectionContext);
   }
 
-  function redoHistory() {
+  function redoHistory(): void {
     props.canvas.redo();
+    const message = {
+      event: 'redo',
+      timeStamp: new Date().getTime(),
+    };
+    broadcast(JSON.stringify(message), props.peerConnectionContext);
   }
 
   return (

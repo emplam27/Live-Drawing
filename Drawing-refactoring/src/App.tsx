@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Switch, Link, Route } from 'react-router-dom';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 import './App.css';
 import Draw from './pages/draw';
 import { ChatComponent } from './chat/components/chat';
