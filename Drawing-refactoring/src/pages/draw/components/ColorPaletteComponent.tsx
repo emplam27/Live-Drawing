@@ -102,7 +102,7 @@ function ColorPaletteComponent(props: ColorPaletteComponentProps) {
     ],
   ]);
 
-  function changeColor(colorCode: string) {
+  function changeColor(colorCode: string): void {
     if (!props.canvas) return;
     props.setColor(colorCode);
     props.canvas.freeDrawingBrush.color = props.color;
@@ -114,7 +114,7 @@ function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   }, [props.color]);
 
   return (
-    <div className='relative'>
+    <div>
       <p className='icon-link center'>
         <i className='ri-xl ri-palette-line'></i>
         <i

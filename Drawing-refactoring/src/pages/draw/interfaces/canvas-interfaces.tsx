@@ -1,5 +1,5 @@
 import { DrawData } from './draw-interfaces';
-import { CanvasCtxTable, PeerConnectionContext } from './index-interfaces';
+import { PeerConnectionContext } from './index-interfaces';
 
 export interface Layer {
   name: string;
@@ -8,7 +8,14 @@ export interface Layer {
   canvasCtx: any | null;
 }
 
-export interface LayerComponentProps {
+export interface Message {
+  event: string | null;
+  tool: string | null;
+  object: any;
+}
+
+export interface CanvasComponentProps {
+  activeTool: string;
   canvas: any | null;
   drawHistory: DrawData[];
   peerConnectionContext: PeerConnectionContext;

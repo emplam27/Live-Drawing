@@ -47,7 +47,7 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
     // },
   ];
 
-  function changeActiveTool(tool: Tool) {
+  function changeActiveTool(tool: Tool): void {
     fabric.Object.prototype.objectCaching = false;
     props.setActiveTool(tool.name);
     if (!props.canvas) return;
@@ -55,13 +55,13 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
     let brush;
     switch (tool.name) {
       case 'cursor':
-        console.log('cursor');
+        // console.log('cursor');
         props.canvas.isDrawingMode = false;
         props.setCursorWidth(5);
         break;
 
       case 'pencil':
-        console.log('pencil');
+        // console.log('pencil');
         props.canvas.isDrawingMode = true;
         brush = new fabric.PencilBrush();
         props.canvas.freeDrawingBrush = brush;
@@ -69,12 +69,12 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.freeDrawingBrush.color = props.color;
         props.canvas.freeDrawingBrush.opacity = 1;
         props.canvas.freeDrawingBrush.width = props.lineWidth;
-        console.log(props.canvas.freeDrawingBrush);
+        // console.log(props.canvas.freeDrawingBrush);
         props.setCursorWidth(props.lineWidth);
         break;
 
       case 'spray':
-        console.log('spray');
+        // console.log('spray');
         props.canvas.isDrawingMode = true;
         brush = new fabric.SprayBrush();
         props.canvas.freeDrawingBrush = brush;
@@ -83,11 +83,11 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.freeDrawingBrush.opacity = 1;
         props.canvas.freeDrawingBrush.width = props.lineWidth;
         props.setCursorWidth(props.lineWidth);
-        console.log(props.canvas.freeDrawingBrush);
+        // console.log(props.canvas.freeDrawingBrush);
         break;
 
       case 'bubble':
-        console.log('bubble');
+        // console.log('bubble');
         props.canvas.isDrawingMode = true;
         brush = new fabric.CircleBrush();
         props.canvas.freeDrawingBrush = brush;
@@ -96,11 +96,11 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.freeDrawingBrush.opacity = 1;
         props.canvas.freeDrawingBrush.width = props.lineWidth;
         props.setCursorWidth(props.lineWidth);
-        console.log(props.canvas.freeDrawingBrush);
+        // console.log(props.canvas.freeDrawingBrush);
         break;
 
       case 'crayon':
-        console.log('crayon');
+        // console.log('crayon');
         props.canvas.isDrawingMode = true;
         brush = new fabric.CrayonBrush(props.canvas, {});
         props.canvas.freeDrawingBrush = brush;
@@ -109,11 +109,11 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.freeDrawingBrush.opacity = 1;
         props.canvas.freeDrawingBrush.width = props.lineWidth;
         props.setCursorWidth(props.lineWidth);
-        console.log(props.canvas.freeDrawingBrush);
+        // console.log(props.canvas.freeDrawingBrush);
         break;
 
       case 'marker':
-        console.log('marker');
+        // console.log('marker');
         props.canvas.isDrawingMode = true;
         brush = new fabric.MarkerBrush(props.canvas, {});
         props.canvas.freeDrawingBrush = brush;
@@ -122,11 +122,11 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.freeDrawingBrush.opacity = 1;
         props.canvas.freeDrawingBrush.width = props.lineWidth;
         props.setCursorWidth(props.lineWidth);
-        console.log(props.canvas.freeDrawingBrush);
+        // console.log(props.canvas.freeDrawingBrush);
         break;
 
       case 'ink':
-        console.log('ink');
+        // console.log('ink');
         props.canvas.isDrawingMode = true;
         brush = new fabric.InkBrush(props.canvas, {});
         props.canvas.freeDrawingBrush = brush;
@@ -135,11 +135,11 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.freeDrawingBrush.opacity = 1;
         props.canvas.freeDrawingBrush.width = props.lineWidth;
         props.setCursorWidth(props.lineWidth);
-        console.log(props.canvas.freeDrawingBrush);
+        // console.log(props.canvas.freeDrawingBrush);
         break;
 
       case 'eraser':
-        console.log('eraser');
+        // console.log('eraser');
         props.canvas.isDrawingMode = true;
         brush = new fabric.PencilBrush();
         props.canvas.freeDrawingBrush = brush;
@@ -150,7 +150,7 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.contextContainer.globalCompositeOperation =
           'destination-out';
         props.canvas.contextCache.globalCompositeOperation = 'destination-out';
-        console.log(props.canvas);
+        // console.log(props.canvas);
         props.setCursorWidth(props.eraserWidth);
         break;
     }
@@ -162,10 +162,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
 
   return (
     <>
-      <p className='icon-link center'>
-        <i className='ri-lg ri-landscape-line'></i>
-      </p>
-      <div className='spacer'></div>
       {Tools.map((tool) => {
         return (
           <p

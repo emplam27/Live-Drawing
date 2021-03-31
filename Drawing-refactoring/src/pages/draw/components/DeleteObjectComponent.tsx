@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import '../index.css';
 import { DeleteObjectComponentProps } from '../interfaces/delete-object-interfaces';
-import { fabric } from 'fabric';
+// import { fabric } from 'fabric';
 
 function DeleteObjectComponent(props: DeleteObjectComponentProps) {
-  function deleteObject() {
+  function deleteObject(): void {
     if (!props.canvas) return;
     //Get currently-selected object
     const obj = props.canvas.getActiveObject();

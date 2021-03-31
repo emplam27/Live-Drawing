@@ -20,12 +20,3 @@ export interface PeerConnectionContext {
   is_host: boolean;
   hostId: string | null;
 }
-
-export interface CanvasCtxTable {
-  [key: string]: any;
-}
-
-// interface point {
-//   x: number;
-//   y: number;
-// }

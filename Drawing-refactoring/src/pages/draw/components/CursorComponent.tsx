@@ -9,19 +9,19 @@ function CursorComponent(props: CursorComponentProps) {
     y: window.innerHeight / 2,
   });
 
-  const onMouseMove = (e: MouseEvent) => {
+  const onMouseMove = (e: MouseEvent): void => {
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
-  const onMouseLeave = () => {
+  const onMouseLeave = (): void => {
     setHidden(true);
   };
 
-  const onMouseEnter = () => {
+  const onMouseEnter = (): void => {
     setHidden(false);
   };
 
-  const addEventListeners = () => {
+  const addEventListeners = (): void => {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
@@ -30,7 +30,7 @@ function CursorComponent(props: CursorComponentProps) {
     targetCanvasContainer?.addEventListener('mouseleave', onMouseLeave);
   };
 
-  const removeEventListeners = () => {
+  const removeEventListeners = (): void => {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'canvasContainer',
     );
@@ -46,7 +46,7 @@ function CursorComponent(props: CursorComponentProps) {
 
   useEffect(() => {
     addEventListeners();
-    return () => removeEventListeners();
+    return (): void => removeEventListeners();
   }, []);
 
   useEffect(() => {

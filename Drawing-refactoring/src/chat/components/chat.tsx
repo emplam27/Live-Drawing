@@ -11,18 +11,17 @@ export function ChatComponent(props: ChatComponentProps) {
   const [roomData, setRoomData] = useState<RoomData>();
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const room = useParams<{ roomKey: string }>();
+  console.log(room);
 
   useEffect(() => {
     const socketIo = io('http://localhost:8080/', {
       transports: ['websocket'],
     });
-    // console.log({ ...socketIo });
-    // console.log(socketIo);
 
     socketIo.emit('join', { userId: props.userId, room: room.roomKey });
 
     socketIo.on('roomData', (message: RoomData) => {
-      setRoomData;
+      setRoomData(message);
     });
     socketIo.on('connect', () => {
       setSocket(socketIo);

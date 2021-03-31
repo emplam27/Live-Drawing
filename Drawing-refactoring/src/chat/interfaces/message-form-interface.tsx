@@ -1,4 +1,4 @@
 export interface MessageForm {
-  userId: string;
+  user: string | null;
   text: string;
 }

@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  font-family: 'NanumSquareRound',sans-serif;
 }
 
 .grid {
@@ -9,12 +10,16 @@
 }
 
 .side {
+  position: relative;
+  display: grid;
+  grid-template-rows: 32px repeat(5, 1fr);
   right: 0;
   top: 0;
   bottom: 0;
 }
 .voice {
-  height: 32px;
+  border: black solid 2px;
+  grid-row: 1/2;
 }
 
 .App-logo {
@@ -50,4 +55,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.peers {
+  grid-row: 2/3;
 }

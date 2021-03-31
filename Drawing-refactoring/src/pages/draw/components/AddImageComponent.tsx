@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import '../index.css';
 import { AddImageComponentProps } from '../interfaces/add-image-interfaces';
 import { fabric } from 'fabric';
 
 function AddImageComponent(props: AddImageComponentProps) {
-  function addImage(event: React.ChangeEvent<HTMLInputElement>) {
+  function addImage(event: React.ChangeEvent<HTMLInputElement>): void {
     const file = event.currentTarget.files;
     if (!file) return;
-    console.log(file[0]);
     const reader = new FileReader();
 
     reader.onload = function (e) {
@@ -29,8 +28,7 @@ function AddImageComponent(props: AddImageComponentProps) {
     reader.readAsDataURL(file[0]);
   }
 
-  function saveImage() {
-    console.log('saveImage');
+  function saveImage(): void {
     const a = document.createElement('a');
     a.download = 'image.png';
     a.href = props.canvas.toDataURL({
@@ -42,13 +40,11 @@ function AddImageComponent(props: AddImageComponentProps) {
 
   return (
     <>
-      <p className={''}>
-        <i className={'icon-link center ri-xl ri-image-add-line'}></i>
+      <p className={'icon-link center '}>
+        <i className={'ri-xl ri-image-add-line'}></i>
       </p>
-      <input type='file' onChange={addImage}></input>
-      <a onClick={saveImage} download>
-        save image
-      </a>
+      <input type='file' onChange={addImage} />
+      <button onClick={saveImage}>save image</button>
     </>
   );
 }
