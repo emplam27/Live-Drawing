@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCustomState } from '../../../context';
 import { JumpToLoginComponent } from './jump-buttons';
 import { LogoutComponent } from './logout-component';
 
 export function NavBarComponent() {
+  const userState = useCustomState();
+  const [isToken, setIsToken] = useState(localStorage.getItem('token'));
+  useEffect(() => {
+    setIsToken(localStorage.getItem('token'));
+  }, [userState]);
   return (
     <div className='header'>
       {/* // <!-- This example requires Tailwind CSS v2.0+ --> */}
@@ -21,9 +27,7 @@ export function NavBarComponent() {
                 <span className='sr-only'>Open main menu</span>
                 {/* <!--
             Icon when menu is closed.
-
             Heroicon name: outline/menu
-
             Menu open: "hidden", Menu closed: "block"
           --> */}
                 <svg
@@ -38,9 +42,7 @@ export function NavBarComponent() {
                 </svg>
                 {/* <!--
             Icon when menu is open.
-
             Heroicon name: outline/x
-
             Menu open: "block", Menu closed: "hidden"
           --> */}
                 <svg
@@ -57,26 +59,28 @@ export function NavBarComponent() {
             </div>
             <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
               <div className='flex-shrink-0 flex items-center'>
-                <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' />
-                <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' />
+                <Link to='/'>방구석 화방</Link>
+                {/* <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' /> */}
+                {/* <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' /> */}
               </div>
               <div className='hidden sm:block sm:ml-6'>
                 <div className='flex space-x-4'>
                   {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                  <Link
+                  {/* <Link
                     to='/'
                     // className='bg-blue-400 text-white px-3 py-2 rounded-md text-md font-medium'
                     className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
                     aria-current='page'
                   >
                     홈
-                  </Link>
+                  </Link> */}
 
                   <Link
-                    to='#'
+                    to='/room'
                     className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
                   >
-                    준비중
+                    {/* <i className='ri-live-line'></i> */}
+                    라이브드로잉 시작
                   </Link>
 
                   <Link
@@ -90,13 +94,13 @@ export function NavBarComponent() {
                     to='/feedback'
                     className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
                   >
-                    피드백 작성하기
+                    피드백 작성
                   </Link>
                 </div>
               </div>
             </div>
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
-              {localStorage.getItem('token') ? (
+              {isToken ? (
                 <>
                   <div className='mr-5'>{`${localStorage.getItem('id')}님 환영합니다.`}</div> <LogoutComponent />
                 </>
@@ -123,7 +127,6 @@ export function NavBarComponent() {
 
                 {/* <!--
             Dropdown menu, show/hide based on menu state.
-
             Entering: "transition ease-out duration-100"
               From: "transform opacity-0 scale-95"
               To: "transform opacity-100 scale-100"

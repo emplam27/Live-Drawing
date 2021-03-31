@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import withReactContent from 'sweetalert2-react-content';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import './join-form.css';
 import { useHistory } from 'react-router';
 
 export function JoinComponent() {
@@ -61,7 +62,7 @@ export function JoinComponent() {
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     axios
-      .post('http://localhost:8080/user/join', { username: userName, email: email, password: password1 })
+      .post('http://localhost:8080/api/join', { username: userName, email: email, password: password1 })
       .then((res) => {
         if (res.data === 'success')
           MySwal.fire({
@@ -119,7 +120,7 @@ export function JoinComponent() {
                 disabled={buttonFlag}
                 className='flex m-3 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
               >
-                회원가입 하기
+                회원가입
               </button>
             </form>
           </div>

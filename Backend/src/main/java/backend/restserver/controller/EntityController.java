@@ -1,5 +1,6 @@
 package backend.restserver.controller;
 
+import backend.restserver.config.auth.PrincipalDetails;
 import backend.restserver.entity.Room;
 import backend.restserver.entity.User;
 import backend.restserver.repository.RoomRepository;
@@ -7,16 +8,22 @@ import backend.restserver.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @RestController
 public class EntityController {
-    static int randBound = 10000;
     private final Logger logger = LoggerFactory.getLogger(IndexController.class);
     private final UserRepository userRepo;
     private final RoomRepository roomRepo;
+
+
 
     @Autowired
     public EntityController(UserRepository userRepo, RoomRepository roomRepo) {
@@ -26,22 +33,25 @@ public class EntityController {
 
 //     GET
 //     방 리스트 목록 조회
-//    @GetMapping("/")
-//    @ResponseBody
-//    public List<Room> showRoomList() {
-//        logger.info("show room list");
-////        RoomList list = new RoomList();
-////        RoomList list = (RoomList) roomRepo.findAll();
-////        return list;
-//
-//        return roomRepo.findAll();
-//    }
+    @GetMapping("/api")
+    public @ResponseBody List<Room> showRoomList() {
+        logger.info("show room list");
 
-
-//    @GetMapping("/room/{id}")
-//    public  giveUserInfo() {
+        //!! 여기 나중에 쓸수도있음 (3/31)
+//        List<Room> findRoomList = roomRepo.findAll();
+//        List<Room> selectRoomList = new ArrayList<>();
 //
-//    }
+//
+//        for(int i = 0; i < findRoomList.size(); i++) {
+//            if(i == 4) break;
+//            selectRoomList.add(findRoomList.get(i));
+//        }
+//        return selectRoomList;
+        //!! 여기 나중에 쓸수도있음 (3/31)
+
+        return roomRepo.findAll();
+    }
+
 
 
     @GetMapping("/room/entrance")
@@ -56,96 +66,51 @@ public class EntityController {
         return userRepo.findByRoom_RoomPk(roomPk);
     }
 
-
-//    // POST user info
-//    @PostMapping("/save")
-//    public Member saveMemberInfo(@RequestParam String name) {
-//        logger.info("save user name : " + name);
-//
-//        return memberRepo.save(new Member(name));
-//    }
-
-    @PostMapping("/room/entrance")
-    public void joinRoom(@RequestBody Map<String, Object> roomJson) {
-        logger.info("join Room1!");
+    @PostMapping("/api/room/entrance")
+    public String joinRoom(@RequestBody Map<String, Object> roomJson) {
         String uuid = roomJson.get("roomKey").toString();
-        logger.info("join Room2!");
-//        Long roomPk = Long.valueOf()
         Long roomPk = Long.parseLong(roomJson.get("roomPk").toString());
-//        Long roomPk = ((Number) roomJson.get("room_pk")).longValue();
-        logger.info("join Room3!");
+        String username = roomJson.get("username").toString();
 
-        if(uuid == null || uuid.length() == 0 || roomPk == 0) {
-            return; // 널 처리
+        String password = roomJson.get("password").toString();
+
+        if(uuid == null || uuid.length() == 0 || roomPk == 0 ||   // 널 처리
+                password == null || password.length() == 0) {
+            System.out.println("잘못된 접근 입니다.");
+            return "failure";
         } else {
             logger.info(" uuid is : " + uuid);
+            Optional<Room> target = roomRepo.findById(roomPk);
 
-        Random rand = new Random();
-        long randVal = (long) rand.nextInt(randBound);
-        String userVal = Integer.toString((int) randVal);
-        String userName = "Kim" + userVal;
-
-        User newUser = new User(userName);
-        newUser.setUserPk(roomPk);
-        Optional<Room> target = roomRepo.findById(roomPk);
-        target.get().add(newUser);
-
-        userRepo.save(newUser);
-//            List<Member> members = new ArrayList<>();
-//            members.add(tmp);
-
-
-//        Room target = roomRepo.findById(room_pk).get();
-//        target.setMembers(members);
-//        target.add(tmp);
-//        roomRepo.save(target);
-
-
-//        Room newRoom = new Room(roomTitle, keyValue, memberName, members);
-//        newRoom.add(tmp);
+            if(target.get().getRoomPassword().equals(password)) {
+                System.out.println("패스워드가 일치합니다. 방으로 입장합니다.");
+                User user = userRepo.findByUsername((username));
+                target.get().add(user);
+                return "success";
+            } else {
+                System.out.println("패스워드가 틀립니다. 다시 입력해 주세요.");
+                return "failure";
+            }
         }
     }
 
     // POST create room
-    @PostMapping("/room")
+    @PostMapping("/api/room")
     public Room createRoom(@RequestBody Map<String, Object> roomJson) {
-        Random rand = new Random();
 
         logger.info("createRoom enter");
 
-//        long userId = (long)Integer.parseInt(userJson.get("id").toString());
-//        User target = userRepo.findById(userId).get();
-
-//        long keyValue = (long)rand.nextInt(randBound);
         String roomKeyValue = UUID.randomUUID().toString();
-//        String keyValue = "1234안녕";
-        String roomTitle = roomJson.get("room_title").toString();
-//        logger.info("is here?1");
-        String userName = roomJson.get("user_name").toString();
-//        String hostName = memberJson.get("room_host").toString();
-        logger.info("room name : " + roomTitle + " host name : " + userName);
+        String roomTitle = roomJson.get("roomTitle").toString();
+        String roomPassword = roomJson.get("roomPassword").toString();
+        String roomHost = roomJson.get("roomHost").toString();
 
-        User tmp = new User(userName);
-        userRepo.save(tmp);
-
-//        List<Member> members = new ArrayList<>();
-//        members.add(tmp);
-//        Room newRoom = new Room(roomTitle, keyValue, memberName, members);
-        Room newRoom = new Room(roomTitle, roomKeyValue, userName);
-        newRoom.add(tmp);
+        User host = userRepo.findByUsername(roomHost);
+        Room newRoom = new Room(roomTitle, roomKeyValue, roomPassword, roomHost);
+        newRoom.add(host);
 
         logger.info("create new room");
 
         return roomRepo.save(newRoom);
-    }
-
-    // GET get host info
-    @GetMapping("/check")
-    public void checkHost(@RequestParam Long id) {
-//        logger.info("check host info");
-//        logger.info("param id " + id);
-
-        Room target = roomRepo.findById(id).get();
-//        logger.info(target.getUser().getName());
     }
 }

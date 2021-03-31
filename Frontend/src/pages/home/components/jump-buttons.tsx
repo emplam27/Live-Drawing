@@ -1,12 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 export function JumpToCreateRoomComponent() {
   return (
     <Link to='/room' className='p-1'>
-      <button className='py-1 px-3 font-semibold rounded-lg shadow-md text-white bg-blue-400 hover:bg-blue-500 text-sm'>
-        방 만들기
-      </button>
+      {/* <button className='py-1 px-3 font-semibold rounded-lg shadow-md text-white bg-blue-400 hover:bg-blue-500 text-sm'> */}
+      <div className='text-blue-400 text-base font-bold flex items-center'>
+        <i className='ri-live-line'></i>
+        <span> &nbsp; 방만들기</span>
+      </div>
+      {/* </button> */}
+    </Link>
+  );
+}
+
+export function JumpToShowMoreRoomComponent() {
+  return (
+    <Link to='/room/list' className='p-1'>
+      <div className='text-blue-400 text-base font-bold flex items-center'>
+        <i className='ri-search-line'></i>
+        <span> &nbsp; 더보기</span>
+      </div>
     </Link>
   );
 }
