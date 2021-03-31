@@ -30,6 +30,7 @@ public class IndexController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    //! 테스트 코드
     @GetMapping("/logincheck")
     public @ResponseBody
     Map<String, Object> logincheck(@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -44,7 +45,7 @@ public class IndexController {
     }
 
 
-
+    //! 테스트 코드
     @GetMapping("test/login")
     @ResponseBody
     public String testLogin(
@@ -58,6 +59,7 @@ public class IndexController {
         return "세션 정보 확인하기";
     }
 
+    //! 테스트 코드
     @GetMapping("test/oauth/login")
     @ResponseBody
     public String testOAuthLogin(
@@ -76,14 +78,6 @@ public class IndexController {
         return "OAuth 세션 정보 확인하기";
     }
 
-//    //* localhost:8080/
-//    //* localhost:8080
-//    @GetMapping({"","/"})
-//    public String index() {
-//        //머스테치 기본폴더 src/main/resources/
-//        //뷰리졸버 설정: templates(prefix), .mustache (suffix) 생략가능! (mustache 의존성에서 다해줌)
-//        return "index"; // src/main/resources/templates/index.mustache
-//    }
 
 
     //! OAuth 로그인을 해도 PrincipalDetails로 받을 수 있고
@@ -119,26 +113,12 @@ public class IndexController {
         return "manager";
     }
 
-//    @GetMapping("/user/login-form")
-//    public String loginForm() {
-//        return "loginForm";
-//    }
-//
-//    @GetMapping("/user/join-form")
-//    public String joinForm() {
-//        return "joinForm";
-//    }
-
     @PostMapping("/api/join")
     public String join(@RequestBody User user) {
-        System.out.println("------------>user :" + user);
         user.setRoles("ROLE_USER");
         System.out.println(user);
-//        System.out.println(member);
         String rawPassword = user.getPassword();
-//        System.out.println("응?" + rawPassword);
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-//        System.out.println("나오냐?" + rawPassword);
         user.setPassword(encPassword);
 
         
@@ -150,17 +130,14 @@ public class IndexController {
         return "success";
     }
 
-//    @GetMapping("/joinProc")
-//    public @ResponseBody String joinProc() {
-//        return "회원가입 완료됨!";
-//    }
-
+    //! 테스트 코드
     @Secured("ROLE_ADMIN")
     @GetMapping("/info")
     public @ResponseBody String info() {
         return "개인정보";
     }
 
+    //! 테스트 코드
     @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") //? <-- data 메소드를 실행하기전에 실행됨.
     @GetMapping("/data")
     public @ResponseBody String data() {

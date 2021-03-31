@@ -42,27 +42,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         System.out.println("JwtAuthenticationFilter : 로그인 시도중");
-        System.out.println("--------------->1<--------------------");
         //! request에 있는 email과 password를 파싱해서 자바 Object로 받기
         ObjectMapper om = new ObjectMapper();
-        System.out.println("--------------->2<--------------------");
-//        LoginRequestDto loginRequestDto = null;
-        System.out.println("--------------->3<--------------------");
         User user = null;
         try {
             System.out.println(request.getInputStream().toString());
-            System.out.println("--------------->4<--------------------");
 //            loginRequestDto = om.readValue(request.getInputStream(), LoginRequestDto.class);
             user = om.readValue(request.getInputStream(), User.class);
             System.out.println(user);
-            System.out.println("--------------->5<--------------------");
         } catch (Exception e) {
-            System.out.println("--------------->6<--------------------");
             e.printStackTrace();
         }
-        System.out.println("--------------->7<--------------------");
         System.out.println("JwtAuthenticationFilter : "+user);
-        System.out.println("--------------->8<--------------------");
         // 유저네임패스워드 토큰 생성
 //        System.out.println(user.getUsername());
 
@@ -76,10 +67,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 new UsernamePasswordAuthenticationToken(
                         user.getEmail(),
                         user.getPassword());
-        System.out.println("--------------->9<--------------------");
         System.out.println("JwtAuthenticationFilter : 토큰생성완료");
 
-        System.out.println("------->시발 " + authenticationToken);
+        System.out.println("-------> " + authenticationToken);
         // authenticate() 함수가 호출 되면 인증 프로바이더가 유저 디테일 서비스의
         // loadUserByUsername(토큰의 첫번째 파라메터) 를 호출하고
         // UserDetails를 리턴받아서 토큰의 두번째 파라메터(credential)과
@@ -106,7 +96,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         System.out.println("successfulAuthentication 실행됨 : 인증이 완료되었다는 뜻임");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
-        System.out.println("----------------------------씨발 : " +principalDetails.getUsername());
+        System.out.println("---------------------------- : " +principalDetails.getUsername());
         String jwtToken = JWT.create()
                 .withSubject(principalDetails.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) //! 토큰 만료시간 10분
@@ -116,22 +106,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
         System.out.println(jwtToken);
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
-//        response.addHeader("name", principalDetails.getUsername());
-//        response.
 
-//        return jwtToken;
-//        return "시발";
-//        response.setContentType();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-//        response.getWriter().write(
-//                "{\"" + "username" + "\":\"" + principalDetails.getUser().getUsername() + "\"}"
-//        );
+
         response.getWriter().write(
                 "{\"" + "username" + "\":\"" + principalDetails.getUser().getUsername() + "\",\n\""
                          + JwtProperties.HEADER_STRING + "\":\"" + JwtProperties.TOKEN_PREFIX+jwtToken + "\"}"
         );
     }
-
-
 }
