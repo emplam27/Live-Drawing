@@ -34,7 +34,7 @@ export default function RoomCreateComponent() {
       .post(`${process.env.REACT_APP_API_URL}/room`, values)
       .then((response) => {
         if (response.status === 200) {
-          window.location.href = `/room/${response.data['roomKey']}`;
+          window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${response.data['roomKey']}`;
         }
       })
       .catch((error) => {

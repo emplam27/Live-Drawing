@@ -113,7 +113,7 @@ public class IndexController {
         return "manager";
     }
 
-    @PostMapping("/api/join")
+    @PostMapping("/join")
     public String join(@RequestBody User user) {
         user.setRoles("ROLE_USER");
         System.out.println(user);
