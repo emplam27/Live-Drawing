@@ -21,7 +21,7 @@ export function SignInComponent() {
   }; //! 서버에 token 넘겨줄때는 header로 넘겨준다.
 
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    console.log(res);
+    console.log('-------------------', res);
     axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
       userDispatch({ type: 'SET_ID', id: res.data.username, token: res.data.Authorization });
       console.log(res);
@@ -112,7 +112,7 @@ export function SignInComponent() {
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
                   // className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-google'
-                  // cookiePolicy={'single_host_origin'}
+                  cookiePolicy={'single_host_origin'}
                 />
                 {/* <button
                   onClick={onClick}

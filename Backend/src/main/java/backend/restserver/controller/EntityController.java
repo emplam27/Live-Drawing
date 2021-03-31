@@ -33,7 +33,7 @@ public class EntityController {
 
 //     GET
 //     방 리스트 목록 조회
-    @GetMapping("/")
+    @GetMapping("/api")
     public @ResponseBody List<Room> showRoomList() {
         logger.info("show room list");
 
@@ -54,7 +54,7 @@ public class EntityController {
 
 
 
-    @GetMapping("/room/entrance")
+    @GetMapping("/api/room/entrance")
     @ResponseBody
     public List<User> showUserInfo(@RequestParam String uuid) {
         logger.info("show user list and number!!" + uuid);
@@ -66,7 +66,7 @@ public class EntityController {
         return userRepo.findByRoom_RoomPk(roomPk);
     }
 
-    @PostMapping("/room/entrance")
+    @PostMapping("/api/room/entrance")
     public String joinRoom(@RequestBody Map<String, Object> roomJson) {
         String uuid = roomJson.get("roomKey").toString();
         Long roomPk = Long.parseLong(roomJson.get("roomPk").toString());
@@ -95,7 +95,7 @@ public class EntityController {
     }
 
     // POST create room
-    @PostMapping("/room")
+    @PostMapping("/api/room")
     public Room createRoom(@RequestBody Map<String, Object> roomJson) {
 
         logger.info("createRoom enter");
