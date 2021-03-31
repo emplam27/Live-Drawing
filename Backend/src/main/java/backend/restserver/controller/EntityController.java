@@ -71,20 +71,27 @@ public class EntityController {
 
 //        List<Room> findRoomList = roomRepo.findAllOrderByRoomPk(1L);
 //        System.out.println("iiiiiiiiiiiiiiiiiii" + findRoomList);
-        List<Room> findRoomList = roomRepo.findAll();
-        System.out.println("iiiiiiiiiiiiiiiiiii" + findRoomList);
-        System.out.println("---------------->1<--------------");
-        List<Room> selectRoomList = new ArrayList<>();
 
-        System.out.println("---------------->2<--------------");
 
-        for(int i = 0; i < findRoomList.size(); i++) {
-            System.out.println("---------------->3<--------------");
-            if(i == 4) break;
-            selectRoomList.add(findRoomList.get(i));
-        }
-        System.out.println("---------------->4<--------------");
-        return selectRoomList;
+
+
+
+
+
+
+        //!! 여기 나중에 쓸수도있음 (3/31)
+//        List<Room> findRoomList = roomRepo.findAll();
+//        List<Room> selectRoomList = new ArrayList<>();
+//
+//
+//        for(int i = 0; i < findRoomList.size(); i++) {
+//            if(i == 4) break;
+//            selectRoomList.add(findRoomList.get(i));
+//        }
+//        return selectRoomList;
+        //!! 여기 나중에 쓸수도있음 (3/31)
+
+        return roomRepo.findAll();
     }
 
 

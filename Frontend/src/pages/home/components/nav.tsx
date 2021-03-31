@@ -76,7 +76,7 @@ export function NavBarComponent() {
                   </Link> */}
 
                   <Link
-                    to='#'
+                    to='/room'
                     className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
                   >
                     {/* <i className='ri-live-line'></i> */}
