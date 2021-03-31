@@ -1,0 +1,20 @@
+logging:
+  level:
+    root: info
+
+server:
+    port: 8080
+
+spring:
+  profiles:
+    include: oauth, db
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update #create update none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
