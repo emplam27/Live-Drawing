@@ -1,6 +1,5 @@
 @tailwind base;
 
-
 *{
   padding:0;
   margin:0;
@@ -12,11 +11,15 @@
 }
 
 .h-mainBox {
-  height: 84vh;
+  height:92vh;
 }
 
-.transparent{
-  display: hidden;
+.h-nav {
+  height: 8vh;
+}
+
+.nav-bottom {
+  border-bottom: #cae2fd 2px solid;
 }
 
 /* https://cdn.pixabay.com/photo/2017/04/03/14/02/acrylic-paint-2198458_1280.jpg */
@@ -25,21 +28,6 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
-/* .btn-image-google {
-  background-image: url(./images/google-fill.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.btn-image-facebook {
-  background-image: url(./images/facebook-circle-fill.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.btn-image-naver {
-  background-image: url(./images/naver-circle-fill.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-} */
 
 .backdrop {
   backdrop-filter: blur(2px);

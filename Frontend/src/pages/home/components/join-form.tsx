@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import withReactContent from 'sweetalert2-react-content';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import './join-form.css';
 import { useHistory } from 'react-router';
 
 export function JoinComponent() {
