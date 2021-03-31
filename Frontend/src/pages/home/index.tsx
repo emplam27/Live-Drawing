@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useCustomState } from '../../context';
 import {
   JumpToCreateRoomComponent,
   JumpToFeedbackComponent,
@@ -10,6 +11,8 @@ import RoomCreateComponent from './components/room-create-form';
 import { RoomListComponent } from './components/room-list';
 
 export function HomeComponent() {
+  const userState = useCustomState();
+  console.log(userState);
   return (
     <div>
       <div className='container flex divide-x-2 '>

@@ -35,9 +35,10 @@ public class JwtCreateController {
                 new GoogleUserInfo((Map<String, Object>)data.get("profileObj"));
 
         User userEntity =
-                userRepository.findByUsername(googleUser.getProvider()+"_"+googleUser.getProviderId());
+                userRepository.findByUsername(googleUser.getName());
 
         if(userEntity == null) {
+            System.out.println("OAuth 로그인이 최초입니다.");
             User userRequest = User.builder()
 //                    .username(googleUser.getProvider()+"_"+googleUser.getProviderId())
                     .username(googleUser.getName())
@@ -48,6 +49,8 @@ public class JwtCreateController {
                     .roles("ROLE_USER")
                     .build();
             userEntity = userRepository.save(userRequest);
+        } else {
+            System.out.println("로그인을 이미 한 적이 있습니다. 당신은 자동회원가입이 되어있습니다.");
         }
 
         String jwtToken = JWT.create()

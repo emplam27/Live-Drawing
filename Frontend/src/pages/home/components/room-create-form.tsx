@@ -1,22 +1,37 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useCustomState } from '../../../context';
+import { CreateRoom } from '../interfaces/create-room-interface';
 
 export default function RoomCreateComponent() {
-  const [values, setValues] = useState({
-    member_name: '',
-    room_title: '',
+  const userState = useCustomState();
+
+  const [values, setValues] = useState<CreateRoom>({
+    roomTitle: '',
+    roomPassword: '',
+    roomHost: '',
   });
 
-  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    setValues({ ...values, roomHost: localStorage.getItem('id') });
+    // setValues({ ...values, [roomHost]: localStorage.getItem('id') });
+  }, [userState]);
+
+  const changeRoomTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValues({ ...values, [e.target.name]: e.target.value });
+    // console.log('roomtitle', values);
+    // console.log('roomtitle', e.target);
   };
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const changeRoomPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+    // console.log('roompass', values);
+  };
 
+  const clickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     axios
-      .post('http://localhost:8080/room', values)
+      .post('http://localhost:8080/api/room', values)
       .then((response) => {
         if (response.status === 200) {
           window.location.href = `/room/${response.data['roomKey']}`;
@@ -57,18 +72,20 @@ export default function RoomCreateComponent() {
             <form action='#' className='px-3 flex flex-col justify-center items-center w-full gap-3'>
               <input
                 type='text'
+                name='roomTitle'
                 placeholder='제목을 입력하세요.'
-                // onChange={onChangeUserName}
+                onChange={changeRoomTitle}
                 className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
               />
               <input
                 type='password'
+                name='roomPassword'
                 placeholder='비밀번호를 입력하세요.'
-                // onChange={onChangePassword1}
+                onChange={changeRoomPassword}
                 className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
               />
               <button
-                // onClick={onClick}
+                onClick={clickHandler}
                 // disabled={buttonFlag}
                 className='flex m-3 justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
               >

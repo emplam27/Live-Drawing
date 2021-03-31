@@ -8,7 +8,7 @@ import { JumpToShowMoreRoomComponent } from './jump-buttons';
 export function RoomListComponent() {
   const [rooms, setRooms] = useState<roomInfo[]>([]);
   useEffect(() => {
-    axios.get('http://localhost:8080/').then((res: ResponseRoomInfo) => {
+    axios.get('http://localhost:8080/api').then((res: ResponseRoomInfo) => {
       console.log(res.data);
       setRooms(res.data);
     });

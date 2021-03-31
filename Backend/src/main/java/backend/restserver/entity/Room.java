@@ -23,6 +23,9 @@ public class Room {
     @Column(name = "roomKey")
     private String roomKey;
 
+    @Column(name = "roomPassword")
+    private String roomPassword;
+
     @Column(name = "roomHost")
     private String roomHost;
 
@@ -38,6 +41,12 @@ public class Room {
 //        this.members = members;
     }
 
+    public Room(String roomTitle, String roomKey, String roomPassword, String roomHost) {
+        this.roomTitle = roomTitle;
+        this.roomKey = roomKey;
+        this.roomPassword = roomPassword;
+        this.roomHost = roomHost;
+    }
 
     public void add(User user) {
         user.setRoom(this);

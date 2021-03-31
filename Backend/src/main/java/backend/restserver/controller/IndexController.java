@@ -146,6 +146,7 @@ public class IndexController {
         
         userRepo.save(user);
 //        return "redirect:http://localhost:3000/user/login-form";
+//        return "redirect: https://jungleroad.shop/user/login-form";
         return "success";
     }
 

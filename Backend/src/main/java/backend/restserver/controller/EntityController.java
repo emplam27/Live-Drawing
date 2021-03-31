@@ -34,23 +34,11 @@ public class EntityController {
 
 //     GET
 //     방 리스트 목록 조회
-    @GetMapping("/")
-    public @ResponseBody List<Room> showRoomList(HttpSession session, HttpServletRequest httpServletRequest) {
+    @GetMapping("/api")
+    public @ResponseBody List<Room> showRoomList() {
         logger.info("show room list");
-        logger.info(session.getId());
 
-        String session_name = "";
-        String session_value= "";
 
-        Enumeration enum_01 = session.getAttributeNames();
-        int i = 0;
-        while(enum_01.hasMoreElements()) {
-            i++;
-            session_name = enum_01.nextElement().toString();
-            session_value = session.getAttribute(session_name).toString();
-            System.out.println("SESSION NAME[ " + session_name +" ] SESSION VALUE [ " + session_value + " ]");
-        }
-        System.out.println(i);
 
 //        if(principalDetails != null) {
 //            System.out.println("principalDetails : " + principalDetails.getUser());
@@ -79,9 +67,24 @@ public class EntityController {
 //        if(user!=null) {
 //            System.out.println(user.getUser());
 //        }
+//        List<Room> roomList = roomRepo.findAll();
 
+//        List<Room> findRoomList = roomRepo.findAllOrderByRoomPk(1L);
+//        System.out.println("iiiiiiiiiiiiiiiiiii" + findRoomList);
+        List<Room> findRoomList = roomRepo.findAll();
+        System.out.println("iiiiiiiiiiiiiiiiiii" + findRoomList);
+        System.out.println("---------------->1<--------------");
+        List<Room> selectRoomList = new ArrayList<>();
 
-        return roomRepo.findAll();
+        System.out.println("---------------->2<--------------");
+
+        for(int i = 0; i < findRoomList.size(); i++) {
+            System.out.println("---------------->3<--------------");
+            if(i == 4) break;
+            selectRoomList.add(findRoomList.get(i));
+        }
+        System.out.println("---------------->4<--------------");
+        return selectRoomList;
     }
 
 
@@ -112,32 +115,60 @@ public class EntityController {
 //        return memberRepo.save(new Member(name));
 //    }
 
-    @PostMapping("/room/entrance")
-    public void joinRoom(@RequestBody Map<String, Object> roomJson) {
-        logger.info("join Room1!");
+    @PostMapping("/api/room/entrance")
+    public String joinRoom(@RequestBody Map<String, Object> roomJson) {
+        System.out.println("----------------->너냐1?");
         String uuid = roomJson.get("roomKey").toString();
-        logger.info("join Room2!");
+        System.out.println("----------------->너냐2?");
 //        Long roomPk = Long.valueOf()
         Long roomPk = Long.parseLong(roomJson.get("roomPk").toString());
+        System.out.println("----------------->너냐3?");
 //        Long roomPk = ((Number) roomJson.get("room_pk")).longValue();
-        logger.info("join Room3!");
+        System.out.println(roomJson.get("username").toString());
+        String username = roomJson.get("username").toString();
+        System.out.println("----------------->너냐4?");
 
-        if(uuid == null || uuid.length() == 0 || roomPk == 0) {
-            return; // 널 처리
+        String password = roomJson.get("password").toString();
+        System.out.println("----------------->응아냐?");
+//        logger.info("------------->is here? 5");
+        System.out.println("------------------->uuid :" + uuid);
+        System.out.println("------------------->password" + password);
+
+        if(uuid == null || uuid.length() == 0 || roomPk == 0 ||   // 널 처리
+                password == null || password.length() == 0) {
+            System.out.println("잘못된 접근 입니다.");
+            return "failure";
         } else {
             logger.info(" uuid is : " + uuid);
+            System.out.println("======================>roomPassword : " + password);
+            Optional<Room> target = roomRepo.findById(roomPk);
 
-        Random rand = new Random();
-        long randVal = (long) rand.nextInt(randBound);
-        String userVal = Integer.toString((int) randVal);
-        String userName = "Kim" + userVal;
+            System.out.println("---------------------->??????? : " + target.get().getRoomPassword());
+            if(target.get().getRoomPassword().equals(password)) {
+                System.out.println("패스워드가 일치합니다. 방으로 입장합니다.");
+                User user = userRepo.findByUsername((username));
+                target.get().add(user);
+                return "success";
+            } else {
+                System.out.println("패스워드가 틀립니다. 다시 입력해 주세요.");
+                return "failure";
+            }
 
-        User newUser = new User(userName);
-        newUser.setUserPk(roomPk);
-        Optional<Room> target = roomRepo.findById(roomPk);
-        target.get().add(newUser);
 
-        userRepo.save(newUser);
+
+
+
+//        Random rand = new Random();
+//        long randVal = (long) rand.nextInt(randBound);
+//        String userVal = Integer.toString((int) randVal);
+//        String userName = "Kim" + userVal;
+
+//        User newUser = new User(userName);
+//        newUser.setUserPk(roomPk);
+
+//            user.getRoom().setRoomPk(roomPk);
+
+//        userRepo.save(newUser);
 //            List<Member> members = new ArrayList<>();
 //            members.add(tmp);
 
@@ -154,12 +185,16 @@ public class EntityController {
     }
 
     // POST create room
-    @PostMapping("/room")
+    @PostMapping("/api/room")
     public Room createRoom(@RequestBody Map<String, Object> roomJson) {
-        Random rand = new Random();
+//        Random rand = new Random();
 
         logger.info("createRoom enter");
-        logger.info("------------->is here? 1");
+        System.out.println("------------> 니년 이름은? " + roomJson.get("roomHost"));
+        System.out.println("------------> 방 이름은? " + roomJson.get("roomTitle"));
+        System.out.println("------------> 방 비번은? " + roomJson.get("roomPassword"));
+
+//        logger.info("------------->is here? 1");
 //        long userId = (long)Integer.parseInt(userJson.get("id").toString());
 //        User target = userRepo.findById(userId).get();
 
@@ -170,19 +205,25 @@ public class EntityController {
         String roomTitle = roomJson.get("roomTitle").toString();
         logger.info("------------->is here? 3");
 //        logger.info("is here?1");
-        String userName = roomJson.get("username").toString();
+        String roomPassword = roomJson.get("roomPassword").toString();
         logger.info("------------->is here? 4");
+        String roomHost = roomJson.get("roomHost").toString();
+        logger.info("------------->is here? 5");
 //        String hostName = memberJson.get("room_host").toString();
-        logger.info("room name : " + roomTitle + " host name : " + userName);
+//        logger.info("room name : " + roomTitle + " host name : " + userName);
 
-        User tmp = new User(userName);
-        userRepo.save(tmp);
+//        User tmp = new User(userName);
+//        userRepo.save(tmp);
 
 //        List<Member> members = new ArrayList<>();
 //        members.add(tmp);
 //        Room newRoom = new Room(roomTitle, keyValue, memberName, members);
-        Room newRoom = new Room(roomTitle, roomKeyValue, userName);
-        newRoom.add(tmp);
+        User host = userRepo.findByUsername(roomHost);
+        logger.info("------------->is here? 6");
+        Room newRoom = new Room(roomTitle, roomKeyValue, roomPassword, roomHost);
+        logger.info("------------->is here? 7");
+        newRoom.add(host);
+        logger.info("------------->is here? 8");
 
         logger.info("create new room");
 

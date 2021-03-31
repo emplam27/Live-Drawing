@@ -15,6 +15,6 @@ spring:
     generate-ddl: true
     show-sql: true
     hibernate:
-      ddl-auto: create #create update none
+      ddl-auto: update #create update none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

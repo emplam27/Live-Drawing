@@ -8,3 +8,10 @@ export interface EntranceProps {
 export interface ResponseEntranceProps {
   data: EntranceProps[];
 }
+
+export interface Values {
+  roomPk: number;
+  roomKey: string;
+  password: string;
+  username: string | null;
+}
