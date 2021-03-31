@@ -1,0 +1,37 @@
+:root{
+    --padding:30px;
+}
+
+.container{
+    margin: 0px auto;    
+    max-width: 900px;
+}
+
+.lecture-group {
+    margin: 0 auto;
+}
+
+
+.lecture-container{
+    padding-bottom: var(--padding);
+    padding-top: var(--padding);
+}
+
+
+.title{
+    display: flex;
+    text-align: left;
+    font-weight: bold;
+    /* justify-content: center; */
+
+
+}
+.rooms{
+    display:flex;
+    /* margin: 0px auto; */
+    float : none;
+    /* display : table; */
+    justify-content: center;
+    /* max-width: 900px; */
+
+}

@@ -3,6 +3,8 @@ import { EntranceComponent } from './entrance';
 import { ResponseRoomInfo, roomInfo } from '../interfaces/room-info-interface';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import './room-list.css';
+
 import { JumpToShowMoreRoomComponent } from './jump-buttons';
 
 export function RoomListComponent() {
@@ -21,7 +23,7 @@ export function RoomListComponent() {
           더보기
         </button>
       </Link> */}
-      <div className='roomList flex flex-wrap self-center'>
+      <div className='roomList'>
         <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
         <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
         <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>

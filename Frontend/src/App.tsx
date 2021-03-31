@@ -16,7 +16,7 @@ function App() {
     <div className='App font-apply text-2xl'>
       <main>
         <NavBarComponent></NavBarComponent>
-        <div className='p-6'>
+        <div>
           <Route path='/' component={HomeComponent} exact />
           <Route path='/login-form' component={SignInComponent} exact />
           <Route path='/member/sign-up' component={HomeComponent} exact />

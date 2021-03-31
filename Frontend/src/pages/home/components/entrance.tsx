@@ -58,22 +58,20 @@ export function EntranceComponent(props: EntranceProps) {
   };
 
   return (
-    <>
-      <div onClick={onClick}>
-        <div className={'roomMetadata'}>
-          <div className={'roomImage'}>
-            <img src='/Kakao_drawing.jpeg' alt=''></img>
-          </div>
-          <div className={'roomInfo'}>
-            <div className='roomTitle'>{props.roomTitle}</div>
-            <div className={'buttonandImage flex'}>
-              <img src='/profile.jpeg' alt=''></img>
-              <span className={'name'}>전민동고흐</span>
-            </div>
+    <div onClick={onClick} className={'roomMetadata'}>
+      <div className={'roomMetadata'}>
+        <div className={'roomImage'}>
+          <img src='/Kakao_drawing.jpeg' alt=''></img>
+        </div>
+        <div className={'roomInfo'}>
+          <div className='roomTitle'>{props.roomTitle}</div>
+          <div className={'buttonandImage'}>
+            <img src='/profile.jpeg' alt=''></img>
+            <div className={'name'}>전민동고흐</div>
           </div>
         </div>
       </div>
-    </>
+    </div>
 
     //  <Link to={`/room/${roomKey}`}>
     //     <div className='entrance'>

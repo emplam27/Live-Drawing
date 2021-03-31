@@ -9,27 +9,34 @@ import {
 } from './components/jump-buttons';
 import RoomCreateComponent from './components/room-create-form';
 import { RoomListComponent } from './components/room-list';
+import './Index.css';
 
 export function HomeComponent() {
   const userState = useCustomState();
   console.log(userState);
   return (
-    <div>
-      <div className='container flex divide-x-2 '>
-        <div className='flex-column w-full'>
-          <div className='flex'>
-            <div className='flex-auto font-bold text-left pt-1 pl-3'>라이브 강의</div>
-            <div className='flex flex-row pr-10'>
-              <JumpToCreateRoomComponent></JumpToCreateRoomComponent>
-              &nbsp;
-              <JumpToShowMoreRoomComponent></JumpToShowMoreRoomComponent>
+    <div className='container'>
+      <div className='lecture-container'>
+        <div className='titleAndButton'>
+          <div className='titleContainer'>
+            <div className='title'>
+              라이브 강의 &nbsp;
+              <i className='ri-live-fill'></i>
             </div>
           </div>
-          <RoomListComponent></RoomListComponent>
         </div>
-        <div className='flex rounded-xl w-full m-1'>
-          <div className='flex-auto font-bold text-left pl-3'>드로잉 강의</div>
-        </div>
+        <RoomListComponent></RoomListComponent>
+        {/* <JumpToCreateRoomComponent></JumpToCreateRoomComponent>
+              &nbsp;
+              <JumpToShowMoreRoomComponent></JumpToShowMoreRoomComponent> */}
+        {/* <div className='rooms'> */}
+        {/* </div> */}
+      </div>
+      <div className='lecture-container'>
+        <div className='title'>드로잉 강의</div>
+        {/* <div className='rooms'> */}
+        <RoomListComponent></RoomListComponent>
+        {/* </div> */}
       </div>
     </div>
   );
