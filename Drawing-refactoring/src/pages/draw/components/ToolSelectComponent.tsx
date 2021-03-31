@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import {
   ToolSelectComponentProps,
   Tool,
@@ -9,34 +10,34 @@ const fabric = require('fabric').fabric;
 
 function ToolSelectComponent(props: ToolSelectComponentProps) {
   const Tools: Tool[] = [
-    {
-      name: 'cursor',
-      iconClass: 'ri-cursor-line',
-    },
+    // {
+    //   name: 'cursor',
+    //   iconClass: 'ri-cursor-line',
+    // },
     {
       name: 'pencil',
       iconClass: 'ri-pencil-line',
     },
-    {
-      name: 'spray',
-      iconClass: 'ri-brush-line',
-    },
-    {
-      name: 'bubble',
-      iconClass: 'ri-bubble-chart-line',
-    },
-    {
-      name: 'crayon',
-      iconClass: 'ri-edit-2-line',
-    },
-    {
-      name: 'marker',
-      iconClass: 'ri-mark-pen-line',
-    },
-    {
-      name: 'ink',
-      iconClass: 'ri-ink-bottle-fill',
-    },
+    // {
+    //   name: 'spray',
+    //   iconClass: 'ri-brush-line',
+    // },
+    // {
+    //   name: 'bubble',
+    //   iconClass: 'ri-bubble-chart-line',
+    // },
+    // {
+    //   name: 'crayon',
+    //   iconClass: 'ri-edit-2-line',
+    // },
+    // {
+    //   name: 'marker',
+    //   iconClass: 'ri-mark-pen-line',
+    // },
+    // {
+    //   name: 'ink',
+    //   iconClass: 'ri-ink-bottle-fill',
+    // },
     {
       name: 'eraser',
       iconClass: 'ri-eraser-line',
@@ -54,12 +55,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
 
     let brush;
     switch (tool.name) {
-      case 'cursor':
-        // console.log('cursor');
-        props.canvas.isDrawingMode = false;
-        props.setCursorWidth(5);
-        break;
-
       case 'pencil':
         // console.log('pencil');
         props.canvas.isDrawingMode = true;
@@ -73,70 +68,70 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.setCursorWidth(props.lineWidth);
         break;
 
-      case 'spray':
-        // console.log('spray');
-        props.canvas.isDrawingMode = true;
-        brush = new fabric.SprayBrush();
-        props.canvas.freeDrawingBrush = brush;
-        props.canvas.freeDrawingBrush.canvas = props.canvas;
-        props.canvas.freeDrawingBrush.color = props.color;
-        props.canvas.freeDrawingBrush.opacity = 1;
-        props.canvas.freeDrawingBrush.width = props.lineWidth;
-        props.setCursorWidth(props.lineWidth);
-        // console.log(props.canvas.freeDrawingBrush);
-        break;
+      // case 'spray':
+      //   // console.log('spray');
+      //   props.canvas.isDrawingMode = true;
+      //   brush = new fabric.SprayBrush();
+      //   props.canvas.freeDrawingBrush = brush;
+      //   props.canvas.freeDrawingBrush.canvas = props.canvas;
+      //   props.canvas.freeDrawingBrush.color = props.color;
+      //   props.canvas.freeDrawingBrush.opacity = 1;
+      //   props.canvas.freeDrawingBrush.width = props.lineWidth;
+      //   props.setCursorWidth(props.lineWidth);
+      //   // console.log(props.canvas.freeDrawingBrush);
+      //   break;
 
-      case 'bubble':
-        // console.log('bubble');
-        props.canvas.isDrawingMode = true;
-        brush = new fabric.CircleBrush();
-        props.canvas.freeDrawingBrush = brush;
-        props.canvas.freeDrawingBrush.canvas = props.canvas;
-        props.canvas.freeDrawingBrush.color = props.color;
-        props.canvas.freeDrawingBrush.opacity = 1;
-        props.canvas.freeDrawingBrush.width = props.lineWidth;
-        props.setCursorWidth(props.lineWidth);
-        // console.log(props.canvas.freeDrawingBrush);
-        break;
+      // case 'bubble':
+      //   // console.log('bubble');
+      //   props.canvas.isDrawingMode = true;
+      //   brush = new fabric.CircleBrush();
+      //   props.canvas.freeDrawingBrush = brush;
+      //   props.canvas.freeDrawingBrush.canvas = props.canvas;
+      //   props.canvas.freeDrawingBrush.color = props.color;
+      //   props.canvas.freeDrawingBrush.opacity = 1;
+      //   props.canvas.freeDrawingBrush.width = props.lineWidth;
+      //   props.setCursorWidth(props.lineWidth);
+      //   // console.log(props.canvas.freeDrawingBrush);
+      //   break;
 
-      case 'crayon':
-        // console.log('crayon');
-        props.canvas.isDrawingMode = true;
-        brush = new fabric.CrayonBrush(props.canvas, {});
-        props.canvas.freeDrawingBrush = brush;
-        props.canvas.freeDrawingBrush.canvas = props.canvas;
-        props.canvas.freeDrawingBrush.color = props.color;
-        props.canvas.freeDrawingBrush.opacity = 1;
-        props.canvas.freeDrawingBrush.width = props.lineWidth;
-        props.setCursorWidth(props.lineWidth);
-        // console.log(props.canvas.freeDrawingBrush);
-        break;
+      // case 'crayon':
+      //   // console.log('crayon');
+      //   props.canvas.isDrawingMode = true;
+      //   brush = new fabric.CrayonBrush(props.canvas, {});
+      //   props.canvas.freeDrawingBrush = brush;
+      //   props.canvas.freeDrawingBrush.canvas = props.canvas;
+      //   props.canvas.freeDrawingBrush.color = props.color;
+      //   props.canvas.freeDrawingBrush.opacity = 1;
+      //   props.canvas.freeDrawingBrush.width = props.lineWidth;
+      //   props.setCursorWidth(props.lineWidth);
+      //   // console.log(props.canvas.freeDrawingBrush);
+      //   break;
 
-      case 'marker':
-        // console.log('marker');
-        props.canvas.isDrawingMode = true;
-        brush = new fabric.MarkerBrush(props.canvas, {});
-        props.canvas.freeDrawingBrush = brush;
-        props.canvas.freeDrawingBrush.canvas = props.canvas;
-        props.canvas.freeDrawingBrush.color = props.color;
-        props.canvas.freeDrawingBrush.opacity = 1;
-        props.canvas.freeDrawingBrush.width = props.lineWidth;
-        props.setCursorWidth(props.lineWidth);
-        // console.log(props.canvas.freeDrawingBrush);
-        break;
+      // case 'marker':
+      //   // console.log('marker');
+      //   props.canvas.isDrawingMode = true;
+      //   brush = new fabric.MarkerBrush(props.canvas, {});
+      //   props.canvas.freeDrawingBrush = brush;
+      //   props.canvas.freeDrawingBrush.canvas = props.canvas;
+      //   props.canvas.freeDrawingBrush.color = props.color;
+      //   props.canvas.freeDrawingBrush.opacity = 1;
+      //   props.canvas.freeDrawingBrush.width = props.lineWidth;
+      //   props.setCursorWidth(props.lineWidth);
+      //   // console.log(props.canvas.freeDrawingBrush);
+      //   break;
 
-      case 'ink':
-        // console.log('ink');
-        props.canvas.isDrawingMode = true;
-        brush = new fabric.InkBrush(props.canvas, {});
-        props.canvas.freeDrawingBrush = brush;
-        props.canvas.freeDrawingBrush.canvas = props.canvas;
-        props.canvas.freeDrawingBrush.color = props.color;
-        props.canvas.freeDrawingBrush.opacity = 1;
-        props.canvas.freeDrawingBrush.width = props.lineWidth;
-        props.setCursorWidth(props.lineWidth);
-        // console.log(props.canvas.freeDrawingBrush);
-        break;
+      // case 'ink':
+      //   // console.log('ink');
+      //   props.canvas.isDrawingMode = true;
+      //   brush = new fabric.InkBrush(props.canvas, {});
+      //   props.canvas.freeDrawingBrush = brush;
+      //   props.canvas.freeDrawingBrush.canvas = props.canvas;
+      //   props.canvas.freeDrawingBrush.color = props.color;
+      //   props.canvas.freeDrawingBrush.opacity = 1;
+      //   props.canvas.freeDrawingBrush.width = props.lineWidth;
+      //   props.setCursorWidth(props.lineWidth);
+      //   // console.log(props.canvas.freeDrawingBrush);
+      //   break;
 
       case 'eraser':
         // console.log('eraser');
@@ -156,10 +151,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
     }
   }
 
-  useEffect(() => {
-    props.setActiveTool('cursor');
-  }, []);
-
   return (
     <>
       {Tools.map((tool) => {
@@ -172,7 +163,7 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
             }`}
             onClick={() => changeActiveTool(tool)}
           >
-            <i className={`ri-xl ${tool.iconClass}`}></i>
+            <i className={`ri-2x ${tool.iconClass}`}></i>
           </p>
         );
       })}

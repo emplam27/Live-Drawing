@@ -55,7 +55,7 @@ function CanvasComponent(props: CanvasComponentProps) {
           id={`canvas`}
           className={'layer'}
           width={window.innerWidth * 0.8}
-          height={window.innerHeight * 0.8}
+          height={window.innerHeight * 1 - 64}
         ></canvas>
       </div>
     </>

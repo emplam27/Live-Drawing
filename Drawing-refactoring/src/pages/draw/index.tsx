@@ -5,9 +5,12 @@ import './index.css';
 
 // components
 import AddImageComponent from './components/AddImageComponent';
+import DeleteObjectComponent from './components/DeleteObjectComponent';
+import CursorToolComponent from './components/CursorToolComponent';
+import CloseButtonComponent from './components/CloseButtonComponent';
+import ClosedFilterComponent from './components/ClosedFilterComponent';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
 import CursorComponent from './components/CursorComponent';
-import DeleteObjectComponent from './components/DeleteObjectComponent';
 import EraseSizeComponent from './components/EraseSizeComponent';
 import CanvasComponent from './components/CanvasComponent';
 import LineSizeComponent from './components/LineSizeComponent';
@@ -82,8 +85,9 @@ function Draw() {
   const [canvas, setCanvas] = useState<any>(null);
   const [color, setColor] = useState('#000000');
   const [cursorWidth, setCursorWidth] = useState(5);
-  const [eraserWidth, setEraserWidth] = useState(5);
+  const [eraserWidth, setEraserWidth] = useState(30);
   const [lineWidth, setLineWidth] = useState(5);
+  const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
   // const [pathsry, setPathsry] = useState<point[][]>([]);
   // const [points, setPoints] = useState<point[]>([]);
 
@@ -314,9 +318,24 @@ function Draw() {
 
   return (
     <div className='drawComponent'>
+      <ClosedFilterComponent
+        isLiveClosed={isLiveClosed}
+        setIsLiveClosed={setIsLiveClosed}
+      />
       <CursorComponent cursorWidth={cursorWidth} />
       <div className='flush vstack'>
         <div className='menubar hstack'>
+          <div className='spacer'></div>
+          <CursorToolComponent
+            activeTool={activeTool}
+            canvas={canvas}
+            setActiveTool={setActiveTool}
+            setCursorWidth={setCursorWidth}
+          />
+          <DeleteObjectComponent canvas={canvas} />
+          <AddImageComponent canvas={canvas} />
+          <div className='spacer'></div>
+
           <ToolSelectComponent
             activeTool={activeTool}
             canvas={canvas}
@@ -331,26 +350,28 @@ function Draw() {
             canvas={canvas}
             peerConnectionContext={peerConnectionContext}
           />
-          <DeleteObjectComponent canvas={canvas} />
-          <div className='spacer'></div>
-          <LineSizeComponent
-            activeTool={activeTool}
-            canvas={canvas}
-            cursorWidth={cursorWidth}
-            lineWidth={lineWidth}
-            setCanvas={setCanvas}
-            setCursorWidth={setCursorWidth}
-            setLineWidth={setLineWidth}
-          />
-          <EraseSizeComponent
-            activeTool={activeTool}
-            canvas={canvas}
-            cursorWidth={cursorWidth}
-            eraserWidth={eraserWidth}
-            setCanvas={setCanvas}
-            setCursorWidth={setCursorWidth}
-            setEraserWidth={setEraserWidth}
-          />
+          {activeTool !== 'eraser' ? (
+            <LineSizeComponent
+              activeTool={activeTool}
+              canvas={canvas}
+              cursorWidth={cursorWidth}
+              lineWidth={lineWidth}
+              setCanvas={setCanvas}
+              setCursorWidth={setCursorWidth}
+              setLineWidth={setLineWidth}
+            />
+          ) : (
+            <EraseSizeComponent
+              activeTool={activeTool}
+              canvas={canvas}
+              cursorWidth={cursorWidth}
+              eraserWidth={eraserWidth}
+              setCanvas={setCanvas}
+              setCursorWidth={setCursorWidth}
+              setEraserWidth={setEraserWidth}
+            />
+          )}
+
           <div className='spacer'></div>
           <ColorPaletteComponent
             canvas={canvas}
@@ -359,7 +380,11 @@ function Draw() {
             setColor={setColor}
           />
           <div className='spacer'></div>
-          <AddImageComponent canvas={canvas} />
+
+          <CloseButtonComponent
+            isHost={peerConnectionContext.is_host}
+            setIsLiveClosed={setIsLiveClosed}
+          />
         </div>
         <CanvasComponent
           activeTool={activeTool}
