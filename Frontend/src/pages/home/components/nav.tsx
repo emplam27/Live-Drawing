@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { JumpToLoginComponent } from './jump-buttons';
 import { LogoutComponent } from './logout-component';
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';

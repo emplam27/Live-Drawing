@@ -54,7 +54,7 @@ public class EntityController {
 
 
 
-    @GetMapping("/room/entrance")
+    @GetMapping("/api/room/entrance")
     @ResponseBody
     public List<User> showUserInfo(@RequestParam String uuid) {
         logger.info("show user list and number!!" + uuid);

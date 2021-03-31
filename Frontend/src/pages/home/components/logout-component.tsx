@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { useCustomDispatch, useCustomState } from '../../../context';
+import { useCustomDispatch } from '../../../context';
 
 export function LogoutComponent() {
   const userDispatch = useCustomDispatch();

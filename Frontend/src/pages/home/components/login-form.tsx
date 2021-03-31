@@ -21,9 +21,9 @@ export function SignInComponent() {
   }; //! 서버에 token 넘겨줄때는 header로 넘겨준다.
 
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    console.log(res);
-    axios.post('/oauth/jwt/google', JSON.stringify(res), config).then((res) => {
+    axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
       userDispatch({ type: 'SET_ID', name: res.data.username, token: res.data.Authorization });
+      console.log(res);
       localStorage.setItem('name', res.data.username);
       localStorage.setItem('token', res.data.Authorization);
       if (res.data.Authorization) {
@@ -122,7 +122,7 @@ export function SignInComponent() {
                 // cookiePolicy={'single_host_origin'}
               />
             </form>
-            <p className='text-gray-700 text-sm mt-2 mr-1'>
+            {/* <p className='text-gray-700 text-sm mt-2 mr-1'>
               회원가입이 필요하십니까?
               <Link
                 to='/user/join-form'
@@ -130,7 +130,7 @@ export function SignInComponent() {
               >
                 가입하기
               </Link>
-            </p>
+            </p> */}
           </div>
         </div>
       </div>
