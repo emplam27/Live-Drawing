@@ -2,7 +2,6 @@
   "name": "live-drawing",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080/",
   "dependencies": {
     "@craco/craco": "^6.1.1",
     "@sweetalert/with-react": "^0.1.1",

@@ -1,21 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useCustomState } from '../../../context';
-import { JumpToLoginComponent } from './jump-buttons';
 import { LogoutComponent } from './logout-component';
+import axios from 'axios';
+import { Link, useHistory } from 'react-router-dom';
+import { useCustomDispatch, useCustomState } from '../../../context';
+import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export function NavBarComponent() {
-  const userState = useCustomState();
   const [isToken, setIsToken] = useState(localStorage.getItem('token'));
+  const userState = useCustomState();
+  const userDispatch = useCustomDispatch();
+  const history = useHistory();
+  const MySwal = withReactContent(Swal);
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json; charset-utf-8',
+    },
+  };
+
+  const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
+    axios.post('/oauth/jwt/google', JSON.stringify(res), config).then((res) => {
+      userDispatch({ type: 'SET_ID', name: res.data.username, token: res.data.Authorization });
+      localStorage.setItem('name', res.data.username);
+      localStorage.setItem('token', res.data.Authorization);
+      if (res.status === 200) {
+        MySwal.fire({
+          title: <p>로그인 되었습니다.</p>,
+          text: '홈으로 돌아갑니다.',
+        }).then(() => history.push(''));
+      }
+    });
+  };
+
   useEffect(() => {
     setIsToken(localStorage.getItem('token'));
   }, [userState]);
   return (
     <div className='header'>
       {/* // <!-- This example requires Tailwind CSS v2.0+ --> */}
-      <nav className='bg-gradient-to-tr from-blue-100 to-blue-200'>
+      <nav className='nav-bottom'>
         <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
-          <div className='relative flex items-center justify-between h-16'>
+          <div className='relative flex items-center justify-between h-nav'>
             <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
               {/* <!-- Mobile menu button--> */}
               <button
@@ -58,7 +85,7 @@ export function NavBarComponent() {
               </button>
             </div>
             <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
-              <div className='flex-shrink-0 flex items-center'>
+              <div className='flex-shrink-0 flex items-center text-blue-400 text-3xl font-bold'>
                 <Link to='/'>방구석 화방</Link>
                 {/* <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' /> */}
                 {/* <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' /> */}
@@ -77,24 +104,24 @@ export function NavBarComponent() {
 
                   <Link
                     to='/room'
-                    className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
+                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
                   >
                     {/* <i className='ri-live-line'></i> */}
-                    라이브드로잉 시작
+                    라이브강의 시작
                   </Link>
 
-                  <Link
+                  {/* <Link
                     to='#'
-                    className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
+                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
                   >
                     준비중
-                  </Link>
+                  </Link> */}
 
                   <Link
                     to='/feedback'
-                    className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
+                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
                   >
-                    피드백 작성
+                    피드백 남기기
                   </Link>
                 </div>
               </div>
@@ -102,10 +129,30 @@ export function NavBarComponent() {
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               {isToken ? (
                 <>
-                  <div className='mr-5'>{`${localStorage.getItem('id')}님 환영합니다.`}</div> <LogoutComponent />
+                  <div className='mr-5'>{`${localStorage.getItem('name')}님 환영합니다.`}</div> <LogoutComponent />
                 </>
               ) : (
-                <JumpToLoginComponent />
+                <GoogleLogin
+                  clientId='234586769421-7gqq45aokbu6mn00rbg6gdcbekmd5ert.apps.googleusercontent.com'
+                  // buttonText='login'
+                  buttonText={'구글로 로그인하기'}
+                  // className='w-full h-3/12 shadow-none'
+                  // style={{
+                  //   border: 'none',
+                  // }}
+                  render={(renderProps) => (
+                    <button
+                      onClick={renderProps.onClick}
+                      className='py-1 px-3 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
+                    >
+                      로그인
+                    </button>
+                  )}
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  // className='p-4 m-3 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white btn-image-google'
+                  // cookiePolicy={'single_host_origin'}
+                />
               )}
               {/* <button className='bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white'> */}
               {/* <span className='sr-only'>View notifications</span> */}

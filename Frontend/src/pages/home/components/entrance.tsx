@@ -1,29 +1,21 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
 import './room-list.css';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-
-import { EntranceProps, Values } from '../interfaces/entrance-props-interface';
+import { EntranceProps } from '../interfaces/entrance-props-interface';
 import { useCustomState } from '../../../context';
 
 export function EntranceComponent(props: EntranceProps) {
   const MySwal = withReactContent(Swal);
   const userState = useCustomState();
-  // const [values, setValues] = useState<Values>({
-  //   roomPk: props.roomPk,
-  //   roomKey: props.roomKey,
-  //   password: '',
-  //   username: null,
-  // });
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userName, setUserName] = useState(localStorage.getItem('id'));
-  const history = useHistory();
+  const [userName, setUserName] = useState(localStorage.getItem('name'));
+  console.log(userName, token);
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserName(localStorage.getItem('id'));
+    setUserName(localStorage.getItem('name'));
   }, [userState]);
 
   const headers = {
@@ -33,8 +25,12 @@ export function EntranceComponent(props: EntranceProps) {
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
-    console.log('00000000000000000000hi', userName);
-    if (token === '') return;
+    if (token === null || userName === null) {
+      MySwal.fire({
+        title: '로그인을 해주세요.',
+      });
+      return;
+    }
     MySwal.fire({
       title: '비밀번호를 입력하세요.',
       input: 'text',
@@ -44,12 +40,10 @@ export function EntranceComponent(props: EntranceProps) {
       showCancelButton: true,
       preConfirm: (password) => {
         const values = { username: userName, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
-        // setValues({ ...values, username: userName, password: password });
-        console.log('-------------->', values);
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
-            if (res.data === 'success') {
+            if (res.status === 200) {
               window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomKey}`;
             } else throw new Error();
           })
@@ -74,13 +68,5 @@ export function EntranceComponent(props: EntranceProps) {
         </div>
       </div>
     </div>
-
-    //  <Link to={`/room/${roomKey}`}>
-    //     <div className='entrance'>
-    //       <h3>{room_title}</h3>
-    //       {/* <h4>방주인 : {room_host}</h4> */}
-    //     </div>
-    //     {/* //{' '} */}
-    //   </Link>
   );
 }

@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { EntranceComponent } from './entrance';
 import { ResponseRoomInfo, roomInfo } from '../interfaces/room-info-interface';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import './room-list.css';
-
-import { JumpToShowMoreRoomComponent } from './jump-buttons';
 
 export function RoomListComponent() {
   const [rooms, setRooms] = useState<roomInfo[]>([]);
@@ -24,10 +21,6 @@ export function RoomListComponent() {
         </button>
       </Link> */}
       <div className='roomList'>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
         {/* <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'라이언 그리기'}></EntranceComponent> */}
 
         {rooms.map((room: roomInfo, index: number) => {
