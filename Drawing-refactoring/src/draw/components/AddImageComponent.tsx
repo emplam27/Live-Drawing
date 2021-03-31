@@ -40,11 +40,21 @@ function AddImageComponent(props: AddImageComponentProps) {
 
   return (
     <>
-      <p className={'icon-link center '}>
-        <i className={'ri-xl ri-image-add-line'}></i>
-      </p>
-      <input type='file' onChange={addImage} />
-      <button onClick={saveImage}>save image</button>
+      <label className={'icon-link center '} htmlFor='file-input'>
+        <i className={'ri-2x ri-image-add-line'}></i>
+      </label>
+      <input
+        id='file-input'
+        type='file'
+        onChange={addImage}
+        style={{ display: 'none' }}
+      />
+      <label className={'icon-link center '} htmlFor='save-button'>
+        <i className={'ri-2x ri-save-3-line'}></i>
+      </label>
+      <button id='save-button' onClick={saveImage} style={{ display: 'none' }}>
+        save image
+      </button>
     </>
   );
 }

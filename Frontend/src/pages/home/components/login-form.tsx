@@ -44,7 +44,7 @@ export function SignInComponent() {
   };
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    axios.post('http://localhost:8080/login', { email: userId, password: password }).then((res) => {
+    axios.post(`${process.env.REACT_APP_API_URL}/login`, { email: userId, password: password }).then((res) => {
       console.log(res);
       userDispatch({ type: 'SET_ID', id: res.data.username, token: res.data.Authorization });
       console.log(userState);

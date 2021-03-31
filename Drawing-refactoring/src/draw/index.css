@@ -55,6 +55,7 @@
   border-radius: 4px;
   z-index: 1;
   margin-left: -80px;
+  margin-top: 30px;
   transition: all 0.25s ease-in-out;
 }
 .icon-link + .dropdown {
@@ -87,8 +88,7 @@
 }
 .icon-link.active {
   color: var(--active-color);
-  border-bottom: 2px solid var(--active-color);
-  animation: animate--rainbow-border 2s ease-in-out infinite;
+  border-bottom: 3px solid var(--active-color);
 }
 .hidden {
   visibility: hidden;
@@ -99,7 +99,7 @@
   padding: var(--standard-padding);
   box-shadow: var(--menubar-shadow);
   background: var(--menubar-bg);
-  height: 32px;
+  /* height: 40px; */
 }
 .app {
   width: 100%;
@@ -114,7 +114,7 @@
   top: 0;
   left: 0;
   cursor: none;
-  border: solid 1px;
+  border: solid 0px 1px 1px 1px;
 
 }
 .button {

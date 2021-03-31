@@ -114,11 +114,11 @@ function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   }, [props.color]);
 
   return (
-    <div>
+    <div className='icon-link center'>
       <p className='icon-link center'>
-        <i className='ri-xl ri-palette-line'></i>
+        <i className='ri-2x ri-palette-line'></i>
         <i
-          className='ri-xl ri-checkbox-blank-fill center'
+          className='ri-2x ri-checkbox-blank-fill center'
           style={{ color: props.color }}
         ></i>
       </p>

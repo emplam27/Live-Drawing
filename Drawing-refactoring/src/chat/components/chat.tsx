@@ -14,7 +14,7 @@ export function ChatComponent(props: ChatComponentProps) {
   console.log(room);
 
   useEffect(() => {
-    const socketIo = io('http://localhost:8080/', {
+    const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
       transports: ['websocket'],
     });
 

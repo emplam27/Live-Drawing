@@ -17,7 +17,7 @@ function DeleteObjectComponent(props: DeleteObjectComponentProps) {
   return (
     <>
       <p className={'icon-link center'} onClick={deleteObject}>
-        <i className={'ri-xl ri-delete-bin-line'}></i>
+        <i className={'ri-2x ri-delete-bin-line'}></i>
       </p>
     </>
   );

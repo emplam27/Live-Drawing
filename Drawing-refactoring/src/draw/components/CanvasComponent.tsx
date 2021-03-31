@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Message, CanvasComponentProps } from '../interfaces/canvas-interfaces';
 import '../index.css';
-import { broadcast } from '../../../functions/draw';
+import { broadcast } from '../../functions/draw';
 
 const fabric = require('fabric').fabric;
 require('fabric-history');
@@ -55,7 +55,7 @@ function CanvasComponent(props: CanvasComponentProps) {
           id={`canvas`}
           className={'layer'}
           width={window.innerWidth * 0.8}
-          height={window.innerHeight - 32}
+          height={window.innerHeight - 64}
         ></canvas>
       </div>
     </>

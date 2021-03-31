@@ -20,12 +20,12 @@ code {
   --root-font-size: 12px;
   --standard-padding: 16px;
 
-  --bg: #fafafa;
+  --bg: #ffffff;
   --fg: #666;
-  --menubar-bg: #fdfdfd;
-  --active-color: #339999;
+  --menubar-bg: #f6f5f5;
+  --active-color: #1687a7;
 
-  --menubar-shadow: 0 8px 6px -6px #f4f4f4;
+  --menubar-shadow: 0 0px 12px 0px #05050541;
 }
 
 /** Reset */

@@ -16,15 +16,18 @@ function EraseSizeComponent(props: EraseSizeComponentProps) {
 
   return (
     <>
+      <p className='icon-link center'>Size</p>
       <input
         id='eraseSlider'
         type='range'
-        min='5'
+        min='1'
         max='100'
         value={props.eraserWidth}
         onChange={changeEraserSize}
       />
-      {props.eraserWidth}
+      <p className='icon-link center' style={{ width: '16px' }}>
+        {props.eraserWidth}
+      </p>
     </>
   );
 }
