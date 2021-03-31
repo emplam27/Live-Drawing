@@ -11,12 +11,6 @@ import { useCustomState } from '../../../context';
 export function EntranceComponent(props: EntranceProps) {
   const MySwal = withReactContent(Swal);
   const userState = useCustomState();
-  // const [values, setValues] = useState<Values>({
-  //   roomPk: props.roomPk,
-  //   roomKey: props.roomKey,
-  //   password: '',
-  //   username: null,
-  // });
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('id'));
   const history = useHistory();
@@ -44,7 +38,6 @@ export function EntranceComponent(props: EntranceProps) {
       showCancelButton: true,
       preConfirm: (password) => {
         const values = { username: userName, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
-        // setValues({ ...values, username: userName, password: password });
         console.log('-------------->', values);
         return axios
           .post('http://localhost:8080/api/room/entrance/', values, { headers: headers })

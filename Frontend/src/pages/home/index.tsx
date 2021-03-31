@@ -9,7 +9,7 @@ import {
 } from './components/jump-buttons';
 import RoomCreateComponent from './components/room-create-form';
 import { RoomListComponent } from './components/room-list';
-import './Index.css';
+import './home.css';
 
 export function HomeComponent() {
   const userState = useCustomState();

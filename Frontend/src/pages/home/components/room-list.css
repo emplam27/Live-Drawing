@@ -41,7 +41,7 @@
     background-color: var(--white-color);
     /* margin-right: var(--small-padding); */
     /* margin-top: var(--small-padding); */
-    margin-bottom: var(--padding);
+    margin-bottom: var(--small-padding);
     /* max-width : 200px;   */
     padding: 0; 
     /* float:left */
