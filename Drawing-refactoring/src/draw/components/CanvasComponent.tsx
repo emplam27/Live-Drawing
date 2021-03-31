@@ -41,7 +41,7 @@ function CanvasComponent(props: CanvasComponentProps) {
       preserveObjectStacking: true,
     });
     canvas.on('mouse:up', function () {
-      console.log('mouse:up');
+      // console.log('mouse:up');
       const canvasObject = canvas._objects;
       setMouseUpSignal(canvasObject[canvasObject.length - 1]);
     });

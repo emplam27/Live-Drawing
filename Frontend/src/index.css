@@ -25,7 +25,7 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
-.btn-image-google {
+/* .btn-image-google {
   background-image: url(./images/google-fill.svg);
   background-size: contain;
   background-repeat: no-repeat;
@@ -39,7 +39,7 @@
   background-image: url(./images/naver-circle-fill.svg);
   background-size: contain;
   background-repeat: no-repeat;
-}
+} */
 
 .backdrop {
   backdrop-filter: blur(2px);

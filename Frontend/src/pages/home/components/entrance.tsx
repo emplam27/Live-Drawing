@@ -49,8 +49,9 @@ export function EntranceComponent(props: EntranceProps) {
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
-            if (res.data === 'success') history.push(`/room/${props.roomKey}`);
-            else throw new Error();
+            if (res.data === 'success') {
+              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomKey}`;
+            } else throw new Error();
           })
           .catch((err) => Swal.showValidationMessage('비밀번호가 일치하지 않습니다.'));
       },
