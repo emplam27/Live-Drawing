@@ -1,7 +1,7 @@
 import React from 'react';
 import '../index.css';
 import { UndoRedoComponentProps } from '../interfaces/undo-redo-interfaces';
-import { broadcast } from '../../../functions/draw';
+import { broadcast } from '../../functions/draw';
 
 function UndoRedoComponent(props: UndoRedoComponentProps) {
   function undoHistory(): void {
@@ -25,10 +25,10 @@ function UndoRedoComponent(props: UndoRedoComponentProps) {
   return (
     <>
       <p className={'icon-link center'} onClick={undoHistory}>
-        <i className={'ri-xl ri-arrow-go-back-line'}></i>
+        <i className={'ri-2x ri-arrow-go-back-line'}></i>
       </p>
       <p className={'icon-link center'} onClick={redoHistory}>
-        <i className={'ri-xl ri-arrow-go-forward-line'}></i>
+        <i className={'ri-2x ri-arrow-go-forward-line'}></i>
       </p>
     </>
   );

@@ -4,7 +4,7 @@
 //   Point,
 //   RectData,
 // } from '../pages/draw/interfaces/draw-interfaces';
-import { PeerConnectionContext } from '../pages/draw/interfaces/index-interfaces';
+import { PeerConnectionContext } from '../draw/interfaces/index-interfaces';
 // import { Layer } from '../pages/draw/interfaces/canvas-interfaces';
 import { fabric } from 'fabric';
 

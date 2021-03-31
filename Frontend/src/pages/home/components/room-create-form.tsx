@@ -31,7 +31,7 @@ export default function RoomCreateComponent() {
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     axios
-      .post('http://localhost:8080/api/room', values)
+      .post(`${process.env.REACT_APP_API_URL}/room`, values)
       .then((response) => {
         if (response.status === 200) {
           window.location.href = `/room/${response.data['roomKey']}`;

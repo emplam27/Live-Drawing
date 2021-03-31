@@ -40,7 +40,7 @@ export function EntranceComponent(props: EntranceProps) {
         const values = { username: userName, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
         console.log('-------------->', values);
         return axios
-          .post('http://localhost:8080/api/room/entrance/', values, { headers: headers })
+          .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
             if (res.data === 'success') history.push(`/room/${props.roomKey}`);
             else throw new Error();

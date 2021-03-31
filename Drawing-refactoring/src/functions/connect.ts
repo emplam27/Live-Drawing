@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PeerConnectionContext } from '../pages/draw/interfaces/index-interfaces';
+import { PeerConnectionContext } from '../draw/interfaces/index-interfaces';
 import { broadcast, addObject, actionDrawHistory } from './draw';
 
 export async function getToken(
@@ -15,7 +15,7 @@ export async function getToken(
     username: peerConnectionContext.username,
   };
   const response = await axios.post(
-    'http://localhost:8080/access',
+    `${process.env.REACT_APP_RTC_URL}/access`,
     data,
     config,
   );
@@ -39,7 +39,7 @@ export async function relay(
   };
 
   await axios.post(
-    `http://localhost:8080/relay/${peerId}/${event}`,
+    `${process.env.REACT_APP_RTC_URL}/relay/${peerId}/${event}`,
     data,
     config,
   );
@@ -235,7 +235,7 @@ export async function joinRoom(peerConnectionContext: any): Promise<void> {
     },
   };
   await axios.post(
-    `http://localhost:8080/${peerConnectionContext.roomId}/join`,
+    `${process.env.REACT_APP_RTC_URL}/${peerConnectionContext.roomId}/join`,
     null,
     config,
   );

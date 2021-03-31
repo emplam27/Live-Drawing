@@ -11,14 +11,7 @@ function LineSizeComponent(props: LineSizeComponentProps) {
 
   useEffect(() => {
     if (!props.canvas) return;
-    if (
-      props.activeTool === 'pencil' ||
-      props.activeTool === 'spray' ||
-      props.activeTool === 'bubble' ||
-      props.activeTool === 'crayon' ||
-      props.activeTool === 'marker' ||
-      props.activeTool === 'ink'
-    ) {
+    if (props.activeTool === 'pencil') {
       props.canvas.freeDrawingBrush.width = props.lineWidth;
       props.setCursorWidth(props.lineWidth);
     }
@@ -26,15 +19,21 @@ function LineSizeComponent(props: LineSizeComponentProps) {
 
   return (
     <>
+      <p className='icon-link center'>Size</p>
       <input
         id='pencilSlider'
         type='range'
-        min='5'
+        min='1'
         max='100'
         value={props.lineWidth}
         onChange={changeLineSize}
       />
-      {props.lineWidth}
+      <p
+        className='icon-link center'
+        style={{ lineHeight: '40px', width: '16px' }}
+      >
+        {props.lineWidth}
+      </p>
     </>
   );
 }

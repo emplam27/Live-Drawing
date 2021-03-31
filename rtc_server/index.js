@@ -128,7 +128,7 @@ const redisClient = redis.createClient();
 async function disconnected(client) {
   console.log('========== index.js :: disconnected ==========');
 
-  // 나갈 peer가 호스트라면, 새로운 호스트를 부여
+  // 나갈 peer가 호스트라면, 모든 피어들의 연결을 끊기
   let roomIds = await redisClient.smembersAsync(`${client.id}:channels`);
   // console.log('disconnected :: roomId', roomIds);
 
@@ -138,7 +138,9 @@ async function disconnected(client) {
     // console.log(roomHostId);
     if (client.id === roomHostId) {
       console.log('Host is Disconneting!!1!!!!!!!!!!!!!!!!!!!!');
-      await setNewHost(roomId, roomHostId);
+      await closeRoom(roomId, client);
+      // await setNewHost(roomId, roomHostId);
+      return;
     }
   });
 
@@ -169,6 +171,22 @@ async function disconnected(client) {
   );
 }
 
+async function closeRoom(roomId, client) {
+  // let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
+  // console.log('no more peer in here');
+  // peerIds.map(async (peerId) => {});
+  // let msg = JSON.stringify({
+  //   event: 'remove-peer',
+  //   data: {
+  //     peer: client.user,
+  //     roomId: roomId,
+  //   },
+  // });
+  // await redisClient.publish(`messages:${client.id}`, msg);
+  // await redisClient.delAsync(`channels:${roomId}:host`);
+  // return;
+}
+
 async function setNewHost(roomId, hostId) {
   let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
   console.log('========== index.js :: setNewHost ==========');
@@ -195,7 +213,7 @@ async function setHost(roomId, peerId) {
   await redisClient.publish(
     `messages:${peerId}`,
     JSON.stringify({
-      event: 'youAreTheHost',
+      event: 'set-host',
       data: null,
     })
   );
@@ -234,6 +252,7 @@ app.post('/access', (req, res) => {
   if (!req.body.username) {
     return res.sendStatus(403);
   }
+
   const user = {
     id: uuid.v4(),
     username: req.body.username,
@@ -292,11 +311,6 @@ app.get('/connect', auth, (req, res) => {
   req.on('close', () => {
     disconnected(client);
   });
-});
-
-app.get('/:roomId', (req, res) => {
-  // console.log('========== index.js :: GET :: /:roomId ==========');
-  res.sendFile(path.join(__dirname, 'static/index.html'));
 });
 
 app.post('/:roomId/join', auth, async (req, res) => {
@@ -370,8 +384,8 @@ app.post('/:roomId/join', auth, async (req, res) => {
 });
 
 app.post('/relay/:peerId/:event', auth, (req, res) => {
-  console.log('========== index.js :: POST :: /relay/:peerId/:event ==========');
-  console.log('event :: "', req.params.event, '", peerId ::"', req.params.peerId, '"');
+  // console.log('========== index.js :: POST :: /relay/:peerId/:event ==========');
+  // console.log('event :: "', req.params.event, '", peerId ::"', req.params.peerId, '"');
 
   let peerId = req.params.peerId;
   let msg = {
@@ -385,6 +399,6 @@ app.post('/relay/:peerId/:event', auth, (req, res) => {
   return res.sendStatus(200);
 });
 
-server.listen(process.env.PORT || 8080, () => {
+server.listen(process.env.PORT || 7000, () => {
   console.log(`Started server on port ${server.address().port}`);
 });

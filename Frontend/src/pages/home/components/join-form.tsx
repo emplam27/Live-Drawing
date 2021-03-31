@@ -62,7 +62,7 @@ export function JoinComponent() {
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     axios
-      .post('http://localhost:8080/api/join', { username: userName, email: email, password: password1 })
+      .post(`${process.env.REACT_APP_API_URL}/join`, { username: userName, email: email, password: password1 })
       .then((res) => {
         if (res.data === 'success')
           MySwal.fire({
