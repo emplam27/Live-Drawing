@@ -1,17 +1,16 @@
-import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { MessageForm } from '../interfaces/message-form-interface';
 import { ChatComponentChildrenProps } from '../interfaces/chat-component-props-interface';
 
 export function ChatInputComponent(props: ChatComponentChildrenProps) {
   const [messageForm, setMessageForm] = useState<MessageForm>({
-    userId: props.userId,
+    user: props.userId,
     text: '',
   });
   const inputRef = useRef<HTMLInputElement>(null);
-  const { userId, text } = messageForm;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessageForm({ userId: messageForm.userId, text: e.target.value });
+    setMessageForm({ user: messageForm.user, text: e.target.value });
   };
 
   const sendMessage = (
@@ -26,7 +25,7 @@ export function ChatInputComponent(props: ChatComponentChildrenProps) {
       if (messageForm.text) {
         props.socket.emit('send message', messageForm);
         setMessageForm({
-          userId: props.userId,
+          user: props.userId,
           text: '',
         });
         if (inputRef.current) {
@@ -38,16 +37,20 @@ export function ChatInputComponent(props: ChatComponentChildrenProps) {
   };
 
   return (
-    <div>
+    <div className='input-container flex'>
       <input
-        className='input'
         type='text'
+        placeholder='메세지를 입력하세요.'
         onChange={onChange}
         ref={inputRef}
         onKeyPress={(e) => (e.key === 'Enter' ? sendMessage(e) : null)}
-      ></input>
-      <button className='input' onClick={(e) => sendMessage(e)}>
-        메세지 보내기
+        className='px-4 py-1 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+      />
+      <button
+        onClick={(e) => sendMessage}
+        className='justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
+      >
+        <i className='ri-send-plane-fill'></i>
       </button>
     </div>
   );

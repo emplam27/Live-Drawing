@@ -1,5 +1,5 @@
 export interface ChatComponentProps {
-  userId: string;
+  userId: string | null;
 }
 
 export interface ChatComponentChildrenProps extends ChatComponentProps {

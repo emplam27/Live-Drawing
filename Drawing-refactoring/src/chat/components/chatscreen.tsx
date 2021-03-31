@@ -12,7 +12,7 @@ export function ChatScreenComponent(props: ChatComponentChildrenProps) {
     if (props.socket)
       props.socket.on('message', (message: MessageForm) => {
         setContainer([...container, message]);
-        // console.log(props.socket?.id);
+        console.log(message);
       });
   }, [props.socket]);
 
@@ -34,12 +34,18 @@ export function ChatScreenComponent(props: ChatComponentChildrenProps) {
         return (
           <div
             key={index}
-            className={
-              message.userId === props.userId ? 'message my' : 'message'
-            }
+            className={`${
+              message.user === props.userId ? 'message my' : 'message'
+            } ${message.user === 'admin' ? 'admin' : ''}`}
           >
-            <p className='userName'>{message.userId}</p>
-            <p>{message.text}</p>
+            {message.user === 'admin' || message.user === props.userId ? (
+              ''
+            ) : (
+              <p className='userName'>{message.user}</p>
+            )}
+            <div className='chat-text'>
+              <p>{message.text}</p>
+            </div>
             <div ref={scrollRef} />
           </div>
         );
