@@ -31,7 +31,7 @@ import {
   joinRoom,
   sendHistoryData,
   setHost,
-} from '../../functions/connect';
+} from '../functions/connect';
 
 function Draw() {
   //@ Connection's States
@@ -126,7 +126,7 @@ function Draw() {
     const context = { ...peerConnectionContext };
     context.token = token;
     context.eventSource = new EventSource(
-      `http://localhost:8080/connect?token=${token}`,
+      `${process.env.REACT_APP_RTC_URL}/connect?token=${token}`,
     );
 
     context.eventSource.addEventListener(

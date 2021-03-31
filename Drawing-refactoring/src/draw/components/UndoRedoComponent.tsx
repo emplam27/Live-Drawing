@@ -1,7 +1,7 @@
 import React from 'react';
 import '../index.css';
 import { UndoRedoComponentProps } from '../interfaces/undo-redo-interfaces';
-import { broadcast } from '../../../functions/draw';
+import { broadcast } from '../../functions/draw';
 
 function UndoRedoComponent(props: UndoRedoComponentProps) {
   function undoHistory(): void {

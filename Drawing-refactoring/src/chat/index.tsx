@@ -8,7 +8,7 @@ export function LiveRoomComponent() {
   const [userInfo, setUserInfo] = useState<UserInfo>();
   useEffect(() => {
     axios
-      .get(`/room/${roomId}`)
+      .get(`${process.env.REACT_APP_API_URL}/room/${roomId}`)
       .then((res: ResponseUserInfo) => setUserInfo(res.data));
   });
   userInfo;

@@ -16,7 +16,7 @@ export function FeedbackComponent(props: FeedbackComponentProps) {
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    axios.post('http://localhost:8080/feedback', feedbackForm).then((res) => {
+    axios.post(`${process.env.REACT_APP_API_URL}/feedback`, feedbackForm).then((res) => {
       if (res.data === 'success')
         MySwal.fire({
           title: <p>피드백 등록이 완료되었습니다. 감사합니다.</p>,

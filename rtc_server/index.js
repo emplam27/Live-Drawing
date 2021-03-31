@@ -172,18 +172,19 @@ async function disconnected(client) {
 }
 
 async function closeRoom(roomId, client) {
-  let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
-  console.log('no more peer in here');
-  let msg = JSON.stringify({
-    event: 'remove-peer',
-    data: {
-      peer: client.user,
-      roomId: roomId,
-    },
-  });
-  await redisClient.publish(`messages:${client.id}`, msg);
-  await redisClient.delAsync(`channels:${roomId}:host`);
-  return;
+  // let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
+  // console.log('no more peer in here');
+  // peerIds.map(async (peerId) => {});
+  // let msg = JSON.stringify({
+  //   event: 'remove-peer',
+  //   data: {
+  //     peer: client.user,
+  //     roomId: roomId,
+  //   },
+  // });
+  // await redisClient.publish(`messages:${client.id}`, msg);
+  // await redisClient.delAsync(`channels:${roomId}:host`);
+  // return;
 }
 
 async function setNewHost(roomId, hostId) {
@@ -398,6 +399,6 @@ app.post('/relay/:peerId/:event', auth, (req, res) => {
   return res.sendStatus(200);
 });
 
-server.listen(process.env.PORT || 8080, () => {
+server.listen(process.env.PORT || 7000, () => {
   console.log(`Started server on port ${server.address().port}`);
 });

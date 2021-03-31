@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Message, CanvasComponentProps } from '../interfaces/canvas-interfaces';
 import '../index.css';
-import { broadcast } from '../../../functions/draw';
+import { broadcast } from '../../functions/draw';
 
 const fabric = require('fabric').fabric;
 require('fabric-history');
