@@ -24,10 +24,6 @@ export function RoomListComponent() {
         </button>
       </Link> */}
       <div className='roomList'>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
-        <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'앵무새 그리기'}></EntranceComponent>
         {/* <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'라이언 그리기'}></EntranceComponent> */}
 
         {rooms.map((room: roomInfo, index: number) => {

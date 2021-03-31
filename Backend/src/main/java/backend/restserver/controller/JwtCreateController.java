@@ -26,7 +26,7 @@ public class JwtCreateController {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @PostMapping("/oauth/jwt/google")
+    @PostMapping("/api/oauth/jwt/google")
     public Map<String, Object> jwtCreate(@RequestBody Map<String, Object> data) {
         System.out.println("jwtCreate 실행됨");
         System.out.println(data.get("profileObj"));

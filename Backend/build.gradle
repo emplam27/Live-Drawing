@@ -12,6 +12,12 @@ repositories {
     mavenCentral()
 }
 
+bootJar {
+    archivesBaseName = 'hwabang'
+    archiveFileName = 'hwabang.jar'
+    archiveVersion = '0.0.0'
+}
+
 dependencies {
     // lombok
     compileOnly 'org.projectlombok:lombok:1.18.16'
