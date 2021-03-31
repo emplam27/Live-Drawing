@@ -5,18 +5,17 @@ import withReactContent from 'sweetalert2-react-content';
 import { useCustomDispatch, useCustomState } from '../../../context';
 
 export function LogoutComponent() {
-  const userState = useCustomState();
   const userDispatch = useCustomDispatch();
   const history = useHistory();
   const MySwal = withReactContent(Swal);
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    userDispatch({ type: 'SET_ID', id: '', token: '' });
+    userDispatch({ type: 'SET_ID', name: '', token: '' });
     localStorage.clear();
     MySwal.fire({
       title: <p>로그아웃 되셨습니다.</p>,
     });
-    history.push('/');
+    history.push('');
   };
   return (
     <button

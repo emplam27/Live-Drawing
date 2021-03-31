@@ -1,11 +1,11 @@
 import React, { useReducer, useContext, createContext, Dispatch } from 'react';
 
 type State = {
-  id: string;
+  name: string;
   token: string;
 };
 
-type Action = { type: 'SET_ID'; id: string; token: string };
+type Action = { type: 'SET_ID'; name: string; token: string };
 type DispatchType = Dispatch<Action>;
 
 const StateContext = createContext<State | null>(null);
@@ -16,7 +16,7 @@ const reducer = (state: State, action: Action): State => {
     case 'SET_ID':
       return {
         ...state,
-        id: action.id,
+        name: action.name,
         token: action.token,
       };
     default:
@@ -26,7 +26,7 @@ const reducer = (state: State, action: Action): State => {
 
 export function Provider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, {
-    id: '',
+    name: '',
     token: '',
   });
 

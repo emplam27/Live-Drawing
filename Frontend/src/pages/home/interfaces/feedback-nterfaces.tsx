@@ -1,8 +1,4 @@
 export interface FeedbackForm {
-  userName: string;
+  userName: string | null;
   text: string;
-}
-
-export interface FeedbackComponentProps {
-  userName: string;
 }

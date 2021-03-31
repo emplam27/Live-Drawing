@@ -5,8 +5,6 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './room-list.css';
 
-import { JumpToShowMoreRoomComponent } from './jump-buttons';
-
 export function RoomListComponent() {
   const [rooms, setRooms] = useState<roomInfo[]>([]);
   useEffect(() => {

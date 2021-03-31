@@ -11,7 +11,15 @@
 }
 
 .h-mainBox {
-  height:93vh;
+  height:92vh;
+}
+
+.h-nav {
+  height: 8vh;
+}
+
+.nav-bottom {
+  border-bottom: #cae2fd 2px solid;
 }
 
 /* https://cdn.pixabay.com/photo/2017/04/03/14/02/acrylic-paint-2198458_1280.jpg */
