@@ -14,17 +14,24 @@ export function SignInComponent() {
   const history = useHistory();
   const MySwal = withReactContent(Swal);
 
+  const config = {
+    headers: {
+      'Content-Type': 'application/json; charset-utf-8',
+    },
+  }; //! 서버에 token 넘겨줄때는 header로 넘겨준다.
+
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    axios.post('http://localhost:8080/login/google', res).then((res) => {
-      userDispatch({ type: 'SET_ID', id: res.data.id, token: res.data.token });
-      console.log(res.data.token);
-      localStorage.setItem('id', res.data.id);
-      localStorage.setItem('token', res.data.token);
-      if (res.data.token) {
+    console.log(res);
+    axios.post('/oauth/jwt/google', JSON.stringify(res), config).then((res) => {
+      userDispatch({ type: 'SET_ID', id: res.data.username, token: res.data.Authorization });
+      console.log(res);
+      localStorage.setItem('id', res.data.username);
+      localStorage.setItem('token', res.data.Authorization);
+      if (res.data.Authorization) {
         MySwal.fire({
           title: <p>로그인 되었습니다.</p>,
           text: '홈으로 돌아갑니다.',
-        }).then(() => history.push('/'));
+        }).then(() => history.push(''));
       }
     });
   };
@@ -38,11 +45,12 @@ export function SignInComponent() {
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     axios.post('http://localhost:8080/login', { email: userId, password: password }).then((res) => {
-      userDispatch({ type: 'SET_ID', id: res.data.id, token: res.data.token });
-      console.log(res.data.token);
-      localStorage.setItem('id', res.data.id);
-      localStorage.setItem('token', res.data.token);
-      if (res.data.token) {
+      console.log(res);
+      userDispatch({ type: 'SET_ID', id: res.data.username, token: res.data.Authorization });
+      console.log(userState);
+      localStorage.setItem('id', res.data.username);
+      localStorage.setItem('token', res.data.Authorization);
+      if (res.data.Authorization) {
         MySwal.fire({
           title: <p>로그인 되었습니다.</p>,
           text: '홈으로 돌아갑니다.',

@@ -1,19 +1,19 @@
 package backend.restserver.config.auth;
 
 
-// 시큐리티가 /login 주소 요청이 오면 낚아채서 로그인을 진행시킨다.
-// 로그인을 진행이 완료가 되면 시큐리티 session을 만들어 준다. (Security ContextHolder)
-// 시큐리티가 가지고 있는 세션에 들어갈 수 있는 오브젝트가 정해져 있다.
-// 오브젝트 => Authentication타입의 객체여야함.
-// Authentication안에 User정보가 있어야 됨.
+//* 시큐리티가 /login 주소 요청이 오면 낚아채서 로그인을 진행시킨다.
+//* 로그인을 진행이 완료가 되면 시큐리티 session을 만들어 준다. (Security ContextHolder)
+//* 시큐리티가 가지고 있는 세션에 들어갈 수 있는 오브젝트가 정해져 있다.
+//* 오브젝트 => Authentication타입의 객체여야함.
+//* Authentication안에 User정보가 있어야 됨.
 
-// User 오브젝트 타입은 UserDetails 타입객체다.
+//* User 오브젝트 타입은 UserDetails 타입객체다.
 
-// Security Session 영역이 있는데 여기들어갈 수 있는 객체가 Authentication 객체이다.
-// 그리고 이 Authentication 객체안에 User 정보를 등록할때 UserDetails 타입이여야 한다.
-// 그래서 나중에 꺼내쓸때는 시큐리티 세션에 있는걸 꺼내면 오쏀티케이션 객체가 나온다. 이 안에서 유저디테일즈 객체를 꺼내면
-// 유저 오브젝트에 접근할 수 있다.
-// 여기서 PrincipalDetails를 UserDetails를 임플리멘츠 하니까 프린시펄디테일즈를 오쏀티케이션 객체에 넣을 수 있다.
+//* Security Session 영역이 있는데 여기들어갈 수 있는 객체가 Authentication 객체이다.
+//* 그리고 이 Authentication 객체안에 User 정보를 등록할때 UserDetails 타입이여야 한다.
+//* 그래서 나중에 꺼내쓸때는 시큐리티 세션에 있는걸 꺼내면 오쏀티케이션 객체가 나온다. 이 안에서 유저디테일즈 객체를 꺼내면
+//* 유저 오브젝트에 접근할 수 있다.
+//* 여기서 PrincipalDetails를 UserDetails를 임플리멘츠 하니까 프린시펄디테일즈를 오쏀티케이션 객체에 넣을 수 있다.
 
 import backend.restserver.entity.User;
 import lombok.Data;
@@ -44,17 +44,29 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     }
 
     // 해당 User의 권한을 리턴하는 곳!!
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        Collection<GrantedAuthority> collect = new ArrayList<>();
+//        collect.add(new GrantedAuthority() {
+//            @Override
+//            public String getAuthority() {
+//                return user.getRoles();
+//            }
+//        });
+//        return collect;
+//    }
+
+    //! 다시 추가해보자
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collect = new ArrayList<>();
-        collect.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return user.getRole();
-            }
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        user.getRoleList().forEach(r-> {
+            System.out.println("r : " + r);
+            authorities.add(()->r);
         });
-        return collect;
+        return authorities;
     }
+
 
     @Override
     public String getPassword() {
@@ -63,7 +75,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override

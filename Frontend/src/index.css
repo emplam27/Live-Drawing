@@ -1,5 +1,12 @@
 @tailwind base;
 
+
+*{
+  padding:0;
+  margin:0;
+  box-sizing:border-box;
+}
+
 .font-apply {
   font-family: 'NanumSquareRound',sans-serif;
 }
@@ -37,7 +44,10 @@
 .backdrop {
   backdrop-filter: blur(2px);
 }
-
+/* 
+.img-room-host{
+  background-image: url('./image/naver-circle-fill.svg')
+} */
 
 @tailwind components;
 @tailwind utilities;

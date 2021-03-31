@@ -138,8 +138,9 @@ async function disconnected(client) {
     // console.log(roomHostId);
     if (client.id === roomHostId) {
       console.log('Host is Disconneting!!1!!!!!!!!!!!!!!!!!!!!');
-      await closeRoom(roomId);
+      await closeRoom(roomId, client);
       // await setNewHost(roomId, roomHostId);
+      return;
     }
   });
 
@@ -170,13 +171,19 @@ async function disconnected(client) {
   );
 }
 
-async function closeRoom(roomId) {
-  // let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
-  // if (peerIds.length <= 1) {
-  //   console.log('no more peer in here');
-  //   await redisClient.delAsync(`channels:${roomId}:host`);
-  //   return;
-  // }
+async function closeRoom(roomId, client) {
+  let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
+  console.log('no more peer in here');
+  let msg = JSON.stringify({
+    event: 'remove-peer',
+    data: {
+      peer: client.user,
+      roomId: roomId,
+    },
+  });
+  await redisClient.publish(`messages:${client.id}`, msg);
+  await redisClient.delAsync(`channels:${roomId}:host`);
+  return;
 }
 
 async function setNewHost(roomId, hostId) {

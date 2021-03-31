@@ -1,26 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import { useCustomState } from '../../context';
 import {
   JumpToCreateRoomComponent,
   JumpToFeedbackComponent,
   JumpToJoinComponent,
   JumpToLoginComponent,
+  JumpToShowMoreRoomComponent,
 } from './components/jump-buttons';
-import { RoomListComponet } from './components/room-list';
+import RoomCreateComponent from './components/room-create-form';
+import { RoomListComponent } from './components/room-list';
+import './Index.css';
 
 export function HomeComponent() {
+  const userState = useCustomState();
+  console.log(userState);
   return (
-    <div>
-      <div className='container flex divide-x-2 border-2 h-mainBox'>
-        <div className='flex-column bg-gradient-to-tr from-blue-300 to-blue-0 rounded-xl w-full m-1'>
-          <div className='flex'>
-            <div className='p-2'>라이브 강의</div>
-            <JumpToCreateRoomComponent></JumpToCreateRoomComponent>
+    <div className='container'>
+      <div className='lecture-container'>
+        <div className='titleAndButton'>
+          <div className='titleContainer'>
+            <div className='title'>
+              라이브 강의 &nbsp;
+              <i className='ri-live-fill'></i>
+            </div>
           </div>
-          <RoomListComponet></RoomListComponet>
         </div>
-        <div className='flex bg-gradient-to-tr from-blue-200 to-blue-0 rounded-xl w-full m-1'>
-          <div className='p-2'>준비중</div>
-        </div>
+        <RoomListComponent></RoomListComponent>
+        {/* <JumpToCreateRoomComponent></JumpToCreateRoomComponent>
+              &nbsp;
+              <JumpToShowMoreRoomComponent></JumpToShowMoreRoomComponent> */}
+        {/* <div className='rooms'> */}
+        {/* </div> */}
+      </div>
+      <div className='lecture-container'>
+        <div className='title'>드로잉 강의</div>
+        {/* <div className='rooms'> */}
+        <RoomListComponent></RoomListComponent>
+        {/* </div> */}
       </div>
     </div>
   );

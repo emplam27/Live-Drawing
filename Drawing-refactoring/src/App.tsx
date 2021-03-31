@@ -3,10 +3,10 @@ import { Switch, Route } from 'react-router-dom';
 import './App.css';
 import Draw from './pages/draw';
 import { ChatComponent } from './chat/components/chat';
-import { v4 as uuidv4 } from 'uuid';
 
 function App() {
-  const tempId = uuidv4();
+  const userId = localStorage.getItem('id');
+  console.log(userId);
 
   return (
     <div className='App'>
@@ -16,7 +16,8 @@ function App() {
         </Switch>
         <div className='side'>
           <div className='voice'></div>
-          <ChatComponent userId={tempId}></ChatComponent>
+          <div className='peers'></div>
+          <ChatComponent userId={userId}></ChatComponent>
         </div>
       </main>
     </div>
