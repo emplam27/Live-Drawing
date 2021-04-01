@@ -8,7 +8,7 @@ export function RoomListComponent() {
   const [rooms, setRooms] = useState<roomInfo[]>([]);
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}`).then((res: ResponseRoomInfo) => {
-      console.log(res.data);
+      // console.log(res.data);
       setRooms(res.data);
     });
   }, []);

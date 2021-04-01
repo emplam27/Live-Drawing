@@ -11,7 +11,7 @@ export function EntranceComponent(props: EntranceProps) {
   const userState = useCustomState();
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('name'));
-  console.log(userName, token);
+  // console.log(userName, token);
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
