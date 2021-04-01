@@ -28,24 +28,6 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
-<<<<<<< HEAD
-/* .btn-image-google {
-  background-image: url(./images/google-fill.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.btn-image-facebook {
-  background-image: url(./images/facebook-circle-fill.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.btn-image-naver {
-  background-image: url(./images/naver-circle-fill.svg);
-  background-size: contain;
-  background-repeat: no-repeat;
-} */
-=======
->>>>>>> c40571c8661053a2991829d8e63d5eceece12af6
 
 .backdrop {
   backdrop-filter: blur(2px);

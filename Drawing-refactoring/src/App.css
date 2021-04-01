@@ -18,7 +18,6 @@
   bottom: 0;
 }
 .voice {
-  border: black solid 2px;
   grid-row: 1/2;
 }
 

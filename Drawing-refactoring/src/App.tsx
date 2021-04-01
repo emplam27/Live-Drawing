@@ -25,7 +25,7 @@ function App() {
     <div className='App'>
       <main className='grid'>
         <Switch>
-          <Route exact path='/:roomKey' component={Drawing} />
+          <Route path='/live/:roomKey' component={Drawing} />
         </Switch>
       </main>
     </div>
