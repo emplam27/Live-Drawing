@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ToolSelectComponentProps,
   Tool,
@@ -45,10 +45,10 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
     // },
   ];
 
-  function changeActiveTool(tool: Tool): void {
-    props.setActiveTool(tool.name);
+  function changeActiveTool(toolName: string): void {
+    props.setActiveTool(toolName);
 
-    switch (tool.name) {
+    switch (toolName) {
       case 'pencil':
         // props.canvas.isDrawingMode = true;
         // brush = new fabric.PencilBrush();
@@ -77,6 +77,10 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
     }
   }
 
+  useEffect(() => {
+    changeActiveTool('pencil');
+  }, []);
+
   return (
     <>
       {Tools.map((tool) => {
@@ -87,7 +91,7 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
             className={`icon-link center ${
               props.activeTool === tool.name ? 'active' : ''
             }`}
-            onClick={() => changeActiveTool(tool)}
+            onClick={() => changeActiveTool(tool.name)}
           >
             <i className={`ri-2x ${tool.iconClass}`}></i>
           </p>

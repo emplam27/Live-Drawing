@@ -18,7 +18,7 @@ import ToolSelectComponent from './components/ToolSelectComponent';
 // import UndoRedoComponent from './components/UndoRedoComponent';
 
 // interfaces
-import { DrawData } from '../functions/draw-interfaces';
+import { DrawData } from './functions/draw-interfaces';
 import {
   CanvasCtxTable,
   Layer,
@@ -37,7 +37,7 @@ import {
   sendHistoryData,
   setHost,
   closeLive,
-} from '../functions/connect';
+} from './functions/connect';
 
 function Draw() {
   //@ Connection's States
@@ -66,7 +66,7 @@ function Draw() {
     is_host: false,
     hostId: null,
   });
-  const [onPeerDataSignal, setOnPeerDataSignal] = useState<string>();
+  const [onPeerDataSignal, setOnPeerDataSignal] = useState<string | null>(null);
   const [drawHistory, setDrawHistory] = useState<DrawData[]>([]);
   // const [readyToDrawHistorySignal, setReadyToDrawHistorySignal] = useState<
   //   number | null
@@ -159,8 +159,9 @@ function Draw() {
    * ========================================================
    */
 
+  //! data:any 수정
   function changeOnPeerDataSignal(_: string, data: string): void {
-    // console.log('========= onPeerData ==========');
+    // console.log('changeOnPeerDataSignal');
     setOnPeerDataSignal(data);
   }
 
@@ -225,16 +226,21 @@ function Draw() {
 
   //@ function: onPeerData
   useEffect(() => {
-    // if (canvas === null || onPeerDataSignal == '' || onPeerDataSignal == null)
-    //   return;
-    // const message = JSON.parse(onPeerDataSignal);
-    // onPeerData(message, canvas, peerConnectionContext);
+    if (onPeerDataSignal === null || !activeLayer || !activeLayer.canvasCtx)
+      return;
+    // console.log('========= useEffect :: onPeerData ==========');
+    // console.log(onPeerDataSignal === null);
+    // console.log(!activeLayer);
+    // console.log(!activeLayer?.canvasCtx);
+    const message = JSON.parse(onPeerDataSignal);
+    // console.log(message);
+    onPeerData(message, canvasCtxTable);
   }, [onPeerDataSignal]);
 
   //@ function: addPeer
   useEffect(() => {
     if (addPeerSignal === null) return;
-    // console.log('========= addPeer ==========');
+    console.log('========= addPeer ==========');
     const message = JSON.parse(addPeerSignal);
     if (peerConnectionContext.peers[message.peer.id]) return;
     addPeer(
@@ -275,7 +281,7 @@ function Draw() {
   //@ function: joinRoom
   useEffect(() => {
     if (joinRoomSignal === null) return;
-    // console.log('========= join ==========');
+    console.log('========= join ==========');
     joinRoom(peerConnectionContext);
   }, [joinRoomSignal]);
 

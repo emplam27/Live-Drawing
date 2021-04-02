@@ -1,4 +1,4 @@
-import { DrawData } from '../../functions/draw-interfaces';
+import { DrawData } from '../functions/draw-interfaces';
 import { PeerConnectionContext, CanvasCtxTable } from './index-interfaces';
 
 export interface Layer {
