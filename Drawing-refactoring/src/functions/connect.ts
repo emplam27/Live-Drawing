@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { PeerConnectionContext } from '../draw/interfaces/index-interfaces';
-import { broadcast, addObject, actionDrawHistory } from './draw';
+import { broadcast, actionDrawHistory } from './draw';
 
 export async function getToken(
   peerConnectionContext: PeerConnectionContext,
@@ -65,51 +65,25 @@ export function onPeerData(
 ): void {
   switch (message.event) {
     case 'object:added':
-      console.log('object:added');
-      addObject(message, canvas);
+      // console.log('object:added');
+      // addObject(message, canvas);
       // setDrawHistory([...drawHistory, message]);
       break;
 
     case 'undo':
-      console.log('undo');
-      canvas.undo();
+      // console.log('undo');
+      // canvas.undo();
       break;
 
     case 'redo':
-      console.log('redo');
-      canvas.redo();
+      // console.log('redo');
+      // canvas.redo();
       break;
 
     case 'history':
-      console.log('history');
-      actionDrawHistory(message, canvas, peerConnectionContext);
+    // console.log('history');
+    // actionDrawHistory(message, canvas, peerConnectionContext);
   }
-  // if (message.event === 'object:added') {
-  // } else if (message.event === 'drawRect') {
-  //   // drawRect(message, false, canvas);
-  // } else if (message.event === 'clear') {
-  //   // canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-  // } else if (
-  //   message.event === 'drawHistoryData' &&
-  //   peerConnectionContext.is_new
-  // ) {
-  // // TODO: 레이어 생성
-  // const newLayers: Layer[] = message.layers.map((layer: any) => {
-  //   return {
-  //     name: layer.name,
-  //     canvasId: layer.canvasId,
-  //     buttonId: layer.buttonId,
-  //     canvasCtx: null,
-  //   };
-  // });
-  // // TODO: 레이어 생성 완료되면 context data 변경
-  // setDrawHistory([...drawHistory, ...message.drawHistory]);
-  // const context = { ...peerConnectionContext };
-  // context.is_new = false;
-  // setPeerConnectionContext(context);
-  // // TODO: 레이어 생성 되면 useEffect 실행해서 지금까지 데이터 적기
-  // setActionHistorySignal(message.drawHistory);
-  // }
 }
 
 //! data:any 수정
@@ -222,9 +196,9 @@ export function iceCandidate(message: any, peerConnectionContext: any): void {
   peer.addIceCandidate(new RTCIceCandidate(message.data));
   // console.log(peer.iceGatheringState);
 
-  if (!peerConnectionContext.is_host && peerConnectionContext.is_new) {
-    requireDrawHistory(peerConnectionContext);
-  }
+  // if (!peerConnectionContext.is_host && peerConnectionContext.is_new) {
+  //   requireDrawHistory(peerConnectionContext);
+  // }
 }
 
 export async function joinRoom(peerConnectionContext: any): Promise<void> {
@@ -262,4 +236,8 @@ export function setHost(
   context.is_host = true;
   context.is_new = false;
   setPeerConnectionContext(context);
+}
+
+export function closeLive(setIsLiveClosed: any): void {
+  setIsLiveClosed(true);
 }

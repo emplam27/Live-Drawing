@@ -55,7 +55,7 @@ export default function RoomCreateComponent() {
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   };
   return (

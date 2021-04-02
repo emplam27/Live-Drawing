@@ -5,12 +5,10 @@ import { EraseSizeComponentProps } from '../interfaces/erase-size-interfaces';
 function EraseSizeComponent(props: EraseSizeComponentProps) {
   function changeEraserSize(e: React.ChangeEvent<HTMLInputElement>): void {
     props.setEraserWidth(Number(e.target.value));
-    // props.setCursorWidth(Number(e.target.value));
   }
 
   useEffect(() => {
-    if (!props.canvas || props.activeTool !== 'eraser') return;
-    props.canvas.freeDrawingBrush.width = props.eraserWidth;
+    if (props.activeTool !== 'eraser') return;
     props.setCursorWidth(props.eraserWidth);
   }, [props.eraserWidth]);
 

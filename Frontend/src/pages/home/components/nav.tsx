@@ -21,7 +21,7 @@ export function NavBarComponent() {
   };
 
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    axios.post('/oauth/jwt/google', JSON.stringify(res), config).then((res) => {
+    axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
       userDispatch({ type: 'SET_ID', name: res.data.username, token: res.data.Authorization });
       localStorage.setItem('name', res.data.username);
       localStorage.setItem('token', res.data.Authorization);

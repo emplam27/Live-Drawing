@@ -23,7 +23,7 @@ export function SignInComponent() {
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
       userDispatch({ type: 'SET_ID', name: res.data.username, token: res.data.Authorization });
-      console.log(res);
+      // console.log(res);
       localStorage.setItem('name', res.data.username);
       localStorage.setItem('token', res.data.Authorization);
       if (res.data.Authorization) {
@@ -44,9 +44,9 @@ export function SignInComponent() {
   const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     axios.post(`${process.env.REACT_APP_API_URL}/login`, { email: email, pasword: password }).then((res) => {
-      console.log(res);
+      // console.log(res);
       userDispatch({ type: 'SET_ID', name: res.data.username, token: res.data.Authorization });
-      console.log(userState);
+      // console.log(userState);
       localStorage.setItem('name', res.data.username);
       localStorage.setItem('token', res.data.Authorization);
       if (res.data.Authorization) {

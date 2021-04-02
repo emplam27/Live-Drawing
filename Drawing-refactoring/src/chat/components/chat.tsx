@@ -11,10 +11,10 @@ export function ChatComponent(props: ChatComponentProps) {
   const [roomData, setRoomData] = useState<RoomData>();
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const room = useParams<{ roomKey: string }>();
-  console.log(room);
+  // console.log(room);
 
   useEffect(() => {
-    const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
+    const socketIo = io(`${process.env.REACT_APP_HOMEPAGE5_URL}`, {
       transports: ['websocket'],
     });
 

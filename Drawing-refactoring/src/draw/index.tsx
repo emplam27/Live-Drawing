@@ -4,22 +4,27 @@ import { v4 as uuid } from 'uuid';
 import './index.css';
 
 // components
-import AddImageComponent from './components/AddImageComponent';
-import DeleteObjectComponent from './components/DeleteObjectComponent';
-import CursorToolComponent from './components/CursorToolComponent';
+// import AddImageComponent from './components/AddImageComponent';
+// import DeleteObjectComponent from './components/DeleteObjectComponent';
+// import CursorToolComponent from './components/CursorToolComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
 import ClosedFilterComponent from './components/ClosedFilterComponent';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
 import CursorComponent from './components/CursorComponent';
 import EraseSizeComponent from './components/EraseSizeComponent';
-import CanvasComponent from './components/CanvasComponent';
+import LayerComponent from './components/LayerComponent';
 import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
-import UndoRedoComponent from './components/UndoRedoComponent';
+// import UndoRedoComponent from './components/UndoRedoComponent';
 
 // interfaces
-import { DrawData } from './interfaces/draw-interfaces';
-import { Params, PeerConnectionContext } from './interfaces/index-interfaces';
+import { DrawData } from '../functions/draw-interfaces';
+import {
+  CanvasCtxTable,
+  Layer,
+  Params,
+  PeerConnectionContext,
+} from './interfaces/index-interfaces';
 
 import {
   getToken,
@@ -31,6 +36,7 @@ import {
   joinRoom,
   sendHistoryData,
   setHost,
+  closeLive,
 } from '../functions/connect';
 
 function Draw() {
@@ -61,7 +67,6 @@ function Draw() {
     hostId: null,
   });
   const [onPeerDataSignal, setOnPeerDataSignal] = useState<string>();
-  const [actionHistorySignal, setActionHistorySignal] = useState<Event[]>([]);
   const [drawHistory, setDrawHistory] = useState<DrawData[]>([]);
   // const [readyToDrawHistorySignal, setReadyToDrawHistorySignal] = useState<
   //   number | null
@@ -79,46 +84,27 @@ function Draw() {
     number | null
   >(null);
   const [setHostSignal, setSetHostSignal] = useState<number | null>(null);
+  const [closeLiveSignal, setCloseLiveSignal] = useState<number | null>(null);
 
   //@ Drawing's States
   const [activeTool, setActiveTool] = useState<string>('');
-  const [canvas, setCanvas] = useState<any>(null);
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
+  const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
+  const [layers, setLayers] = useState<Layer[]>([]);
+  const [layerCount, setLayerCount] = useState<number>(1);
+  // const [canvas, setCanvas] = useState<any>(null);
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const [color, setColor] = useState('#000000');
   const [cursorWidth, setCursorWidth] = useState(5);
   const [eraserWidth, setEraserWidth] = useState(30);
   const [lineWidth, setLineWidth] = useState(5);
   const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
-  // const [pathsry, setPathsry] = useState<point[][]>([]);
-  // const [points, setPoints] = useState<point[]>([]);
 
-  //! 하나의 ctx를 사용, 전역으로 사용하기 위해 Context API 사용
-  //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
-
-  // function drawPaths() {
-  //   // delete everything
-  //   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  //   // draw all the paths in the paths array
-  //   pathsry.forEach((path) => {
-  //     ctx.beginPath();
-  //     ctx.moveTo(path[0].x, path[0].y);
-  //     for (let i = 1; i < path.length; i++) {
-  //       ctx.lineTo(path[i].x, path[i].y);
-  //     }
-  //     ctx.stroke();
-  //     ctx.closePath();
-  //   });
-  // }
-
-  // function Undo() {
-  //   // remove the last path from the paths array
-  //   console.log('before drawpaths');
-  //   console.log(pathsry);
-  //   pathsry.splice(-1, 1);
-  //   // draw all the paths in the paths array
-  //   drawPaths();
-  //   console.log('after drawpaths');
-  //   console.log(pathsry);
-  // }
+  /*
+   * ========================================================
+   * ========================================================
+   */
 
   async function connectInit(): Promise<void> {
     // console.log('========= connect ==========');
@@ -160,11 +146,15 @@ function Draw() {
       changeSetHostSignal,
       false,
     );
+    context.eventSource.addEventListener(
+      'close-live',
+      changeCloseLiveSignal,
+      false,
+    );
     setPeerConnectionContext(context);
   }
 
   /*
-   * ========================================================
    * ========================================================
    * ========================================================
    */
@@ -215,8 +205,13 @@ function Draw() {
     setSetHostSignal(data.timeStamp);
   }
 
+  //! data:any 수정
+  function changeCloseLiveSignal(data: any): void {
+    // console.log('========== close live ==========');
+    setCloseLiveSignal(data.timeStamp);
+  }
+
   /*
-   * ========================================================
    * ========================================================
    * ========================================================
    */
@@ -230,17 +225,16 @@ function Draw() {
 
   //@ function: onPeerData
   useEffect(() => {
-    if (canvas === null || onPeerDataSignal == '' || onPeerDataSignal == null)
-      return;
-    const message = JSON.parse(onPeerDataSignal);
-    onPeerData(message, canvas, peerConnectionContext);
+    // if (canvas === null || onPeerDataSignal == '' || onPeerDataSignal == null)
+    //   return;
+    // const message = JSON.parse(onPeerDataSignal);
+    // onPeerData(message, canvas, peerConnectionContext);
   }, [onPeerDataSignal]);
 
   //@ function: addPeer
   useEffect(() => {
     if (addPeerSignal === null) return;
     // console.log('========= addPeer ==========');
-
     const message = JSON.parse(addPeerSignal);
     if (peerConnectionContext.peers[message.peer.id]) return;
     addPeer(
@@ -288,16 +282,9 @@ function Draw() {
   //@ function: sendHistoryData
   useEffect(() => {
     if (sendHistoryDataSignal === null) return;
-    console.log('========= sendHistoryData ==========');
-    if (!peerConnectionContext.is_host) {
-      console.log('나는 호스트가 아니야');
-      return;
-    }
-    // console.log(canvas.historyNextState);
-    // console.log(canvas.historyRedo);
-    // console.log(canvas.historyUndo);
-    // console.log(JSON.stringify(canvas));
-    sendHistoryData(canvas, peerConnectionContext);
+    // console.log('========= sendHistoryData ==========');
+    if (!peerConnectionContext.is_host) return;
+    // sendHistoryData(canvas, peerConnectionContext);
   }, [sendHistoryDataSignal]);
 
   //@ function: setHost
@@ -307,14 +294,17 @@ function Draw() {
     setHost(peerConnectionContext, setPeerConnectionContext);
   }, [setHostSignal]);
 
+  //@ function: closeLive
+  useEffect(() => {
+    if (closeLiveSignal === null) return;
+    console.log('========== closeLive ==========');
+    closeLive(setIsLiveClosed);
+  }, [closeLiveSignal]);
+
   //@ function: connectInit
   useEffect(() => {
     connectInit();
   }, []);
-
-  // useEffect(() => {
-  //   console.log(drawHistory);
-  // }, [drawHistory]);
 
   return (
     <div className='drawComponent'>
@@ -326,59 +316,47 @@ function Draw() {
       <div className='flush vstack'>
         <div className='menubar hstack'>
           <div className='spacer'></div>
-          <CursorToolComponent
+          {/* <CursorToolComponent
             activeTool={activeTool}
-            canvas={canvas}
             setActiveTool={setActiveTool}
             setCursorWidth={setCursorWidth}
           />
           <DeleteObjectComponent canvas={canvas} />
           <AddImageComponent canvas={canvas} />
-          <div className='spacer'></div>
+          <div className='spacer'></div> */}
 
           <ToolSelectComponent
             activeTool={activeTool}
-            canvas={canvas}
             color={color}
             eraserWidth={eraserWidth}
             lineWidth={lineWidth}
             setActiveTool={setActiveTool}
-            setCanvas={setCanvas}
             setCursorWidth={setCursorWidth}
           />
-          <UndoRedoComponent
+          {/* <UndoRedoComponent
             canvas={canvas}
             peerConnectionContext={peerConnectionContext}
-          />
+          /> */}
           {activeTool !== 'eraser' ? (
             <LineSizeComponent
               activeTool={activeTool}
-              canvas={canvas}
               cursorWidth={cursorWidth}
               lineWidth={lineWidth}
-              setCanvas={setCanvas}
               setCursorWidth={setCursorWidth}
               setLineWidth={setLineWidth}
             />
           ) : (
             <EraseSizeComponent
               activeTool={activeTool}
-              canvas={canvas}
               cursorWidth={cursorWidth}
               eraserWidth={eraserWidth}
-              setCanvas={setCanvas}
               setCursorWidth={setCursorWidth}
               setEraserWidth={setEraserWidth}
             />
           )}
 
           <div className='spacer'></div>
-          <ColorPaletteComponent
-            canvas={canvas}
-            color={color}
-            setCanvas={setCanvas}
-            setColor={setColor}
-          />
+          <ColorPaletteComponent color={color} setColor={setColor} />
           <div className='spacer'></div>
 
           <CloseButtonComponent
@@ -386,13 +364,22 @@ function Draw() {
             setIsLiveClosed={setIsLiveClosed}
           />
         </div>
-        <CanvasComponent
+        <LayerComponent
           activeTool={activeTool}
-          canvas={canvas}
+          activeLayer={activeLayer}
+          canvasCtxTable={canvasCtxTable}
+          color={color}
           drawHistory={drawHistory}
+          eraserWidth={eraserWidth}
+          layerCount={layerCount}
+          layers={layers}
+          lineWidth={lineWidth}
           peerConnectionContext={peerConnectionContext}
-          setCanvas={setCanvas}
+          setActiveLayer={setActiveLayer}
+          setCanvasCtxTable={setCanvasCtxTable}
           setDrawHistory={setDrawHistory}
+          setLayerCount={setLayerCount}
+          setLayers={setLayers}
         />
       </div>
     </div>

@@ -18,7 +18,7 @@ const server = http.createServer(app);
 const io = socket(server);
 
 io.on('connection', (socket) => {
-  console.log('소켓 연결 완료');
+  // console.log('소켓 연결 완료');
 
   socket.on('join', (message) => {
     const user = addUser({
@@ -51,7 +51,7 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     const user = removeUser(socket.id);
-    console.log('유저의 연결이 끊어졌습니다.');
+    // console.log('유저의 연결이 끊어졌습니다.');
     if (user) {
       io.to(user.room).emit('message', {
         userId: user.name,
@@ -138,7 +138,7 @@ async function disconnected(client) {
     // console.log(roomHostId);
     if (client.id === roomHostId) {
       console.log('Host is Disconneting!!1!!!!!!!!!!!!!!!!!!!!');
-      await closeRoom(roomId, client);
+      await closeRoom(roomId);
       // await setNewHost(roomId, roomHostId);
       return;
     }
@@ -163,7 +163,7 @@ async function disconnected(client) {
       await Promise.all(
         peerIds.map(async (peerId) => {
           if (peerId !== client.id) {
-            await redisClient.publish(`messages:${peerId}`, msg);
+            redisClient.publish(`messages:${peerId}`, msg);
           }
         })
       );
@@ -171,46 +171,39 @@ async function disconnected(client) {
   );
 }
 
-async function closeRoom(roomId, client) {
-  // let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
-  // console.log('no more peer in here');
-  // peerIds.map(async (peerId) => {});
-  // let msg = JSON.stringify({
-  //   event: 'remove-peer',
-  //   data: {
-  //     peer: client.user,
-  //     roomId: roomId,
-  //   },
-  // });
-  // await redisClient.publish(`messages:${client.id}`, msg);
-  // await redisClient.delAsync(`channels:${roomId}:host`);
-  // return;
-}
-
-async function setNewHost(roomId, hostId) {
+async function closeRoom(roomId) {
   let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
-  console.log('========== index.js :: setNewHost ==========');
-  console.log("peerIds ::'", peerIds, "', roomId ::'", roomId, "', hostId ::'", hostId, "'");
-
-  if (peerIds.length <= 1) {
-    console.log('no more peer in here');
-    await redisClient.delAsync(`channels:${roomId}:host`);
-    return;
-  }
-
-  console.log('another peer in here');
-  for (peerId in peerIds) {
-    if (peerId === hostId) continue;
-    await setHost(roomId, peerId);
-    break;
-  }
+  let msg = JSON.stringify({
+    event: 'close-live',
+    data: {
+      roomId: roomId,
+    },
+  });
+  peerIds.map(async (peerId) => {
+    redisClient.publish(`messages:${peerId}`, msg);
+  });
+  await redisClient.delAsync(`channels:${roomId}:host`);
+  await redisClient.delAsync(`channels:${roomId}`);
+  return;
 }
+
+// async function setNewHost(roomId, hostId) {
+//   let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
+//   if (peerIds.length <= 1) {
+//     console.log('no more peer in here');
+//     await redisClient.delAsync(`channels:${roomId}:host`);
+//     return;
+//   }
+//   console.log('another peer in here');
+//   for (peerId in peerIds) {
+//     if (peerId === hostId) continue;
+//     await setHost(roomId, peerId);
+//     break;
+//   }
+// }
 
 async function setHost(roomId, peerId) {
-  console.log('========== setHost 요청을 보냄` ==========');
-  console.log('roomId ::"', roomId, '", peerId ::"', peerId, '"');
-
-  await redisClient.publish(
+  redisClient.publish(
     `messages:${peerId}`,
     JSON.stringify({
       event: 'set-host',
@@ -221,53 +214,34 @@ async function setHost(roomId, peerId) {
 }
 
 function auth(req, res, next) {
-  // console.log('========== index.js :: auth ==========');
   let token;
   if (req.headers.authorization) {
     token = req.headers.authorization.split(' ')[1];
   } else if (req.query.token) {
     token = req.query.token;
   }
-  if (typeof token !== 'string') {
-    return res.sendStatus(401);
-  }
+  if (typeof token !== 'string') return res.sendStatus(401);
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (err) {
-      return res.sendStatus(403);
-    }
+    if (err) return res.sendStatus(403);
     req.user = user;
     next();
   });
 }
 
-app.get('/', (req, res) => {
-  // console.log('========== index.js :: GET :: / ==========');
-  let id = (app.locals.index++).toString(36);
-  res.redirect(`/${id}`);
-});
-
 app.post('/access', (req, res) => {
-  // console.log('========== index.js :: POST :: /access ==========');
-  if (!req.body.username) {
-    return res.sendStatus(403);
-  }
+  if (!req.body.username) return res.sendStatus(403);
 
   const user = {
     id: uuid.v4(),
     username: req.body.username,
   };
-
   const token = jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '3600s' });
   return res.json({ token });
 });
 
 app.get('/connect', auth, (req, res) => {
-  // console.log('========== index.js :: GET :: /connect ==========');
-
-  if (req.headers.accept !== 'text/event-stream') {
-    return res.sendStatus(404);
-  }
+  if (req.headers.accept !== 'text/event-stream') return res.sendStatus(404);
 
   // write the event stream headers
   res.setHeader('Cache-Control', 'no-cache');
@@ -286,9 +260,6 @@ app.get('/connect', auth, (req, res) => {
       res.write(`data: ${JSON.stringify(data)}\n\n`);
     },
   };
-
-  // console.log('GET :: /connect  :: clients');
-  // console.log(clients);
 
   // cache the current connection until it disconnects
   clients[client.id] = client;
@@ -314,45 +285,23 @@ app.get('/connect', auth, (req, res) => {
 });
 
 app.post('/:roomId/join', auth, async (req, res) => {
-  // console.log('========== index.js :: POST :: /:roomId/join ==========');
-
   let roomId = req.params.roomId;
-
-  // console.log('req.user.id ::', req.user.id);
   await redisClient.saddAsync(`${req.user.id}:channels`, roomId);
-
   let peerIds = await redisClient.smembersAsync(`channels:${roomId}`);
-  // console.log('roomId ::', roomId);
-  // console.log('peerIds ::', peerIds);
 
   // 호스트를 만드는 이벤트
   if (peerIds.length == 0) {
     await setHost(roomId, req.user.id);
-    // console.log('========== Host Id ::', req.user.id, '==========');
-    // console.log(req.user.id);
-    // console.log(typeof req.user.id);
-    // console.log(roomId);
-    // console.log(typeof roomId);
-    // host 아이디 저장
-    // console.log('111111111111111111111111111111111111111111');
-    // await redisClient.setAsync(`channels:${roomId}:host`, req.user.id);
-    // console.log(typeof req.user.id);
-    // console.log('111111111111111111111111111111111111111111');
     await redisClient.saddAsync(`channels:${roomId}`, req.user.id);
-    // console.log('111111111111111111111111111111111111111111');
     return res.sendStatus(200);
   }
 
   let hostId = await redisClient.getAsync(`channels:${roomId}:host`);
-  if (!peerIds.includes(hostId)) {
-    setHost(roomId, peerIds[0]);
-  }
+  // if (!peerIds.includes(hostId)) {
+  //   setHost(roomId, peerIds[0]);
+  // }
 
-  // console.log(typeof req.user.id);
-  // console.log(typeof req.user.id);
-  // console.log('========== 가져온 Host Id ::', hostId, '==========');
   peerIds.forEach((peerId) => {
-    // console.log('publish :: addpeer');
     redisClient.publish(
       `messages:${peerId}`,
       JSON.stringify({
@@ -384,9 +333,6 @@ app.post('/:roomId/join', auth, async (req, res) => {
 });
 
 app.post('/relay/:peerId/:event', auth, (req, res) => {
-  // console.log('========== index.js :: POST :: /relay/:peerId/:event ==========');
-  // console.log('event :: "', req.params.event, '", peerId ::"', req.params.peerId, '"');
-
   let peerId = req.params.peerId;
   let msg = {
     event: req.params.event,

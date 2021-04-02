@@ -1,5 +1,5 @@
-export interface Params {
-  roomKey: string;
+export interface CanvasCtxTable {
+  [key: string]: CanvasRenderingContext2D;
 }
 
 export interface Layer {
@@ -7,6 +7,10 @@ export interface Layer {
   canvasId: string;
   buttonId: string;
   canvasCtx: any | null;
+}
+
+export interface Params {
+  roomKey: string;
 }
 
 export interface PeerConnectionContext {
