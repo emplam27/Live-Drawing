@@ -10,8 +10,8 @@ function LayerComponent(props: LayerComponentProps) {
   );
 
   function createLayer() {
-    if ((props.layers, length > 50)) {
-      console.log('layer가 50개가 넘어서 못 만들어.');
+    if (!props.peerConnectionContext.is_host && props.layers.length > 1) {
+      console.log('host 아니면 두개까지만');
       return;
     }
 
@@ -94,34 +94,43 @@ function LayerComponent(props: LayerComponentProps) {
           delete layer
         </button>
         <div id='layerButtonContainer'>
-          {props.layers.map((layer) => {
-            return (
-              <span
-                key={layer.name}
-                id={layer.buttonId}
-                className={`layer_space ${
-                  props.activeLayer != null &&
-                  props.activeLayer.name === layer.name
-                    ? 'active-layer'
-                    : ''
-                }`}
-                onClick={() => selectActiveLayer(layer)}
-              >
-                {layer.name}
-              </span>
-            );
+          {props.layers.map((layer, index) => {
+            if (index !== 0)
+              return (
+                <span
+                  key={layer.name}
+                  id={layer.buttonId}
+                  className={`layer_space ${
+                    props.activeLayer != null &&
+                    props.activeLayer.name === layer.name
+                      ? 'active-layer'
+                      : ''
+                  }`}
+                  onClick={() => selectActiveLayer(layer)}
+                >
+                  {layer.name}
+                </span>
+              );
           })}
         </div>
       </div>
-      <div id='canvasContainer' className='spacer app relative'>
-        {props.layers.map((layer) => {
+      <div
+        id='canvasContainer'
+        className='spacer app relative divide-x-2 divide-black canvas-container'
+      >
+        {props.layers.map((layer, index) => {
           return (
             <canvas
               key={layer.name}
               id={layer.canvasId}
-              className={'layer'}
-              width={window.innerWidth * 0.8}
-              height={window.innerHeight - 64}
+              className={`${index === 0 ? 'layer-right' : 'layer-left'} ${
+                props.activeLayer !== null &&
+                props.activeLayer.canvasId !== layer.canvasId
+                  ? 'hide'
+                  : 'show'
+              }`}
+              width={window.innerWidth * 0.4}
+              height={window.innerHeight * 0.8}
               onMouseDown={(e) => mouseDown(e)}
               onMouseMove={(e) =>
                 mouseMove(

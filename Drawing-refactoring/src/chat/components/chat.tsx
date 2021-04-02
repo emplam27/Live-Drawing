@@ -8,35 +8,15 @@ import { RoomData } from '../interfaces/room-data';
 import './chat.css';
 
 export function ChatComponent(props: ChatComponentProps) {
-  const [roomData, setRoomData] = useState<RoomData>();
-  const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
-  const room = useParams<{ roomKey: string }>();
-  // console.log(room);
-
-  useEffect(() => {
-    const socketIo = io(`${process.env.REACT_APP_HOMEPAGE5_URL}`, {
-      transports: ['websocket'],
-    });
-
-    socketIo.emit('join', { userId: props.userId, room: room.roomKey });
-
-    socketIo.on('roomData', (message: RoomData) => {
-      setRoomData(message);
-    });
-    socketIo.on('connect', () => {
-      setSocket(socketIo);
-    });
-  }, []);
-
   return (
     <div className='chatContainer'>
       <ChatScreenComponent
-        userId={props.userId}
-        socket={socket}
+        userName={props.userName}
+        socket={props.socket}
       ></ChatScreenComponent>
       <ChatInputComponent
-        userId={props.userId}
-        socket={socket}
+        userName={props.userName}
+        socket={props.socket}
       ></ChatInputComponent>
     </div>
   );

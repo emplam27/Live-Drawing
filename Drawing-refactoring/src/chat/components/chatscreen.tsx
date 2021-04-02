@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { ChatComponentChildrenProps } from '../interfaces/chat-component-props-interface';
+import { ChatComponentProps } from '../interfaces/chat-component-props-interface';
 import { MessageForm } from '../interfaces/message-form-interface';
 import './chat.css';
 
-export function ChatScreenComponent(props: ChatComponentChildrenProps) {
+export function ChatScreenComponent(props: ChatComponentProps) {
   const [screen, setScreen] = useState<MessageForm[]>([]);
   const [container, setContainer] = useState<MessageForm[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -35,10 +35,10 @@ export function ChatScreenComponent(props: ChatComponentChildrenProps) {
           <div
             key={index}
             className={`${
-              message.user === props.userId ? 'message my' : 'message'
+              message.user === props.userName ? 'message my' : 'message'
             } ${message.user === 'admin' ? 'admin' : ''}`}
           >
-            {message.user === 'admin' || message.user === props.userId ? (
+            {message.user === 'admin' || message.user === props.userName ? (
               ''
             ) : (
               <p className='userName'>{message.user}</p>

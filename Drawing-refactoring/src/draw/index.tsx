@@ -63,7 +63,7 @@ function Draw() {
     peers: {},
     channels: {},
     is_new: true,
-    is_host: false,
+    is_host: true,
     hostId: null,
   });
   const [onPeerDataSignal, setOnPeerDataSignal] = useState<string>();
@@ -92,7 +92,7 @@ function Draw() {
   const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
   const [layers, setLayers] = useState<Layer[]>([]);
-  const [layerCount, setLayerCount] = useState<number>(1);
+  const [layerCount, setLayerCount] = useState<number>(0);
   // const [canvas, setCanvas] = useState<any>(null);
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const [color, setColor] = useState('#000000');

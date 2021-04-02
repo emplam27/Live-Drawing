@@ -1,7 +1,4 @@
 export interface ChatComponentProps {
-  userId: string | null;
-}
-
-export interface ChatComponentChildrenProps extends ChatComponentProps {
+  userName: string;
   socket: SocketIOClient.Socket | null;
 }

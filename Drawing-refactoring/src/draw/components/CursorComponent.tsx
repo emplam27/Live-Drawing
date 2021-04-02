@@ -11,6 +11,7 @@ function CursorComponent(props: CursorComponentProps) {
 
   const onMouseMove = (e: MouseEvent): void => {
     setPosition({ x: e.clientX, y: e.clientY });
+    console.log({ x: e.clientX, y: e.clientY });
   };
 
   const onMouseLeave = (): void => {
