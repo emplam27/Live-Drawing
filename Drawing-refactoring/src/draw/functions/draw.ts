@@ -1,10 +1,8 @@
-import { DrawData, EraseData, Point, RectData } from './draw-interfaces';
-import { PeerConnectionContext } from '../draw/interfaces/index-interfaces';
-import { Layer } from '../draw/interfaces/layer-interfaces';
-// import { Layer } from '../pages/draw/interfaces/canvas-interfaces';
+import { DrawData, EraseData, Point } from './draw-interfaces';
+import { PeerConnectionContext } from '../interfaces/index-interfaces';
+import { Layer } from '../interfaces/layer-interfaces';
 
 let lastPoint: Point | null;
-let originPoint: Point | null;
 
 export function actionDrawHistory(
   message: any,
@@ -34,7 +32,7 @@ export function mouseDown(
   e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
 ): void {
   // console.log('down');
-  originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+  lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
   // points = [];
   // points.push(originPoint);
 }
@@ -46,7 +44,7 @@ export function mouseMove(
   color: string,
   lineWidth: number,
   eraserWidth: number,
-  // peerConnectionContext: PeerConnectionContext,
+  peerConnectionContext: PeerConnectionContext,
   // drawHistory: DrawData[],
   // setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>,
 ): void {
@@ -60,59 +58,55 @@ export function mouseMove(
 
   if (!lastPoint) {
     lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
-    originPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
     return;
   }
 
+  const currentPoint: Point = {
+    x: e.nativeEvent.offsetX,
+    y: e.nativeEvent.offsetY,
+  };
   switch (activeTool) {
     case 'pencil':
-      const data = {
-        event: 'draw',
+      // console.log('mouseMove :: pencil');
+      const drawData: DrawData = {
+        event: 'pencil',
         canvasId: activeLayer.canvasId,
         lastPoint: lastPoint,
-        x: e.nativeEvent.offsetX,
-        y: e.nativeEvent.offsetY,
+        currentPoint: currentPoint,
         color: color,
         lineWidth: lineWidth,
       };
-      draw(data, activeLayer.canvasCtx);
-      // broadcast(JSON.stringify(data), peerConnectionContext);
+      draw(drawData, activeLayer.canvasCtx);
+      broadcast(JSON.stringify(drawData), peerConnectionContext);
       // setDrawHistory([...drawHistory, data]);
       break;
+
     case 'eraser':
-      erase(
-        {
-          lastPoint,
-          x: e.nativeEvent.offsetX,
-          y: e.nativeEvent.offsetY,
-          r: eraserWidth,
-        },
-        activeLayer.canvasCtx,
-      );
+      const eraserData = {
+        event: 'eraser',
+        canvasId: activeLayer.canvasId,
+        currentPoint: currentPoint,
+        r: eraserWidth,
+      };
+      erase(eraserData, activeLayer.canvasCtx);
+      broadcast(JSON.stringify(eraserData), peerConnectionContext);
       break;
   }
   lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
 }
 
-export function mouseUp(
-  canvasCtx: any | null,
-  peerConnectionContext: PeerConnectionContext,
-  drawHistory: DrawData[],
-  setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>,
-): void {
+export function mouseUp(): void {
   lastPoint = null;
-  originPoint = null;
 }
 
 export function draw(data: DrawData, canvasCtx: any): void {
-  // console.log(canvasCtxs);
   // console.log('draw');
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
   // points.push({ x: data.x, y: data.y });
   canvasCtx.beginPath();
   canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
-  canvasCtx.lineTo(data.x, data.y);
+  canvasCtx.lineTo(data.currentPoint.x, data.currentPoint.y);
   canvasCtx.strokeStyle = data.color;
   canvasCtx.lineWidth = data.lineWidth;
   canvasCtx.stroke();
@@ -120,9 +114,9 @@ export function draw(data: DrawData, canvasCtx: any): void {
 }
 
 export function erase(data: EraseData, canvasCtx: any): void {
-  console.log('erase');
-  const x = data.x;
-  const y = data.y;
+  // console.log('erase');
+  const x = data.currentPoint.x;
+  const y = data.currentPoint.y;
   const r = data.r / 2;
   for (let i = 0; i < Math.round(Math.PI * r); i++) {
     const angle = (i / Math.round(Math.PI * r)) * 360;

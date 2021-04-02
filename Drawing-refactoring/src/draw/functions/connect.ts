@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { PeerConnectionContext } from '../draw/interfaces/index-interfaces';
-import { broadcast, actionDrawHistory } from './draw';
+import { createPartiallyEmittedExpression } from 'typescript';
+import { PeerConnectionContext } from '../interfaces/index-interfaces';
+import { broadcast, actionDrawHistory, draw, erase } from './draw';
 
 export async function getToken(
   peerConnectionContext: PeerConnectionContext,
@@ -58,26 +59,27 @@ async function createOffer(
   await relay(peerId, 'session-description', offer, token);
 }
 
-export function onPeerData(
-  message: any,
-  canvas: any,
-  peerConnectionContext: any,
-): void {
+export function onPeerData(message: any, canvasCtxTable: any): void {
+  // console.log('onPeerData');
+  // console.log(canvasCtxTable);
+  const canvasCtx: CanvasRenderingContext2D = canvasCtxTable[message.canvasId];
+  if (!canvasCtx) return;
   switch (message.event) {
-    case 'object:added':
-      // console.log('object:added');
-      // addObject(message, canvas);
-      // setDrawHistory([...drawHistory, message]);
+    case 'pencil':
+      // console.log('onPeerData :: pencil');
+      draw(message, canvasCtx);
       break;
 
-    case 'undo':
+    case 'eraser':
       // console.log('undo');
       // canvas.undo();
+      erase(message, canvasCtx);
       break;
 
-    case 'redo':
+    case 'create-layer':
       // console.log('redo');
       // canvas.redo();
+
       break;
 
     case 'history':

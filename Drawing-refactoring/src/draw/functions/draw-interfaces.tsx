@@ -3,19 +3,20 @@ export interface Point {
   y: number;
 }
 
-export interface DrawData extends Point {
+export interface DrawData {
   event: string;
   canvasId: string;
   lastPoint: Point;
-  x: number;
-  y: number;
+  currentPoint: Point;
   color: string;
   lineWidth: number;
 }
 
-export interface EraseData extends Point {
+export interface EraseData {
+  event: string;
+  canvasId: string;
+  currentPoint: Point;
   r: number;
-  lastPoint: Point;
 }
 
 export interface RectData {

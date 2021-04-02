@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Layer } from '../interfaces/index-interfaces';
 import { LayerComponentProps } from '../interfaces/layer-interfaces';
 import '../index.css';
-import { mouseDown, mouseMove, mouseUp } from '../../functions/draw';
+import { broadcast, mouseDown, mouseMove, mouseUp } from '../functions/draw';
+import { v4 as uuid } from 'uuid';
 
 function LayerComponent(props: LayerComponentProps) {
   const [createLayerSignal, setCreateLayerSignal] = useState<number | null>(
@@ -16,10 +17,11 @@ function LayerComponent(props: LayerComponentProps) {
     }
 
     // console.log('create layer');
+    const layerId: string = uuid();
     const newLayer: Layer = {
-      name: `layer-${props.layerCount}`,
-      canvasId: `layer-id-${props.layerCount}`,
-      buttonId: `layer-id-${props.layerCount}-button`,
+      name: `layer-${layerId}`,
+      canvasId: `layer-id-${layerId}`,
+      buttonId: `layer-id-${layerId}-button`,
       canvasCtx: null,
     };
 
@@ -28,8 +30,17 @@ function LayerComponent(props: LayerComponentProps) {
       props.setActiveLayer(newLayer);
     }
     props.setLayers([...props.layers, newLayer]);
-    props.setLayerCount(props.layerCount + 1);
+    // props.setLayerCount(props.layerCount + 1);
     setCreateLayerSignal(new Date().getTime());
+
+    //! broadcast :: createLayer
+    console.log('broadcast :: createLayer');
+    const message = {
+      event: 'create-layer',
+      canvasId: layerId,
+    };
+    broadcast(JSON.stringify(message), props.peerConnectionContext);
+    //! broadcast :: deleteLayer
   }
 
   function deleteLayer() {
@@ -41,6 +52,16 @@ function LayerComponent(props: LayerComponentProps) {
       if (props.activeLayer != null && layer.name === props.activeLayer.name)
         index = i;
     });
+
+    //! broadcast :: deleteLayer
+    console.log('broadcast :: createLayer');
+    const message = {
+      event: 'delete-layer',
+      canvasId: props.layers[index].canvasId,
+    };
+    broadcast(JSON.stringify(message), props.peerConnectionContext);
+    //! broadcast :: deleteLayer
+
     props.layers.splice(index, 1);
     props.setLayers(props.layers);
 
@@ -54,7 +75,7 @@ function LayerComponent(props: LayerComponentProps) {
   }
 
   useEffect(() => {
-    console.log(props.layers);
+    // console.log(props.layers);
     // 마지막에 추가되는 canvas에 대해서 layers에 ctx 저장하기
     const layersLength: number = props.layers.length;
     if (layersLength === 0 || createLayerSignal === null) return;
@@ -69,7 +90,9 @@ function LayerComponent(props: LayerComponentProps) {
       );
       if (!canvas) continue;
 
-      const ctx = (canvas as HTMLCanvasElement).getContext('2d');
+      const ctx: CanvasRenderingContext2D | null = (canvas as HTMLCanvasElement).getContext(
+        '2d',
+      );
       if (!ctx) continue;
 
       // layer와 CanvasCtxTable에 ctx 추가하기
@@ -78,7 +101,6 @@ function LayerComponent(props: LayerComponentProps) {
     }
     props.setLayers(tmpLayers);
     props.setCanvasCtxTable(tmpCanvasCtxTable);
-    selectActiveLayer(props.layers[layersLength - 1]);
   }, [createLayerSignal]);
 
   useEffect(() => {
@@ -140,18 +162,17 @@ function LayerComponent(props: LayerComponentProps) {
                   props.color,
                   props.lineWidth,
                   props.eraserWidth,
-                  // props.peerConnectionContext,
+                  props.peerConnectionContext,
                   // props.drawHistory,
                   // props.setDrawHistory,
                 )
               }
-              onMouseUp={() =>
-                mouseUp(
-                  (props.activeLayer as Layer).canvasCtx,
-                  props.peerConnectionContext,
-                  props.drawHistory,
-                  props.setDrawHistory,
-                )
+              onMouseUp={
+                () => mouseUp()
+                // (props.activeLayer as Layer).canvasCtx,
+                // props.peerConnectionContext,
+                // props.drawHistory,
+                // props.setDrawHistory,
               }
             />
           );
