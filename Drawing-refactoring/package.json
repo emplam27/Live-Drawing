@@ -8,13 +8,15 @@
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.8.3",
     "@types/fabric": "^4.2.3",
-    "@types/jest": "^26.0.21",
     "@types/node": "^12.20.6",
     "@types/react-dom": "^17.0.2",
     "@types/react-router": "^5.1.13",
     "@types/react-router-dom": "^5.1.7",
     "@types/socket.io-client": "^1.4.36",
+    "agora-rtc-sdk-ng": "^4.3.0",
     "axios": "^0.21.1",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
     "fabric": "^4.3.1",
     "fabric-brush": "^0.0.1",
     "fabric-history": "^1.6.0",
@@ -22,17 +24,18 @@
     "react-dom": "^17.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
+    "socket.io": "^4.0.1",
     "socket.io-client": "^4.0.0",
     "sweetalert2": "^10.15.7",
     "sweetalert2-react-content": "^3.3.1",
-    "typescript": "^4.2.3",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
     "start": "set PORT=4000 && craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "devStart": "nodemon server.js"
   },
   "eslintConfig": {
     "extends": [
@@ -55,7 +58,10 @@
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.4",
     "@types/classnames": "^2.2.11",
+    "@types/jest": "^26.0.22",
     "@types/react": "^17.0.3",
+    "@types/react-native": "^0.64.2",
+    "@types/react-test-renderer": "^17.0.1",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.17.0",
     "@typescript-eslint/parser": "^4.17.0",
@@ -66,10 +72,12 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "nodemon": "^2.0.7",
     "postcss": "^7.0.35",
     "prettier": "^2.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.4",
     "ts-loader": "^8.0.17",
-    "ts-node": "^9.1.1"
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.3"
   }
 }

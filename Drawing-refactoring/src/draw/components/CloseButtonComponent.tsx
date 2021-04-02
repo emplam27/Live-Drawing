@@ -3,6 +3,7 @@ import '../index.css';
 import { CloseButtonComponentProps } from '../interfaces/close-button-interfaces';
 import Swal from 'sweetalert2';
 // import withReactContent from 'sweetalert2-react-content';
+import { start } from 'node:repl';
 
 function CloseButtonComponent(props: CloseButtonComponentProps) {
   function closeLive() {

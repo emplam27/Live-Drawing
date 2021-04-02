@@ -5,3 +5,7 @@ export interface ChatComponentProps {
 export interface ChatComponentChildrenProps extends ChatComponentProps {
   socket: SocketIOClient.Socket | null;
 }
+
+// rtc{
+//   client : aiogar | null
+// }

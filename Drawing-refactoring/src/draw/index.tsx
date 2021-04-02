@@ -16,6 +16,7 @@ import CanvasComponent from './components/CanvasComponent';
 import LineSizeComponent from './components/LineSizeComponent';
 import ToolSelectComponent from './components/ToolSelectComponent';
 import UndoRedoComponent from './components/UndoRedoComponent';
+import VoiceChatComponent from '../voice/components/VoiceChatComponent';
 
 // interfaces
 import { DrawData } from './interfaces/draw-interfaces';
@@ -385,6 +386,8 @@ function Draw() {
             isHost={peerConnectionContext.is_host}
             setIsLiveClosed={setIsLiveClosed}
           />
+          <div className='spacer'></div>
+          <VoiceChatComponent></VoiceChatComponent>
         </div>
         <CanvasComponent
           activeTool={activeTool}
