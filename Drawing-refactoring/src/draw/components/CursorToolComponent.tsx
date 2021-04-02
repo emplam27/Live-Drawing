@@ -1,19 +1,13 @@
 import React, { useEffect } from 'react';
-
 import {
   CursorToolComponentProps,
   Tool,
 } from '../interfaces/cursor-tool-interfaces';
 import '../index.css';
-// import { fabric } from 'fabric';
-const fabric = require('fabric').fabric;
 
 function CursorToolComponent(props: CursorToolComponentProps) {
   function changeActiveTool(tool: Tool): void {
-    fabric.Object.prototype.objectCaching = false;
     props.setActiveTool(tool.name);
-    if (!props.canvas) return;
-    props.canvas.isDrawingMode = false;
     props.setCursorWidth(0);
   }
 

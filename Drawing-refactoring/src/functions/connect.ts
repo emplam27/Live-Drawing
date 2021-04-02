@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { PeerConnectionContext } from '../draw/interfaces/index-interfaces';
-import { broadcast, addObject, actionDrawHistory } from './draw';
+import { broadcast, actionDrawHistory } from './draw';
 
 export async function getToken(
   peerConnectionContext: PeerConnectionContext,
@@ -66,23 +66,23 @@ export function onPeerData(
   switch (message.event) {
     case 'object:added':
       // console.log('object:added');
-      addObject(message, canvas);
+      // addObject(message, canvas);
       // setDrawHistory([...drawHistory, message]);
       break;
 
     case 'undo':
       // console.log('undo');
-      canvas.undo();
+      // canvas.undo();
       break;
 
     case 'redo':
       // console.log('redo');
-      canvas.redo();
+      // canvas.redo();
       break;
 
     case 'history':
-      // console.log('history');
-      actionDrawHistory(message, canvas, peerConnectionContext);
+    // console.log('history');
+    // actionDrawHistory(message, canvas, peerConnectionContext);
   }
 }
 

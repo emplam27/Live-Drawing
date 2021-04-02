@@ -7,9 +7,10 @@ export interface DrawData extends Point {
   event: string;
   canvasId: string;
   lastPoint: Point;
+  x: number;
+  y: number;
   color: string;
   lineWidth: number;
-  force: number;
 }
 
 export interface EraseData extends Point {
