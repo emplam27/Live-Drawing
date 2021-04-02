@@ -32,6 +32,7 @@ function App() {
       socketIo.on('roomData', (message: RoomData) => {
         setRoomData(message);
       });
+
       socketIo.on('connect', () => {
         setSocket(socketIo);
       });
@@ -41,7 +42,7 @@ function App() {
   function Drawing() {
     return (
       <>
-        <Draw />
+        <Draw socket={socket} roomKey={data.roomKey} />
         <div className='side'>
           <div className='voice'></div>
           <div className='peers'></div>

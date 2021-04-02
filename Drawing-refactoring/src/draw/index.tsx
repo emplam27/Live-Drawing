@@ -38,26 +38,28 @@ import {
   setHost,
   closeLive,
 } from '../functions/connect';
+import { DrawProps } from './interfaces/draw-props-interfaces';
+import { Socket } from 'socket.io-client';
 
-function Draw() {
+function Draw(props: DrawProps) {
   //@ Connection's States
-  const rtcConfig = {
-    iceServers: [
-      {
-        urls: [
-          'stun:stun.l.google.com:19302',
-          'stun:global.stun.twilio.com:3478',
-        ],
-      },
-    ],
-  };
-  const { roomKey } = useParams<Params>();
+  // const rtcConfig = {
+  //   iceServers: [
+  //     {
+  //       urls: [
+  //         'stun:stun.l.google.com:19302',
+  //         'stun:global.stun.twilio.com:3478',
+  //       ],
+  //     },
+  //   ],
+  // };
+  // const { roomKey } = useParams<Params>();
   const [
     peerConnectionContext,
     setPeerConnectionContext,
   ] = useState<PeerConnectionContext>({
     username: `user-${uuid()}`,
-    roomId: roomKey,
+    roomId: props.roomKey,
     token: null,
     eventSource: null,
     peers: {},
@@ -106,53 +108,56 @@ function Draw() {
    * ========================================================
    */
 
-  async function connectInit(): Promise<void> {
-    // console.log('========= connect ==========');
-    const token = await getToken(peerConnectionContext);
-    const context = { ...peerConnectionContext };
-    context.token = token;
-    context.eventSource = new EventSource(
-      `${process.env.REACT_APP_RTC_URL}/connect?token=${token}`,
-    );
+  useEffect(() => {
+    if(props.socket)
+    props.socket.on('', () => ());
+  }, [props.socket]);
 
-    context.eventSource.addEventListener(
-      'add-peer',
-      changeAddPeerSignal,
-      false,
-    );
-    context.eventSource.addEventListener(
-      'remove-peer',
-      changeRemovePeerSignal,
-      false,
-    );
-    context.eventSource.addEventListener(
-      'session-description',
-      changeSessionDescriptionSignal,
-      false,
-    );
-    context.eventSource.addEventListener(
-      'ice-candidate',
-      changeIceCandidateSignal,
-      false,
-    );
-    context.eventSource.addEventListener('connected', changeJoinRoomSignal);
-    context.eventSource.addEventListener(
-      'send-history-data',
-      changeSendHistoryDataSignal,
-      false,
-    );
-    context.eventSource.addEventListener(
-      'set-host',
-      changeSetHostSignal,
-      false,
-    );
-    context.eventSource.addEventListener(
-      'close-live',
-      changeCloseLiveSignal,
-      false,
-    );
-    setPeerConnectionContext(context);
-  }
+  useEffect(() => {}, [props.roomData]);
+
+  // async function connectInit(): Promise<void> {
+  //   // console.log('========= connect ==========');
+  //   const token = await getToken(peerConnectionContext);
+  //   const context = { ...peerConnectionContext };
+  //   context.token = token;
+  //   context.eventSource = new EventSource(
+  //     `${process.env.REACT_APP_RTC_URL}/connect?token=${token}`,
+  //   );
+
+  //   context.eventSource.addEventListener(
+  //     'add-peer',
+  //     changeAddPeerSignal,
+  //     false,
+  //   );
+  //   context.eventSource.addEventListener(
+  //     'remove-peer',
+  //     changeRemovePeerSignal,
+  //     false,
+  //   );
+  //   context.eventSource.addEventListener(
+  //     'session-description',
+  //     changeSessionDescriptionSignal,
+  //     false,
+  //   );
+  //   context.eventSource.addEventListener(
+  //     'ice-candidate',
+  //     changeIceCandidateSignal,
+  //     false,
+  //   );
+  // context.eventSource.addEventListener('connected', changeJoinRoomSignal);
+  context.eventSource.addEventListener(
+    'send-history-data',
+    changeSendHistoryDataSignal,
+    false,
+  );
+  context.eventSource.addEventListener('set-host', changeSetHostSignal, false);
+  context.eventSource.addEventListener(
+    'close-live',
+    changeCloseLiveSignal,
+    false,
+  );
+  //   setPeerConnectionContext(context);
+  // }
 
   /*
    * ========================================================
@@ -303,7 +308,7 @@ function Draw() {
 
   //@ function: connectInit
   useEffect(() => {
-    connectInit();
+    // connectInit();
   }, []);
 
   return (
