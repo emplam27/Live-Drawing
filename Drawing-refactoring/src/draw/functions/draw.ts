@@ -45,11 +45,12 @@ export function mouseMove(
   lineWidth: number,
   eraserWidth: number,
   peerConnectionContext: PeerConnectionContext,
+  socket: SocketIOClient.Socket | null,
   // drawHistory: DrawData[],
   // setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>,
 ): void {
   // console.log('move');
-  if (!activeLayer || !activeLayer.canvasCtx) return;
+  if (!activeLayer || !activeLayer.canvasCtx || !socket) return;
 
   if (!e.buttons) {
     lastPoint = null;
@@ -77,7 +78,8 @@ export function mouseMove(
         lineWidth: lineWidth,
       };
       draw(drawData, activeLayer.canvasCtx);
-      broadcast(JSON.stringify(drawData), peerConnectionContext);
+      socket.emit('draw-pencil', drawData);
+      // broadcast(JSON.stringify(drawData), peerConnectionContext);
       // setDrawHistory([...drawHistory, data]);
       break;
 
@@ -89,7 +91,8 @@ export function mouseMove(
         r: eraserWidth,
       };
       erase(eraserData, activeLayer.canvasCtx);
-      broadcast(JSON.stringify(eraserData), peerConnectionContext);
+      socket.emit('draw-eraser', eraserData);
+      // broadcast(JSON.stringify(eraserData), peerConnectionContext);
       break;
   }
   lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };

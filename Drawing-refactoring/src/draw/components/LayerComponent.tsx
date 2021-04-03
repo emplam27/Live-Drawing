@@ -9,6 +9,7 @@ function LayerComponent(props: LayerComponentProps) {
   const [createLayerSignal, setCreateLayerSignal] = useState<number | null>(
     null,
   );
+  const [layerCount, setLayerCount] = useState<number>(0);
 
   function createLayer() {
     if (!props.peerConnectionContext.is_host && props.layers.length > 1) {
@@ -19,9 +20,9 @@ function LayerComponent(props: LayerComponentProps) {
     // console.log('create layer');
     const layerId: string = uuid();
     const newLayer: Layer = {
-      name: `layer-${layerId}`,
-      canvasId: `layer-id-${layerId}`,
-      buttonId: `layer-id-${layerId}-button`,
+      name: `layer-${layerCount}`,
+      canvasId: `layer-id-${layerCount}`,
+      buttonId: `layer-id-${layerCount}-button`,
       canvasCtx: null,
     };
 
@@ -32,6 +33,7 @@ function LayerComponent(props: LayerComponentProps) {
     props.setLayers([...props.layers, newLayer]);
     // props.setLayerCount(props.layerCount + 1);
     setCreateLayerSignal(new Date().getTime());
+    setLayerCount(layerCount + 1);
 
     //! broadcast :: createLayer
     console.log('broadcast :: createLayer');
@@ -117,22 +119,21 @@ function LayerComponent(props: LayerComponentProps) {
         </button>
         <div id='layerButtonContainer'>
           {props.layers.map((layer, index) => {
-            if (index !== 0)
-              return (
-                <span
-                  key={layer.name}
-                  id={layer.buttonId}
-                  className={`layer_space ${
-                    props.activeLayer != null &&
-                    props.activeLayer.name === layer.name
-                      ? 'active-layer'
-                      : ''
-                  }`}
-                  onClick={() => selectActiveLayer(layer)}
-                >
-                  {layer.name}
-                </span>
-              );
+            return (
+              <span
+                key={layer.name}
+                id={layer.buttonId}
+                className={`layer_space ${
+                  props.activeLayer != null &&
+                  props.activeLayer.name === layer.name
+                    ? 'active-layer'
+                    : ''
+                }`}
+                onClick={() => selectActiveLayer(layer)}
+              >
+                {layer.name}
+              </span>
+            );
           })}
         </div>
       </div>
@@ -163,6 +164,7 @@ function LayerComponent(props: LayerComponentProps) {
                   props.lineWidth,
                   props.eraserWidth,
                   props.peerConnectionContext,
+                  props.socket,
                   // props.drawHistory,
                   // props.setDrawHistory,
                 )

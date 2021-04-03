@@ -25,6 +25,7 @@ export interface LayerComponentProps {
   layers: Layer[];
   lineWidth: number;
   peerConnectionContext: PeerConnectionContext;
+  socket: SocketIOClient.Socket | null;
   setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   setCanvasCtxTable: React.Dispatch<React.SetStateAction<CanvasCtxTable>>;
   setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>;

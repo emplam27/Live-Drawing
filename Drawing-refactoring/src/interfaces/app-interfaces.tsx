@@ -1,6 +1,6 @@
 export interface Data {
   roomTitle: string;
-  roomKey: string;
+  roomId: string;
   userName: string;
   userKey: string;
 }

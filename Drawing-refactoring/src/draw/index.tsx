@@ -40,6 +40,7 @@ import {
 } from './functions/connect';
 import { DrawProps } from './interfaces/draw-props-interfaces';
 import { Socket } from 'socket.io-client';
+import { draw, erase } from './functions/draw';
 
 function Draw(props: DrawProps) {
   //@ Connection's States
@@ -108,12 +109,30 @@ function Draw(props: DrawProps) {
    * ========================================================
    */
 
+  const [pencilSignal, setPencilSignal] = useState<any | null>(null);
+  const [eraserSignal, setEraserSignal] = useState<any | null>(null);
   useEffect(() => {
-    if(props.socket)
-    props.socket.on('', () => ());
+    if (props.socket) {
+      props.socket.on('draw-pencil', (message: any) =>
+        setPencilSignal(message),
+      );
+      props.socket.on('draw-eraser', (message: any) =>
+        setEraserSignal(message),
+      );
+    }
   }, [props.socket]);
-
-  useEffect(() => {}, [props.roomData]);
+  useEffect(() => {
+    if (pencilSignal === null) return;
+    const canvasCtx: CanvasRenderingContext2D =
+      canvasCtxTable[pencilSignal.canvasId];
+    draw(pencilSignal, canvasCtx);
+  }, [pencilSignal]);
+  useEffect(() => {
+    if (eraserSignal === null) return;
+    const canvasCtx: CanvasRenderingContext2D =
+      canvasCtxTable[eraserSignal.canvasId];
+    erase(eraserSignal, canvasCtx);
+  }, [eraserSignal]);
 
   // async function connectInit(): Promise<void> {
   //   // console.log('========= connect ==========');
@@ -145,177 +164,177 @@ function Draw(props: DrawProps) {
   //     false,
   //   );
   // context.eventSource.addEventListener('connected', changeJoinRoomSignal);
-  context.eventSource.addEventListener(
-    'send-history-data',
-    changeSendHistoryDataSignal,
-    false,
-  );
-  context.eventSource.addEventListener('set-host', changeSetHostSignal, false);
-  context.eventSource.addEventListener(
-    'close-live',
-    changeCloseLiveSignal,
-    false,
-  );
-  //   setPeerConnectionContext(context);
+  // context.eventSource.addEventListener(
+  //   'send-history-data',
+  //   changeSendHistoryDataSignal,
+  //   false,
+  // );
+  // context.eventSource.addEventListener('set-host', changeSetHostSignal, false);
+  // context.eventSource.addEventListener(
+  //   'close-live',
+  //   changeCloseLiveSignal,
+  //   false,
+  // );
+  // //   setPeerConnectionContext(context);
+  // // }
+
+  // /*
+  //  * ========================================================
+  //  * ========================================================
+  //  */
+
+  // //! data:any 수정
+  // function changeOnPeerDataSignal(_: string, data: string): void {
+  //   // console.log('changeOnPeerDataSignal');
+  //   setOnPeerDataSignal(data);
   // }
 
-  /*
-   * ========================================================
-   * ========================================================
-   */
+  // //! data:any 수정
+  // function changeAddPeerSignal(data: any): void {
+  //   setAddPeerSignal(data.data);
+  // }
 
-  //! data:any 수정
-  function changeOnPeerDataSignal(_: string, data: string): void {
-    // console.log('changeOnPeerDataSignal');
-    setOnPeerDataSignal(data);
-  }
+  // //! data:any 수정
+  // function changeRemovePeerSignal(data: any): void {
+  //   // console.log('========= removePeer ==========');
+  //   setRemovePeerSignal(data.data);
+  // }
 
-  //! data:any 수정
-  function changeAddPeerSignal(data: any): void {
-    setAddPeerSignal(data.data);
-  }
+  // //! data:any 수정
+  // function changeSessionDescriptionSignal(data: any): void {
+  //   // console.log('========= sessionDescription ==========');
+  //   setSessionDescriptionSignal(data.data);
+  // }
 
-  //! data:any 수정
-  function changeRemovePeerSignal(data: any): void {
-    // console.log('========= removePeer ==========');
-    setRemovePeerSignal(data.data);
-  }
+  // //! data:any 수정
+  // function changeIceCandidateSignal(data: any): void {
+  //   // console.log('========= iceCandidate ==========');
+  //   setIceCandidateSignal(data.data);
+  // }
 
-  //! data:any 수정
-  function changeSessionDescriptionSignal(data: any): void {
-    // console.log('========= sessionDescription ==========');
-    setSessionDescriptionSignal(data.data);
-  }
+  // //! data:any 수정
+  // function changeJoinRoomSignal(data: any): void {
+  //   // console.log('========= join ==========');
+  //   setJoinRoomSignal(data.timeStamp);
+  // }
 
-  //! data:any 수정
-  function changeIceCandidateSignal(data: any): void {
-    // console.log('========= iceCandidate ==========');
-    setIceCandidateSignal(data.data);
-  }
+  // //! data:any 수정
+  // function changeSendHistoryDataSignal(data: any): void {
+  //   // console.log('========== sendHistoryData 이벤트는 들어오냐? ==========');
+  //   setSendHistoryDataSignal(data.timeStamp);
+  // }
 
-  //! data:any 수정
-  function changeJoinRoomSignal(data: any): void {
-    // console.log('========= join ==========');
-    setJoinRoomSignal(data.timeStamp);
-  }
+  // //! data:any 수정
+  // function changeSetHostSignal(data: any): void {
+  //   // console.log('========== setHost ==========');
+  //   setSetHostSignal(data.timeStamp);
+  // }
 
-  //! data:any 수정
-  function changeSendHistoryDataSignal(data: any): void {
-    // console.log('========== sendHistoryData 이벤트는 들어오냐? ==========');
-    setSendHistoryDataSignal(data.timeStamp);
-  }
+  // //! data:any 수정
+  // function changeCloseLiveSignal(data: any): void {
+  //   // console.log('========== close live ==========');
+  //   setCloseLiveSignal(data.timeStamp);
+  // }
 
-  //! data:any 수정
-  function changeSetHostSignal(data: any): void {
-    // console.log('========== setHost ==========');
-    setSetHostSignal(data.timeStamp);
-  }
+  // /*
+  //  * ========================================================
+  //  * ========================================================
+  //  */
 
-  //! data:any 수정
-  function changeCloseLiveSignal(data: any): void {
-    // console.log('========== close live ==========');
-    setCloseLiveSignal(data.timeStamp);
-  }
+  // // //@ function: actionDrawHistory
+  // // useEffect(() => {
+  // //   if (!actionHistorySignal.length) return;
+  // //   console.log('actionHistorySignal 을 받았다!');
+  // //   // actionDrawHistory(actionHistorySignal, canvasCtxTable);
+  // // }, [actionHistorySignal]);
 
-  /*
-   * ========================================================
-   * ========================================================
-   */
-
-  // //@ function: actionDrawHistory
+  // //@ function: onPeerData
   // useEffect(() => {
-  //   if (!actionHistorySignal.length) return;
-  //   console.log('actionHistorySignal 을 받았다!');
-  //   // actionDrawHistory(actionHistorySignal, canvasCtxTable);
-  // }, [actionHistorySignal]);
+  //   if (onPeerDataSignal === null || !activeLayer || !activeLayer.canvasCtx)
+  //     return;
+  //   // console.log('========= useEffect :: onPeerData ==========');
+  //   // console.log(onPeerDataSignal === null);
+  //   // console.log(!activeLayer);
+  //   // console.log(!activeLayer?.canvasCtx);
+  //   const message = JSON.parse(onPeerDataSignal);
+  //   // console.log(message);
+  //   onPeerData(message, canvasCtxTable);
+  // }, [onPeerDataSignal]);
 
-  //@ function: onPeerData
-  useEffect(() => {
-    if (onPeerDataSignal === null || !activeLayer || !activeLayer.canvasCtx)
-      return;
-    // console.log('========= useEffect :: onPeerData ==========');
-    // console.log(onPeerDataSignal === null);
-    // console.log(!activeLayer);
-    // console.log(!activeLayer?.canvasCtx);
-    const message = JSON.parse(onPeerDataSignal);
-    // console.log(message);
-    onPeerData(message, canvasCtxTable);
-  }, [onPeerDataSignal]);
+  // //@ function: addPeer
+  // useEffect(() => {
+  //   if (addPeerSignal === null) return;
+  //   console.log('========= addPeer ==========');
+  //   const message = JSON.parse(addPeerSignal);
+  //   if (peerConnectionContext.peers[message.peer.id]) return;
+  //   addPeer(
+  //     message,
+  //     peerConnectionContext,
+  //     rtcConfig,
+  //     changeOnPeerDataSignal,
+  //     setPeerConnectionContext,
+  //   );
+  // }, [addPeerSignal]);
 
-  //@ function: addPeer
-  useEffect(() => {
-    if (addPeerSignal === null) return;
-    console.log('========= addPeer ==========');
-    const message = JSON.parse(addPeerSignal);
-    if (peerConnectionContext.peers[message.peer.id]) return;
-    addPeer(
-      message,
-      peerConnectionContext,
-      rtcConfig,
-      changeOnPeerDataSignal,
-      setPeerConnectionContext,
-    );
-  }, [addPeerSignal]);
+  // //@ function: removePeer
+  // useEffect(() => {
+  //   if (removePeerSignal === null) return;
+  //   console.log('========= removePeer ==========');
+  //   const message = JSON.parse(removePeerSignal);
+  //   removePeer(message, peerConnectionContext, setPeerConnectionContext);
+  // }, [removePeerSignal]);
 
-  //@ function: removePeer
-  useEffect(() => {
-    if (removePeerSignal === null) return;
-    console.log('========= removePeer ==========');
-    const message = JSON.parse(removePeerSignal);
-    removePeer(message, peerConnectionContext, setPeerConnectionContext);
-  }, [removePeerSignal]);
+  // //@ function: sessionDescription
+  // useEffect(() => {
+  //   if (sessionDescriptionSignal === null) return;
+  //   // console.log('========= sessionDescription ==========');
 
-  //@ function: sessionDescription
-  useEffect(() => {
-    if (sessionDescriptionSignal === null) return;
-    // console.log('========= sessionDescription ==========');
+  //   const message = JSON.parse(sessionDescriptionSignal);
+  //   if (peerConnectionContext.token === null || !message) return;
+  //   sessionDescription(message, peerConnectionContext);
+  // }, [sessionDescriptionSignal]);
 
-    const message = JSON.parse(sessionDescriptionSignal);
-    if (peerConnectionContext.token === null || !message) return;
-    sessionDescription(message, peerConnectionContext);
-  }, [sessionDescriptionSignal]);
+  // //@ function: iceCandidate
+  // useEffect(() => {
+  //   if (iceCandidateSignal === null) return;
+  //   // console.log('========= iceCandidate ==========');
+  //   const message = JSON.parse(iceCandidateSignal);
+  //   iceCandidate(message, peerConnectionContext);
+  // }, [iceCandidateSignal]);
 
-  //@ function: iceCandidate
-  useEffect(() => {
-    if (iceCandidateSignal === null) return;
-    // console.log('========= iceCandidate ==========');
-    const message = JSON.parse(iceCandidateSignal);
-    iceCandidate(message, peerConnectionContext);
-  }, [iceCandidateSignal]);
+  // //@ function: joinRoom
+  // useEffect(() => {
+  //   if (joinRoomSignal === null) return;
+  //   console.log('========= join ==========');
+  //   joinRoom(peerConnectionContext);
+  // }, [joinRoomSignal]);
 
-  //@ function: joinRoom
-  useEffect(() => {
-    if (joinRoomSignal === null) return;
-    console.log('========= join ==========');
-    joinRoom(peerConnectionContext);
-  }, [joinRoomSignal]);
+  // //@ function: sendHistoryData
+  // useEffect(() => {
+  //   if (sendHistoryDataSignal === null) return;
+  //   // console.log('========= sendHistoryData ==========');
+  //   if (!peerConnectionContext.is_host) return;
+  //   // sendHistoryData(canvas, peerConnectionContext);
+  // }, [sendHistoryDataSignal]);
 
-  //@ function: sendHistoryData
-  useEffect(() => {
-    if (sendHistoryDataSignal === null) return;
-    // console.log('========= sendHistoryData ==========');
-    if (!peerConnectionContext.is_host) return;
-    // sendHistoryData(canvas, peerConnectionContext);
-  }, [sendHistoryDataSignal]);
+  // //@ function: setHost
+  // useEffect(() => {
+  //   if (setHostSignal === null) return;
+  //   console.log('========== setHost ==========');
+  //   setHost(peerConnectionContext, setPeerConnectionContext);
+  // }, [setHostSignal]);
 
-  //@ function: setHost
-  useEffect(() => {
-    if (setHostSignal === null) return;
-    console.log('========== setHost ==========');
-    setHost(peerConnectionContext, setPeerConnectionContext);
-  }, [setHostSignal]);
+  // //@ function: closeLive
+  // useEffect(() => {
+  //   if (closeLiveSignal === null) return;
+  //   console.log('========== closeLive ==========');
+  //   closeLive(setIsLiveClosed);
+  // }, [closeLiveSignal]);
 
-  //@ function: closeLive
-  useEffect(() => {
-    if (closeLiveSignal === null) return;
-    console.log('========== closeLive ==========');
-    closeLive(setIsLiveClosed);
-  }, [closeLiveSignal]);
-
-  //@ function: connectInit
-  useEffect(() => {
-    // connectInit();
-  }, []);
+  // //@ function: connectInit
+  // useEffect(() => {
+  //   // connectInit();
+  // }, []);
 
   return (
     <div className='drawComponent'>
@@ -386,6 +405,7 @@ function Draw(props: DrawProps) {
           layers={layers}
           lineWidth={lineWidth}
           peerConnectionContext={peerConnectionContext}
+          socket={props.socket}
           setActiveLayer={setActiveLayer}
           setCanvasCtxTable={setCanvasCtxTable}
           setDrawHistory={setDrawHistory}

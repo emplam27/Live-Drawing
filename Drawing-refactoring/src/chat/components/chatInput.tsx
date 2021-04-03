@@ -23,7 +23,7 @@ export function ChatInputComponent(props: ChatComponentProps) {
         e.preventDefault();
       }
       if (messageForm.text) {
-        props.socket.emit('send message', messageForm);
+        props.socket.emit('chat-send-message', messageForm);
         setMessageForm({
           user: props.userName,
           text: '',

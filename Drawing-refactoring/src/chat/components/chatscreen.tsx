@@ -10,7 +10,7 @@ export function ChatScreenComponent(props: ChatComponentProps) {
 
   useEffect(() => {
     if (props.socket)
-      props.socket.on('message', (message: MessageForm) => {
+      props.socket.on('chat-message', (message: MessageForm) => {
         setContainer([...container, message]);
       });
   }, [props.socket]);
