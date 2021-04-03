@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../index.css';
 import { ColorPaletteComponentProps } from '../interfaces/color-palette-interfaces';
 
@@ -103,15 +103,8 @@ function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   ]);
 
   function changeColor(colorCode: string): void {
-    if (!props.canvas) return;
     props.setColor(colorCode);
-    props.canvas.freeDrawingBrush.color = props.color;
   }
-
-  useEffect(() => {
-    if (!props.canvas || !props.canvas) return;
-    props.canvas.freeDrawingBrush.color = props.color;
-  }, [props.color]);
 
   return (
     <div className='icon-link center'>

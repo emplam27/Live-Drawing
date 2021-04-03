@@ -5,13 +5,12 @@ import { DeleteObjectComponentProps } from '../interfaces/delete-object-interfac
 
 function DeleteObjectComponent(props: DeleteObjectComponentProps) {
   function deleteObject(): void {
-    if (!props.canvas) return;
-    //Get currently-selected object
-    const obj = props.canvas.getActiveObject();
-
-    //Delete currently-selected object
-    props.canvas.remove(obj);
-    props.canvas.renderAll(); //Re-render the drawing in Fabric
+    // if (!props.canvas) return;
+    // //Get currently-selected object
+    // const obj = props.canvas.getActiveObject();
+    // //Delete currently-selected object
+    // props.canvas.remove(obj);
+    // props.canvas.renderAll(); //Re-render the drawing in Fabric
   }
 
   return (
