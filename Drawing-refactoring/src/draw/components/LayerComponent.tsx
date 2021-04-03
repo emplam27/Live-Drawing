@@ -2,73 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { Layer } from '../interfaces/index-interfaces';
 import { LayerComponentProps } from '../interfaces/layer-interfaces';
 import '../index.css';
-import { broadcast, mouseDown, mouseMove, mouseUp } from '../functions/draw';
-import { v4 as uuid } from 'uuid';
+import { mouseDown, mouseMove, mouseUp } from '../functions/draw';
+import {
+  createLayer,
+  deleteLayerByCanvasId,
+} from '../functions/layer-functions';
 
 function LayerComponent(props: LayerComponentProps) {
-  const [createLayerSignal, setCreateLayerSignal] = useState<number | null>(
-    null,
-  );
-  const [layerCount, setLayerCount] = useState<number>(0);
-
-  function createLayer() {
-    if (!props.peerConnectionContext.is_host && props.layers.length > 1) {
-      console.log('host 아니면 두개까지만');
-      return;
-    }
-
-    // console.log('create layer');
-    const layerId: string = uuid();
-    const newLayer: Layer = {
-      name: `layer-${layerCount}`,
-      canvasId: `layer-id-${layerCount}`,
-      buttonId: `layer-id-${layerCount}-button`,
-      canvasCtx: null,
-    };
-
-    // 새로 만들어진 layer를 activeLayer로 바꾸기
-    if (props.activeLayer === null) {
-      props.setActiveLayer(newLayer);
-    }
-    props.setLayers([...props.layers, newLayer]);
-    // props.setLayerCount(props.layerCount + 1);
-    setCreateLayerSignal(new Date().getTime());
-    setLayerCount(layerCount + 1);
-
+  function onClickCreateLayer() {
+    if (!props.socket) return;
+    const targetLayerId = createLayer(
+      props.activeLayer,
+      props.layers,
+      props.setActiveLayer,
+      props.setNewLayerCtxSignal,
+      props.setLayers,
+    );
     //! broadcast :: createLayer
     console.log('broadcast :: createLayer');
     const message = {
       event: 'create-layer',
-      canvasId: layerId,
+      canvasId: targetLayerId,
     };
-    broadcast(JSON.stringify(message), props.peerConnectionContext);
+    props.socket.emit('create-layer', message);
+    // broadcast(JSON.stringify(message), props.peerConnectionContext);
     //! broadcast :: deleteLayer
   }
 
-  function deleteLayer() {
-    // console.log('delete layer');
-    if (props.layers.length === 1) return;
-
-    let index = 0;
-    props.layers.forEach((layer, i) => {
-      if (props.activeLayer != null && layer.name === props.activeLayer.name)
-        index = i;
-    });
+  function onClickDeleteLayer() {
+    if (!props.socket || !props.activeLayer) return;
+    const targetLayerId = props.activeLayer.canvasId;
+    deleteLayerByCanvasId(targetLayerId, props.layers, props.setActiveLayer);
 
     //! broadcast :: deleteLayer
-    console.log('broadcast :: createLayer');
+    console.log('broadcast :: deleteLayer');
     const message = {
       event: 'delete-layer',
-      canvasId: props.layers[index].canvasId,
+      canvasId: targetLayerId,
     };
-    broadcast(JSON.stringify(message), props.peerConnectionContext);
+    props.socket.emit('delete-layer', message);
+    // broadcast(JSON.stringify(message), peerConnectionContext);
     //! broadcast :: deleteLayer
 
-    props.layers.splice(index, 1);
-    props.setLayers(props.layers);
-
-    if (index === props.layers.length && index >= 1) index -= 1;
-    selectActiveLayer(props.layers[index]);
+    selectActiveLayer(props.layers[0]);
   }
 
   function selectActiveLayer(layer: Layer) {
@@ -77,10 +53,10 @@ function LayerComponent(props: LayerComponentProps) {
   }
 
   useEffect(() => {
-    // console.log(props.layers);
+    console.log('newLayerCtxSignal');
     // 마지막에 추가되는 canvas에 대해서 layers에 ctx 저장하기
     const layersLength: number = props.layers.length;
-    if (layersLength === 0 || createLayerSignal === null) return;
+    if (layersLength === 0 || props.newLayerCtxSignal === null) return;
 
     const tmpCanvasCtxTable = { ...props.canvasCtxTable };
     const tmpLayers = [...props.layers];
@@ -100,28 +76,30 @@ function LayerComponent(props: LayerComponentProps) {
       // layer와 CanvasCtxTable에 ctx 추가하기
       layer.canvasCtx = ctx;
       tmpCanvasCtxTable[layer.canvasId] = layer.canvasCtx;
+      console.log(tmpCanvasCtxTable);
     }
     props.setLayers(tmpLayers);
     props.setCanvasCtxTable(tmpCanvasCtxTable);
-  }, [createLayerSignal]);
+  }, [props.newLayerCtxSignal]);
 
   useEffect(() => {
-    createLayer();
+    onClickCreateLayer();
   }, []);
+
   return (
     <>
       <div>
-        <button className='button layer_space' onClick={createLayer}>
+        <button className='button layer_space' onClick={onClickCreateLayer}>
           make layer
         </button>
-        <button className='button' onClick={deleteLayer}>
+        <button className='button' onClick={onClickDeleteLayer}>
           delete layer
         </button>
         <div id='layerButtonContainer'>
-          {props.layers.map((layer, index) => {
+          {props.layers.map((layer) => {
             return (
               <span
-                key={layer.name}
+                key={layer.canvasId}
                 id={layer.buttonId}
                 className={`layer_space ${
                   props.activeLayer != null &&
@@ -158,12 +136,11 @@ function LayerComponent(props: LayerComponentProps) {
               onMouseMove={(e) =>
                 mouseMove(
                   e,
-                  props.activeLayer,
                   props.activeTool,
                   props.color,
                   props.lineWidth,
                   props.eraserWidth,
-                  props.peerConnectionContext,
+                  props.canvasCtxTable,
                   props.socket,
                   // props.drawHistory,
                   // props.setDrawHistory,

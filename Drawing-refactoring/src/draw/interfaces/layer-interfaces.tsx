@@ -24,6 +24,7 @@ export interface LayerComponentProps {
   layerCount: number;
   layers: Layer[];
   lineWidth: number;
+  newLayerCtxSignal: number | null;
   peerConnectionContext: PeerConnectionContext;
   socket: SocketIOClient.Socket | null;
   setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
@@ -31,4 +32,5 @@ export interface LayerComponentProps {
   setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>;
   setLayerCount: React.Dispatch<React.SetStateAction<number>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  setNewLayerCtxSignal: React.Dispatch<React.SetStateAction<number | null>>;
 }

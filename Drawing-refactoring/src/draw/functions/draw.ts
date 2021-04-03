@@ -39,18 +39,17 @@ export function mouseDown(
 
 export function mouseMove(
   e: any,
-  activeLayer: Layer | null,
   activeTool: string,
   color: string,
   lineWidth: number,
   eraserWidth: number,
-  peerConnectionContext: PeerConnectionContext,
+  canvasCtxTable: any,
   socket: SocketIOClient.Socket | null,
   // drawHistory: DrawData[],
   // setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>,
 ): void {
   // console.log('move');
-  if (!activeLayer || !activeLayer.canvasCtx || !socket) return;
+  if (!canvasCtxTable || !socket) return;
 
   if (!e.buttons) {
     lastPoint = null;
@@ -61,6 +60,9 @@ export function mouseMove(
     lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
     return;
   }
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (!targetCanvasId || !targetCanvasCtx) return;
 
   const currentPoint: Point = {
     x: e.nativeEvent.offsetX,
@@ -71,13 +73,13 @@ export function mouseMove(
       // console.log('mouseMove :: pencil');
       const drawData: DrawData = {
         event: 'pencil',
-        canvasId: activeLayer.canvasId,
+        canvasId: targetCanvasId,
         lastPoint: lastPoint,
         currentPoint: currentPoint,
         color: color,
         lineWidth: lineWidth,
       };
-      draw(drawData, activeLayer.canvasCtx);
+      draw(drawData, targetCanvasCtx);
       socket.emit('draw-pencil', drawData);
       // broadcast(JSON.stringify(drawData), peerConnectionContext);
       // setDrawHistory([...drawHistory, data]);
@@ -86,11 +88,11 @@ export function mouseMove(
     case 'eraser':
       const eraserData = {
         event: 'eraser',
-        canvasId: activeLayer.canvasId,
+        canvasId: targetCanvasId,
         currentPoint: currentPoint,
         r: eraserWidth,
       };
-      erase(eraserData, activeLayer.canvasCtx);
+      erase(eraserData, targetCanvasCtx);
       socket.emit('draw-eraser', eraserData);
       // broadcast(JSON.stringify(eraserData), peerConnectionContext);
       break;

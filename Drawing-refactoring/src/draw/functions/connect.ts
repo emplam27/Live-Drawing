@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { createPartiallyEmittedExpression } from 'typescript';
 import { PeerConnectionContext } from '../interfaces/index-interfaces';
 import { broadcast, actionDrawHistory, draw, erase } from './draw';
 
