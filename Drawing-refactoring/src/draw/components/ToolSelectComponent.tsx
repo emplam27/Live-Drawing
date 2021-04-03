@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-
+import React from 'react';
 import {
   ToolSelectComponentProps,
   Tool,
@@ -56,7 +55,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
     let brush;
     switch (tool.name) {
       case 'pencil':
-        // console.log('pencil');
         props.canvas.isDrawingMode = true;
         brush = new fabric.PencilBrush();
         props.canvas.freeDrawingBrush = brush;
@@ -64,8 +62,32 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
         props.canvas.freeDrawingBrush.color = props.color;
         props.canvas.freeDrawingBrush.opacity = 1;
         props.canvas.freeDrawingBrush.width = props.lineWidth;
-        // console.log(props.canvas.freeDrawingBrush);
         props.setCursorWidth(props.lineWidth);
+
+        props.canvas.on('path:created', function (opt: any) {
+          opt.path.globalCompositeOperation = 'source-over';
+          opt.path.lineWidth = props.lineWidth;
+          opt.path.selectable = false;
+          opt.path.absolutePositioned = true;
+          opt.path.evented = false;
+          // console.log('pencil', opt);
+          // props.canvas.renderAll();
+        });
+        break;
+
+      case 'eraser':
+        // console.log('eraser');
+        props.canvas.isDrawingMode = true;
+        brush = new fabric.PencilBrush();
+        props.canvas.freeDrawingBrush = brush;
+        props.canvas.freeDrawingBrush.canvas = props.canvas;
+        props.canvas.freeDrawingBrush.color = '#ffffff';
+        props.canvas.freeDrawingBrush.opacity = 1;
+        props.canvas.freeDrawingBrush.width = props.eraserWidth;
+        props.canvas.contextContainer.globalCompositeOperation =
+          'destination-out';
+        props.canvas.contextCache.globalCompositeOperation = 'destination-out';
+        props.setCursorWidth(props.eraserWidth);
         break;
 
       // case 'spray':
@@ -132,22 +154,6 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
       //   props.setCursorWidth(props.lineWidth);
       //   // console.log(props.canvas.freeDrawingBrush);
       //   break;
-
-      case 'eraser':
-        // console.log('eraser');
-        props.canvas.isDrawingMode = true;
-        brush = new fabric.PencilBrush();
-        props.canvas.freeDrawingBrush = brush;
-        props.canvas.freeDrawingBrush.canvas = props.canvas;
-        props.canvas.freeDrawingBrush.color = '#ff0000';
-        props.canvas.freeDrawingBrush.opacity = 1;
-        props.canvas.freeDrawingBrush.width = props.eraserWidth;
-        props.canvas.contextContainer.globalCompositeOperation =
-          'destination-out';
-        props.canvas.contextCache.globalCompositeOperation = 'destination-out';
-        // console.log(props.canvas);
-        props.setCursorWidth(props.eraserWidth);
-        break;
     }
   }
 

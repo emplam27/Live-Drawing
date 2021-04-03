@@ -6,7 +6,7 @@ import { ChatComponent } from './chat/components/chat';
 
 function App() {
   const userId = localStorage.getItem('id');
-  console.log(userId);
+  // console.log(userId);
 
   function Drawing() {
     return (
@@ -25,7 +25,7 @@ function App() {
     <div className='App'>
       <main className='grid'>
         <Switch>
-          <Route exact path='/:roomKey' component={Drawing} />
+          <Route path='/live/:roomKey' component={Drawing} />
         </Switch>
       </main>
     </div>

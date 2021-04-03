@@ -41,12 +41,12 @@ export function broadcast(
 }
 
 export function addObject(message: any, canvas: any) {
-  console.log('addObject');
+  // console.log('addObject');
   // console.log(message.object);
 
   switch (message.tool) {
     case 'pencil':
-      console.log('pencil 브러쉬!');
+      // console.log('pencil 브러쉬!');
       let path = '';
       message.object.path.forEach((p: any) => {
         path += p.toString();
@@ -55,14 +55,14 @@ export function addObject(message: any, canvas: any) {
       canvas.add(newPath);
       break;
 
-    case 'bubble':
-      console.log('bubble 브러쉬!');
-      const circles = message.object.objects.map((o: any) => {
-        return new fabric.Circle(o);
-      });
-      const newGroup = new fabric.Group(circles, message.object);
-      canvas.add(newGroup);
-      break;
+    // case 'bubble':
+    //   console.log('bubble 브러쉬!');
+    //   const circles = message.object.objects.map((o: any) => {
+    //     return new fabric.Circle(o);
+    //   });
+    //   const newGroup = new fabric.Group(circles, message.object);
+    //   canvas.add(newGroup);
+    //   break;
   }
 }
 

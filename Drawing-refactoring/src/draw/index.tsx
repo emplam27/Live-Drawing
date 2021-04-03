@@ -31,6 +31,7 @@ import {
   joinRoom,
   sendHistoryData,
   setHost,
+  closeLive,
 } from '../functions/connect';
 
 function Draw() {
@@ -61,7 +62,6 @@ function Draw() {
     hostId: null,
   });
   const [onPeerDataSignal, setOnPeerDataSignal] = useState<string>();
-  const [actionHistorySignal, setActionHistorySignal] = useState<Event[]>([]);
   const [drawHistory, setDrawHistory] = useState<DrawData[]>([]);
   // const [readyToDrawHistorySignal, setReadyToDrawHistorySignal] = useState<
   //   number | null
@@ -79,6 +79,7 @@ function Draw() {
     number | null
   >(null);
   const [setHostSignal, setSetHostSignal] = useState<number | null>(null);
+  const [closeLiveSignal, setCloseLiveSignal] = useState<number | null>(null);
 
   //@ Drawing's States
   const [activeTool, setActiveTool] = useState<string>('');
@@ -90,9 +91,6 @@ function Draw() {
   const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
   // const [pathsry, setPathsry] = useState<point[][]>([]);
   // const [points, setPoints] = useState<point[]>([]);
-
-  //! 하나의 ctx를 사용, 전역으로 사용하기 위해 Context API 사용
-  //! 레이어 마다 하나씩 가지고 있는 방법으로 바꿔야함
 
   // function drawPaths() {
   //   // delete everything
@@ -160,11 +158,15 @@ function Draw() {
       changeSetHostSignal,
       false,
     );
+    context.eventSource.addEventListener(
+      'close-live',
+      changeCloseLiveSignal,
+      false,
+    );
     setPeerConnectionContext(context);
   }
 
   /*
-   * ========================================================
    * ========================================================
    * ========================================================
    */
@@ -215,8 +217,14 @@ function Draw() {
     setSetHostSignal(data.timeStamp);
   }
 
+  //! data:any 수정
+  function changeCloseLiveSignal(data: any): void {
+    console.log('========== close live ==========');
+    // console.log(data.timeStamp);
+    setCloseLiveSignal(data.timeStamp);
+  }
+
   /*
-   * ========================================================
    * ========================================================
    * ========================================================
    */
@@ -240,7 +248,6 @@ function Draw() {
   useEffect(() => {
     if (addPeerSignal === null) return;
     // console.log('========= addPeer ==========');
-
     const message = JSON.parse(addPeerSignal);
     if (peerConnectionContext.peers[message.peer.id]) return;
     addPeer(
@@ -288,15 +295,8 @@ function Draw() {
   //@ function: sendHistoryData
   useEffect(() => {
     if (sendHistoryDataSignal === null) return;
-    console.log('========= sendHistoryData ==========');
-    if (!peerConnectionContext.is_host) {
-      console.log('나는 호스트가 아니야');
-      return;
-    }
-    // console.log(canvas.historyNextState);
-    // console.log(canvas.historyRedo);
-    // console.log(canvas.historyUndo);
-    // console.log(JSON.stringify(canvas));
+    // console.log('========= sendHistoryData ==========');
+    if (!peerConnectionContext.is_host) return;
     sendHistoryData(canvas, peerConnectionContext);
   }, [sendHistoryDataSignal]);
 
@@ -307,14 +307,17 @@ function Draw() {
     setHost(peerConnectionContext, setPeerConnectionContext);
   }, [setHostSignal]);
 
+  //@ function: closeLive
+  useEffect(() => {
+    if (closeLiveSignal === null) return;
+    console.log('========== closeLive ==========');
+    closeLive(setIsLiveClosed);
+  }, [closeLiveSignal]);
+
   //@ function: connectInit
   useEffect(() => {
     connectInit();
   }, []);
-
-  // useEffect(() => {
-  //   console.log(drawHistory);
-  // }, [drawHistory]);
 
   return (
     <div className='drawComponent'>

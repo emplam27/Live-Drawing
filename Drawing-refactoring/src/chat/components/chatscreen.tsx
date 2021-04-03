@@ -12,7 +12,7 @@ export function ChatScreenComponent(props: ChatComponentChildrenProps) {
     if (props.socket)
       props.socket.on('message', (message: MessageForm) => {
         setContainer([...container, message]);
-        console.log(message);
+        // console.log(message);
       });
   }, [props.socket]);
 

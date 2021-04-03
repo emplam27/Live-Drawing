@@ -16,7 +16,7 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
       confirmButtonText: 'Yes',
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('홈 화면으로 이동하는 로직이 들어감');
+        window.location.replace(`${process.env.REACT_APP_HOMEPAGE_URL}`);
       }
     });
   }
@@ -24,7 +24,7 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
   function exitLive() {
     Swal.fire({
       title: '라이브에서 나가시겠습니까?',
-      text: '저장하지 않은 그림은 사라집니다.',
+      text: '홈화면으로 이동합니다.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -32,13 +32,9 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
       confirmButtonText: 'Yes',
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire('홈 화면으로 이동하는 로직이 들어감');
+        window.location.replace(`${process.env.REACT_APP_HOMEPAGE_URL}`);
       }
     });
-  }
-
-  function closeTest() {
-    props.setIsLiveClosed(true);
   }
 
   return (
@@ -55,16 +51,9 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
           className='bg-gray-350 hover:bg-gray-300 text-white font-bold py-3 px-4 rounded'
           onClick={exitLive}
         >
-          나가기
+          라이브 나가기
         </button>
       )}
-
-      <button
-        className='bg-gray-350 hover:bg-gray-300 text-white font-bold py-3 px-4 rounded'
-        onClick={closeTest}
-      >
-        테스트용
-      </button>
     </>
   );
 }

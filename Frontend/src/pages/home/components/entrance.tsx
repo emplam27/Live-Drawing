@@ -11,7 +11,7 @@ export function EntranceComponent(props: EntranceProps) {
   const userState = useCustomState();
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [userName, setUserName] = useState(localStorage.getItem('name'));
-  console.log(userName, token);
+  // console.log(userName, token);
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
@@ -42,9 +42,10 @@ export function EntranceComponent(props: EntranceProps) {
         const values = { username: userName, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
-          .then((response) => {
-            if (response.status === 200) window.location.href = `/room/${props.roomKey}`;
-            else throw new Error();
+          .then((res) => {
+            if (res.status === 200) {
+              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomKey}`;
+            } else throw new Error();
           })
           .catch((err) => Swal.showValidationMessage('비밀번호가 일치하지 않습니다.'));
       },
