@@ -11,13 +11,14 @@ import { v4 as uuid } from 'uuid';
 
 function App() {
   function Drawing() {
+    const tempName = uuid();
     const { roomId } = useParams<{ roomId: string }>();
     const [data, setData] = useState<Data>({
       roomId: 'roomId',
-      userName: `${uuid()}`,
+      userName: tempName,
       roomTitle: '7번방',
-      userId: `${uuid()}`,
-      isHost: false,
+      userId: tempName,
+      hostId: tempName,
     });
     const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
     const [roomData, setRoomData] = useState<RoomData | null>(null);

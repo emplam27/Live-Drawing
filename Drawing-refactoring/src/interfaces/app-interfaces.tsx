@@ -3,7 +3,7 @@ export interface Data {
   roomId: string;
   userName: string;
   userId: string;
-  isHost: boolean;
+  hostId: string;
 }
 
 export interface ResponseData {

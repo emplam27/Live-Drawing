@@ -11,12 +11,11 @@ import {
 import { joinRoom } from '../functions/connect';
 
 function LayerComponent(props: LayerComponentProps) {
+  const [historyFlag, setHistoryFlag] = useState<boolean>(true);
   useEffect(() => {
+    console.log(props.roomData);
     if (props.roomData !== null && props.roomData.users !== undefined) {
-      // console.log('------userId', props.data.userId);
-      const length = props.roomData.users.length;
-      console.log('------userName', props.roomData.users);
-      const newLayers = props.roomData.users.map((user, index) => {
+      const newLayers = props.roomData.users.map((user) => {
         return {
           name: user.userName,
           canvasId: user.userId,
@@ -24,22 +23,12 @@ function LayerComponent(props: LayerComponentProps) {
           canvasCtx: null,
         };
       });
-
       props.setLayers(newLayers);
       props.setNewLayerCtxSignal(new Date().getTime());
-      //   console.log(
-      //     !props.layers.find((layer) => layer.canvasId === user.userId),
-      //   );
-      //   if (!props.layers.find((layer) => layer.canvasId === user.userId))
-      //     createLayerByCanvasId(
-      //       user.userId,
-      //       props.activeLayer,
-      //       props.layers,
-      //       props.setActiveLayer,
-      //       props.setCreateLayerSignal,
-      //       props.setLayers,
-      //     );
-      // });
+      if (historyFlag && props.socket) {
+        props.socket.emit('draw-history');
+        setHistoryFlag(false);
+      }
     }
   }, [props.roomData]);
 
@@ -181,6 +170,7 @@ function LayerComponent(props: LayerComponentProps) {
                   props.eraserWidth,
                   props.canvasCtxTable,
                   props.socket,
+                  props.data,
                   // props.drawHistory,
                   // props.setDrawHistory,
                 )

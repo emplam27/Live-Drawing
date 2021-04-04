@@ -129,7 +129,6 @@
   left: 0;
   cursor: none;
   border: solid 0px 1px 1px 1px;
-  background-color: brown;
   width: 50%;
 }
 .layer-right {
@@ -139,7 +138,6 @@
   cursor: none;
   border: solid 0px 1px 1px 1px;
   width: 50%;
-  background-color: cadetblue;
   z-index: 0;
 }
 
