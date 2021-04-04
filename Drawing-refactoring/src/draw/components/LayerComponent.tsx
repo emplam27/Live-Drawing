@@ -5,24 +5,47 @@ import '../index.css';
 import { mouseDown, mouseMove, mouseUp } from '../functions/draw';
 import {
   createLayer,
+  createLayerByCanvasId,
   deleteLayerByCanvasId,
 } from '../functions/layer-functions';
+import { joinRoom } from '../functions/connect';
 
 function LayerComponent(props: LayerComponentProps) {
+  const [historyFlag, setHistoryFlag] = useState<boolean>(true);
+  useEffect(() => {
+    console.log(props.roomData);
+    if (props.roomData !== null && props.roomData.users !== undefined) {
+      const newLayers = props.roomData.users.map((user) => {
+        return {
+          name: user.userName,
+          canvasId: user.userId,
+          buttonId: `${user.userId}-button`,
+          canvasCtx: null,
+        };
+      });
+      props.setLayers(newLayers);
+      props.setNewLayerCtxSignal(new Date().getTime());
+      if (historyFlag && props.socket) {
+        props.socket.emit('draw-history');
+        setHistoryFlag(false);
+      }
+    }
+  }, [props.roomData]);
+
   function onClickCreateLayer() {
     if (!props.socket) return;
-    const targetLayerId = createLayer(
-      props.activeLayer,
-      props.layers,
-      props.setActiveLayer,
-      props.setNewLayerCtxSignal,
-      props.setLayers,
-    );
+    // const targetLayerId = createLayer(
+    //   props.activeLayer,
+    //   props.layers,
+    //   props.setActiveLayer,
+    //   props.setNewLayerCtxSignal,
+    //   props.setLayers,
+    // );
     //! broadcast :: createLayer
     console.log('broadcast :: createLayer');
     const message = {
       event: 'create-layer',
-      canvasId: targetLayerId,
+      // canvasId: targetLayerId,
     };
     props.socket.emit('create-layer', message);
     // broadcast(JSON.stringify(message), props.peerConnectionContext);
@@ -97,21 +120,22 @@ function LayerComponent(props: LayerComponentProps) {
         </button>
         <div id='layerButtonContainer'>
           {props.layers.map((layer) => {
-            return (
-              <span
-                key={layer.canvasId}
-                id={layer.buttonId}
-                className={`layer_space ${
-                  props.activeLayer != null &&
-                  props.activeLayer.name === layer.name
-                    ? 'active-layer'
-                    : ''
-                }`}
-                onClick={() => selectActiveLayer(layer)}
-              >
-                {layer.name}
-              </span>
-            );
+            if (layer.canvasId !== props.data.userId)
+              return (
+                <span
+                  key={layer.canvasId}
+                  id={layer.buttonId}
+                  className={`layer_space ${
+                    props.activeLayer != null &&
+                    props.activeLayer.name === layer.name
+                      ? 'active-layer'
+                      : ''
+                  }`}
+                  onClick={() => selectActiveLayer(layer)}
+                >
+                  {layer.name}
+                </span>
+              );
           })}
         </div>
       </div>
@@ -119,12 +143,16 @@ function LayerComponent(props: LayerComponentProps) {
         id='canvasContainer'
         className='spacer app relative divide-x-2 divide-black canvas-container'
       >
-        {props.layers.map((layer, index) => {
+        {props.layers.map((layer) => {
           return (
             <canvas
-              key={layer.name}
+              key={layer.canvasId}
               id={layer.canvasId}
-              className={`${index === 0 ? 'layer-right' : 'layer-left'} ${
+              className={`${
+                layer.canvasId === props.data.userId
+                  ? 'layer-right'
+                  : 'layer-left'
+              } ${
                 props.activeLayer !== null &&
                 props.activeLayer.canvasId !== layer.canvasId
                   ? 'hide'
@@ -142,6 +170,7 @@ function LayerComponent(props: LayerComponentProps) {
                   props.eraserWidth,
                   props.canvasCtxTable,
                   props.socket,
+                  props.data,
                   // props.drawHistory,
                   // props.setDrawHistory,
                 )

@@ -1,6 +1,7 @@
 import { DrawData, EraseData, Point } from './draw-interfaces';
 import { PeerConnectionContext } from '../interfaces/index-interfaces';
 import { Layer } from '../interfaces/layer-interfaces';
+import { Data } from '../../interfaces/app-interfaces';
 
 let lastPoint: Point | null;
 
@@ -29,10 +30,15 @@ export function broadcast(
 }
 
 export function mouseDown(
-  e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+  // e: React.MouseEvent<HTMLCanvasElement, MouseEvent>,
+  e: any,
 ): void {
   // console.log('down');
-  lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+  lastPoint = {
+    x: e.nativeEvent.offsetX,
+    y: e.nativeEvent.offsetY,
+    c: e.target.id,
+  };
   // points = [];
   // points.push(originPoint);
 }
@@ -45,6 +51,7 @@ export function mouseMove(
   eraserWidth: number,
   canvasCtxTable: any,
   socket: SocketIOClient.Socket | null,
+  data: Data,
   // drawHistory: DrawData[],
   // setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>,
 ): void {
@@ -57,9 +64,15 @@ export function mouseMove(
   }
 
   if (!lastPoint) {
-    lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+    lastPoint = {
+      x: e.nativeEvent.offsetX,
+      y: e.nativeEvent.offsetY,
+      c: e.target.id,
+    };
     return;
   }
+
+  if (data.hostId !== data.userId && e.target.id !== data.userId) return;
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
   if (!targetCanvasId || !targetCanvasCtx) return;
@@ -67,6 +80,7 @@ export function mouseMove(
   const currentPoint: Point = {
     x: e.nativeEvent.offsetX,
     y: e.nativeEvent.offsetY,
+    c: e.target.id,
   };
   switch (activeTool) {
     case 'pencil':
@@ -97,7 +111,11 @@ export function mouseMove(
       // broadcast(JSON.stringify(eraserData), peerConnectionContext);
       break;
   }
-  lastPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+  lastPoint = {
+    x: e.nativeEvent.offsetX,
+    y: e.nativeEvent.offsetY,
+    c: e.target.id,
+  };
 }
 
 export function mouseUp(): void {
@@ -106,6 +124,7 @@ export function mouseUp(): void {
 
 export function draw(data: DrawData, canvasCtx: any): void {
   // console.log('draw');
+  if (data.lastPoint.c !== data.currentPoint.c) return;
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
   // points.push({ x: data.x, y: data.y });

@@ -51,7 +51,7 @@ function Draw(props: DrawProps) {
     setPeerConnectionContext,
   ] = useState<PeerConnectionContext>({
     username: `user-${uuid()}`,
-    roomId: props.roomKey,
+    roomId: props.data.roomId,
     token: null,
     eventSource: null,
     peers: {},
@@ -212,6 +212,7 @@ function Draw(props: DrawProps) {
           activeLayer={activeLayer}
           canvasCtxTable={canvasCtxTable}
           color={color}
+          data={props.data}
           drawHistory={drawHistory}
           eraserWidth={eraserWidth}
           layerCount={layerCount}
@@ -219,9 +220,11 @@ function Draw(props: DrawProps) {
           lineWidth={lineWidth}
           newLayerCtxSignal={newLayerCtxSignal}
           peerConnectionContext={peerConnectionContext}
+          roomData={props.roomData}
           socket={props.socket}
           setActiveLayer={setActiveLayer}
           setCanvasCtxTable={setCanvasCtxTable}
+          setCreateLayerSignal={setCreateLayerSignal}
           setDrawHistory={setDrawHistory}
           setLayerCount={setLayerCount}
           setLayers={setLayers}

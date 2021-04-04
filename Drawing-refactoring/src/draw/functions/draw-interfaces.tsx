@@ -1,6 +1,7 @@
 export interface Point {
   x: number;
   y: number;
+  c: string;
 }
 
 export interface DrawData {
