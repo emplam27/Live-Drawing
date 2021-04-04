@@ -2,7 +2,8 @@ export interface Data {
   roomTitle: string;
   roomId: string;
   userName: string;
-  userKey: string;
+  userId: string;
+  isHost: boolean;
 }
 
 export interface ResponseData {

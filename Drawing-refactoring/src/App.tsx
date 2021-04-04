@@ -11,15 +11,16 @@ import { v4 as uuid } from 'uuid';
 
 function App() {
   function Drawing() {
+    const { roomId } = useParams<{ roomId: string }>();
     const [data, setData] = useState<Data>({
-      roomId: '',
-      userName: '',
-      roomTitle: '',
-      userKey: '',
+      roomId: 'roomId',
+      userName: `${uuid()}`,
+      roomTitle: '7번방',
+      userId: `${uuid()}`,
+      isHost: false,
     });
     const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
-    const [roomData, setRoomData] = useState<RoomData>();
-    const { roomId } = useParams<{ roomId: string }>();
+    const [roomData, setRoomData] = useState<RoomData | null>(null);
 
     // axios.get(`${process.env.REACT_APP_API_URL}`).then((res: ResponseData) => {
     //   setData(res.data);
@@ -49,13 +50,14 @@ function App() {
       });
 
       socketIo.emit('join', {
-        userId: uuid(),
-        userName: uuid(),
+        userId: data.userId,
+        userName: data.userName,
         roomId: roomId,
       });
 
       socketIo.on('roomData', (message: RoomData) => {
         setRoomData(message);
+        console.log('-------roomdata------', message);
       });
 
       socketIo.on('connect', () => {
@@ -65,7 +67,7 @@ function App() {
 
     return (
       <>
-        <Draw socket={socket} roomKey={data.roomId} />
+        <Draw socket={socket} data={data} roomData={roomData} />
         <div className='side'>
           <div className='voice'></div>
           <div className='peers'></div>

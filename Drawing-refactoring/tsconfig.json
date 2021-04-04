@@ -23,5 +23,5 @@
   },
   "include": [
     "src"
-  ]
+, "../rtc_server/default-dict.tsx"  ]
 }

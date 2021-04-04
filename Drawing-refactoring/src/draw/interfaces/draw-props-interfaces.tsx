@@ -1,7 +1,8 @@
 import { RoomData } from '../../chat/interfaces/room-data';
+import { Data } from '../../interfaces/app-interfaces';
 
 export interface DrawProps {
   socket: SocketIOClient.Socket | null;
-  roomKey: string;
-  // roomData: RoomData;
+  data: Data;
+  roomData: RoomData | null;
 }

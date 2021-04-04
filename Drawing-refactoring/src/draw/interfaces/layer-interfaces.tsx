@@ -1,3 +1,5 @@
+import { RoomData } from '../../chat/interfaces/room-data';
+import { Data } from '../../interfaces/app-interfaces';
 import { DrawData } from '../functions/draw-interfaces';
 import { PeerConnectionContext, CanvasCtxTable } from './index-interfaces';
 
@@ -19,6 +21,7 @@ export interface LayerComponentProps {
   activeLayer: Layer | null;
   canvasCtxTable: CanvasCtxTable;
   color: string;
+  data: Data;
   drawHistory: DrawData[];
   eraserWidth: number;
   layerCount: number;
@@ -26,9 +29,11 @@ export interface LayerComponentProps {
   lineWidth: number;
   newLayerCtxSignal: number | null;
   peerConnectionContext: PeerConnectionContext;
+  roomData: RoomData | null;
   socket: SocketIOClient.Socket | null;
   setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   setCanvasCtxTable: React.Dispatch<React.SetStateAction<CanvasCtxTable>>;
+  setCreateLayerSignal: React.Dispatch<React.SetStateAction<any | null>>;
   setDrawHistory: React.Dispatch<React.SetStateAction<DrawData[]>>;
   setLayerCount: React.Dispatch<React.SetStateAction<number>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;

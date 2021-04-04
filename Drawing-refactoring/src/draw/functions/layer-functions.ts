@@ -1,19 +1,21 @@
 import { v4 as uuid } from 'uuid';
+import { UserInfo } from '../../chat/interfaces/user-info-interface';
 import { Layer } from '../interfaces/index-interfaces';
 
 export function createLayer(
   activeLayer: any,
   layers: any,
   setActiveLayer: any,
-  setCreateLayerSignal: any,
+  setNewLayerCtxSignal: any,
   setLayers: any,
+  user: UserInfo,
 ) {
   // console.log('create layer');
-  const layerId: string = uuid();
+  // const layerId: string = uuid();
   const newLayer: Layer = {
-    name: layerId,
-    canvasId: layerId,
-    buttonId: `${layerId}-button`,
+    name: user.userName,
+    canvasId: user.userId,
+    buttonId: `${user.userId}-button`,
     canvasCtx: null,
   };
 
@@ -23,7 +25,7 @@ export function createLayer(
   }
   setLayers([...layers, newLayer]);
   // setLayerCount(layerCount + 1);
-  setCreateLayerSignal(new Date().getTime());
+  setNewLayerCtxSignal(new Date().getTime());
 
   return newLayer.canvasId;
 }
@@ -33,7 +35,7 @@ export function createLayerByCanvasId(
   activeLayer: any,
   layers: any,
   setActiveLayer: any,
-  setCreateLayerSignal: any,
+  setNewLayerCtxSignal: any,
   setLayers: any,
 ) {
   const layerId: string = canvasId;
@@ -50,7 +52,7 @@ export function createLayerByCanvasId(
   }
   setLayers([...layers, newLayer]);
   // setLayerCount(layerCount + 1);
-  setCreateLayerSignal(new Date().getTime());
+  setNewLayerCtxSignal(new Date().getTime());
 }
 
 export function deleteLayerByCanvasId(
