@@ -1,21 +1,22 @@
-var express = require('express')
-var http = require('http')
-var path = require('path')
-var jwt = require('jsonwebtoken')
-var uuid = require('uuid')
-var dotenv = require('dotenv')
-var redis = require('redis')
-var bluebird = require('bluebird')
-var cors = require('cors')
-var socket = require('socket.io')
-var {
+const express = require('express')
+const http = require('http')
+const path = require('path')
+const jwt = require('jsonwebtoken')
+const uuid = require('uuid')
+const dotenv = require('dotenv')
+const redis = require('redis')
+const bluebird = require('bluebird')
+const cors = require('cors')
+const socket = require('socket.io')
+const {
   addUser,
   removeUser,
   getUsersInRoom,
   getRoom,
   getUser,
 } = require('./users')
-var defaultDict = require('./default-dict')
+const defaultDict = require('./default-dict')
+const historyData = defaultDict()
 
 bluebird.promisifyAll(redis)
 dotenv.config()
@@ -26,10 +27,9 @@ const io = socket(server)
 app.use('/static', express.static(`${__dirname}/static`))
 app.use(express.json())
 app.use(cors())
-const historyData = new defaultDict(Object)
 
 io.on('connection', socket => {
-  // console.log('소켓 연결 완료');
+  console.log('소켓 연결 완료')
 
   socket.on('join', message => {
     const user = addUser({
@@ -57,6 +57,21 @@ io.on('connection', socket => {
     })
   })
 
+  socket.on('draw-history', () => {
+    const user = getUser(socket.id)
+    if (historyData.dict[user.roomId])
+      for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
+        switch (historyData.dict[user.roomId][i].event) {
+          case 'pencil':
+            socket.emit('draw-pencil', historyData.dict[user.roomId][i])
+            break
+          case 'eraser':
+            socket.emit('draw-eraser', historyData.dict[user.roomId][i])
+            break
+        }
+      }
+  })
+
   //@ Chat Event
   socket.on('chat-send-message', message => {
     // console.log('sendmsg socket', socket.id);
@@ -66,24 +81,18 @@ io.on('connection', socket => {
 
   //@ Draw Event
   socket.on('draw-pencil', message => {
-    // console.log('draw-pencil');
     const user = getUser(socket.id)
-    // if (!historyData[user.roomId]) historyData[user.roomId] = {}
-    // if (!historyData[room.roomId][message.canvasId])
-    //   historyData[room.roomId][message.canvasId] = []
-    // historyData[room.roomId][message.canvasId].push(message)
-    // console.log(historyData)
-    if (!historyData[user.roomId])
-      historyData[user.roomId] = new defaultDict(Array)
-    historyData[user.roomId][message.canvasId].push(message)
-    console.log(historyData)
+
+    historyData.push(user.roomId, message)
 
     socket.broadcast.to(user.roomId).emit('draw-pencil', message)
   })
 
   socket.on('draw-eraser', message => {
-    // console.log('draw-eraser');
     const user = getUser(socket.id)
+
+    historyData.push(user.roomId, message)
+
     socket.broadcast.to(user.roomId).emit('draw-eraser', message)
   })
 
@@ -109,9 +118,11 @@ io.on('connection', socket => {
         text: `${user.userName}님이 나가셨습니다.`,
       })
       io.to(user.roomId).emit('roomData', {
-        room: user.roomId,
-        userIds: getUsersInRoom(user.roomId),
+        roomId: user.roomId,
+        users: getUsersInRoom(user.roomId),
       })
+      const users = getUsersInRoom(user.roomId)
+      if (users.length === 0) delete historyData.dict[user.roomId]
     }
   })
 })
