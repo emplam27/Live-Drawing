@@ -21,6 +21,7 @@ import VoiceChatComponent from '../voice/components/VoiceChatComponent';
 // interfaces
 import { DrawData } from './interfaces/draw-interfaces';
 import { Params, PeerConnectionContext } from './interfaces/index-interfaces';
+import { Rtc } from '../voice/interfaces/voice-chat-interfaces';
 
 import {
   getToken,
@@ -89,6 +90,7 @@ function Draw() {
   const [eraserWidth, setEraserWidth] = useState(30);
   const [lineWidth, setLineWidth] = useState(5);
   const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
+
   // const [pathsry, setPathsry] = useState<point[][]>([]);
   // const [points, setPoints] = useState<point[]>([]);
 
@@ -387,7 +389,12 @@ function Draw() {
             setIsLiveClosed={setIsLiveClosed}
           />
           <div className='spacer'></div>
-          <VoiceChatComponent></VoiceChatComponent>
+          <VoiceChatComponent
+            client={null}
+            localAudioTrack={null}
+            speaker={true}
+            mic={true}
+          ></VoiceChatComponent>
         </div>
         <CanvasComponent
           activeTool={activeTool}
