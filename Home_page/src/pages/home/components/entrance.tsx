@@ -42,11 +42,20 @@ export function EntranceComponent(props: EntranceProps) {
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
-            if (res.status === 200 || res.data === 'fail') {
+            console.log(res);
+            if (res.status === 200) {
+              if (res.data === 'already exist') {
+                Swal.showValidationMessage('잘못된 접근입니다. 이미 방에 입장한 유저입니다.');
+                return;
+              }
+              if (res.data === 'password fail') {
+                Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
+                return;
+              }
               window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomId}`;
             } else throw new Error();
           })
-          .catch((err) => Swal.showValidationMessage('비밀번호가 일치하지 않습니다.'));
+          .catch((err) => Swal.showValidationMessage('오류가 발생했습니다.'));
       },
       allowOutsideClick: () => !Swal.isLoading(),
     });
