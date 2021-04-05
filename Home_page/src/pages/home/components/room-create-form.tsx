@@ -9,7 +9,7 @@ export default function RoomCreateComponent() {
   const userState = useCustomState();
   const MySwal = withReactContent(Swal);
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userName, setUserName] = useState(localStorage.getItem('name'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
   const [values, setValues] = useState<CreateRoom>({
     roomTitle: '',
@@ -24,7 +24,7 @@ export default function RoomCreateComponent() {
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserName(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('name'));
   }, [userState]);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function RoomCreateComponent() {
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    if (token === null || userName === null) {
+    if (token === null || userId === null) {
       MySwal.fire({
         title: '로그인을 해주세요.',
       });
@@ -51,10 +51,11 @@ export default function RoomCreateComponent() {
       .post(`${process.env.REACT_APP_API_URL}/room`, values, { headers: headers })
       .then((response) => {
         if (response.status === 200) {
-          window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${response.data['roomKey']}`;
+          window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${response.data['roomId']}`;
         }
       })
       .catch((error) => {
+        Swal.showValidationMessage('해당 방을 만들 수가 없습니다.');
       });
   };
   return (

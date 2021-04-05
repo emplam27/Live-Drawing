@@ -10,11 +10,11 @@ export function EntranceComponent(props: EntranceProps) {
   const MySwal = withReactContent(Swal);
   const userState = useCustomState();
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userName, setUserName] = useState(localStorage.getItem('name'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserName(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('name'));
   }, [userState]);
 
   const headers = {
@@ -24,7 +24,7 @@ export function EntranceComponent(props: EntranceProps) {
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
-    if (token === null || userName === null) {
+    if (token === null || userId === null) {
       MySwal.fire({
         title: '로그인을 해주세요.',
       });
@@ -38,11 +38,11 @@ export function EntranceComponent(props: EntranceProps) {
       },
       showCancelButton: true,
       preConfirm: (password) => {
-        const values = { username: userName, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
+        const values = { userId: userId, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
-            if (res.status === 200) {
+            if (res.status === 200 || res.data === 'fail') {
               window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomKey}`;
             } else throw new Error();
           })

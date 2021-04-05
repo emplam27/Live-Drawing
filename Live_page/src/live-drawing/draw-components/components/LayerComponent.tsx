@@ -12,8 +12,8 @@ import '../index.css';
 function LayerComponent(props: LayerComponentProps) {
   const [historyFlag, setHistoryFlag] = useState<boolean>(true);
 
-  function selectActiveLayer(layer: Layer) {
-    props.setActiveLayer(layer);
+  function selectTopLayer(layer: Layer) {
+    props.setTopLayer(layer);
   }
 
   useEffect(() => {
@@ -74,12 +74,11 @@ function LayerComponent(props: LayerComponentProps) {
                 key={layer.canvasId}
                 id={layer.buttonId}
                 className={`layer_space ${
-                  props.activeLayer != null &&
-                  props.activeLayer.name === layer.name
+                  props.topLayer != null && props.topLayer.name === layer.name
                     ? 'active-layer'
                     : ''
                 }`}
-                onClick={() => selectActiveLayer(layer)}
+                onClick={() => selectTopLayer(layer)}
               >
                 {layer.name}
               </span>
@@ -100,8 +99,8 @@ function LayerComponent(props: LayerComponentProps) {
                   ? 'layer-right'
                   : 'layer-left'
               } ${
-                props.activeLayer !== null &&
-                props.activeLayer.canvasId !== layer.canvasId
+                props.topLayer !== null &&
+                props.topLayer.canvasId !== layer.canvasId
                   ? 'hide'
                   : 'show'
               }`}
