@@ -40,7 +40,7 @@ function LiveDrawing() {
   useEffect(() => {
     axios // roomId랑 userId 보내줘야함
       .get(`${process.env.REACT_APP_API_URL}/live/${roomId}`, {
-        params: { userId: roomInfo.userId, roomId: roomId },
+        params: { userId: roomInfo.userId },
         headers: headers,
       })
       .then((res) => {

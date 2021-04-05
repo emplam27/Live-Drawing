@@ -38,7 +38,7 @@ export function EntranceComponent(props: EntranceProps) {
       },
       showCancelButton: true,
       preConfirm: (password) => {
-        const values = { userId: userId, password: password, roomId: props.roomId, roomPk: props.roomPk };
+        const values = { userId: userId, password: password, roomId: props.roomId };
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
@@ -70,7 +70,7 @@ export function EntranceComponent(props: EntranceProps) {
           <div className='roomTitle'>{props.roomTitle}</div>
           <div className={'buttonandImage'}>
             <img src='/profile.jpeg' alt=''></img>
-            <div className={'name'}>{`${userState.name}`}</div>
+            <div className={'name'}>{`${props.roomHostname}`}</div>
           </div>
         </div>
       </div>
