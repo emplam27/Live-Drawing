@@ -60,5 +60,5 @@ export interface PeerConnectionContext {
   channels: { [key: string]: RTCDataChannel };
   is_new: boolean;
   is_host: boolean;
-  hostId: string | null;
+  roomHostId: string | null;
 }

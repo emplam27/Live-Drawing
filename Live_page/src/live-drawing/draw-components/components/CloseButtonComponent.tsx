@@ -15,6 +15,7 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
       confirmButtonText: 'Yes',
     }).then((result) => {
       if (result.isConfirmed) {
+        props.setIsLiveClosed(true);
         window.location.replace(`${process.env.REACT_APP_HOMEPAGE_URL}`);
       }
     });
@@ -38,7 +39,7 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
 
   return (
     <>
-      {props.isHost ? (
+      {props.roomInfo.roomHostId === props.roomInfo.userId ? (
         <button
           className='bg-gray-350 hover:bg-gray-300 text-white font-bold py-3 px-4 rounded'
           onClick={closeLive}

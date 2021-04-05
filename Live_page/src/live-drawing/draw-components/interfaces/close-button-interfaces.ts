@@ -1,4 +1,6 @@
+import { RoomInfo } from '../../interfaces/socket-interfaces';
+
 export interface CloseButtonComponentProps {
-  isHost: boolean | null;
+  roomInfo: RoomInfo;
   setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
 }
