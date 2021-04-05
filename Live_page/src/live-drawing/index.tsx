@@ -7,11 +7,7 @@ import ChatComponent from './chat-components';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import {
-  RoomInfo,
-  ResponseData,
-  RoomUsers,
-} from './interfaces/socket-interfaces';
+import { RoomInfo, RoomUsers } from './interfaces/socket-interfaces';
 
 import axios from 'axios';
 import io from 'socket.io-client';
@@ -38,7 +34,7 @@ function LiveDrawing() {
   };
 
   useEffect(() => {
-    axios // roomId랑 userId 보내줘야함
+    axios
       .get(`${process.env.REACT_APP_API_URL}/live/${roomId}`, {
         params: { userId: roomInfo.userId },
         headers: headers,
@@ -62,6 +58,7 @@ function LiveDrawing() {
           userId: roomInfo.userId,
           roomId: roomId,
           roomTitle: res.data.roomInfo.roomTitle,
+          token: localStorage.getItem('token'),
         });
 
         socketIo.on('error', (message: { error: string }) => {
@@ -87,7 +84,7 @@ function LiveDrawing() {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/live/${roomId}/users`, {
-        params: { userId: roomInfo.userId, roomId: roomId },
+        params: { userId: roomInfo.userId },
         headers: headers,
       })
       .then((res) => {

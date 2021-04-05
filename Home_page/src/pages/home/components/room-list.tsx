@@ -15,15 +15,7 @@ export function RoomListComponent() {
   }, []);
   return (
     <>
-      {/* <div>진행중인 라이브</div> */}
-      {/* <Link to={'/'}>
-        <button className='py-1 px-3 font-semibold rounded-lg shadow-md text-white bg-blue-400 hover:bg-blue-500 text-sm'>
-          더보기
-        </button>
-      </Link> */}
       <div className='roomList'>
-        {/* <EntranceComponent roomPk={1} roomKey={'1'} roomTitle={'라이언 그리기'}></EntranceComponent> */}
-
         {rooms.map((room: EntranceProps, index: number) => {
           return (
             <div key={index}>

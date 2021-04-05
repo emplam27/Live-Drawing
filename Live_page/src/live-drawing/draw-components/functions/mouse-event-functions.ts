@@ -43,7 +43,10 @@ export function mouseMove(
     return;
   }
 
-  if (roomInfo.hostId !== roomInfo.userId && e.target.id !== roomInfo.userId)
+  if (
+    roomInfo.roomHostId !== roomInfo.userId &&
+    e.target.id !== roomInfo.userId
+  )
     return;
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];

@@ -136,7 +136,7 @@ function Draw(props: DrawProps) {
           <div className='spacer'></div>
 
           <CloseButtonComponent
-            isHost={isHost}
+            roomInfo={props.roomInfo}
             setIsLiveClosed={setIsLiveClosed}
           />
         </div>
