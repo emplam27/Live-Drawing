@@ -6,7 +6,7 @@ import './App.css';
 function App() {
   return (
     <div className='App'>
-      <main className='grid'>
+      <main className='flex w-screen h-screen'>
         <Switch>
           <Route path='/live/:roomId' component={LiveDrawing} />
         </Switch>
