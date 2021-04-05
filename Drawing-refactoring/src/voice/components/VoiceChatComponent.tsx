@@ -17,21 +17,23 @@ const {
 
 export function VoiceChatComponent(props: Rtc) {
   // 토큰 생성 및 방 참여
-  const [speaker, setSpeaker] = useState(true);
-  const [mic, setMic] = useState(true);
+  const [speaker, setSpeaker] = useState<boolean | null>(false);
+  const [mic, setMic] = useState<boolean | null>(false);
+
   const [toggleSpeakerSignal, setToggleSpeakerSignal] = useState<
     boolean | null
   >(null);
   const [toggleMicSignal, setToggleMicSignal] = useState<boolean | null>(null);
+
   const [
     localAudioTrack,
     setLocalAudiotrack,
   ] = useState<ILocalAudioTrack | null>(null);
-  const [
-    remoteAudioTrack,
-    setRemoteAudioTrack,
-  ] = useState<IRemoteAudioTrack | null>(null);
+  const [remoteAudioTracks, setRemoteAudioTracks] = useState<
+    IRemoteAudioTrack[]
+  >([]);
 
+  const [remotesignal, setRemoteSignal] = useState<boolean | null>(null);
   const [audiosignal, setAudiosignal] = useState<number | null>(null);
   const [clientsignal, setClientSignal] = useState<boolean | null>(null);
   const [client, setClient] = useState<IAgoraRTCClient | null>(
@@ -40,14 +42,88 @@ export function VoiceChatComponent(props: Rtc) {
       mode: 'rtc',
     }),
   );
-
   const [uid, setUid] = useState<UID | number>(0);
 
   useEffect(() => {
-    const appID = '0ebd36dbd3ed4d0bb0e3780173e3d4f7';
-    const appCertificate = 'dd5dd9f77a9a413e88dfb7eb13e4ad54';
-    const channelName = 'live';
-    // const uid = 0; // 사용자 ID 인증하지 않음
+    if (!localAudioTrack || !client) return;
+    client.publish([localAudioTrack]);
+    client.on('user-published', async (user, mediaType) => {
+      await client.subscribe(user, mediaType);
+      console.log('!!!!!!!새로 들어왔어요!!!!!!!!!!', remoteAudioTracks);
+      console.log('!!!!!!!클라이언트의 리모트 유저스다!!!!!!!!!!');
+      client.remoteUsers.forEach((remoteUser) => {
+        console.log('================1==', speaker, mic, remoteUser.audioTrack);
+        if (remoteUser.audioTrack) remoteUser.audioTrack.play();
+        console.log(
+          '================2===',
+          speaker,
+          mic,
+          remoteUser.audioTrack,
+        );
+        if (speaker === false) remoteUser.audioTrack?.setVolume(0);
+        // 스피커가 false면 volume 0 으로
+      });
+      // 마이크가 false면 unpublish
+      if (mic === false) client.unpublish([localAudioTrack]);
+    });
+  }, [localAudioTrack]);
+
+  function toggleSpeaker(speaker: boolean | null) {
+    setToggleSpeakerSignal(speaker);
+    console.log('!!!!!!!!!!!!!speaker!!!!!!!!!!!!!', speaker);
+  }
+
+  function toggleMic(mic: boolean | null) {
+    setToggleMicSignal(mic);
+    console.log('!!!!!!!!!!!!!mic!!!!!!!!!!!!!!', mic);
+  }
+  useEffect(() => {
+    remoteAudioTracks.forEach((remoteAudioTrack) => {
+      if (speaker === true) {
+        remoteAudioTrack.setVolume(100);
+      } else {
+        remoteAudioTrack.setVolume(0);
+      }
+    });
+  }, [remoteAudioTracks]);
+
+  /* 스피커 on/off */
+  useEffect(() => {
+    if (!remoteAudioTracks || toggleSpeakerSignal === null) return;
+    if (speaker === true || speaker == null) {
+      remoteAudioTracks.forEach((remoteAudioTrack) => {
+        // remoteAudioTrack.setVolume(0);
+        remoteAudioTrack.play();
+        // stop을 풀 때 다른 사람들의 이벤트를 듣게해야해
+      });
+      setSpeaker(false);
+    } else if (speaker === false) {
+      remoteAudioTracks.forEach((remoteAudioTrack) => {
+        // remoteAudioTrack.setVolume(100);
+        remoteAudioTrack.stop();
+      });
+      setSpeaker(true);
+    }
+  }, [toggleSpeakerSignal]);
+
+  /* 마이크 조절 */
+  useEffect(() => {
+    if (!client || !localAudioTrack || toggleMicSignal === null) return;
+    if (mic === true || mic == null) {
+      client.unpublish([localAudioTrack]);
+      // localAudioTrack.setEnabled(false);
+      setMic(false);
+    } else if (mic === false) {
+      // localAudioTrack.setEnabled(true);
+      client.publish([localAudioTrack]);
+      setMic(true);
+    }
+  }, [toggleMicSignal]);
+
+  useEffect(() => {
+    const appID = `${process.env.REACT_APP_AGORA_APP_ID}`;
+    const appCertificate = `${process.env.REACT_APP_AGORA_APP_CER}`;
+    const channelName = `${process.env.REACT_APP_AGORA_CH_NAME}`;
     const role = RtcRole.PUBLISHER;
     const expirationTimeInSeconds = 3600;
     const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -62,88 +138,16 @@ export function VoiceChatComponent(props: Rtc) {
       role,
       privilegeExpiredTs,
     ); // 0 uid
-    // console.log('Token With Integer Number Uid: ' + tokenA);
 
     async function startBasicCall() {
       if (!client) return;
       setUid(await client.join(appID, channelName, tokenA, null));
       setLocalAudiotrack(await AgoraRTC.createMicrophoneAudioTrack());
+      setSpeaker(false);
+      setMic(false);
     }
     startBasicCall();
-    // console.log('publish success!', user);
   }, []);
-
-  useEffect(() => {
-    if (!localAudioTrack || !client) return;
-
-    client.publish([localAudioTrack]);
-    console.log('published');
-
-    client.on('user-published', async (user, mediaType) => {
-      if (client) {
-        await client.subscribe(user, mediaType);
-        // Get `RemoteAudioTrack` in the `user` object.
-        const remoteAudioTrack = user.audioTrack;
-        // Play the audio track. No need to pass any DOM element.if (mediaType === "audio") {
-        if (remoteAudioTrack) {
-          remoteAudioTrack.play();
-          remoteAudioTrack.on;
-          console.log('remote audio track');
-        }
-      }
-    });
-  }, [localAudioTrack]);
-
-  async function toggleSpeaker(speaker) {
-    setToggleSpeakerSignal(speaker);
-  }
-
-  async function toggleMic(mic) {
-    setToggleMicSignal(mic);
-  }
-  /* 스피커 조절 : 다른 사람들 목소리 안들리게 */
-
-  useEffect(() => {
-    console.log('speaker', speaker, localAudioTrack);
-    if (!localAudioTrack) return;
-    if (speaker === true) {
-      console.log('remote audio track', remoteAudioTrack);
-      if (localAudioTrack !== null) {
-        localAudioTrack.setVolume(0);
-        localAudioTrack.stop();
-        setSpeaker(false);
-        console.log('volume down');
-      }
-    } else {
-      if (speaker === false) {
-        localAudioTrack.setVolume(100);
-        localAudioTrack.play();
-        setSpeaker(true);
-        console.log('volume up');
-      }
-    }
-  }, [toggleSpeakerSignal]);
-
-  /* 마이크 조절 */
-  useEffect(() => {
-    if (toggleMicSignal === null) return;
-    if (mic === true && client !== null && localAudioTrack !== null) {
-      localAudioTrack.setEnabled(false);
-      client.unpublish([localAudioTrack]);
-      localAudioTrack.stop();
-      setMic(false);
-      console.log('mic off', mic);
-    } else {
-      if (mic === false && client !== null && localAudioTrack !== null) {
-        localAudioTrack.setEnabled(true);
-        client.publish([localAudioTrack]);
-        localAudioTrack.play();
-        setMic(true);
-        console.log('mic on', mic);
-      }
-    }
-    console.log('toggle mic', localAudioTrack);
-  }, [toggleMicSignal]);
 
   return (
     <>
