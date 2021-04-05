@@ -1,0 +1,186 @@
+/** Utilities */
+  /* cursor: none; */
+.drawComponent {
+
+  grid-column: 1/5;
+}
+.cursor {
+  /* width: 40px; */
+  /* height: 40px; */
+  border: 1px solid #fefefe;
+  border-radius: 100%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition-property: opacity, background-color, transform, mix-blend-mode;
+}
+
+.hide{
+  display: hidden;
+  z-index: -1;
+}
+.show{
+  display: visible;
+  z-index: 0;
+}
+
+.cursor--hidden {
+  opacity: 0;
+}
+.cursor--width {
+  width: 100px;
+  height: 100px;
+}
+
+.hstack {
+  display: flex;
+  flex-direction: row;
+}
+
+.vstack {
+  display: flex;
+  flex-direction: column;
+}
+.center {
+  display: flex;
+  align-items: center;
+}
+.spacer {
+  flex: 1;
+}
+.flush {
+  height: 100%;
+}
+.relative {
+  position: relative;
+}
+.dropdown {
+  position: absolute;
+  background-color: #fff;
+  padding: 4px;
+  box-shadow: var(--dropdown-shadow);
+  border-radius: 4px;
+  z-index: 1;
+  margin-left: -80px;
+  margin-top: 30px;
+  transition: all 0.25s ease-in-out;
+}
+.icon-link + .dropdown {
+  opacity: 0;
+  top: 8px;
+  visibility: hidden;
+  transition: all 0.25s ease-in-out;
+}
+.icon-link:hover + .dropdown,
+.dropdown:hover {
+  opacity: 1;
+  top: 16px;
+  visibility: visible;
+}
+.icon-link:hover + .dropdown *,
+.dropdown:hover * {
+  opacity: 1;
+}
+.icon-link {
+  padding: calc(var(--standard-padding) / 2);
+  margin: calc(var(--standard-padding) * -1) 0px;
+  font-size: 1rem;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  top: 2px;
+  cursor: pointer;
+}
+.icon-link:hover {
+  color: var(--active-color);
+}
+.icon-link.active {
+  color: var(--active-color);
+  border-bottom: 3px solid var(--active-color);
+}
+.hidden {
+  visibility: hidden;
+}
+
+/** Sections */
+.menubar {
+  padding: var(--standard-padding);
+  box-shadow: var(--menubar-shadow);
+  background: var(--menubar-bg);
+  /* height: 40px; */
+}
+.app {
+  width: 100%;
+}
+.app canvas.active {
+  /* position: absolute; */
+  top: 32px;
+  left: 0px;
+}
+
+.canvas-container {
+  /* height: 2000px; */
+}
+
+.layer-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: none;
+  border: solid 0px 1px 1px 1px;
+  width: 50%;
+}
+.layer-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: none;
+  border: solid 0px 1px 1px 1px;
+  width: 50%;
+  z-index: 0;
+}
+
+
+.button {
+  font-size: 16px;
+  margin: none;
+  border: 0;
+  text-decoration: none;
+  padding: 0;
+}
+
+.layer_space {
+  margin-right: 36px;
+}
+.active-layer {
+  background-color: lightgray;
+}
+
+/** Color Picker */
+.box {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+.box:hover,
+.box.active {
+  box-shadow: inset 0px 0px 2px 2px #fff;
+  opacity: 0.75;
+}
+.box.color-ffffff:hover,
+.box.color-ffffff.active .box.color-f3f3f3:hover,
+.box.color-f3f3f3.active .box.color-efefef:hover,
+.box.color-efefef.active .box.color-d9d9d9:hover,
+.box.color-d9d9d9.active {
+  box-shadow: inset 0px 0px 2px 2px #aaa;
+}
+*[data-color] > .ri-palette-line {
+  color: #333 !important;
+}
+*[data-color] > .ri-checkbox-blank-fill {
+  width: 12px;
+  text-indent: -2px;
+  margin-left: 4px;
+  box-shadow: 0px 0px 1px 1px #ddd;
+}
