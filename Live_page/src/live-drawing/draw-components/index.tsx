@@ -27,7 +27,7 @@ import './index.css';
 function Draw(props: DrawProps) {
   //@ Drawing's States
   const [activeTool, setActiveTool] = useState<string>('');
-  const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
+  const [topLayer, setTopLayer] = useState<Layer | null>(null);
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
   const [layers, setLayers] = useState<Layer[]>([]);
   const [color, setColor] = useState('#000000');
@@ -142,7 +142,7 @@ function Draw(props: DrawProps) {
         </div>
         <LayerComponent
           activeTool={activeTool}
-          activeLayer={activeLayer}
+          topLayer={topLayer}
           canvasCtxTable={canvasCtxTable}
           color={color}
           roomInfo={props.roomInfo}
@@ -152,7 +152,7 @@ function Draw(props: DrawProps) {
           newLayerCtxSignal={newLayerCtxSignal}
           roomUsers={props.roomUsers}
           socket={props.socket}
-          setActiveLayer={setActiveLayer}
+          setTopLayer={setTopLayer}
           setCanvasCtxTable={setCanvasCtxTable}
           setLayers={setLayers}
           setNewLayerCtxSignal={setNewLayerCtxSignal}

@@ -9,7 +9,7 @@ export default function RoomCreateComponent() {
   const userState = useCustomState();
   const MySwal = withReactContent(Swal);
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userName, setUserName] = useState(localStorage.getItem('name'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
   const [values, setValues] = useState<CreateRoom>({
     roomTitle: '',
@@ -24,11 +24,11 @@ export default function RoomCreateComponent() {
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserName(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('userId'));
   }, [userState]);
 
   useEffect(() => {
-    setValues({ ...values, roomHost: localStorage.getItem('name') });
+    setValues({ ...values, roomHostId: localStorage.getItem('userId') });
   }, [userState]);
 
   const changeRoomTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +41,7 @@ export default function RoomCreateComponent() {
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    if (token === null || userName === null) {
+    if (token === null || userId === null) {
       MySwal.fire({
         title: '로그인을 해주세요.',
       });

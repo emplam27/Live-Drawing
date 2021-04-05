@@ -16,7 +16,7 @@ export interface Message {
 
 export interface LayerComponentProps {
   activeTool: string;
-  activeLayer: Layer | null;
+  topLayer: Layer | null;
   canvasCtxTable: CanvasCtxTable;
   color: string;
   roomInfo: RoomInfo;
@@ -26,7 +26,7 @@ export interface LayerComponentProps {
   newLayerCtxSignal: number | null;
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
-  setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   setCanvasCtxTable: React.Dispatch<React.SetStateAction<CanvasCtxTable>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setNewLayerCtxSignal: React.Dispatch<React.SetStateAction<number | null>>;

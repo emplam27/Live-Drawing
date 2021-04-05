@@ -6,7 +6,7 @@ const addUser = ({ socketId, userName, userId, roomId }) => {
   )
 
   if (existingUser) {
-    return { error: 'Username is taken' }
+    return { error: '이미 접속 중 입니다.' }
   }
 
   const user = { socketId, userName, userId, roomId }

@@ -7,6 +7,7 @@ import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import jwt_decode from 'jwt-decode';
+import { DecodedToken } from '../interfaces/decoded-token-interface';
 
 export function NavBarComponent() {
   const [isToken, setIsToken] = useState(localStorage.getItem('token'));
@@ -21,11 +22,19 @@ export function NavBarComponent() {
     },
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token !== null) {
+      const decodedToken: DecodedToken = jwt_decode(token);
+      userDispatch({ type: 'SET_ID', name: decodedToken.username, token: token });
+    }
+  }, []);
+
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
-      const decodedToken: { exp: number; sub: string; username: string } = jwt_decode(res.data.Authorization);
+      const decodedToken: DecodedToken = jwt_decode(res.data.Authorization);
       userDispatch({ type: 'SET_ID', name: decodedToken.username, token: res.data.Authorization });
-      localStorage.setItem('name', res.data.userId);
+      localStorage.setItem('userId', res.data.userId);
       localStorage.setItem('token', res.data.Authorization);
       if (res.status === 200) {
         MySwal.fire({
