@@ -30,7 +30,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         User userEntity = userRepo.findByEmail(email);
 //        System.out.println(username);
 //        System.out.println(userEntity.getUsername());
-        System.out.println("나다 시발" + userEntity.getEmail());
+        System.out.println(userEntity.getEmail());
         if(userEntity != null) {
 
             System.out.println("is not null?");

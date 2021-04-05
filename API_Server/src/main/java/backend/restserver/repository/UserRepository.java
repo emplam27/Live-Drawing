@@ -13,7 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // findBy 규칙 -> UserName 문법
     // select * from user where userName = 1?
-    public User findByUsername(String username); //* Jpa Query Methods (쿼리 메소드)를 공식홈페이지에서 찾아보면 됨.
+    User findByUserKey(String userKey);
+    User findByUsername(String username); //* Jpa Query Methods (쿼리 메소드)를 공식홈페이지에서 찾아보면 됨.
     User findByEmail(String email);
     //! 근데 얘는 왜 public을 붙이지?
 }
