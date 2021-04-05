@@ -41,7 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
                 .antMatchers("/api/user/join")
-                .antMatchers("/oauth/jwt/google");
+                .antMatchers("/api")
+//                .antMatchers("/login")
+                .antMatchers("/api/oauth/jwt/google");
 //        .antMatchers("/login");
     }
 

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
+
 import com.auth0.jwt.JWT;
 
 @RestController
@@ -47,6 +49,8 @@ public class JwtCreateController {
                     .providerId(googleUser.getProviderId())
                     .roles("ROLE_USER")
                     .build();
+            String userKeyValue = UUID.randomUUID().toString();
+            userRequest.setUserKey(userKeyValue);
             userEntity = userRepository.save(userRequest);
         } else {
             System.out.println("로그인을 이미 한 적이 있습니다. 당신은 자동회원가입이 되어있습니다.");
