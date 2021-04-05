@@ -14,7 +14,7 @@ export default function RoomCreateComponent() {
   const [values, setValues] = useState<CreateRoom>({
     roomTitle: '',
     roomPassword: '',
-    roomHost: '',
+    roomHostId: '',
   });
 
   const headers = {
@@ -51,10 +51,11 @@ export default function RoomCreateComponent() {
       .post(`${process.env.REACT_APP_API_URL}/room`, values, { headers: headers })
       .then((response) => {
         if (response.status === 200) {
-          window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${response.data['roomKey']}`;
+          window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${response.data['roomId']}`;
         }
       })
       .catch((error) => {
+        Swal.showValidationMessage('해당 방을 만들 수 없습니다.');
       });
   };
   return (

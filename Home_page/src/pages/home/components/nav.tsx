@@ -6,6 +6,7 @@ import { useCustomDispatch, useCustomState } from '../../../context';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import jwt_decode from 'jwt-decode';
 
 export function NavBarComponent() {
   const [isToken, setIsToken] = useState(localStorage.getItem('token'));
@@ -22,8 +23,9 @@ export function NavBarComponent() {
 
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
-      userDispatch({ type: 'SET_ID', name: res.data.username, token: res.data.Authorization });
-      localStorage.setItem('name', res.data.username);
+      const decodedToken: { exp: number; sub: string; username: string } = jwt_decode(res.data.Authorization);
+      userDispatch({ type: 'SET_ID', name: decodedToken.username, token: res.data.Authorization });
+      localStorage.setItem('name', res.data.userId);
       localStorage.setItem('token', res.data.Authorization);
       if (res.status === 200) {
         MySwal.fire({
@@ -129,7 +131,7 @@ export function NavBarComponent() {
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               {isToken ? (
                 <>
-                  <div className='mr-5'>{`${localStorage.getItem('name')}님 환영합니다.`}</div> <LogoutComponent />
+                  <div className='mr-5'>{`${userState.name}님 환영합니다.`}</div> <LogoutComponent />
                 </>
               ) : (
                 <GoogleLogin
