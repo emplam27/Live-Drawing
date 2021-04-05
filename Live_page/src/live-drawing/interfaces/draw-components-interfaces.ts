@@ -48,7 +48,7 @@ export interface Layer {
 }
 
 export interface Params {
-  roomKey: string;
+  roomId: string;
 }
 
 export interface PeerConnectionContext {
