@@ -14,7 +14,7 @@ export default function RoomCreateComponent() {
   const [values, setValues] = useState<CreateRoom>({
     roomTitle: '',
     roomPassword: '',
-    roomHost: '',
+    roomHostId: '',
   });
 
   const headers = {
@@ -24,11 +24,11 @@ export default function RoomCreateComponent() {
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserId(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('userId'));
   }, [userState]);
 
   useEffect(() => {
-    setValues({ ...values, roomHost: localStorage.getItem('name') });
+    setValues({ ...values, roomHostId: localStorage.getItem('userId') });
   }, [userState]);
 
   const changeRoomTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +55,7 @@ export default function RoomCreateComponent() {
         }
       })
       .catch((error) => {
-        Swal.showValidationMessage('해당 방을 만들 수가 없습니다.');
+        Swal.showValidationMessage('해당 방을 만들 수 없습니다.');
       });
   };
   return (

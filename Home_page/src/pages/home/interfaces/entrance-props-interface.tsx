@@ -1,5 +1,5 @@
 export interface EntranceProps {
-  roomKey: string;
+  roomId: string;
   roomTitle: string;
   roomPk: number;
   // roomHost: string;
@@ -11,7 +11,7 @@ export interface ResponseEntranceProps {
 
 export interface Values {
   roomPk: number;
-  roomKey: string;
+  roomId: string;
   password: string;
-  username: string | null;
+  userId: string | null;
 }

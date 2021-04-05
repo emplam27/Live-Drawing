@@ -14,7 +14,7 @@ export function EntranceComponent(props: EntranceProps) {
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserId(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('userId'));
   }, [userState]);
 
   const headers = {
@@ -38,12 +38,12 @@ export function EntranceComponent(props: EntranceProps) {
       },
       showCancelButton: true,
       preConfirm: (password) => {
-        const values = { userId: userId, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
+        const values = { userId: userId, password: password, roomId: props.roomId, roomPk: props.roomPk };
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
             if (res.status === 200 || res.data === 'fail') {
-              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomKey}`;
+              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomId}`;
             } else throw new Error();
           })
           .catch((err) => Swal.showValidationMessage('비밀번호가 일치하지 않습니다.'));
@@ -62,7 +62,7 @@ export function EntranceComponent(props: EntranceProps) {
           <div className='roomTitle'>{props.roomTitle}</div>
           <div className={'buttonandImage'}>
             <img src='/profile.jpeg' alt=''></img>
-            <div className={'name'}>전민동고흐</div>
+            <div className={'name'}>{`${userState.name}`}</div>
           </div>
         </div>
       </div>
