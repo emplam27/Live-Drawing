@@ -42,7 +42,6 @@ export function EntranceComponent(props: EntranceProps) {
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
-            console.log(res);
             if (res.status === 200) {
               if (res.data === 'already exist') {
                 Swal.showValidationMessage('잘못된 접근입니다. 이미 방에 입장한 유저입니다.');

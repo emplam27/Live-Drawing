@@ -15,22 +15,22 @@ import {
 
 import axios from 'axios';
 import io from 'socket.io-client';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 
 import '../App.css';
 
 function LiveDrawing() {
-  const tempName = uuid();
   const { roomId } = useParams<{ roomId: string }>();
   const [roomInfo, setRoomInfo] = useState<RoomInfo>({
-    roomId: 'roomId',
-    userName: tempName,
-    roomTitle: '7번방',
-    userId: tempName,
-    hostId: tempName,
+    roomId: roomId,
+    userName: null,
+    roomTitle: null,
+    userId: localStorage.getItem('userId'),
+    roomHostId: null,
   });
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const [roomUsers, setRoomUsers] = useState<RoomUsers | null>(null);
+  const [usersInfo, setUsersInfo] = useState();
   const MySwal = withReactContent(Swal);
   const headers = {
     'Content-Type': 'application/json',
@@ -38,20 +38,29 @@ function LiveDrawing() {
   };
 
   useEffect(() => {
-    axios
+    axios // roomId랑 userId 보내줘야함
       .get(`${process.env.REACT_APP_API_URL}/live/${roomId}`, {
+        params: { userId: roomInfo.userId, roomId: roomId },
         headers: headers,
       })
       .then((res) => {
-        setRoomInfo(res.data.roomInfo);
+        if (res.status !== 200)
+          MySwal.fire({
+            title: <p>{'오류가 발생했습니다.'}</p>,
+            text: '홈으로 돌아갑니다.',
+          }).then(
+            () =>
+              (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
+          );
+        setRoomInfo({ ...roomInfo, ...res.data.roomInfo });
         const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
           transports: ['websocket'],
         });
 
         socketIo.emit('join', {
           userName: res.data.roomInfo.userName,
-          userId: res.data.roomInfo.userId,
-          roomId: res.data.roomInfo.roomId,
+          userId: roomInfo.userId,
+          roomId: roomId,
           roomTitle: res.data.roomInfo.roomTitle,
         });
 
@@ -76,34 +85,45 @@ function LiveDrawing() {
   }, []);
 
   useEffect(() => {
-    const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
-      transports: ['websocket'],
-    });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/live/${roomId}/users`, {
+        params: { userId: roomInfo.userId, roomId: roomId },
+        headers: headers,
+      })
+      .then((res) => {
+        setUsersInfo(res.data);
+      });
+  }, [roomUsers]);
 
-    socketIo.emit('join', {
-      userId: roomInfo.userId,
-      userName: roomInfo.userName,
-      roomId: roomId,
-      roomTitle: roomInfo.roomTitle,
-    });
+  // useEffect(() => {
+  //   const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
+  //     transports: ['websocket'],
+  //   });
 
-    socketIo.on('error', (message: { error: string }) => {
-      MySwal.fire({
-        title: <p>{`${message.error}`}</p>,
-        text: '홈으로 돌아갑니다.',
-      }).then(
-        () => (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-      );
-    });
+  //   socketIo.emit('join', {
+  //     userId: roomInfo.userId,
+  //     userName: roomInfo.userName,
+  //     roomId: roomId,
+  //     roomTitle: roomInfo.roomTitle,
+  //   });
 
-    socketIo.on('update-room-users', (message: RoomUsers) => {
-      setRoomUsers(message);
-    });
+  //   socketIo.on('error', (message: { error: string }) => {
+  //     MySwal.fire({
+  //       title: <p>{`${message.error}`}</p>,
+  //       text: '홈으로 돌아갑니다.',
+  //     }).then(
+  //       () => (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
+  //     );
+  //   });
 
-    socketIo.on('connect', () => {
-      setSocket(socketIo);
-    });
-  }, []);
+  //   socketIo.on('update-room-users', (message: RoomUsers) => {
+  //     setRoomUsers(message);
+  //   });
+
+  //   socketIo.on('connect', () => {
+  //     setSocket(socketIo);
+  //   });
+  // }, []);
 
   return (
     <>
