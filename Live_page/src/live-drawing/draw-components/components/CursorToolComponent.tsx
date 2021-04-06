@@ -19,7 +19,7 @@ function CursorToolComponent(props: CursorToolComponentProps) {
     <>
       <p
         id={'cursor'}
-        className={`icon-link center ${
+        className={`hover:text-blue-500 flex items-center ${
           props.activeTool === 'cursor' ? 'active' : ''
         }`}
         onClick={() =>

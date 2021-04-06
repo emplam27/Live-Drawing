@@ -46,6 +46,7 @@ function DrawComponent(props: DrawComponentProps) {
     if (pencilSignal === null) return;
     const canvasCtx: CanvasRenderingContext2D =
       canvasCtxTable[pencilSignal.canvasId];
+    if (!canvasCtx) return;
     draw(pencilSignal, canvasCtx);
   }, [pencilSignal]);
 
@@ -54,6 +55,7 @@ function DrawComponent(props: DrawComponentProps) {
     if (eraserSignal === null) return;
     const canvasCtx: CanvasRenderingContext2D =
       canvasCtxTable[eraserSignal.canvasId];
+    if (!canvasCtx) return;
     erase(eraserSignal, canvasCtx);
   }, [eraserSignal]);
 

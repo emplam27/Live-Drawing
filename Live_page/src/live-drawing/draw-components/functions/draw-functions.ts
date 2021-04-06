@@ -15,16 +15,17 @@ export function draw(
   data: DrawData,
   canvasCtx: CanvasRenderingContext2D,
 ): void {
+  if (!canvasCtx) return;
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
   canvasCtx.beginPath();
   canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
   const midPoint = midPointBtw(data.lastPoint, data.currentPoint);
   canvasCtx.quadraticCurveTo(
-    data.lastPoint.x,
-    data.lastPoint.y,
     midPoint.x,
     midPoint.y,
+    data.currentPoint.x,
+    data.currentPoint.y,
   );
   canvasCtx.strokeStyle = data.color;
   canvasCtx.lineWidth = data.lineWidth;
@@ -36,6 +37,7 @@ export function erase(
   data: EraseData,
   canvasCtx: CanvasRenderingContext2D,
 ): void {
+  if (!canvasCtx) return;
   const x = data.currentPoint.x;
   const y = data.currentPoint.y;
   const r = data.r / 2;

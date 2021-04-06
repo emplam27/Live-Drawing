@@ -1,6 +1,7 @@
 import React from 'react';
 import UserSelectButtonComponent from './components/UserSelectButtonComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
+import VoiceChatComponent from '../voice-components/';
 
 import { SidebarComponentProps } from '../interfaces/sidebar-components-interfaces';
 
@@ -12,8 +13,6 @@ function SidebarComponent(props: SidebarComponentProps) {
           <i className='ri-2x ri-leaf-fill text-blue-500'></i>
         </div>
       </div>
-
-      <div className='flex-grow'></div>
       <UserSelectButtonComponent
         topLayer={props.topLayer}
         userProfileInfos={props.userProfileInfos}
@@ -22,8 +21,7 @@ function SidebarComponent(props: SidebarComponentProps) {
         setTopLayer={props.setTopLayer}
       />
       <div className='flex-grow'></div>
-      <p>스피커 버튼</p>
-      <div className='flex-grow'></div>
+      <VoiceChatComponent />
       <p>유저, 채팅 버튼</p>
       <div className='flex-grow'></div>
       <CloseButtonComponent
