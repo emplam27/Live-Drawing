@@ -6,6 +6,12 @@ export interface RoomInfo {
   roomHostId: string | null;
 }
 
+export interface UsersInfo {
+  userName: string | null;
+  userId: string;
+  userImage: string;
+}
+
 export interface ResponseData {
   roomInfo: RoomInfo;
 }

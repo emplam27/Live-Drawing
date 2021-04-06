@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 // import DeleteObjectComponent from './components/DeleteObjectComponent';
 // import CursorToolComponent from './components/CursorToolComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
-import ClosedFilterComponent from './components/ClosedFilterComponent';
+import { closedFilter } from './functions/closedFilter';
 import ColorPaletteComponent from './components/ColorPaletteComponent';
 import CursorComponent from './components/CursorComponent';
 import EraseSizeComponent from './components/EraseSizeComponent';
@@ -76,6 +76,11 @@ function Draw(props: DrawProps) {
       canvasCtxTable[eraserSignal.canvasId];
     erase(eraserSignal, canvasCtx);
   }, [eraserSignal]);
+
+  //@ Function: Recieve Close Event
+  useEffect(() => {
+    closedFilter({ isLiveClosed, setIsLiveClosed });
+  }, [isLiveClosed]);
 
   /*
    * ========================================================

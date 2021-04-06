@@ -7,7 +7,7 @@ import ChatComponent from './chat-components';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import { RoomInfo, RoomUsers } from './interfaces/socket-interfaces';
+import { RoomInfo, RoomUsers, UsersInfo } from './interfaces/socket-interfaces';
 
 import axios from 'axios';
 import io from 'socket.io-client';
@@ -26,7 +26,8 @@ function LiveDrawing() {
   });
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const [roomUsers, setRoomUsers] = useState<RoomUsers | null>(null);
-  const [usersInfo, setUsersInfo] = useState();
+  const [usersInfo, setUsersInfo] = useState<UsersInfo[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const MySwal = withReactContent(Swal);
   const headers = {
     'Content-Type': 'application/json',
