@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import Draw from './draw-components';
 import ChatComponent from './chat-components';
+import VoiceChatComponent from './voice-components';
 
 import {
   RoomInfo,
@@ -10,7 +11,7 @@ import {
   RoomUsers,
 } from './interfaces/socket-interfaces';
 
-import axios from 'axios';
+// import axios from 'axios';
 import io from 'socket.io-client';
 import { v4 as uuid } from 'uuid';
 
@@ -75,7 +76,9 @@ function LiveDrawing() {
     <>
       <Draw socket={socket} roomInfo={roomInfo} roomUsers={roomUsers} />
       <div className='side'>
-        <div className='voice'></div>
+        <div className='voice'>
+          <VoiceChatComponent></VoiceChatComponent>
+        </div>
         <div className='peers'></div>
         <ChatComponent
           userName={roomInfo.userName}

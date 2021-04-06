@@ -1,33 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import AgoraRTC, {
   IAgoraRTCClient,
   ILocalAudioTrack,
-  IRemoteAudioTrack,
   UID,
 } from 'agora-rtc-sdk-ng';
-import { Rtc } from '../interfaces/voice-chat-interfaces';
-import { TextComponent } from 'react-native';
+import { Rtc } from '../interfaces/voice-component-props-interface';
 
-const {
-  RtcTokenBuilder,
-  RtmTokenBuilder,
-  RtcRole,
-  RtmRole,
-} = require('agora-access-token');
+const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
 
-export function VoiceChatComponent(props: Rtc) {
+export function VoiceToolComponent(props: Rtc) {
   const [speaker, setSpeaker] = useState<boolean | null>(null);
   const [mic, setMic] = useState<boolean | null>(null);
   const [toggleSpeakerSignal, setToggleSpeakerSignal] = useState<
     boolean | null
   >(null);
   const [toggleMicSignal, setToggleMicSignal] = useState<boolean | null>(null);
+
   const [
     localAudioTrack,
     setLocalAudiotrack,
   ] = useState<ILocalAudioTrack | null>(null);
-  const [remotesignal, setRemoteSignal] = useState<boolean | null>(null);
-  const [audiosignal, setAudiosignal] = useState<number | null>(null);
+
+  const { roomId } = useParams<{ roomId: string }>();
   const [newUserSignal, setNewUserSignal] = useState<number | null>(null);
   const [client, setClient] = useState<IAgoraRTCClient | null>(
     AgoraRTC.createClient({
@@ -41,8 +36,8 @@ export function VoiceChatComponent(props: Rtc) {
     if (!localAudioTrack || !client) return;
     client.publish([localAudioTrack]);
     client.on('user-published', async (user, mediaType) => {
+      console.log('**********', user, mediaType);
       if (user && mediaType === 'audio') {
-        console.log('**********', user, mediaType);
         await client.subscribe(user, mediaType);
         console.log('!!!!!!!클라이언트의 리모트 유저스다!!!!!!!!!!');
         setNewUserSignal(new Date().getTime());
@@ -60,8 +55,6 @@ export function VoiceChatComponent(props: Rtc) {
 
   /* 스피커 on/off */
   useEffect(() => {
-    // 맨 처음 toggle값이 널일 때 여기로 들어가게 된다.
-    console.log('==== check toggle speaker signal', toggleSpeakerSignal);
     if (!client || toggleSpeakerSignal === null) return;
     if (toggleSpeakerSignal === false) {
       client.remoteUsers.forEach((user) => {
@@ -82,10 +75,8 @@ export function VoiceChatComponent(props: Rtc) {
     if (!client || !localAudioTrack) return;
     if (toggleMicSignal === false || toggleMicSignal === null) {
       client.unpublish([localAudioTrack]);
-      // localAudioTrack.setEnabled(false);
       setMic(false);
     } else if (toggleMicSignal === true) {
-      // localAudioTrack.setEnabled(true);
       client.publish([localAudioTrack]);
       setMic(true);
     }
@@ -98,7 +89,6 @@ export function VoiceChatComponent(props: Rtc) {
       if (speaker === false) remoteUser.audioTrack?.setVolume(0);
     });
     if (mic === false) client.unpublish([localAudioTrack]);
-    console.log('!!!!!!!새로운 친구가 들어왔어요!!!!!!!!!!');
     console.log('친구들', client.remoteUsers);
     console.log('내 스피커 상황', speaker);
     console.log('내 마이크 상황', mic);
@@ -109,7 +99,14 @@ export function VoiceChatComponent(props: Rtc) {
   useEffect(() => {
     const appID = `${process.env.REACT_APP_AGORA_APP_ID}`;
     const appCertificate = `${process.env.REACT_APP_AGORA_APP_CER}`;
-    const channelName = `${process.env.REACT_APP_AGORA_CH_NAME}`;
+
+    // const channelName = `${process.env.REACT_APP_AGORA_CH_NAME}`;
+    // console.log(`${useParams<{ roomId: string }>()}`);
+    // const roomId = document.location.href.split('/')[4];
+    // const channelName = 'live';
+
+    const channelName = roomId;
+    console.log('channel name = ', channelName);
     const role = RtcRole.PUBLISHER;
     const expirationTimeInSeconds = 3600;
     const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -127,12 +124,15 @@ export function VoiceChatComponent(props: Rtc) {
 
     async function startBasicCall() {
       if (!client) return;
-      setUid(await client.join(appID, channelName, tokenA, null));
       setLocalAudiotrack(await AgoraRTC.createMicrophoneAudioTrack());
+      console.log('local audio track = ', localAudioTrack);
+      setUid(await client.join(appID, channelName, tokenA, null));
       setToggleSpeakerSignal(false);
       setSpeaker(false);
       setToggleMicSignal(false);
       setMic(false);
+
+      //   console.log(roomId);
     }
     startBasicCall();
   }, []);
@@ -173,4 +173,4 @@ export function VoiceChatComponent(props: Rtc) {
     </>
   );
 }
-export default VoiceChatComponent;
+export default VoiceToolComponent;
