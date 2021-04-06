@@ -15,6 +15,7 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
       confirmButtonText: 'Yes',
     }).then((result) => {
       if (result.isConfirmed) {
+        props.setIsLiveClosed(true);
         window.location.replace(`${process.env.REACT_APP_HOMEPAGE_URL}`);
       }
     });
@@ -38,19 +39,21 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
 
   return (
     <>
-      {props.isHost ? (
+      {props.roomInfo.roomHostId === props.roomInfo.userId ? (
         <button
-          className='bg-gray-350 hover:bg-gray-300 text-white font-bold py-3 px-4 rounded'
+          className='w-20 h-20 bg-gray-350 hover:bg-gray-300 text-white font-bold'
           onClick={closeLive}
         >
-          라이브 종료
+          <p>라이브</p>
+          <p>종료</p>
         </button>
       ) : (
         <button
-          className='bg-gray-350 hover:bg-gray-300 text-white font-bold py-3 px-4 rounded'
+          className='w-20 h-20 bg-gray-350 hover:bg-gray-300 text-white font-bold'
           onClick={exitLive}
         >
-          라이브 나가기
+          <p>라이브</p>
+          <p>나가기</p>
         </button>
       )}
     </>

@@ -23,7 +23,7 @@ export function SignInComponent() {
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
       userDispatch({ type: 'SET_ID', name: res.data.username, token: res.data.Authorization });
-      localStorage.setItem('name', res.data.username);
+      localStorage.setItem('userId', res.data.userId);
       localStorage.setItem('token', res.data.Authorization);
       if (res.data.Authorization) {
         MySwal.fire({

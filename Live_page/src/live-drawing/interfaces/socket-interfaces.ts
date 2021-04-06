@@ -1,9 +1,15 @@
 export interface RoomInfo {
-  roomTitle: string;
-  roomId: string;
-  userName: string;
+  roomTitle: string | null;
+  roomId: string | null;
+  username: string | null;
+  userId: string | null;
+  roomHostId: string | null;
+}
+
+export interface UserProfileInfo {
+  userName: string | null;
   userId: string;
-  hostId: string;
+  userImage: string;
 }
 
 export interface ResponseData {
