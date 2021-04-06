@@ -75,10 +75,7 @@ function LayerComponent(props: LayerComponentProps) {
 
   return (
     <>
-      <div
-        id='canvasContainer'
-        className='spacer app relative canvas-container grid grid-cols-2 divide-x-2'
-      >
+      <div id='canvasContainer' className='w-full grid grid-cols-2 divide-x-2'>
         {props.layers.map((layer: Layer) => {
           return (
             <canvas
@@ -86,13 +83,14 @@ function LayerComponent(props: LayerComponentProps) {
               id={layer.canvasId}
               className={`${
                 layer.canvasId === props.roomInfo.userId
-                  ? 'layer-right cols-start-2 cols-end-3 border-8 border-indigo-600'
-                  : 'layer-left cols-start-1 cols-end-2 border-8 border-red-600'
-              } ${
-                props.activeLayer !== null &&
-                props.activeLayer.canvasId !== layer.canvasId
-                  ? 'hide'
-                  : 'show'
+                  ? 'cols-start-2 cols-end-3 border-8 border-indigo-600'
+                  : `cols-start-1 cols-end-2 border-8 border-red-600
+               ${
+                 props.activeLayer !== null &&
+                 props.activeLayer.canvasId !== layer.canvasId
+                   ? 'hidden'
+                   : null
+               }`
               }`}
               width={window.innerWidth * 0.4}
               height={window.innerHeight}

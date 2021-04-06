@@ -58,7 +58,7 @@ function DrawComponent(props: DrawComponentProps) {
   }, [eraserSignal]);
 
   return (
-    <div className='w-full'>
+    <>
       <CursorComponent cursorWidth={cursorWidth} />
       <LayerComponent
         activeLayer={props.activeLayer}
@@ -75,7 +75,7 @@ function DrawComponent(props: DrawComponentProps) {
         setLayers={props.setLayers}
         setNewLayerCtxSignal={setNewLayerCtxSignal}
       />
-    </div>
+    </>
   );
 }
 
