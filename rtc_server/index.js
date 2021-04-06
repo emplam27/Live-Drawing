@@ -2,13 +2,13 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const uuid = require('uuid');
 const dotenv = require('dotenv');
 const redis = require('redis');
 const bluebird = require('bluebird');
 const cors = require('cors');
 const socket = require('socket.io');
-const { addUser, removeUser, getUsersInRoom, getRoom, getUser } = require('./src/users');
+const axios = require('axios');
+const { addUser, removeUser, getUsersInRoom, getUser } = require('./src/users');
 const defaultDict = require('./src/default-dict');
 const historyData = defaultDict();
 
@@ -31,12 +31,18 @@ io.on('connection', (socket) => {
       userName: message.userName,
       userId: message.userId,
       roomId: message.roomId,
+      roomTitle: message.roomTitle,
+      token: message.token,
     });
+    if (user.error) {
+      socket.emit('error', user);
+      return;
+    }
     socket.join(user.roomId);
 
     socket.emit('chat-message', {
       user: 'admin',
-      text: `${user.userName} 님, ${user.roomId} 방에 오신걸 환영합니다!`,
+      text: `${user.userName} 님, ${user.roomTitle} 방에 오신걸 환영합니다!`,
     });
 
     socket.broadcast.to(user.roomId).emit('chat-message', {
@@ -103,6 +109,15 @@ io.on('connection', (socket) => {
     const user = removeUser(socket.id);
     console.log('유저의 연결이 끊어졌습니다.');
     if (user) {
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: user.token,
+      };
+      axios.post(
+        `${process.env.REACT_APP_API_URL}/${user.roomId}/disconnect`,
+        { userId: user.userId },
+        { headers: headers }
+      );
       io.to(user.roomId).emit('chat-message', {
         userId: user.userId,
         userName: user.userName,

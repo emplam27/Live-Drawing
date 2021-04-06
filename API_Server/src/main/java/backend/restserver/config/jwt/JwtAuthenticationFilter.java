@@ -99,7 +99,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("---------------------------- : " +principalDetails.getUsername());
         String jwtToken = JWT.create()
                 .withSubject(principalDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) //! 토큰 만료시간 10분
+                .withExpiresAt(new Date(System.currentTimeMillis()+JwtProperties.EXPIRATION_TIME)) //! 토큰 만료시간 100분
                 .withClaim("userPk", principalDetails.getUser().getUserPk())
                 .withClaim("username", principalDetails.getUser().getUsername())
                 .withClaim("email", principalDetails.getUser().getEmail())
@@ -111,8 +111,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setCharacterEncoding("UTF-8");
 
         response.getWriter().write(
-                "{\"" + "username" + "\":\"" + principalDetails.getUser().getUsername() + "\",\n\""
-                         + JwtProperties.HEADER_STRING + "\":\"" + JwtProperties.TOKEN_PREFIX+jwtToken + "\"}"
+                "{\"" + "username" + "\":\"" + principalDetails.getUser().getUsername() + "\",\n"
+                        +"\"" + "userKey" + "\":\"" + principalDetails.getUser().getUserKey() + "\",\n"
+                         + "\"" + JwtProperties.HEADER_STRING + "\":\"" + JwtProperties.TOKEN_PREFIX+jwtToken + "\"}"
         );
     }
 }

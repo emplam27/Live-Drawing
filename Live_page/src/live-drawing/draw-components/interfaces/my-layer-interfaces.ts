@@ -1,4 +1,4 @@
-import { RoomInfo, RoomUsers } from '../../interfaces/socket-interfaces';
+import { RoomInfo } from '../../interfaces/socket-interfaces';
 import {
   Layer,
   CanvasCtxTable,

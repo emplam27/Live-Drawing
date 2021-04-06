@@ -1,4 +1,4 @@
 export interface ChatComponentProps {
-  userName: string;
+  userName: string | null;
   socket: SocketIOClient.Socket | null;
 }

@@ -10,11 +10,11 @@ export function EntranceComponent(props: EntranceProps) {
   const MySwal = withReactContent(Swal);
   const userState = useCustomState();
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userName, setUserName] = useState(localStorage.getItem('name'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserName(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('userId'));
   }, [userState]);
 
   const headers = {
@@ -24,7 +24,7 @@ export function EntranceComponent(props: EntranceProps) {
 
   const onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
-    if (token === null || userName === null) {
+    if (token === null || userId === null) {
       MySwal.fire({
         title: '로그인을 해주세요.',
       });
@@ -38,15 +38,23 @@ export function EntranceComponent(props: EntranceProps) {
       },
       showCancelButton: true,
       preConfirm: (password) => {
-        const values = { username: userName, password: password, roomKey: props.roomKey, roomPk: props.roomPk };
+        const values = { userId: userId, password: password, roomId: props.roomId };
         return axios
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
             if (res.status === 200) {
-              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomKey}`;
+              if (res.data === 'already exist') {
+                Swal.showValidationMessage('잘못된 접근입니다. 이미 방에 입장한 유저입니다.');
+                return;
+              }
+              if (res.data === 'password fail') {
+                Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
+                return;
+              }
+              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomId}`;
             } else throw new Error();
           })
-          .catch((err) => Swal.showValidationMessage('비밀번호가 일치하지 않습니다.'));
+          .catch((err) => Swal.showValidationMessage('오류가 발생했습니다.'));
       },
       allowOutsideClick: () => !Swal.isLoading(),
     });
@@ -62,7 +70,7 @@ export function EntranceComponent(props: EntranceProps) {
           <div className='roomTitle'>{props.roomTitle}</div>
           <div className={'buttonandImage'}>
             <img src='/profile.jpeg' alt=''></img>
-            <div className={'name'}>전민동고흐</div>
+            <div className={'name'}>{`${props.roomHostname}`}</div>
           </div>
         </div>
       </div>

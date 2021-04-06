@@ -16,6 +16,7 @@ function SidebarComponent(props: SidebarComponentProps) {
       <div className='flex-grow'></div>
       <UserSelectButtonComponent
         topLayer={props.topLayer}
+        userProfileInfos={props.userProfileInfos}
         roomInfo={props.roomInfo}
         layers={props.layers}
         setTopLayer={props.setTopLayer}
@@ -26,7 +27,7 @@ function SidebarComponent(props: SidebarComponentProps) {
       <p>유저, 채팅 버튼</p>
       <div className='flex-grow'></div>
       <CloseButtonComponent
-        isHost={props.isHost}
+        roomInfo={props.roomInfo}
         setIsLiveClosed={props.setIsLiveClosed}
       />
     </div>

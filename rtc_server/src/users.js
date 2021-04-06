@@ -1,15 +1,15 @@
 let users = []
 
-const addUser = ({ socketId, userName, userId, roomId }) => {
+const addUser = ({ socketId, userName, userId, roomId, token }) => {
   const existingUser = users.find(
     user => user.roomId === roomId && user.userId === userId
   )
 
   if (existingUser) {
-    return { error: 'Username is taken' }
+    return { error: '이미 접속 중 입니다.' }
   }
 
-  const user = { socketId, userName, userId, roomId }
+  const user = { socketId, userName, userId, roomId, token }
   // console.log(user)
   users.push(user)
   return user

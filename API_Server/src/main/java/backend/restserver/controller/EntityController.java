@@ -58,9 +58,7 @@ public class EntityController {
     @ResponseBody
     public List<User> showUserInfo(@RequestParam String uuid) {
         logger.info("show user list and number!!" + uuid);
-//        List<Member> memberList =  new ArrayList<>();
 
-//        List<Member> memberList = memberRepo.findByRoom_RoomPk(roomPk);
         List<Room> newRoom = roomRepo.findByRoomKey(uuid); // 예가 인덱싱 처리가 안되있어서 해줘야 함 (물론 이번서비스에서는 그정도로 속도 저하가 일어날것 같진않지만..)
         Long roomPk = newRoom.get(0).getRoomPk();
         return userRepo.findByRoom_RoomPk(roomPk);
@@ -68,28 +66,35 @@ public class EntityController {
 
     @PostMapping("/api/room/entrance")
     public String joinRoom(@RequestBody Map<String, Object> roomJson) {
-        String uuid = roomJson.get("roomKey").toString();
+        String uuid = roomJson.get("roomId").toString();
         Long roomPk = Long.parseLong(roomJson.get("roomPk").toString());
         String username = roomJson.get("username").toString();
 
         String password = roomJson.get("password").toString();
 
+//        User newUser = findByUsername(username);
+        User user = userRepo.findByUsername((username));
+
         if(uuid == null || uuid.length() == 0 || roomPk == 0 ||   // 널 처리
                 password == null || password.length() == 0) {
             System.out.println("잘못된 접근 입니다.");
             return "failure";
-        } else {
+        } else if (user.getRoom().getRoomPk() >= 1) { // 이미 방에 있는 유저인 경우
+            System.out.println("잘못된 접근 입니다.");
+            return "failure";
+        }
+        else {
             logger.info(" uuid is : " + uuid);
             Optional<Room> target = roomRepo.findById(roomPk);
 
             if(target.get().getRoomPassword().equals(password)) {
                 System.out.println("패스워드가 일치합니다. 방으로 입장합니다.");
-                User user = userRepo.findByUsername((username));
+//                User user = userRepo.findByUsername((username));
                 target.get().add(user);
                 return "success";
             } else {
                 System.out.println("패스워드가 틀립니다. 다시 입력해 주세요.");
-                return "failure";
+                return "failure"; //! 이거도 사실 faulure면 status가 200이아니니까 에러? 같은 다른 방식으로 리스폰스줘야함
             }
         }
     }
@@ -100,17 +105,25 @@ public class EntityController {
 
         logger.info("createRoom enter");
 
-        String roomKeyValue = UUID.randomUUID().toString();
+        String roomIdValue = UUID.randomUUID().toString();
         String roomTitle = roomJson.get("roomTitle").toString();
         String roomPassword = roomJson.get("roomPassword").toString();
         String roomHost = roomJson.get("roomHost").toString();
 
         User host = userRepo.findByUsername(roomHost);
-        Room newRoom = new Room(roomTitle, roomKeyValue, roomPassword, roomHost);
+        Room newRoom = new Room(roomTitle, roomIdValue, roomPassword, roomHost);
         newRoom.add(host);
 
         logger.info("create new room");
 
         return roomRepo.save(newRoom);
+    }
+
+
+
+    @DeleteMapping("/api/room")
+    public void deleteRoom(@RequestParam String uuid) {
+        List<Room> newRoom = new ArrayList<>();
+        roomRepo.delete(newRoom.get(0));
     }
 }

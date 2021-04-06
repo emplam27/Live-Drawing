@@ -1,31 +1,35 @@
 import React from 'react';
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { UserSelectButtonComponentProps } from '../interfaces/user-select-button-interfaces';
+import { UserProfileInfo } from '../../interfaces/socket-interfaces';
+
 import '../index.css';
 
 function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
-  function selectActiveLayer(layer: Layer) {
-    props.setTopLayer(layer);
-  }
-
   return (
     <>
-      <div id='layerButtonContainer'>
-        {props.layers.map((layer: Layer) => {
+      <div id='layerButtonContainer' className='flex-col'>
+        {props.layers.map((layer) => {
+          const user = props.userProfileInfos.find(
+            (userProfileInfo: UserProfileInfo) =>
+              userProfileInfo.userId === layer.canvasId,
+          );
           if (layer.canvasId !== props.roomInfo.userId)
             return (
-              <span
-                key={layer.canvasId}
-                id={layer.buttonId}
-                className={`layer_space ${
-                  props.topLayer != null && props.topLayer.name === layer.name
-                    ? 'active-layer'
-                    : ''
-                }`}
-                onClick={() => selectActiveLayer(layer)}
+              <div
+                onClick={() => props.setTopLayer(layer)}
+                className={
+                  layer.canvasId === props.roomInfo.roomHostId ? 'order-1' : ''
+                }
               >
-                {layer.name}
-              </span>
+                <img
+                  src={`${user?.userImage}`}
+                  width='3rem'
+                  height='3rem'
+                  alt={`${user?.userName}`}
+                />
+                <p>{`${user?.userName}`}</p>
+              </div>
             );
         })}
       </div>

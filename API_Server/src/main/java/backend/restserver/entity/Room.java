@@ -21,7 +21,7 @@ public class Room {
     private String roomTitle;
 
     @Column(name = "roomKey")
-    private String roomKey;
+    private String roomKey; // uuid
 
     @Column(name = "roomPassword")
     private String roomPassword;

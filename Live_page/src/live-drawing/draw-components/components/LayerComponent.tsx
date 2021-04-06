@@ -33,7 +33,7 @@ function LayerComponent(props: LayerComponentProps) {
     // 호스트이면 본인을 제외한 아무 레이어 선택, 게스트이면 호스트 레이어 선택
     if (props.topLayer === null && props.roomUsers.users.length > 1) {
       let targetLayer: Layer = newLayers[0];
-      if (props.roomInfo.hostId === props.roomInfo.userId) {
+      if (props.roomInfo.roomHostId === props.roomInfo.userId) {
         console.log('난 호스트');
         const tmp = newLayers.find((layer: Layer) => {
           props.roomInfo.userId !== layer.canvasId;
@@ -43,7 +43,7 @@ function LayerComponent(props: LayerComponentProps) {
       } else {
         console.log('난 호스트가 아니야');
         const tmp = newLayers.find((layer: Layer) => {
-          props.roomInfo.hostId === layer.canvasId;
+          props.roomInfo.roomHostId === layer.canvasId;
         });
         console.log('호스트 레이어가 있음?', tmp);
         if (tmp) targetLayer = tmp;
@@ -107,7 +107,7 @@ function LayerComponent(props: LayerComponentProps) {
               topLayer={props.topLayer}
             />
           ) : (
-            <div> 아무도 없어요</div>
+            <div> 아무도 없어요!</div>
           )}
         </div>
         <div className='cols-start-2 cols-end-3 relative'>

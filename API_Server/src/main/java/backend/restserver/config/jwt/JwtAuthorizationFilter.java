@@ -41,11 +41,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
         System.out.println("header Authorization : " + jwtHeader);
+
         //! header가 있는지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response); //! 없으면 다시 필터를 타게함. 밑에 로직이 실행 안됨.
             //? 추가 이슈 발생. 필터에서 짤려서 컨트롤러로 가면 안되는데
-            //todo doFilter함수는 이 필터 다음으로 넘겨지므로 컨트롤러로 넘겨짐. 그래서 여기서 짤라주는 구문을 추가해야함
+            //? doFilter함수는 이 필터 다음으로 넘겨지므로 컨트롤러로 넘겨짐. 그래서 여기서 짤라주는 구문을 추가해야함
             return;
         }
 
@@ -56,13 +57,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //! loadByUsername이 호출됨.
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
                 .getClaim("username").asString();
-
         //! 서명이 정상적으로 됨
         if (username != null) {
             User userEntity = userRepo.findByUsername(username);
             //! 인증은 토큰 검증시 끝. 인증을 하기 위해서가 아닌 스프링 시큐리티가 수행해주는 권한 처리를 위해
             //! 아래와 같이 토큰을 만들어서 Authentication 객체를 강제로 만들고 그걸 세션에 저장!
             PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
+            //? 난지금 JWT로하는데 여기서 세션만료됨 뭐를 취할것인가?
             Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, // 나중에 컨트롤러에서 DI해서
                     // 쓸 때 사용하기 편함.
                     null, // 패스워드는 모르니까 null 처리, 어차피 지금 인증하는게 아니니까!!
@@ -70,8 +71,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             //! 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-
+        System.out.println("권한이 있는 유저임");
         chain.doFilter(request, response);
     }
-
 }

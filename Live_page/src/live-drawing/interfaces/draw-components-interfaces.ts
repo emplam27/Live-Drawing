@@ -2,7 +2,6 @@ import { RoomUsers, RoomInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
   topLayer: Layer | null;
-  isHost: boolean | null;
   isLiveClosed: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;
@@ -47,7 +46,7 @@ export interface Layer {
 }
 
 export interface Params {
-  roomKey: string;
+  roomId: string;
 }
 
 export interface PeerConnectionContext {
@@ -59,5 +58,5 @@ export interface PeerConnectionContext {
   channels: { [key: string]: RTCDataChannel };
   is_new: boolean;
   is_host: boolean;
-  hostId: string | null;
+  roomHostId: string | null;
 }

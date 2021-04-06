@@ -21,7 +21,7 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
             <canvas
               key={layer.canvasId}
               id={layer.canvasId}
-              className={`border-2 border-red-600 
+              className={`cols-start-1 cols-end-2 border-2 border-red-600 
               ${
                 props.topLayer !== null &&
                 props.topLayer.canvasId !== layer.canvasId
