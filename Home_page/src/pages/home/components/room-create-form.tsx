@@ -54,8 +54,11 @@ export default function RoomCreateComponent() {
           window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${response.data['roomId']}`;
         }
       })
-      .catch((error) => {
-        Swal.showValidationMessage('해당 방을 만들 수 없습니다.');
+      .catch(() => {
+        // MySwal.showValidationMessage('해당 방을 만들 수 없습니다.');
+        MySwal.fire({
+          title: '재로그인이 필요합니다.',
+        });
       });
   };
   return (

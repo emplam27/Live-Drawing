@@ -19,7 +19,7 @@ function LiveDrawing() {
   const { roomId } = useParams<{ roomId: string }>();
   const [roomInfo, setRoomInfo] = useState<RoomInfo>({
     roomId: roomId,
-    userName: null,
+    username: null,
     roomTitle: null,
     userId: localStorage.getItem('userId'),
     roomHostId: null,
@@ -40,24 +40,17 @@ function LiveDrawing() {
         headers: headers,
       })
       .then((res) => {
-        if (res.status !== 200)
-          MySwal.fire({
-            title: <p>{'오류가 발생했습니다.'}</p>,
-            text: '홈으로 돌아갑니다.',
-          }).then(
-            () =>
-              (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-          );
-        setRoomInfo({ ...roomInfo, ...res.data.roomInfo });
-        const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
+        console.log(res.data);
+        setRoomInfo({ ...roomInfo, ...res.data });
+        const socketIo = io(`${process.env.REACT_APP_RTC_URL}/`, {
           transports: ['websocket'],
         });
 
         socketIo.emit('join', {
-          userName: res.data.roomInfo.userName,
+          userName: res.data.username,
           userId: roomInfo.userId,
           roomId: roomId,
-          roomTitle: res.data.roomInfo.roomTitle,
+          roomTitle: res.data.roomTitle,
           token: localStorage.getItem('token'),
         });
 
@@ -78,7 +71,23 @@ function LiveDrawing() {
         socketIo.on('connect', () => {
           setSocket(socketIo);
         });
+      })
+      .catch((error) => {
+        console.log(error);
+        MySwal.fire({
+          title: <p>{'오류가 발생했습니다.'}</p>,
+          text: '홈으로 돌아갑니다.',
+        }).then(() => {
+          window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
+        });
       });
+    window.addEventListener('beforeunload', (e) => {
+      axios.post(
+        `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
+        { userId: roomInfo.userId },
+        { headers: headers },
+      );
+    });
   }, []);
 
   useEffect(() => {
@@ -88,6 +97,7 @@ function LiveDrawing() {
         headers: headers,
       })
       .then((res) => {
+        console.log(res.data);
         setUsersInfo(res.data);
       });
   }, [roomUsers]);
@@ -129,7 +139,7 @@ function LiveDrawing() {
         <div className='voice'></div>
         <div className='peers'></div>
         <ChatComponent
-          userName={roomInfo.userName}
+          userName={roomInfo.username}
           socket={socket}
         ></ChatComponent>
       </div>

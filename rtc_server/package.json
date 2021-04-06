@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/nyxtom/map#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
