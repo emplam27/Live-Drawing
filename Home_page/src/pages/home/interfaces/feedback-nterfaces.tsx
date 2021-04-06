@@ -1,4 +1,4 @@
 export interface FeedbackForm {
-  userName: string | null;
+  userId: string | null;
   text: string;
 }

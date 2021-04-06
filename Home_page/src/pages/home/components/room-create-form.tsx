@@ -55,7 +55,10 @@ export default function RoomCreateComponent() {
         }
       })
       .catch((error) => {
-        Swal.showValidationMessage('해당 방을 만들 수 없습니다.');
+        MySwal.fire({
+          title: <p>{'재로그인이 필요합니다.'}</p>,
+        });
+        return;
       });
   };
   return (
