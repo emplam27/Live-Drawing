@@ -1,9 +1,9 @@
 import { Layer } from '../../interfaces/draw-components-interfaces';
-import { RoomInfo, UsersInfo } from '../../interfaces/socket-interfaces';
+import { RoomInfo, UserProfileInfo } from '../../interfaces/socket-interfaces';
 
 export interface UserSelectButtonComponentProps {
   topLayer: Layer | null;
-  users: UsersInfo[];
+  userProfileInfos: UserProfileInfo[];
   roomInfo: RoomInfo;
   layers: Layer[];
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;

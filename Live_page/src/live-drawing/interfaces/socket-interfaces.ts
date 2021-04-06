@@ -6,7 +6,7 @@ export interface RoomInfo {
   roomHostId: string | null;
 }
 
-export interface UsersInfo {
+export interface UserProfileInfo {
   userName: string | null;
   userId: string;
   userImage: string;

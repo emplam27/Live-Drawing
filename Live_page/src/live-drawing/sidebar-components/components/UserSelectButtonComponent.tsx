@@ -1,6 +1,8 @@
 import React from 'react';
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { UserSelectButtonComponentProps } from '../interfaces/user-select-button-interfaces';
+import { UserProfileInfo } from '../../interfaces/socket-interfaces';
+
 import '../index.css';
 
 function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
@@ -8,8 +10,9 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
     <>
       <div id='layerButtonContainer' className='flex-col'>
         {props.layers.map((layer) => {
-          const user = props.users.find(
-            (user) => user.userId === layer.canvasId,
+          const user = props.userProfileInfos.find(
+            (userProfileInfo: UserProfileInfo) =>
+              userProfileInfo.userId === layer.canvasId,
           );
           if (layer.canvasId !== props.roomInfo.userId)
             return (
