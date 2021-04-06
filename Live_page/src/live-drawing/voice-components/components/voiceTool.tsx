@@ -36,10 +36,10 @@ export function VoiceToolComponent(props: Rtc) {
     if (!localAudioTrack || !client) return;
     client.publish([localAudioTrack]);
     client.on('user-published', async (user, mediaType) => {
-      console.log('**********', user, mediaType);
+      //   console.log('**********', user, mediaType);
       if (user && mediaType === 'audio') {
         await client.subscribe(user, mediaType);
-        console.log('!!!!!!!클라이언트의 리모트 유저스다!!!!!!!!!!');
+        // console.log('!!!!!!!클라이언트의 리모트 유저스다!!!!!!!!!!');
         setNewUserSignal(new Date().getTime());
       }
     });
@@ -89,11 +89,11 @@ export function VoiceToolComponent(props: Rtc) {
       if (speaker === false) remoteUser.audioTrack?.setVolume(0);
     });
     if (mic === false) client.unpublish([localAudioTrack]);
-    console.log('친구들', client.remoteUsers);
-    console.log('내 스피커 상황', speaker);
-    console.log('내 마이크 상황', mic);
-    console.log('토글 스피커 시그널', toggleSpeakerSignal);
-    console.log('토글 마이크 시그널', toggleMicSignal);
+    // console.log('친구들', client.remoteUsers);
+    // console.log('내 스피커 상황', speaker);
+    // console.log('내 마이크 상황', mic);
+    // console.log('토글 스피커 시그널', toggleSpeakerSignal);
+    // console.log('토글 마이크 시그널', toggleMicSignal);
   }, [newUserSignal]);
 
   useEffect(() => {

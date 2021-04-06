@@ -2,6 +2,7 @@ import React from 'react';
 import UserSelectButtonComponent from './components/UserSelectButtonComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
 import VoiceChatComponent from '../voice-components/';
+import SaveImageComponent from '../draw-components/components/SaveImageComponent';
 
 import { SidebarComponentProps } from '../interfaces/sidebar-components-interfaces';
 
@@ -25,6 +26,8 @@ function SidebarComponent(props: SidebarComponentProps) {
       <div className='flex-grow'></div>
       <p>스피커 버튼</p>
       <VoiceChatComponent />
+      <div className='flex-grow'></div>
+      <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} />
       <div className='flex-grow'></div>
       <p>유저, 채팅 버튼</p>
       <div className='flex-grow'></div>

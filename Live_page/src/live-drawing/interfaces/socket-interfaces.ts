@@ -20,7 +20,7 @@ export interface UserInfo {
   userName: string;
   socketId: SocketIOClient.Socket | null;
   userId: string;
-  roomdId: string;
+  roomId: string;
 }
 
 export interface RoomUsers {
