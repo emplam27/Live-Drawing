@@ -7,11 +7,14 @@ import { useHistory } from 'react-router';
 import { useCustomState } from '../../../context';
 
 export function FeedbackComponent() {
-  const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({ userName: localStorage.getItem('name'), text: '' });
+  const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({
+    userId: localStorage.getItem('userId'),
+    text: '',
+  });
   const MySwal = withReactContent(Swal);
   const userState = useCustomState;
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userName, setUserName] = useState(localStorage.getItem('name'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
   const history = useHistory();
 
   const headers = {
@@ -21,33 +24,36 @@ export function FeedbackComponent() {
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserName(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('userId'));
   }, [userState]);
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFeedbackForm({ userName: userName, text: e.target.value });
+    setFeedbackForm({ userId: userId, text: e.target.value });
   };
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    if (token === null || userName === null) {
+    if (token === null || userId === null) {
       MySwal.fire({
         title: '로그인을 해주세요.',
       });
       return;
     }
-    axios.post(`${process.env.REACT_APP_API_URL}/feedback`, feedbackForm, { headers: headers }).then((response) => {
-      if (response.status === 200)
-        MySwal.fire({
-          title: <p>피드백 등록이 완료되었습니다. 감사합니다.</p>,
-          text: '홈으로 돌아갑니다.',
-        }).then(() => history.push(''));
-      else
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/feedback`, feedbackForm, { headers: headers })
+      .then((response) => {
+        if (response.status === 200)
+          MySwal.fire({
+            title: <p>피드백 등록이 완료되었습니다. 감사합니다.</p>,
+            text: '홈으로 돌아갑니다.',
+          }).then(() => history.push(''));
+      })
+      .catch(() =>
         MySwal.fire({
           title: <p>피드백 등록이 실패했습니다.</p>,
           text: '다시 시도해주세요.',
-        });
-    });
+        }),
+      );
   };
   return (
     <div>

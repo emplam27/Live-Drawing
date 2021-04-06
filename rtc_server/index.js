@@ -1,7 +1,5 @@
 const express = require("express");
 const http = require("http");
-const path = require("path");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const redis = require("redis");
 const bluebird = require("bluebird");
@@ -10,7 +8,6 @@ const socket = require("socket.io");
 const axios = require("axios");
 const { addUser, removeUser, getUsersInRoom, getUser } = require("./src/users");
 const defaultDict = require("./src/default-dict");
-const { CONNREFUSED } = require("dns");
 const historyData = defaultDict();
 
 bluebird.promisifyAll(redis);
@@ -22,9 +19,6 @@ const io = socket(server);
 app.use("/static", express.static(`${__dirname}/static`));
 app.use(express.json());
 app.use(cors());
-
-let disconnetedUser = "";
-let flag = false;
 
 io.on("connection", (socket) => {
   console.log("소켓 연결 완료");
@@ -64,36 +58,39 @@ io.on("connection", (socket) => {
 
   //@ History Event
   socket.on("require-history", () => {
+    console.log("require-history");
     const user = getUser(socket.id);
-    if (historyData.dict[user.roomId])
-      for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
-        switch (historyData.dict[user.roomId][i].event) {
-          case "pencil":
-            socket.emit("draw-pencil", historyData.dict[user.roomId][i]);
-            break;
-          case "eraser":
-            socket.emit("draw-eraser", historyData.dict[user.roomId][i]);
-            break;
-        }
+    if (!user || !historyData.dict[user.roomId]) return;
+    for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
+      switch (historyData.dict[user.roomId][i].event) {
+        case "pencil":
+          socket.emit("draw-pencil", historyData.dict[user.roomId][i]);
+          break;
+        case "eraser":
+          socket.emit("draw-eraser", historyData.dict[user.roomId][i]);
+          break;
       }
+    }
   });
 
   //@ Chat Event
   socket.on("chat-send-message", (message) => {
-    // console.log('sendmsg socket', socket.id);
     const user = getUser(socket.id);
+    if (!user) return;
     io.to(user.roomId).emit("chat-message", message);
   });
 
   //@ Draw Event
   socket.on("draw-pencil", (message) => {
     const user = getUser(socket.id);
+    if (!user) return;
     historyData.push(user.roomId, message);
     socket.broadcast.to(user.roomId).emit("draw-pencil", message);
   });
 
   socket.on("draw-eraser", (message) => {
     const user = getUser(socket.id);
+    if (!user) return;
     historyData.push(user.roomId, message);
     socket.broadcast.to(user.roomId).emit("draw-eraser", message);
   });
@@ -101,12 +98,14 @@ io.on("connection", (socket) => {
   socket.on("create-layer", (message) => {
     console.log("create-layer");
     const user = getUser(socket.id);
+    if (!user) return;
     socket.broadcast.to(user.roomId).emit("create-layer", message);
   });
 
   socket.on("delete-layer", (message) => {
     console.log("delete-layer");
     const user = getUser(socket.id);
+    if (!user) return;
     socket.broadcast.to(user.roomId).emit("delete-layer", message);
   });
 
@@ -114,23 +113,21 @@ io.on("connection", (socket) => {
     const user = removeUser(socket.id);
     console.log("유저의 연결이 끊어졌습니다.");
     if (user) {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: user.token,
-      };
-      axios
-        .post(
-          `https://jungleroad.shop/api/${user.roomId}/disconnect`,
-          { userId: user.userId },
-          { headers: headers }
-        )
-        .then((res) => console.log("!!!!!"));
+      // const headers = {
+      //   'Content-Type': 'application/json',
+      //   Authorization: user.token,
+      // };
+      // axios.post(
+      //   `${process.env.REACT_APP_API_URL}/${user.roomId}/disconnect`,
+      //   { userId: user.userId },
+      //   { headers: headers }
+      // );
       io.to(user.roomId).emit("chat-message", {
         userId: user.userId,
         userName: user.userName,
         text: `${user.userName}님이 나가셨습니다.`,
       });
-      io.to(user.roomId).emit("roomData", {
+      io.to(user.roomId).emit("update-room-users", {
         roomId: user.roomId,
         users: getUsersInRoom(user.roomId),
       });

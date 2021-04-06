@@ -14,7 +14,7 @@ function LineSizeComponent(props: LineSizeComponentProps) {
 
   return (
     <>
-      <p className='icon-link center'>Size</p>
+      <p className='hover:text-blue-500 flex items-center'>Size</p>
       <input
         id='pencilSlider'
         type='range'
@@ -23,7 +23,10 @@ function LineSizeComponent(props: LineSizeComponentProps) {
         value={props.lineWidth}
         onChange={changeLineSize}
       />
-      <p className='icon-link center' style={{ width: '16px' }}>
+      <p
+        className='hover:text-blue-500 flex items-center'
+        style={{ width: '16px' }}
+      >
         {props.lineWidth}
       </p>
     </>

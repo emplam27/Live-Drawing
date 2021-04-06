@@ -107,18 +107,18 @@ function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   }
 
   return (
-    <div className='icon-link center'>
-      <p className='icon-link center'>
+    <div className='icon-link flex items-center'>
+      <p className='icon-link flex items-center'>
         <i className='ri-2x ri-palette-line'></i>
         <i
-          className='ri-2x ri-checkbox-blank-fill center'
+          className='ri-2x ri-checkbox-blank-fill flex items-center'
           style={{ color: props.color }}
         ></i>
       </p>
-      <div id='color-picker' className='dropdown vstack'>
+      <div id='color-picker' className='dropdown flex flex-col'>
         {swatch.map((row, row_index) => {
           return (
-            <div key={row_index} className={'hstack'}>
+            <div key={row_index} className={' flex flex-row'}>
               {row.map((colorCode, column_index) => {
                 return (
                   <div

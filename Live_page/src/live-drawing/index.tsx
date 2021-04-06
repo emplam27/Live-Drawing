@@ -81,13 +81,13 @@ function LiveDrawing() {
           window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
         });
       });
-    window.addEventListener('beforeunload', (e) => {
-      axios.post(
-        `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
-        { userId: roomInfo.userId },
-        { headers: headers },
-      );
-    });
+    // window.addEventListener('beforeunload', (e) => {
+    //   axios.post(
+    //     `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
+    //     { userId: roomInfo.userId },
+    //     { headers: headers },
+    //   );
+    // });
   }, []);
 
   useEffect(() => {
