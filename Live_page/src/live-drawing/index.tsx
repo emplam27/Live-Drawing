@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Draw from './draw-components';
+import SidebarComponent from './sidebar-components';
+import DrawComponent from './draw-components';
 import ChatComponent from './chat-components';
 
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 import { RoomInfo, RoomUsers, UsersInfo } from './interfaces/socket-interfaces';
+import { Layer } from './interfaces/draw-components-interfaces';
 
 import axios from 'axios';
 import io from 'socket.io-client';
@@ -19,7 +21,7 @@ function LiveDrawing() {
   const { roomId } = useParams<{ roomId: string }>();
   const [roomInfo, setRoomInfo] = useState<RoomInfo>({
     roomId: roomId,
-    userName: null,
+    username: null,
     roomTitle: null,
     userId: localStorage.getItem('userId'),
     roomHostId: null,
@@ -28,6 +30,10 @@ function LiveDrawing() {
   const [roomUsers, setRoomUsers] = useState<RoomUsers | null>(null);
   const [usersInfo, setUsersInfo] = useState<UsersInfo[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [topLayer, setTopLayer] = useState<Layer | null>(null);
+  const [layers, setLayers] = useState<Layer[]>([]);
+  const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
+
   const MySwal = withReactContent(Swal);
   const headers = {
     'Content-Type': 'application/json',
@@ -41,24 +47,16 @@ function LiveDrawing() {
         headers: headers,
       })
       .then((res) => {
-        if (res.status !== 200)
-          MySwal.fire({
-            title: <p>{'오류가 발생했습니다.'}</p>,
-            text: '홈으로 돌아갑니다.',
-          }).then(
-            () =>
-              (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-          );
-        setRoomInfo({ ...roomInfo, ...res.data.roomInfo });
+        setRoomInfo({ ...roomInfo, ...res.data });
         const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
           transports: ['websocket'],
         });
 
         socketIo.emit('join', {
-          userName: res.data.roomInfo.userName,
+          username: res.data.username,
           userId: roomInfo.userId,
           roomId: roomId,
-          roomTitle: res.data.roomInfo.roomTitle,
+          roomTitle: res.data.roomTitle,
           token: localStorage.getItem('token'),
         });
 
@@ -79,8 +77,35 @@ function LiveDrawing() {
         socketIo.on('connect', () => {
           setSocket(socketIo);
         });
-      });
+      })
+      .catch(() =>
+        MySwal.fire({
+          title: <p>{'오류가 발생했습니다.'}</p>,
+          text: '홈으로 돌아갑니다.',
+        }).then(
+          () =>
+            (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
+        ),
+      );
   }, []);
+
+  //@ Function: Recieve Close Event
+  useEffect(() => {
+    if (!isLiveClosed) return;
+    Swal.fire({
+      title: '라이브가 종료되었습니다.',
+      text: '홈 화면으로 이동합니다.',
+      icon: 'warning',
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: '  이동(사실은 안감)',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire('홈 화면으로 이동하는 로직이 들어감');
+        setIsLiveClosed(false);
+      }
+    });
+  }, [isLiveClosed]);
 
   useEffect(() => {
     axios
@@ -93,47 +118,34 @@ function LiveDrawing() {
       });
   }, [roomUsers]);
 
-  // useEffect(() => {
-  //   const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
-  //     transports: ['websocket'],
-  //   });
-
-  //   socketIo.emit('join', {
-  //     userId: roomInfo.userId,
-  //     userName: roomInfo.userName,
-  //     roomId: roomId,
-  //     roomTitle: roomInfo.roomTitle,
-  //   });
-
-  //   socketIo.on('error', (message: { error: string }) => {
-  //     MySwal.fire({
-  //       title: <p>{`${message.error}`}</p>,
-  //       text: '홈으로 돌아갑니다.',
-  //     }).then(
-  //       () => (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-  //     );
-  //   });
-
-  //   socketIo.on('update-room-users', (message: RoomUsers) => {
-  //     setRoomUsers(message);
-  //   });
-
-  //   socketIo.on('connect', () => {
-  //     setSocket(socketIo);
-  //   });
-  // }, []);
-
   return (
     <>
-      <Draw socket={socket} roomInfo={roomInfo} roomUsers={roomUsers} />
-      <div className='side'>
-        <div className='voice'></div>
-        <div className='peers'></div>
-        <ChatComponent
-          userName={roomInfo.userName}
-          socket={socket}
-        ></ChatComponent>
-      </div>
+      <SidebarComponent
+        topLayer={topLayer}
+        isLiveClosed={isLiveClosed}
+        layers={layers}
+        roomInfo={roomInfo}
+        setTopLayer={setTopLayer}
+        setIsLiveClosed={setIsLiveClosed}
+        users={usersInfo}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+      />
+      <DrawComponent
+        topLayer={topLayer}
+        isLiveClosed={isLiveClosed}
+        layers={layers}
+        roomInfo={roomInfo}
+        roomUsers={roomUsers}
+        socket={socket}
+        setTopLayer={setTopLayer}
+        setIsLiveClosed={setIsLiveClosed}
+        setLayers={setLayers}
+      />
+      {/* <ChatComponent
+        userName={roomInfo.userName}
+        socket={socket}
+      ></ChatComponent> */}
     </>
   );
 }
