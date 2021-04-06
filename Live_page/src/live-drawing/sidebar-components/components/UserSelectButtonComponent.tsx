@@ -5,7 +5,7 @@ import '../index.css';
 
 function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
   function selectActiveLayer(layer: Layer) {
-    props.setActiveLayer(layer);
+    props.setTopLayer(layer);
   }
 
   return (
@@ -18,8 +18,7 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
                 key={layer.canvasId}
                 id={layer.buttonId}
                 className={`layer_space ${
-                  props.activeLayer != null &&
-                  props.activeLayer.name === layer.name
+                  props.topLayer != null && props.topLayer.name === layer.name
                     ? 'active-layer'
                     : ''
                 }`}

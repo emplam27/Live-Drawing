@@ -32,7 +32,7 @@ function LiveDrawing() {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const [roomUsers, setRoomUsers] = useState<RoomUsers | null>(null);
 
-  const [activeLayer, setActiveLayer] = useState<Layer | null>(null);
+  const [topLayer, setTopLayer] = useState<Layer | null>(null);
   const [layers, setLayers] = useState<Layer[]>([]);
   const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
   const [isHost, setIsHost] = useState<boolean | null>(null);
@@ -99,24 +99,24 @@ function LiveDrawing() {
   return (
     <>
       <SidebarComponent
-        activeLayer={activeLayer}
+        topLayer={topLayer}
         isHost={isHost}
         isLiveClosed={isLiveClosed}
         layers={layers}
         roomInfo={roomInfo}
-        setActiveLayer={setActiveLayer}
+        setTopLayer={setTopLayer}
         setIsHost={setIsHost}
         setIsLiveClosed={setIsLiveClosed}
       />
       <DrawComponent
-        activeLayer={activeLayer}
+        topLayer={topLayer}
         isHost={isHost}
         isLiveClosed={isLiveClosed}
         layers={layers}
         roomInfo={roomInfo}
         roomUsers={roomUsers}
         socket={socket}
-        setActiveLayer={setActiveLayer}
+        setTopLayer={setTopLayer}
         setIsLiveClosed={setIsLiveClosed}
         setLayers={setLayers}
       />

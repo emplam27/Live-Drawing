@@ -2,8 +2,8 @@ import { RoomInfo } from '../../interfaces/socket-interfaces';
 import { Layer } from '../../interfaces/draw-components-interfaces';
 
 export interface UserSelectButtonComponentProps {
-  activeLayer: Layer | null;
+  topLayer: Layer | null;
   roomInfo: RoomInfo;
   layers: Layer[];
-  setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
 }

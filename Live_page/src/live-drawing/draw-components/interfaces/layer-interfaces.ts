@@ -5,7 +5,7 @@ import {
 } from '../../interfaces/draw-components-interfaces';
 
 export interface LayerComponentProps {
-  activeLayer: Layer | null;
+  topLayer: Layer | null;
   canvasCtxTable: CanvasCtxTable;
   cursorWidth: number;
   layers: Layer[];
@@ -13,7 +13,7 @@ export interface LayerComponentProps {
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
-  setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   setCanvasCtxTable: React.Dispatch<React.SetStateAction<CanvasCtxTable>>;
   setCursorWidth: React.Dispatch<React.SetStateAction<number>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;

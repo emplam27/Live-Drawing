@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import ToolbarComponent from './ToolbarComponent';
+import PeersLayerComponent from './PeersLayerComponent';
+import MyLayerComponent from './MyLayerComponent';
 import '../index.css';
 
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { LayerComponentProps } from '../interfaces/layer-interfaces';
 import { UserInfo } from '../../interfaces/socket-interfaces';
-
-import {
-  mouseDown,
-  mouseMove,
-  mouseUp,
-} from '../functions/mouse-event-functions';
 
 function LayerComponent(props: LayerComponentProps) {
   const [activeTool, setActiveTool] = useState<string>('');
@@ -34,6 +29,28 @@ function LayerComponent(props: LayerComponentProps) {
       };
       return newLayer;
     });
+
+    // 호스트이면 본인을 제외한 아무 레이어 선택, 게스트이면 호스트 레이어 선택
+    if (props.topLayer === null && props.roomUsers.users.length > 1) {
+      let targetLayer: Layer = newLayers[0];
+      if (props.roomInfo.hostId === props.roomInfo.userId) {
+        console.log('난 호스트');
+        const tmp = newLayers.find((layer: Layer) => {
+          props.roomInfo.userId !== layer.canvasId;
+        });
+        console.log('게스트 레이어가 있음?', tmp);
+        if (tmp) targetLayer = tmp;
+      } else {
+        console.log('난 호스트가 아니야');
+        const tmp = newLayers.find((layer: Layer) => {
+          props.roomInfo.hostId === layer.canvasId;
+        });
+        console.log('호스트 레이어가 있음?', tmp);
+        if (tmp) targetLayer = tmp;
+      }
+      props.setTopLayer(targetLayer);
+    }
+
     props.setLayers(newLayers);
     props.setNewLayerCtxSignal(new Date().getTime());
 
@@ -76,54 +93,42 @@ function LayerComponent(props: LayerComponentProps) {
   return (
     <>
       <div id='canvasContainer' className='w-full grid grid-cols-2 divide-x-2'>
-        {props.layers.map((layer: Layer) => {
-          return (
-            <canvas
-              key={layer.canvasId}
-              id={layer.canvasId}
-              className={`${
-                layer.canvasId === props.roomInfo.userId
-                  ? 'cols-start-2 cols-end-3 border-8 border-indigo-600'
-                  : `cols-start-1 cols-end-2 border-8 border-red-600
-               ${
-                 props.activeLayer !== null &&
-                 props.activeLayer.canvasId !== layer.canvasId
-                   ? 'hidden'
-                   : null
-               }`
-              }`}
-              width={window.innerWidth * 0.4}
-              height={window.innerHeight}
-              onMouseDown={(e) => mouseDown(e)}
-              onMouseUp={mouseUp}
-              onMouseMove={(e) =>
-                mouseMove(
-                  e,
-                  activeTool,
-                  color,
-                  lineWidth,
-                  eraserWidth,
-                  props.canvasCtxTable,
-                  props.socket,
-                  props.roomInfo,
-                )
-              }
+        <div className='cols-start-1 cols-end-2 relative'>
+          {props.layers.length > 1 ? (
+            <PeersLayerComponent
+              activeTool={activeTool}
+              canvasCtxTable={props.canvasCtxTable}
+              color={color}
+              eraserWidth={eraserWidth}
+              layers={props.layers}
+              lineWidth={lineWidth}
+              roomInfo={props.roomInfo}
+              socket={props.socket}
+              topLayer={props.topLayer}
             />
-          );
-        })}
+          ) : (
+            <div> 아무도 없어요</div>
+          )}
+        </div>
+        <div className='cols-start-2 cols-end-3 relative'>
+          <MyLayerComponent
+            activeTool={activeTool}
+            canvasCtxTable={props.canvasCtxTable}
+            color={color}
+            cursorWidth={props.cursorWidth}
+            eraserWidth={eraserWidth}
+            lineWidth={lineWidth}
+            roomInfo={props.roomInfo}
+            socket={props.socket}
+            topLayer={props.topLayer}
+            setActiveTool={setActiveTool}
+            setColor={setColor}
+            setCursorWidth={props.setCursorWidth}
+            setEraserWidth={setEraserWidth}
+            setLineWidth={setLineWidth}
+          />
+        </div>
       </div>
-      <ToolbarComponent
-        activeTool={activeTool}
-        color={color}
-        cursorWidth={props.cursorWidth}
-        eraserWidth={eraserWidth}
-        lineWidth={lineWidth}
-        setActiveTool={setActiveTool}
-        setColor={setColor}
-        setCursorWidth={props.setCursorWidth}
-        setEraserWidth={setEraserWidth}
-        setLineWidth={setLineWidth}
-      />
     </>
   );
 }

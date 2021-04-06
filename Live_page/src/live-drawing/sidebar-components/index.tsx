@@ -15,11 +15,15 @@ function SidebarComponent(props: SidebarComponentProps) {
 
       <div className='flex-grow'></div>
       <UserSelectButtonComponent
-        activeLayer={props.activeLayer}
+        topLayer={props.topLayer}
         roomInfo={props.roomInfo}
         layers={props.layers}
-        setActiveLayer={props.setActiveLayer}
+        setTopLayer={props.setTopLayer}
       />
+      <div className='flex-grow'></div>
+      <p>스피커 버튼</p>
+      <div className='flex-grow'></div>
+      <p>유저, 채팅 버튼</p>
       <div className='flex-grow'></div>
       <CloseButtonComponent
         isHost={props.isHost}

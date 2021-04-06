@@ -61,7 +61,7 @@ function DrawComponent(props: DrawComponentProps) {
     <>
       <CursorComponent cursorWidth={cursorWidth} />
       <LayerComponent
-        activeLayer={props.activeLayer}
+        topLayer={props.topLayer}
         canvasCtxTable={canvasCtxTable}
         cursorWidth={cursorWidth}
         layers={props.layers}
@@ -69,7 +69,7 @@ function DrawComponent(props: DrawComponentProps) {
         roomInfo={props.roomInfo}
         roomUsers={props.roomUsers}
         socket={props.socket}
-        setActiveLayer={props.setActiveLayer}
+        setTopLayer={props.setTopLayer}
         setCanvasCtxTable={setCanvasCtxTable}
         setCursorWidth={setCursorWidth}
         setLayers={props.setLayers}

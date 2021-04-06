@@ -1,14 +1,14 @@
 import { RoomUsers, RoomInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
-  activeLayer: Layer | null;
+  topLayer: Layer | null;
   isHost: boolean | null;
   isLiveClosed: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
-  setActiveLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
 }

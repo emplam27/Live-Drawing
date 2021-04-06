@@ -42,7 +42,7 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
           <p
             key={tool.name}
             id={tool.name}
-            className={`icon-link center ${
+            className={`icon-link flex items-center ${
               props.activeTool === tool.name ? 'active' : ''
             }`}
             onClick={() => changeActiveTool(tool.name)}
