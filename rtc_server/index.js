@@ -52,20 +52,20 @@ io.on('connection', (socket) => {
   });
 
   //@ History Event
-  socket.on('require-history', () => {
-    const user = getUser(socket.id);
-    if (historyData.dict[user.roomId])
-      for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
-        switch (historyData.dict[user.roomId][i].event) {
-          case 'pencil':
-            socket.emit('draw-pencil', historyData.dict[user.roomId][i]);
-            break;
-          case 'eraser':
-            socket.emit('draw-eraser', historyData.dict[user.roomId][i]);
-            break;
-        }
-      }
-  });
+  // socket.on('require-history', () => {
+  //   const user = getUser(socket.id);
+  //   if (historyData.dict[user.roomId])
+  //     for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
+  //       switch (historyData.dict[user.roomId][i].event) {
+  //         case 'pencil':
+  //           socket.emit('draw-pencil', historyData.dict[user.roomId][i]);
+  //           break;
+  //         case 'eraser':
+  //           socket.emit('draw-eraser', historyData.dict[user.roomId][i]);
+  //           break;
+  //       }
+  //     }
+  // });
 
   //@ Chat Event
   socket.on('chat-send-message', (message) => {
@@ -108,7 +108,7 @@ io.on('connection', (socket) => {
         userName: user.userName,
         text: `${user.userName}님이 나가셨습니다.`,
       });
-      io.to(user.roomId).emit('roomData', {
+      io.to(user.roomId).emit('update-room-users', {
         roomId: user.roomId,
         users: getUsersInRoom(user.roomId),
       });
