@@ -7,7 +7,6 @@ const redis = require('redis');
 const bluebird = require('bluebird');
 const cors = require('cors');
 const socket = require('socket.io');
-const axios = require('axios');
 const { addUser, removeUser, getUsersInRoom, getUser } = require('./src/users');
 const defaultDict = require('./src/default-dict');
 const historyData = defaultDict();
@@ -58,37 +57,40 @@ io.on('connection', (socket) => {
   });
 
   //@ History Event
-  // socket.on('require-history', () => {
-  //   const user = getUser(socket.id);
-  //   if (historyData.dict[user.roomId])
-  //     for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
-  //       switch (historyData.dict[user.roomId][i].event) {
-  //         case 'pencil':
-  //           socket.emit('draw-pencil', historyData.dict[user.roomId][i]);
-  //           break;
-  //         case 'eraser':
-  //           socket.emit('draw-eraser', historyData.dict[user.roomId][i]);
-  //           break;
-  //       }
-  //     }
-  // });
+  socket.on('require-history', () => {
+    console.log('require-history');
+    const user = getUser(socket.id);
+    if (!user || !historyData.dict[user.roomId]) return;
+    for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
+      switch (historyData.dict[user.roomId][i].event) {
+        case 'pencil':
+          socket.emit('draw-pencil', historyData.dict[user.roomId][i]);
+          break;
+        case 'eraser':
+          socket.emit('draw-eraser', historyData.dict[user.roomId][i]);
+          break;
+      }
+    }
+  });
 
   //@ Chat Event
   socket.on('chat-send-message', (message) => {
-    // console.log('sendmsg socket', socket.id);
     const user = getUser(socket.id);
+    if (!user) return;
     io.to(user.roomId).emit('chat-message', message);
   });
 
   //@ Draw Event
   socket.on('draw-pencil', (message) => {
     const user = getUser(socket.id);
+    if (!user) return;
     historyData.push(user.roomId, message);
     socket.broadcast.to(user.roomId).emit('draw-pencil', message);
   });
 
   socket.on('draw-eraser', (message) => {
     const user = getUser(socket.id);
+    if (!user) return;
     historyData.push(user.roomId, message);
     socket.broadcast.to(user.roomId).emit('draw-eraser', message);
   });
@@ -96,12 +98,14 @@ io.on('connection', (socket) => {
   socket.on('create-layer', (message) => {
     console.log('create-layer');
     const user = getUser(socket.id);
+    if (!user) return;
     socket.broadcast.to(user.roomId).emit('create-layer', message);
   });
 
   socket.on('delete-layer', (message) => {
     console.log('delete-layer');
     const user = getUser(socket.id);
+    if (!user) return;
     socket.broadcast.to(user.roomId).emit('delete-layer', message);
   });
 
@@ -113,11 +117,11 @@ io.on('connection', (socket) => {
         'Content-Type': 'application/json',
         Authorization: user.token,
       };
-      axios.post(
-        `${process.env.REACT_APP_API_URL}/${user.roomId}/disconnect`,
-        { userId: user.userId },
-        { headers: headers }
-      );
+      // axios.post(
+      //   `${process.env.REACT_APP_API_URL}/${user.roomId}/disconnect`,
+      //   { userId: user.userId },
+      //   { headers: headers }
+      // );
       io.to(user.roomId).emit('chat-message', {
         userId: user.userId,
         userName: user.userName,

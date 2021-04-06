@@ -107,7 +107,13 @@ function LayerComponent(props: LayerComponentProps) {
               topLayer={props.topLayer}
             />
           ) : (
-            <div> 아무도 없어요!</div>
+            <div className='flex flex-col justify-center h-full'>
+              <p>
+                <i className='ri-group-line text-8xl text-gray-300'></i>
+              </p>
+              <p className='text-xl '>참여한 게스트가 없습니다!</p>
+              <p className='text-xl'>게스트가 참여하면 여기에 표시됩니다.</p>
+            </div>
           )}
         </div>
         <div className='cols-start-2 cols-end-3 relative'>
