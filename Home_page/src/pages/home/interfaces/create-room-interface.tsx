@@ -1,5 +1,5 @@
 export interface CreateRoom {
-  roomHost: string | null;
+  roomHostId: string | null;
   roomTitle: string;
   roomPassword: string;
 }

@@ -6,7 +6,7 @@ import './index.css';
 
 function ChatComponent(props: ChatComponentProps) {
   return (
-    <div className='chatContainer'>
+    <div className='col-start-2 col-end-3 absolute'>
       <ChatScreenComponent
         userName={props.userName}
         socket={props.socket}

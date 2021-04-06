@@ -1,9 +1,15 @@
 import { RoomUsers, RoomInfo } from './socket-interfaces';
 
-export interface DrawProps {
-  socket: SocketIOClient.Socket | null;
+export interface DrawComponentProps {
+  topLayer: Layer | null;
+  isLiveClosed: boolean;
+  layers: Layer[];
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
+  socket: SocketIOClient.Socket | null;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface Point {
@@ -28,14 +34,6 @@ export interface EraseData {
   r: number;
 }
 
-export interface RectData {
-  color: string;
-  origin: Point;
-  width: number;
-  height: number;
-  commit?: boolean;
-}
-
 export interface CanvasCtxTable {
   [key: string]: CanvasRenderingContext2D;
 }
@@ -48,7 +46,7 @@ export interface Layer {
 }
 
 export interface Params {
-  roomKey: string;
+  roomId: string;
 }
 
 export interface PeerConnectionContext {
@@ -60,5 +58,5 @@ export interface PeerConnectionContext {
   channels: { [key: string]: RTCDataChannel };
   is_new: boolean;
   is_host: boolean;
-  hostId: string | null;
+  roomHostId: string | null;
 }
