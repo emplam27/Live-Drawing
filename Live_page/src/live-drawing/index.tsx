@@ -29,7 +29,6 @@ function LiveDrawing() {
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const [roomUsers, setRoomUsers] = useState<RoomUsers | null>(null);
   const [usersInfo, setUsersInfo] = useState<UsersInfo[]>([]);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [topLayer, setTopLayer] = useState<Layer | null>(null);
   const [layers, setLayers] = useState<Layer[]>([]);
   const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
@@ -64,10 +63,11 @@ function LiveDrawing() {
           MySwal.fire({
             title: <p>{`${message.error}`}</p>,
             text: '홈으로 돌아갑니다.',
-          }).then(
-            () =>
-              (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-          );
+          });
+          // .then(
+          // () =>
+          // (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
+          // );
         });
 
         socketIo.on('roomUsers', (message: RoomUsers) => {
@@ -78,14 +78,16 @@ function LiveDrawing() {
           setSocket(socketIo);
         });
       })
-      .catch(() =>
-        MySwal.fire({
-          title: <p>{'오류가 발생했습니다.'}</p>,
-          text: '홈으로 돌아갑니다.',
-        }).then(
-          () =>
-            (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-        ),
+      .catch(
+        () =>
+          MySwal.fire({
+            title: <p>{'오류가 발생했습니다.'}</p>,
+            text: '홈으로 돌아갑니다.',
+          }),
+        // .then(
+        // () =>
+        // (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
+        // ),
       );
   }, []);
 
@@ -128,8 +130,6 @@ function LiveDrawing() {
         setTopLayer={setTopLayer}
         setIsLiveClosed={setIsLiveClosed}
         users={usersInfo}
-        selectedId={selectedId}
-        setSelectedId={setSelectedId}
       />
       <DrawComponent
         topLayer={topLayer}

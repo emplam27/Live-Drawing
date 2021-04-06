@@ -9,6 +9,4 @@ export interface SidebarComponentProps {
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
   users: UsersInfo[];
-  selectedId: string | null;
-  setSelectedId: React.Dispatch<React.SetStateAction<string | null>>;
 }
