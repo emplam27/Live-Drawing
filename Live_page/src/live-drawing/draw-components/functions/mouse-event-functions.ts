@@ -59,6 +59,7 @@ export function mouseMove(
     y: e.nativeEvent.offsetY,
     c: e.target.id,
   };
+  if (lastPoint.c !== currentPoint.c) return;
   switch (activeTool) {
     case 'pencil':
       const drawData: DrawData = {

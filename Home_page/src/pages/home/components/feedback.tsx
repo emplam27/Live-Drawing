@@ -5,7 +5,6 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router';
 import { useCustomState } from '../../../context';
-
 export function FeedbackComponent() {
   const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({
     userId: localStorage.getItem('userId'),
@@ -17,21 +16,17 @@ export function FeedbackComponent() {
   const [userId, setUserId] = useState(localStorage.getItem('userId'));
   const [textLength, setTextLength] = useState<number>(0);
   const history = useHistory();
-
   const headers = {
     'Content-Type': 'application/json',
     Authorization: token,
   };
-
   useEffect(() => {
     setToken(localStorage.getItem('token'));
     setUserId(localStorage.getItem('userId'));
   }, [userState]);
-
   useEffect(() => {
     setTextLength(feedbackForm.text.length);
   }, [feedbackForm]);
-
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (feedbackForm.text.length <= 1000) {
       setFeedbackForm({ userId: userId, text: e.target.value });
@@ -41,7 +36,6 @@ export function FeedbackComponent() {
         text: '허용 글자수 : 1000자',
       });
   };
-
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     if (token === null || userId === null) {
@@ -75,18 +69,18 @@ export function FeedbackComponent() {
             <p className='mb-2 text-white text-xl hidden md:block'>당신도 화가가 될 수 있습니다.</p>
           </div>
           <div className='w-full md:w-1/2 h-full flex flex-col items-center bg-white md:py-8 px-4'>
-            <h3 className='mb-5 mt-1 font-bold text-4xl flex items-center text-blue-400'>피드백 남기기</h3>
-            <form action='#' className='px-3 flex h-full flex-col justify-center items-center w-full'>
+            <h3 className='mb-5 mt-3 font-bold text-4xl flex items-center text-blue-400'>피드백 남기기</h3>
+            <form action='#' className='px-3 flex h-full flex-col justify-center items-center w-full gap-2'>
               <textarea
                 onChange={onChange}
                 placeholder='피드백을 작성해주세요.'
-                className='px-4 pt-2 w-10/12 h-72 rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+                className='px-4 pt-2 w-10/12 h-32 rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
                 maxLength={1000}
               />
-              <div className='textLength'>{textLength} / 1000</div>
+              <p className='text-gray-500 Length text-base text-sm'>{textLength} / 1000</p>
               <button
                 onClick={onClick}
-                className='w-10/12 h-14 mt-5 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
+                className='w-10/12 h-14 mt-1 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
               >
                 감사합니다 :)
               </button>

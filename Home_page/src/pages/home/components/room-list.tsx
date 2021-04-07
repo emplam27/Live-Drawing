@@ -4,18 +4,16 @@ import { ResponseRoomInfo } from '../interfaces/room-info-interface';
 import axios from 'axios';
 import './room-list.css';
 import { EntranceProps } from '../interfaces/entrance-props-interface';
-
 export function RoomListComponent() {
   const [rooms, setRooms] = useState<EntranceProps[]>([]);
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}`).then((res: ResponseRoomInfo) => {
-      console.log(res.data);
       setRooms(res.data);
     });
   }, []);
   return (
     <>
-      <div className='roomList'>
+      <div className='roomList grid grid-cols-4 gap-1 pt-10 flex-justify-center'>
         {rooms.map((room: EntranceProps, index: number) => {
           return (
             <div key={index}>

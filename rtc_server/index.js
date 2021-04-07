@@ -29,6 +29,7 @@ io.on("connection", (socket) => {
       socketId: socket.id,
       username: message.username,
       userId: message.userId,
+      userImage: message.userImage,
       roomId: message.roomId,
       roomTitle: message.roomTitle,
       token: message.token,
@@ -133,8 +134,7 @@ io.on("connection", (socket) => {
         { headers: headers }
       );
       io.to(user.roomId).emit("chat-message", {
-        userId: user.userId,
-        username: user.username,
+        user: "admin",
         text: `${user.username}님이 나가셨습니다.`,
       });
       io.to(user.roomId).emit("update-room-users", {

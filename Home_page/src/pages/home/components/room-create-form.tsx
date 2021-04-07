@@ -77,21 +77,25 @@ export default function RoomCreateComponent() {
             <p className='mb-2 text-white text-xl hidden md:block'>당신도 화가가 될 수 있습니다.</p>
           </div>
           <div className='w-full h-full md:w-1/2 flex flex-col items-center bg-white py-5 md:py-8 px-4'>
-            <h3 className='mb-16 my font-bold text-4xl flex items-center text-blue-400'>방 만들기</h3>
-            <form action='#' className='px-3 flex flex-col justify-center items-center w-full gap-10'>
-              <label className='text-left w-10/12 text-blue-400 font-bold '>
+            <h3 className='mb-6 mt-3 my font-bold text-4xl flex items-center text-blue-400'>방 만들기</h3>
+            <form action='#' className='px-3 flex flex-col justify-center items-center w-full gap-3'>
+              <label className='text-left w-10/12 text-blue-400 font-bold text-xl '>
                 방 제목
                 <input
+                  maxLength={50}
+                  autoComplete='off'
                   type='text'
                   name='roomTitle'
                   placeholder='제목을 입력하세요.'
                   onChange={changeRoomTitle}
-                  className='px-4 py-2 mt-1 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+                  className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
                 />
               </label>
-              <label className='text-left w-10/12 text-blue-400 font-bold '>
+              <label className='text-left w-10/12 mt-1 text-blue-400 font-bold text-xl '>
                 비밀번호
                 <input
+                  maxLength={50}
+                  autoComplete='off'
                   type='password'
                   name='roomPassword'
                   placeholder='비밀번호를 입력하세요.'

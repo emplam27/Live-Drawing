@@ -35,6 +35,7 @@ export function EntranceComponent(props: EntranceProps) {
       input: 'text',
       inputAttributes: {
         autocapitalize: 'off',
+        autocomplete: 'off',
       },
       showCancelButton: true,
       preConfirm: (password) => {
