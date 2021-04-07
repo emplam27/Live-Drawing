@@ -183,6 +183,7 @@ function LiveDrawing() {
         headers: headers,
       })
       .then((res) => {
+        console.log(res);
         setUserProfileInfos(res.data);
       });
   }, [roomUsers]);

@@ -43,6 +43,11 @@ export function EntranceComponent(props: EntranceProps) {
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
             if (res.status === 200) {
+              if (res.data === 'fail') {
+                Swal.showValidationMessage('비밀번호를 입력해주세요.');
+                return;
+              }
+
               if (res.data === 'already exist') {
                 Swal.showValidationMessage('잘못된 접근입니다. 이미 방에 입장한 유저입니다.');
                 return;

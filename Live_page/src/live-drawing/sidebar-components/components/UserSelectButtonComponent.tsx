@@ -12,7 +12,7 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
             (userProfileInfo: UserProfileInfo) =>
               userProfileInfo.userId === layer.canvasId,
           );
-          if (layer.canvasId !== props.roomInfo.userId)
+          if (layer.canvasId !== props.roomInfo.userId && user)
             return (
               <div
                 key={layer.canvasId}
@@ -43,10 +43,10 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
                       ? 'ring-2 ring-white shadow-lg'
                       : ''
                   }`}
-                  src={`${user?.userImage}`}
-                  alt={`${user?.username}`}
+                  src={`${user.userImage}`}
+                  alt={`${user.username}`}
                 />
-                <p>{`${user?.username}`}</p>
+                <p>{`${user.username}`}</p>
               </div>
             );
         })}
