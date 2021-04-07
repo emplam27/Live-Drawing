@@ -32,6 +32,9 @@ public class Room {
     @Column(name = "roomHostId")
     private String roomHostId;
 
+    @Column(name = "isRoomActive")
+    private boolean isRoomActive;
+
 //    @OneToMany(mappedBy = "room")
 //    private List<Member> members = new ArrayList<>();
 
@@ -44,12 +47,13 @@ public class Room {
 //        this.members = members;
     }
 
-    public Room(String roomTitle, String roomId, String roomPassword, String roomHostId, String roomHostname) {
+    public Room(String roomTitle, String roomId, String roomPassword, String roomHostId, String roomHostname, boolean isRoomActive) {
         this.roomTitle = roomTitle;
         this.roomId = roomId;
         this.roomPassword = roomPassword;
         this.roomHostId = roomHostId;
         this.roomHostname = roomHostname;
+        this.isRoomActive = isRoomActive;
     }
 
     public void add(User user) {

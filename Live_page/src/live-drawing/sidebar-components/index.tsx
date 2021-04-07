@@ -26,7 +26,8 @@ function SidebarComponent(props: SidebarComponentProps) {
       <div className='flex-grow'></div>
       <CloseButtonComponent
         roomInfo={props.roomInfo}
-        setIsLiveClosed={props.setIsLiveClosed}
+        // setIsLiveClosed={props.setIsLiveClosed}
+        socket={props.socket}
       />
     </div>
   );

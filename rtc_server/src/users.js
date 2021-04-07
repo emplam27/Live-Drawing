@@ -1,6 +1,6 @@
 let users = [];
 
-const addUser = ({ socketId, userName, userId, roomId, token, roomTitle }) => {
+const addUser = ({ socketId, username, userId, roomId, token, roomTitle }) => {
   const existingUser = users.find(
     (user) => user.roomId === roomId && user.userId === userId
   );
@@ -9,8 +9,8 @@ const addUser = ({ socketId, userName, userId, roomId, token, roomTitle }) => {
     return { error: "이미 접속 중 입니다." };
   }
 
-  const user = { socketId, userName, userId, roomId, token, roomTitle };
-  // console.log(user)
+  const user = { socketId, username, userId, roomId, token, roomTitle };
+  console.log("users", user);
   users.push(user);
   return user;
 };
@@ -19,6 +19,7 @@ const removeUser = (socketId) => {
   const index = users.findIndex((user) => user.socketId === socketId);
 
   if (index !== -1) {
+    console.log("are you in??");
     return users.splice(index, 1)[0];
   }
 };

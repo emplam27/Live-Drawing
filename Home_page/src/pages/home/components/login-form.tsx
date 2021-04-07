@@ -61,7 +61,7 @@ export function SignInComponent() {
   //       <hr />
   //       {/* 시큐리티는 x-www-form-url-encoded 타입만 인식 */}
   //       <form action='/login' method='POST'>
-  //         <input type='text' name='username' placeholder='Username' onChange={onChangeUserName} /> <br />
+  //         <input type='text' name='username' placeholder='Username' onChange={onChangeUsername} /> <br />
   //         <input type='password' name='password' placeholder='Password' onChange={onChangePassword} />
   //         <br />
   //         {/* <button onClick={onClick}>로그인</button> */}

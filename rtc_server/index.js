@@ -24,15 +24,16 @@ io.on("connection", (socket) => {
   console.log("소켓 연결 완료");
 
   socket.on("join", (message) => {
+    console.log("message", message);
     const user = addUser({
       socketId: socket.id,
-      userName: message.userName,
+      username: message.username,
       userId: message.userId,
       roomId: message.roomId,
       roomTitle: message.roomTitle,
       token: message.token,
     });
-    console.log(user);
+    console.log("server", user);
     if (user.error) {
       socket.emit("error", user);
       return;
@@ -41,12 +42,12 @@ io.on("connection", (socket) => {
 
     socket.emit("chat-message", {
       user: "admin",
-      text: `${user.userName} 님, ${user.roomTitle} 방에 오신걸 환영합니다!`,
+      text: `${user.username} 님, ${user.roomTitle} 방에 오신걸 환영합니다!`,
     });
 
     socket.broadcast.to(user.roomId).emit("chat-message", {
       user: "admin",
-      text: `${user.userName}님이 참가했습니다!`,
+      text: `${user.username}님이 참가했습니다!`,
     });
 
     //@ Send Room Users
@@ -118,21 +119,23 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
+    console.log(user);
     console.log("유저의 연결이 끊어졌습니다.");
     if (user) {
-      // const headers = {
-      //   'Content-Type': 'application/json',
-      //   Authorization: user.token,
-      // };
-      // axios.post(
-      //   `${process.env.REACT_APP_API_URL}/${user.roomId}/disconnect`,
-      //   { userId: user.userId },
-      //   { headers: headers }
-      // );
+      console.log("im in!");
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: user.token,
+      };
+      axios.post(
+        `${process.env.REACT_APP_API_URL}/${user.roomId}/disconnect`,
+        { userId: user.userId },
+        { headers: headers }
+      );
       io.to(user.roomId).emit("chat-message", {
         userId: user.userId,
-        userName: user.userName,
-        text: `${user.userName}님이 나가셨습니다.`,
+        username: user.username,
+        text: `${user.username}님이 나가셨습니다.`,
       });
       io.to(user.roomId).emit("update-room-users", {
         roomId: user.roomId,

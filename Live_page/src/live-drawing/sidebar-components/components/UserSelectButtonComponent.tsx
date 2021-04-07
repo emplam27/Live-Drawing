@@ -48,9 +48,9 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
                       : ''
                   }`}
                   src={`${user?.userImage}`}
-                  alt={`${user?.userName}`}
+                  alt={`${user?.username}`}
                 />
-                <p>{`${user?.userName}`}</p>
+                <p>{`${user?.username}`}</p>
               </div>
             );
         })}

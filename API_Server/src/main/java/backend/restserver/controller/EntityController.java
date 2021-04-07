@@ -5,16 +5,19 @@ import backend.restserver.entity.Room;
 import backend.restserver.entity.User;
 import backend.restserver.repository.RoomRepository;
 import backend.restserver.repository.UserRepository;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 
 @RestController
@@ -51,7 +54,7 @@ public class EntityController {
         List<Room> newRoomList = roomRepo.findAll();
 
 
-        List<Map<String, Object>> RoomList = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> giveRoomList = new ArrayList<Map<String, Object>>();
 //        Map<String, Object> map = new HashMap<String, Object>();
 
 //        ArrayList<Map<String, String>[]> RoomList = new ArrayList<Map<String, String>[]>();
@@ -59,21 +62,24 @@ public class EntityController {
         for (int i = 0 ; i < newRoomList.size(); i++) {
 //            RoomList.add("1234");
 
-            List<User> newUserList = userRepo.findByRoom_RoomPk(newRoomList.get(i).getRoomPk());
-            User userHost = userRepo.findByUserId(newRoomList.get(i).getRoomHostId());
+            if(newRoomList.get(i).isRoomActive()){
+                List<User> newUserList = userRepo.findByRoom_RoomPk(newRoomList.get(i).getRoomPk());
+                User userHost = userRepo.findByUserId(newRoomList.get(i).getRoomHostId());
 
 
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.put("roomHostname", newRoomList.get(i).getRoomHostname());
-            map.put("roomId", newRoomList.get(i).getRoomId());
-            map.put("roomTitle", newRoomList.get(i).getRoomTitle());
-            //? 프로필 사진, 방마다 유저몇명인지 반환
-            map.put("userImage", userHost.getProfileImage());
-            map.put("userNumber", newUserList.size());
-            RoomList.add(map);
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("roomHostname", newRoomList.get(i).getRoomHostname());
+                map.put("roomId", newRoomList.get(i).getRoomId());
+                map.put("roomTitle", newRoomList.get(i).getRoomTitle());
+                //? 프로필 사진, 방마다 유저몇명인지 반환
+                map.put("userImage", userHost.getProfileImage());
+                map.put("userNumber", newUserList.size());
+                giveRoomList.add(map);
+            } else {}
+
         }
 
-        return RoomList;
+        return giveRoomList;
     }
 
 
@@ -134,7 +140,12 @@ public class EntityController {
         String roomHostId = roomJson.get("roomHostId").toString();
 //        logger.info("")
         User host = userRepo.findByUserId(roomHostId);
-        Room newRoom = new Room(roomTitle, roomIdValue, roomPassword, roomHostId, host.getUsername());
+        if(host.getRoom() != null) {
+            logger.info("잘못된 접근 입니다. (이미 호스트로서 방에 접속되어 있습니다.)");
+//            throw new AccessDeniedException("권한이 없습니다.");
+            return null;
+        }
+        Room newRoom = new Room(roomTitle, roomIdValue, roomPassword, roomHostId, host.getUsername(), true);
         newRoom.add(host);
 
         logger.info("create new room");
@@ -176,13 +187,14 @@ public class EntityController {
     }
 
 
-    @GetMapping("/aaa/{key}")
-    @ResponseBody
-    public String testtest(
-            @PathVariable("key") String key,
-            @RequestParam String key1) {
-        System.out.println("1111!@#!@#!@#!!#!@");
-        return "success" + key + key1;
+    @PostMapping("api/live/{roomId}/inactive")
+    public void isInactiveRoom(@PathVariable String roomId,
+                               @RequestBody String newRoomId) {
+        System.out.println("------------> newRoomId: " + newRoomId);
+//        System.out.println("------------> roomId: " + roomId);
+        List<Room> newRoom = roomRepo.findByRoomId(roomId);
+        newRoom.get(0).setRoomActive(false);
+        roomRepo.save(newRoom.get(0));
     }
 
     @PostMapping("/api/{roomId}/disconnect")
@@ -200,7 +212,7 @@ public class EntityController {
 
         List<User> newUserList = userRepo.findByRoom_RoomPk(roomPk);
 
-        System.out.println("시발년아 : " + newUserList.size());
+        System.out.println("유저 몇명? : " + newUserList.size());
         if ( newUserList.size() == 0) {
             roomRepo.delete(newRoom.get(0));
         }

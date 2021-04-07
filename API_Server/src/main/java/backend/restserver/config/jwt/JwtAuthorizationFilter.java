@@ -50,7 +50,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
             //? 추가 이슈 발생. 필터에서 짤려서 컨트롤러로 가면 안되는데
             //? doFilter함수는 이 필터 다음으로 넘겨지므로 컨트롤러로 넘겨짐. 그래서 여기서 짤라주는 구문을 추가해야함
-//            response.setStatus(401);
+            response.setStatus(401);
 //            chain.doFilter(request, response); //! 없으면 다시 필터를 타게함. 밑에 로직이 실행 안됨.
             throw new AccessDeniedException("권한이 없습니다.");
 //            return;

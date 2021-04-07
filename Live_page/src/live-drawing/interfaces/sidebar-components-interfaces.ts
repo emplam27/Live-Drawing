@@ -8,5 +8,6 @@ export interface SidebarComponentProps {
   topLayer: Layer | null;
   userProfileInfos: UserProfileInfo[];
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
-  setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
+  // setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
+  socket: SocketIOClient.Socket | null;
 }

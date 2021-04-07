@@ -50,6 +50,13 @@ export default function RoomCreateComponent() {
     axios
       .post(`${process.env.REACT_APP_API_URL}/room`, values, { headers: headers })
       .then((response) => {
+        console.log(response);
+        if (!response.data) {
+          MySwal.fire({
+            title: <p>이미 다른 방에 참여중 입니다.</p>,
+          });
+          return;
+        }
         if (response.status === 200) {
           window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${response.data['roomId']}`;
         }
