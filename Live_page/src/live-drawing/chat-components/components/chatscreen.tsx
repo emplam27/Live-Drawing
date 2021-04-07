@@ -34,13 +34,13 @@ export function ChatScreenComponent(props: ChatComponentProps) {
           <div
             key={index}
             className={`${
-              message.user === props.userName ? 'message my' : 'message'
+              message.user === props.username ? 'message my' : 'message'
             } ${message.user === 'admin' ? 'admin' : ''}`}
           >
-            {message.user === 'admin' || message.user === props.userName ? (
+            {message.user === 'admin' || message.user === props.username ? (
               ''
             ) : (
-              <p className='userName'>{message.user}</p>
+              <p className='username'>{message.user}</p>
             )}
             <div className='chat-text'>
               <p>{message.text}</p>

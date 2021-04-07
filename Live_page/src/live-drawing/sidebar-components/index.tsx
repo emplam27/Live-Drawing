@@ -13,8 +13,6 @@ function SidebarComponent(props: SidebarComponentProps) {
           <i className='ri-2x ri-leaf-fill text-blue-500'></i>
         </div>
       </div>
-
-      <div className='flex-grow'></div>
       <UserSelectButtonComponent
         topLayer={props.topLayer}
         userProfileInfos={props.userProfileInfos}
@@ -23,14 +21,13 @@ function SidebarComponent(props: SidebarComponentProps) {
         setTopLayer={props.setTopLayer}
       />
       <div className='flex-grow'></div>
-      <p>스피커 버튼</p>
       <VoiceChatComponent />
-      <div className='flex-grow'></div>
       <p>유저, 채팅 버튼</p>
       <div className='flex-grow'></div>
       <CloseButtonComponent
         roomInfo={props.roomInfo}
-        setIsLiveClosed={props.setIsLiveClosed}
+        // setIsLiveClosed={props.setIsLiveClosed}
+        socket={props.socket}
       />
     </div>
   );

@@ -14,7 +14,7 @@ function EraseSizeComponent(props: EraseSizeComponentProps) {
 
   return (
     <>
-      <p className='icon-link flex items-center'>Size</p>
+      <p className='hover:text-blue-500 flex items-center'>Size</p>
       <input
         id='eraseSlider'
         type='range'
@@ -23,7 +23,10 @@ function EraseSizeComponent(props: EraseSizeComponentProps) {
         value={props.eraserWidth}
         onChange={changeEraserSize}
       />
-      <p className='icon-link flex items-center' style={{ width: '16px' }}>
+      <p
+        className='hover:text-blue-500 flex items-center'
+        style={{ width: '16px' }}
+      >
         {props.eraserWidth}
       </p>
     </>

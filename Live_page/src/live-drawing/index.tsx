@@ -19,8 +19,6 @@ import axios from 'axios';
 import io from 'socket.io-client';
 // import { v4 as uuid } from 'uuid';
 
-import '../App.css';
-
 function LiveDrawing() {
   const { roomId } = useParams<{ roomId: string }>();
   const [roomInfo, setRoomInfo] = useState<RoomInfo>({
@@ -45,40 +43,70 @@ function LiveDrawing() {
     Authorization: `${localStorage.getItem('token')}`,
   };
 
-  const dummyUsersProfileInfo = [
-    {
-      userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
-      userImage:
-        'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
-      username: '김형우',
-    },
-    {
-      userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
-      userImage:
-        'https://lh3.googleusercontent.com/a-/AOh14Ggzk1sZlAeI4hnd0bZyYd7yS1Nqq04glqSQlywLpg=s96-c',
-      username: '김용욱',
-    },
-    {
-      userId: '73dd814c-8026-459b-a2ed-4863ddb79750',
-      userImage:
-        'https://lh6.googleusercontent.com/-h-I_zB0DmFk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnE3WNy2c7s-MYKHpFFSQgdcAifNg/s96-c/photo.jpg',
-      username: '김유석',
-    },
-    {
-      userId: 'b02fcfc9-c8d2-4900-8b8b-a7e2b3fa342c',
-      userImage:
-        'https://lh5.googleusercontent.com/-0XZwgDcb5yU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnyQd6S3wBQrFAPoAVUkdUO3q6nMA/s96-c/photo.jpg',
-      username: 'M K',
-    },
-  ];
+  // const dummyUsersProfileInfo: UserProfileInfo[] = [
+  //   {
+  //     userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
+  //     userImage:
+  //       'https://lh3.googleusercontent.com/a-/AOh14Ggzk1sZlAeI4hnd0bZyYd7yS1Nqq04glqSQlywLpg=s96-c',
+  //     username: '김용욱',
+  //   },
+  //   {
+  //     userId: '73dd814c-8026-459b-a2ed-4863ddb79750',
+  //     userImage:
+  //       'https://lh6.googleusercontent.com/-h-I_zB0DmFk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnE3WNy2c7s-MYKHpFFSQgdcAifNg/s96-c/photo.jpg',
+  //     username: '김유석',
+  //   },
+  //   {
+  //     userId: 'b02fcfc9-c8d2-4900-8b8b-a7e2b3fa342c',
+  //     userImage:
+  //       'https://lh5.googleusercontent.com/-0XZwgDcb5yU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnyQd6S3wBQrFAPoAVUkdUO3q6nMA/s96-c/photo.jpg',
+  //     username: 'M K',
+  //   },
+  //   {
+  //     userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+  //     userImage:
+  //       'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
+  //     username: '김형우',
+  //   },
+  // ];
 
-  const dummyRoomUsers = {
-    roomId: roomId,
-    roomHostId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
-    roomTitle: '12312421',
-    userId: localStorage.getItem('userId'),
-    username: '김용욱',
-  };
+  // const dummyRoomInfo = {
+  //   roomId: roomId,
+  //   roomHostId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+  //   roomTitle: '12312421',
+  //   userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+  //   username: '김형우',
+  // };
+
+  // const dummyRoomUsers: RoomUsers = {
+  //   roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //   users: [
+  //     {
+  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //       socketId: null,
+  //       username: '김용욱',
+  //       userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
+  //     },
+  //     {
+  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //       socketId: null,
+  //       username: '김유석',
+  //       userId: '73dd814c-8026-459b-a2ed-4863ddb79750',
+  //     },
+  //     {
+  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //       socketId: null,
+  //       username: 'M K',
+  //       userId: 'b02fcfc9-c8d2-4900-8b8b-a7e2b3fa342c',
+  //     },
+  //     {
+  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //       socketId: null,
+  //       username: '김형우',
+  //       userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+  //     },
+  //   ],
+  // };
 
   useEffect(() => {
     axios
@@ -88,14 +116,18 @@ function LiveDrawing() {
       })
       .then((res) => {
         setRoomInfo({ ...roomInfo, ...res.data });
+        // setRoomInfo({ ...roomInfo, ...dummyRoomUsers });
+
         const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
           transports: ['websocket'],
         });
         socketIo.emit('join', {
           username: res.data.username,
+          // username: roomInfo.username,
           userId: roomInfo.userId,
           roomId: roomId,
           roomTitle: res.data.roomTitle,
+          // roomTitle: roomInfo.roomTitle,
           token: localStorage.getItem('token'),
         });
         socketIo.on('error', (message: { error: string }) => {
@@ -107,9 +139,25 @@ function LiveDrawing() {
               (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
           );
         });
-        socketIo.on('roomUsers', (message: RoomUsers) => {
+        socketIo.on('update-room-users', (message: RoomUsers) => {
           setRoomUsers(message);
         });
+
+        socketIo.on('live-closed', () => {
+          Swal.fire({
+            title: '라이브가 종료되었습니다.',
+            text: '홈 화면으로 이동합니다.',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: '  이동',
+            allowOutsideClick: false,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
+            }
+          });
+        });
+
         socketIo.on('connect', () => {
           setSocket(socketIo);
         });
@@ -123,27 +171,19 @@ function LiveDrawing() {
             (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
         ),
       );
+    // window.addEventListener('beforeunload', (e: Event) => {
+    //   e.preventDefault();
+    //   axios.post(
+    //     `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
+    //     { userId: roomInfo.userId },
+    //     { headers: headers },
+    //   );
+    // });
   }, []);
 
-  //@ Function: Recieve Close Event
   useEffect(() => {
-    if (!isLiveClosed) return;
-    Swal.fire({
-      title: '라이브가 종료되었습니다.',
-      text: '홈 화면으로 이동합니다.',
-      icon: 'warning',
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: '  이동(사실은 안감)',
-      allowOutsideClick: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('홈 화면으로 이동하는 로직이 들어감');
-        setIsLiveClosed(false);
-      }
-    });
-  }, [isLiveClosed]);
+    //   setUserProfileInfos(dummyUsersProfileInfo);
 
-  useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/live/${roomId}/users`, {
         params: { userId: roomInfo.userId },
@@ -157,27 +197,28 @@ function LiveDrawing() {
   return (
     <>
       <SidebarComponent
-        topLayer={topLayer}
         isLiveClosed={isLiveClosed}
         layers={layers}
         roomInfo={roomInfo}
+        topLayer={topLayer}
         userProfileInfos={userProfileInfos}
         setTopLayer={setTopLayer}
-        setIsLiveClosed={setIsLiveClosed}
+        // setIsLiveClosed={setIsLiveClosed}
+        socket={socket}
       />
       <DrawComponent
-        topLayer={topLayer}
         isLiveClosed={isLiveClosed}
         layers={layers}
         roomInfo={roomInfo}
         roomUsers={roomUsers}
         socket={socket}
+        topLayer={topLayer}
         setTopLayer={setTopLayer}
         setIsLiveClosed={setIsLiveClosed}
         setLayers={setLayers}
       />
       {/* <ChatComponent
-        userName={roomInfo.userName}
+        username={roomInfo.username}
         socket={socket}
       ></ChatComponent> */}
     </>

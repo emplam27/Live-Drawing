@@ -1,6 +1,6 @@
 import { IAgoraRTCClient, ILocalAudioTrack } from 'agora-rtc-sdk-ng';
 
-export interface Rtc {
+export interface VoiceToolComponentProps {
   client: IAgoraRTCClient | null;
   localAudioTrack: ILocalAudioTrack | null;
   speaker: boolean | null;

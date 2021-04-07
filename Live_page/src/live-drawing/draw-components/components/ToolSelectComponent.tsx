@@ -42,8 +42,10 @@ function ToolSelectComponent(props: ToolSelectComponentProps) {
           <p
             key={tool.name}
             id={tool.name}
-            className={`icon-link flex items-center ${
-              props.activeTool === tool.name ? 'active' : ''
+            className={`hover:text-blue-500 px-2 flex items-center ${
+              props.activeTool === tool.name
+                ? 'border-b-4 border-blue-500 text-blue-500'
+                : ''
             }`}
             onClick={() => changeActiveTool(tool.name)}
           >

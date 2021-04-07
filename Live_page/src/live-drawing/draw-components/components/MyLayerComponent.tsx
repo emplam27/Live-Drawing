@@ -18,7 +18,7 @@ function MyLayerComponent(props: MyLayerComponentProps) {
       <canvas
         key={props.roomInfo.userId}
         id={props.roomInfo.userId === null ? undefined : props.roomInfo.userId}
-        className={'border-2 border-indigo-600'}
+        className={''}
         width={(window.innerWidth - 60) * 0.5}
         height={window.innerHeight}
         onMouseDown={(e) => mouseDown(e)}

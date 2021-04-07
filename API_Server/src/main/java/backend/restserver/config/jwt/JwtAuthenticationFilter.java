@@ -112,7 +112,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.getWriter().write(
                 "{\"" + "username" + "\":\"" + principalDetails.getUser().getUsername() + "\",\n"
-                        +"\"" + "userKey" + "\":\"" + principalDetails.getUser().getUserKey() + "\",\n"
+                        +"\"" + "userId" + "\":\"" + principalDetails.getUser().getUserId() + "\",\n"
                          + "\"" + JwtProperties.HEADER_STRING + "\":\"" + JwtProperties.TOKEN_PREFIX+jwtToken + "\"}"
         );
     }

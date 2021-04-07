@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .antMatchers("/api/user/join")
                 .antMatchers("/api")
+                .antMatchers("/")
 //                .antMatchers("/login")
                 .antMatchers("/api/oauth/jwt/google");
 //        .antMatchers("/login");

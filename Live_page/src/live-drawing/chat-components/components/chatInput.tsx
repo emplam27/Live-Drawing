@@ -4,13 +4,13 @@ import { ChatComponentProps } from '../interfaces/chat-component-props-interface
 
 export function ChatInputComponent(props: ChatComponentProps) {
   const [messageForm, setMessageForm] = useState<MessageForm>({
-    user: props.userName,
+    user: props.username,
     text: '',
   });
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessageForm({ user: props.userName, text: e.target.value });
+    setMessageForm({ user: props.username, text: e.target.value });
   };
 
   const sendMessage = (
@@ -25,7 +25,7 @@ export function ChatInputComponent(props: ChatComponentProps) {
       if (messageForm.text) {
         props.socket.emit('chat-send-message', messageForm);
         setMessageForm({
-          user: props.userName,
+          user: props.username,
           text: '',
         });
         if (inputRef.current) {

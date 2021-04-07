@@ -16,12 +16,11 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
     <>
       {props.layers.map((layer: Layer) => {
         if (layer.canvasId !== props.roomInfo.userId) {
-          console.log(props.topLayer);
           return (
             <canvas
               key={layer.canvasId}
               id={layer.canvasId}
-              className={`cols-start-1 cols-end-2 border-2 border-red-600 
+              className={`cols-start-1 cols-end-2 
               ${
                 props.topLayer !== null &&
                 props.topLayer.canvasId !== layer.canvasId

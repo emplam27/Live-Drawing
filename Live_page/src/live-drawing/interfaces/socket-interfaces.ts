@@ -7,7 +7,7 @@ export interface RoomInfo {
 }
 
 export interface UserProfileInfo {
-  userName: string | null;
+  username: string | null;
   userId: string;
   userImage: string;
 }
@@ -17,10 +17,10 @@ export interface ResponseData {
 }
 
 export interface UserInfo {
-  userName: string;
+  username: string;
   socketId: SocketIOClient.Socket | null;
   userId: string;
-  roomdId: string;
+  roomId: string;
 }
 
 export interface RoomUsers {

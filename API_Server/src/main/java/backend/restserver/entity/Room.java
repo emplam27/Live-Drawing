@@ -20,32 +20,40 @@ public class Room {
     @Column(name = "roomTitle")
     private String roomTitle;
 
-    @Column(name = "roomKey")
-    private String roomKey; // uuid
+    @Column(name = "roomId")
+    private String roomId; // uuid
+
+    @Column(name = "roomHostname")
+    private String roomHostname;
 
     @Column(name = "roomPassword")
     private String roomPassword;
 
-    @Column(name = "roomHost")
-    private String roomHost;
+    @Column(name = "roomHostId")
+    private String roomHostId;
+
+    @Column(name = "isRoomActive")
+    private boolean isRoomActive;
 
 //    @OneToMany(mappedBy = "room")
 //    private List<Member> members = new ArrayList<>();
 
 //    public Room() {}
 
-    public Room(String roomTitle, String roomKey, String roomHost) {
+    public Room(String roomTitle, String roomId, String roomHostId) {
         this.roomTitle = roomTitle;
-        this.roomKey = roomKey;
-        this.roomHost = roomHost;
+        this.roomId = roomId;
+        this.roomHostId = roomHostId;
 //        this.members = members;
     }
 
-    public Room(String roomTitle, String roomKey, String roomPassword, String roomHost) {
+    public Room(String roomTitle, String roomId, String roomPassword, String roomHostId, String roomHostname, boolean isRoomActive) {
         this.roomTitle = roomTitle;
-        this.roomKey = roomKey;
+        this.roomId = roomId;
         this.roomPassword = roomPassword;
-        this.roomHost = roomHost;
+        this.roomHostId = roomHostId;
+        this.roomHostname = roomHostname;
+        this.isRoomActive = isRoomActive;
     }
 
     public void add(User user) {
