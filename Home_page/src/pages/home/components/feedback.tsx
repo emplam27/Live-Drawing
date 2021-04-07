@@ -15,6 +15,7 @@ export function FeedbackComponent() {
   const userState = useCustomState;
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  const [textLength, setTextLength] = useState<number>(0);
   const history = useHistory();
 
   const headers = {
@@ -27,8 +28,18 @@ export function FeedbackComponent() {
     setUserId(localStorage.getItem('userId'));
   }, [userState]);
 
+  useEffect(() => {
+    setTextLength(feedbackForm.text.length);
+  }, [feedbackForm]);
+
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFeedbackForm({ userId: userId, text: e.target.value });
+    if (feedbackForm.text.length <= 1000) {
+      setFeedbackForm({ userId: userId, text: e.target.value });
+    } else
+      MySwal.fire({
+        title: <p>허용 글자수를 초과했습니다.</p>,
+        text: '허용 글자수 : 1000자',
+      });
   };
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -70,7 +81,9 @@ export function FeedbackComponent() {
                 onChange={onChange}
                 placeholder='피드백을 작성해주세요.'
                 className='px-4 pt-2 w-10/12 h-72 rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+                maxLength={1000}
               />
+              <div className='textLength'>{textLength} / 1000</div>
               <button
                 onClick={onClick}
                 className='w-10/12 h-14 mt-5 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
