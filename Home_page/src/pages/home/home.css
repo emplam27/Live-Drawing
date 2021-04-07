@@ -1,10 +1,12 @@
 :root{
     --padding:30px;
+    /* background: linear-gradient(to right, #F5F6FF, #E8F8FD); */
+    background-color: white;
 }
 
 .container{
     margin: 0px auto;    
-    max-width: 900px;
+    /* max-width: 1500px; */
 }
 
 .lecture-group {
@@ -20,7 +22,7 @@
 
 .title{
     display: flex;
-    text-align: left;
+    /* text-align: left; */
     font-weight: bold;
     /* justify-content: center; */
 

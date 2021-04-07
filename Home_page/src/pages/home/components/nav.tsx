@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import jwt_decode from 'jwt-decode';
 import { DecodedToken } from '../interfaces/decoded-token-interface';
+import './nav.css';
 
 export function NavBarComponent() {
   const [isToken, setIsToken] = useState(localStorage.getItem('token'));
@@ -96,48 +97,36 @@ export function NavBarComponent() {
               </button>
             </div>
             <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
-              <div className='flex-shrink-0 flex items-center text-blue-400 text-3xl font-bold'>
+              <div className='flex-shrink-0 flex items-center text-4xl font-bold text-blue-400 pt-6'>
                 <Link to='/'>방구석 화방</Link>
                 {/* <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' /> */}
                 {/* <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' /> */}
               </div>
-              <div className='hidden sm:block sm:ml-6'>
-                <div className='flex space-x-4'>
-                  {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                  {/* <Link
-                    to='/'
-                    // className='bg-blue-400 text-white px-3 py-2 rounded-md text-md font-medium'
-                    className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
-                    aria-current='page'
-                  >
-                    홈
-                  </Link> */}
-
+              <div className='hidden sm:block sm:ml-6 pt-6 px-0'>
+                <div className='flex px-40'>
                   <Link
                     to='/room'
-                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
+                    className='text-gray-400  hover:text-blue-400 px-10 py-2 rounded-md text-md font-medium'
                   >
-                    {/* <i className='ri-live-line'></i> */}
-                    라이브강의 시작
+                    <div>
+                      라이브강의 만들기 &nbsp;
+                      <i className='ri-artboard-line'></i>
+                    </div>
                   </Link>
-
-                  {/* <Link
-                    to='#'
-                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
-                  >
-                    준비중
-                  </Link> */}
 
                   <Link
                     to='/feedback'
-                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
+                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-md font-medium'
                   >
-                    피드백 남기기
+                    <div>
+                      피드백 남기기 &nbsp;
+                      <i className='ri-chat-smile-2-line'></i>
+                    </div>
                   </Link>
                 </div>
               </div>
             </div>
-            <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+            <div className='absolute inset-y-0 right-0 pt-6 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               {isToken ? (
                 <>
                   <div className='mr-5'>{`${userState.name}님 환영합니다.`}</div> <LogoutComponent />

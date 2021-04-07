@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import SidebarComponent from './sidebar-components';
 import DrawComponent from './draw-components';
+import ChatComponent from './chat-components';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import {
@@ -194,9 +195,10 @@ function LiveDrawing() {
         layers={layers}
         roomInfo={roomInfo}
         topLayer={topLayer}
-        socket={socket}
         userProfileInfos={userProfileInfos}
         setTopLayer={setTopLayer}
+        // setIsLiveClosed={setIsLiveClosed}
+        socket={socket}
       />
       <DrawComponent
         isLiveClosed={isLiveClosed}
@@ -209,6 +211,10 @@ function LiveDrawing() {
         setIsLiveClosed={setIsLiveClosed}
         setLayers={setLayers}
       />
+      {/* <ChatComponent
+        username={roomInfo.username}
+        socket={socket}
+      ></ChatComponent> */}
     </>
   );
 }
