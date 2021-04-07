@@ -7,7 +7,7 @@
 }
 
 .font-apply {
-  font-family: 'NanumSquareRound',sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .h-mainBox {
@@ -20,6 +20,7 @@
 
 .nav-bottom {
   border-bottom: #cae2fd 2px solid;
+  min-height: 80px;
 }
 
 /* https://cdn.pixabay.com/photo/2017/04/03/14/02/acrylic-paint-2198458_1280.jpg */
@@ -32,6 +33,9 @@
 .backdrop {
   backdrop-filter: blur(2px);
 }
+
+
+
 /* 
 .img-room-host{
   background-image: url('./image/naver-circle-fill.svg')

@@ -1,33 +1,34 @@
-:root{
+/* :root{
     --avatar-size: 32px; 
     --font-large: 18px;
     --font-medium: 14px;
     --padding:20px;
     --small-padding : 5px;
-    --grey-dark-color: #909090;
-    --grey-light-color:#e0e0e0;
+    --grey-dark-color: #fafafa;
+    --grey-light-color:#fafafa;
     /* --white-color:#ebf8fc; */
-}
-*{
-    padding:0;
+/* } */
+/* *{
+     padding:0;
     margin:0;
-    box-sizing: border-box; /* border 포함 */
-}
-.entrance {
-    width: '300px';
-    height: '300px';
+    box-sizing: border-box; border 포함
+} */
+/* .entrance {
+    width: '280px';
+    height: '280px';
     border: '2px solid black'
-}
+} */
 .roomList {
-    display: grid;
+    /* display: grid; */
     /* flex-wrap : wrap; */
     /* padding : 0; */
     /* margin : 0 auto; */
-    margin-top : var(--padding);
-    justify-content: center;
+    /* margin-top : var(--padding); */
+    /* justify-content: center; */
     /* grid-row-start : 0; */
-    grid-template-columns : repeat(auto-fill, minmax(23%, auto));
-    column-gap: 15px;
+    /* grid-template-columns : repeat(auto-fill, minmax(16%, auto)); */
+    /* column-gap: 1px; */
+    
     /* flex-flow: row wrap; */
     /* justify-content: space-between; */
     /* float:left; */
@@ -38,52 +39,78 @@
     /* margin : var(--padding) ; */
     /* display:flex; */
     /* padding-right: 20px; */
-    background-color: var(--white-color);
+    /* background-color: var(--white-color); */
     /* margin-right: var(--small-padding); */
     /* margin-top: var(--small-padding); */
-    margin-bottom: var(--small-padding);
+    /* margin-bottom: var(--small-padding); */
     /* max-width : 200px;   */
-    padding: 0; 
+    /* padding: 0 auto;   */
+    /* text-align: center; */
     /* float:left */
     /* justify-content : flex-start; */
 }
-.roomMetadata .roomImage img{
-    flex: 1 1 35%; /* 줄어들때, 늘어날때, default*/
-    /* margin-right: var(--padding); */
-    /* padding : 0 0; */
-    /* margin : 0; */
-}
-.roomMetadata .roomInfo{
-    display: flex;
+mMetadata .roomInfo{
+    /* display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-between; */
 }
 .roomMetadata .roomTitle{
-    font-size: var(--font-large);
+    /* color : #f6cfc1 */
+    /* font-size: var(--font-large);
     margin-top: var(--small-padding);
-    text-align: left;
+    text-align: center;
     font-weight: bold;
-    color : var(--grey-dark-color);
+    color : var(--grey-dark-color); */
     /* margin-right: var(--padding);  */
 }
 .roomMetadata .buttonandImage{
-    display : flex;
-    max-width: 200px;
+    /* display : flex;
+    max-width: 200px; */
 }
 .roomMetadata .roomInfo .buttonandImage img{
-    width: var(--avatar-size);
+    /* width: var(--avatar-size);
     height: var(--avatar-size);
-    border-radius: 50%;
+    border-radius: 50%; */
     /* margin-left: 80px; */
-    flex-basis: 13%;
+    /* flex-basis: 13%; */
     /* width : 100%; */
     /* height: 100%/ */
     /* flex : 1 1 35% */
 }
 .roomMetadata .buttonandImage .name{
-    font-size : var(--font-medium);
+    /* font-size : var(--font-medium);
     color : var(--grey-dark-color);
     font-weight: bold;
-    margin-left: 6px;
+    margin-left: 6px; */
     /* padding : 0 */
-}
+} 
+.middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%)
+  }
+  .conatiner image {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: .5s ease;
+    backface-visibility: hidden;
+  }
+  .container:hover .image {
+    opacity: 0.3;
+  }
+  
+  .container:hover .middle {
+    opacity: 1;
+  }
+  .middle .text {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    padding: 16px 32px;
+  }
