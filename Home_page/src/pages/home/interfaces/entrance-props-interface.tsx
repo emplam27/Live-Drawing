@@ -9,7 +9,6 @@ export interface ResponseEntranceProps {
 }
 
 export interface Values {
-  roomPk: number;
   roomId: string;
   password: string;
   userId: string | null;

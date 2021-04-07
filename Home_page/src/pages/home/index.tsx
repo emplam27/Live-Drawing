@@ -5,7 +5,7 @@ import './home.css';
 
 export function HomeComponent() {
   const userState = useCustomState();
-  
+
   return (
     <div className='container'>
       <div className='lecture-container'>

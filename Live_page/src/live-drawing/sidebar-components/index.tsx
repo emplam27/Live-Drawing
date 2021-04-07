@@ -27,7 +27,8 @@ function SidebarComponent(props: SidebarComponentProps) {
       <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} />
       <CloseButtonComponent
         roomInfo={props.roomInfo}
-        setIsLiveClosed={props.setIsLiveClosed}
+        // setIsLiveClosed={props.setIsLiveClosed}
+        socket={props.socket}
       />
     </div>
   );
