@@ -143,6 +143,22 @@ function LiveDrawing() {
     socketIo.on('update-room-users', (message: RoomUsers) => {
       setRoomUsers(message);
     });
+
+    socketIo.on('live-closed', () => {
+      Swal.fire({
+        title: '라이브가 종료되었습니다.',
+        text: '홈 화면으로 이동합니다.',
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: '  이동',
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
+        }
+      });
+    });
+
     socketIo.on('connect', () => {
       setSocket(socketIo);
     });
@@ -168,20 +184,8 @@ function LiveDrawing() {
 
   //@ Function: Recieve Close Event
   useEffect(() => {
-    if (!isLiveClosed) return;
-    Swal.fire({
-      title: '라이브가 종료되었습니다.',
-      text: '홈 화면으로 이동합니다.',
-      icon: 'warning',
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: '  이동(사실은 안감)',
-      allowOutsideClick: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire('홈 화면으로 이동하는 로직이 들어감');
-        setIsLiveClosed(false);
-      }
-    });
+    if (!isLiveClosed || !socket) return;
+    socket.emit('live-closed');
   }, [isLiveClosed]);
 
   useEffect(() => {
