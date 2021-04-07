@@ -19,7 +19,7 @@ import java.util.*;
 
 @RestController
 public class EntityController {
-    private final Logger logger = LoggerFactory.getLogger(IndexController.class);
+    private final Logger logger = LoggerFactory.getLogger(EntityController.class.getSimpleName());
     private final UserRepository userRepo;
     private final RoomRepository roomRepo;
 
@@ -34,7 +34,7 @@ public class EntityController {
 //     GET
 //     방 리스트 목록 조회
     @GetMapping("/api")
-    public @ResponseBody List<Room> showRoomList() {
+    public @ResponseBody List<Map<String, Object>> showRoomList() {
         logger.info("show room list");
 
         //!! 여기 나중에 쓸수도있음 (3/31)
@@ -48,8 +48,32 @@ public class EntityController {
 //        }
 //        return selectRoomList;
         //!! 여기 나중에 쓸수도있음 (3/31)
+        List<Room> newRoomList = roomRepo.findAll();
 
-        return roomRepo.findAll();
+
+        List<Map<String, Object>> RoomList = new ArrayList<Map<String, Object>>();
+//        Map<String, Object> map = new HashMap<String, Object>();
+
+//        ArrayList<Map<String, String>[]> RoomList = new ArrayList<Map<String, String>[]>();
+
+        for (int i = 0 ; i < newRoomList.size(); i++) {
+//            RoomList.add("1234");
+
+            List<User> newUserList = userRepo.findByRoom_RoomPk(newRoomList.get(i).getRoomPk());
+            User userHost = userRepo.findByUserId(newRoomList.get(i).getRoomHostId());
+
+
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("roomHostname", newRoomList.get(i).getRoomHostname());
+            map.put("roomId", newRoomList.get(i).getRoomId());
+            map.put("roomTitle", newRoomList.get(i).getRoomTitle());
+            //? 프로필 사진, 방마다 유저몇명인지 반환
+            map.put("userImage", userHost.getProfileImage());
+            map.put("userNumber", newUserList.size());
+            RoomList.add(map);
+        }
+
+        return RoomList;
     }
 
 
@@ -59,42 +83,41 @@ public class EntityController {
     public List<User> showUserInfo(@RequestParam String uuid) {
         logger.info("show user list and number!!" + uuid);
 
-        List<Room> newRoom = roomRepo.findByRoomKey(uuid); // 예가 인덱싱 처리가 안되있어서 해줘야 함 (물론 이번서비스에서는 그정도로 속도 저하가 일어날것 같진않지만..)
+        List<Room> newRoom = roomRepo.findByRoomId(uuid); // 예가 인덱싱 처리가 안되있어서 해줘야 함 (물론 이번서비스에서는 그정도로 속도 저하가 일어날것 같진않지만..)
         Long roomPk = newRoom.get(0).getRoomPk();
         return userRepo.findByRoom_RoomPk(roomPk);
     }
 
     @PostMapping("/api/room/entrance")
     public String joinRoom(@RequestBody Map<String, Object> roomJson) {
-        String uuid = roomJson.get("roomId").toString();
-        Long roomPk = Long.parseLong(roomJson.get("roomPk").toString());
-        String username = roomJson.get("username").toString();
-
+        String roomId = roomJson.get("roomId").toString();
+//        Long roomPk = Long.parseLong(roomJson.get("roomPk").toString());
+        String userId = roomJson.get("userId").toString();
         String password = roomJson.get("password").toString();
 
+        List<Room> target = roomRepo.findByRoomId(roomId);
+
 //        User newUser = findByUsername(username);
-        User user = userRepo.findByUsername((username));
+        User user = userRepo.findByUserId(userId);
 
-        if(uuid == null || uuid.length() == 0 || roomPk == 0 ||   // 널 처리
+        System.out.println("!!!!!!!!!!!!!!!!!!!!" + user.getRoom());
+
+        if(roomId == null || roomId.length() == 0 ||   // 널 처리
                 password == null || password.length() == 0) {
-            System.out.println("잘못된 접근 입니다.");
-            return "failure";
-        } else if (user.getRoom().getRoomPk() >= 1) { // 이미 방에 있는 유저인 경우
-            System.out.println("잘못된 접근 입니다.");
-            return "failure";
-        }
-        else {
-            logger.info(" uuid is : " + uuid);
-            Optional<Room> target = roomRepo.findById(roomPk);
-
-            if(target.get().getRoomPassword().equals(password)) {
-                System.out.println("패스워드가 일치합니다. 방으로 입장합니다.");
-//                User user = userRepo.findByUsername((username));
-                target.get().add(user);
-                return "success";
-            } else {
+            logger.info("잘못된 접근 입니다.");
+            return "fail";
+        } else {
+            if(!target.get(0).getRoomPassword().equals(password)) {
                 System.out.println("패스워드가 틀립니다. 다시 입력해 주세요.");
-                return "failure"; //! 이거도 사실 faulure면 status가 200이아니니까 에러? 같은 다른 방식으로 리스폰스줘야함
+                return "password fail"; //! 이거도 사실 faulure면 status가 200이아니니까 에러? 같은 다른 방식으로 리스폰스줘야함
+            } else if(user.getRoom() != null) {
+                logger.info("잘못된 접근 입니다. (이미 방에 접속되어 있습니다)");
+                return "already exist";
+            } else {
+                logger.info("패스워드가 일치합니다. 방으로 입장합니다.");
+                target.get(0).add(user);
+                roomRepo.save(target.get(0)); //! 이렇게 save 까지 하면 foreign key, 즉 맵핑이 성립됨
+                return "success";
             }
         }
     }
@@ -108,10 +131,10 @@ public class EntityController {
         String roomIdValue = UUID.randomUUID().toString();
         String roomTitle = roomJson.get("roomTitle").toString();
         String roomPassword = roomJson.get("roomPassword").toString();
-        String roomHost = roomJson.get("roomHost").toString();
-
-        User host = userRepo.findByUsername(roomHost);
-        Room newRoom = new Room(roomTitle, roomIdValue, roomPassword, roomHost);
+        String roomHostId = roomJson.get("roomHostId").toString();
+//        logger.info("")
+        User host = userRepo.findByUserId(roomHostId);
+        Room newRoom = new Room(roomTitle, roomIdValue, roomPassword, roomHostId, host.getUsername());
         newRoom.add(host);
 
         logger.info("create new room");
@@ -119,6 +142,69 @@ public class EntityController {
         return roomRepo.save(newRoom);
     }
 
+    @GetMapping("/api/live/{roomId}")
+    @ResponseBody
+    public Map<String, Object> roomInfoUser(@PathVariable("roomId") String roomId,
+                                            @RequestParam String userId) {
+        List<Room> newRoom = roomRepo.findByRoomId(roomId);
+        User newUser = userRepo.findByUserId(userId);
+
+        Map<String, Object> json = new HashMap<>();
+        json.put("roomTitle", newRoom.get(0).getRoomTitle());
+        json.put("username", newUser.getUsername());
+        json.put("roomHostId", newRoom.get(0).getRoomHostId());
+        return json;
+    }
+
+    @GetMapping("/api/live/{roomId}/users")
+    @ResponseBody
+    public List<Map<String, Object>> roomInfoUsers(@PathVariable("roomId") String roomId) {
+        List<Room> newRoom = roomRepo.findByRoomId(roomId);
+        Long roomPk = newRoom.get(0).getRoomPk();
+
+        List<User> newUserList = userRepo.findByRoom_RoomPk(roomPk);
+        List<Map<String, Object>> UserList = new ArrayList<>();
+
+        for (int i = 0; i < newUserList.size(); i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("username", newUserList.get(i).getUsername());
+            map.put("userId", newUserList.get(i).getUserId());
+            map.put("userImage", newUserList.get(i).getProfileImage());
+            UserList.add(map);
+        }
+        return UserList;
+    }
+
+
+    @GetMapping("/aaa/{key}")
+    @ResponseBody
+    public String testtest(
+            @PathVariable("key") String key,
+            @RequestParam String key1) {
+        System.out.println("1111!@#!@#!@#!!#!@");
+        return "success" + key + key1;
+    }
+
+    @PostMapping("/api/{roomId}/disconnect")
+    public void deleteUser(@PathVariable("roomId") String roomId,
+                           @RequestBody Map<String, Object> req) {
+//        System.out.println("-------------------->여기로 들어오는가?!?!?!?");
+        String userId = req.get("userId").toString();
+        System.out.println("user id is : " + userId);
+        User user = userRepo.findByUserId(userId);
+        user.setRoom(null);
+        userRepo.save(user);
+
+        List<Room> newRoom = roomRepo.findByRoomId(roomId);
+        Long roomPk = newRoom.get(0).getRoomPk();
+
+        List<User> newUserList = userRepo.findByRoom_RoomPk(roomPk);
+
+        System.out.println("시발년아 : " + newUserList.size());
+        if ( newUserList.size() == 0) {
+            roomRepo.delete(newRoom.get(0));
+        }
+    }
 
 
     @DeleteMapping("/api/room")
