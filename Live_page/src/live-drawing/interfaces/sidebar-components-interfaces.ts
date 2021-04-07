@@ -6,8 +6,7 @@ export interface SidebarComponentProps {
   layers: Layer[];
   roomInfo: RoomInfo;
   topLayer: Layer | null;
+  socket: SocketIOClient.Socket | null;
   userProfileInfos: UserProfileInfo[];
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
-  // setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
-  socket: SocketIOClient.Socket | null;
 }

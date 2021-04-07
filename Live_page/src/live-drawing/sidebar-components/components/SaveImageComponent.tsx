@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SaveImageComponentProps } from '../interfaces/save-image-interfaces';
-import { RoomInfo } from '../../interfaces/socket-interfaces';
 
-export function SaveImageComponent(props: SaveImageComponentProps) {
+function SaveImageComponent(props: SaveImageComponentProps) {
   function downloadImage() {
     const userId = props.roomInfo.userId;
     if (!userId) return;
@@ -15,9 +14,19 @@ export function SaveImageComponent(props: SaveImageComponentProps) {
       a.click();
     }
   }
+
+  const chatButtonStyle =
+    'flex justify-center items-center w-20 h-20 cursor-pointer';
+  const inactiveStyle = 'text-gray-500 hover:text-blue-600';
+
   return (
     <>
-      <i className={'ri-2x ri-save-3-line'} onClick={() => downloadImage()}></i>
+      <div
+        className={`${chatButtonStyle} ${inactiveStyle}`}
+        onClick={downloadImage}
+      >
+        <i className={'ri-2x ri-save-3-line'}></i>
+      </div>
     </>
   );
 }

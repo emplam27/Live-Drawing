@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { ChatComponentProps } from '../interfaces/chat-component-props-interface';
 import { MessageForm } from '../interfaces/message-form-interface';
-import '../index.css';
 
-export function ChatScreenComponent(props: ChatComponentProps) {
+function ChatScreenComponent(props: ChatComponentProps) {
   const [screen, setScreen] = useState<MessageForm[]>([]);
   const [container, setContainer] = useState<MessageForm[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -27,24 +26,32 @@ export function ChatScreenComponent(props: ChatComponentProps) {
     scrollBottom();
   }, [screen]);
 
+  const messageStyle =
+    'inline-block rounded-xl shadow-md px-4 py-2.5 mx-4 my-1.5';
+  const myMessageStyle = 'bg-blue-500 text-right text-white self-end';
+  const peerMessageStyle = 'bg-white text-left self-start';
+  const adminMessageStyle =
+    'bg-opacity-0 text-center font-bold self-center shadow-none';
+
   return (
-    <div className='chatScreen'>
+    <div className='flex-auto flex flex-col bg-white bg-opacity-75 border overflow-auto pt-4'>
       {screen.map((message: MessageForm, index: number) => {
         return (
           <div
             key={index}
-            className={`${
-              message.user === props.username ? 'message my' : 'message'
-            } ${message.user === 'admin' ? 'admin' : ''}`}
+            className={`
+            ${
+              message.user === props.roomInfo.username
+                ? `${messageStyle} ${myMessageStyle}`
+                : `${messageStyle} ${peerMessageStyle}`
+            } 
+            ${message.user === 'admin' ? `${adminMessageStyle}` : null}`}
           >
-            {message.user === 'admin' || message.user === props.username ? (
-              ''
-            ) : (
-              <p className='username'>{message.user}</p>
+            {message.user === 'admin' ||
+            message.user === props.roomInfo.username ? null : (
+              <p className='text-sm'>{message.user}</p>
             )}
-            <div className='chat-text'>
-              <p>{message.text}</p>
-            </div>
+            <div className='break-all'>{message.text}</div>
             <div ref={scrollRef} />
           </div>
         );
@@ -52,3 +59,5 @@ export function ChatScreenComponent(props: ChatComponentProps) {
     </div>
   );
 }
+
+export default ChatScreenComponent;

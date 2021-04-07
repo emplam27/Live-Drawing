@@ -17,6 +17,7 @@ function LineSizeComponent(props: LineSizeComponentProps) {
       <p className='hover:text-blue-500 flex items-center'>Size</p>
       <input
         id='pencilSlider'
+        className='cursor-pointer'
         type='range'
         min='1'
         max='100'

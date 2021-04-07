@@ -3,8 +3,6 @@ import { Layer } from '../../interfaces/draw-components-interfaces';
 import { UserSelectButtonComponentProps } from '../interfaces/user-select-button-interfaces';
 import { UserProfileInfo } from '../../interfaces/socket-interfaces';
 
-import '../index.css';
-
 function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
   return (
     <>
@@ -19,24 +17,22 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
               <div
                 key={layer.canvasId}
                 onClick={() => props.setTopLayer(layer)}
-                className={`flex flex-col items-center 
+                className={`flex flex-col items-center cursor-pointer
                   ${
                     layer.canvasId === props.roomInfo.roomHostId
-                      ? ' order-first py-6 flex flex-col'
-                      : ' py-6 flex flex-col'
+                      ? 'order-first py-6 flex flex-col'
+                      : 'py-6 flex flex-col'
                   }
                   ${
                     layer.canvasId === props.topLayer?.canvasId
-                      ? ' bg-blue-500 text-white '
-                      : ''
+                      ? 'bg-blue-500 text-white shadow-inner '
+                      : 'hover:bg-gray-200'
                   }
                 `}
               >
                 <div
                   className={
-                    layer.canvasId === props.roomInfo.roomHostId
-                      ? ''
-                      : ' hidden'
+                    layer.canvasId === props.roomInfo.roomHostId ? '' : 'hidden'
                   }
                 >
                   HOST
@@ -44,7 +40,7 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
                 <img
                   className={`w-12 h-12 rounded-full my-2 ${
                     layer.canvasId === props.topLayer?.canvasId
-                      ? 'ring-2 ring-white'
+                      ? 'ring-2 ring-white shadow-lg'
                       : ''
                   }`}
                   src={`${user?.userImage}`}
