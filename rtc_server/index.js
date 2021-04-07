@@ -109,6 +109,13 @@ io.on("connection", (socket) => {
     socket.broadcast.to(user.roomId).emit("delete-layer", message);
   });
 
+  socket.on("live-closed", () => {
+    console.log("live-closed");
+    const user = getUser(socket.id);
+    if (!user) return;
+    socket.broadcast.to(user.roomId).emit("live-closed");
+  });
+
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
     console.log("유저의 연결이 끊어졌습니다.");
