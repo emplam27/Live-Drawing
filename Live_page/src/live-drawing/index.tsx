@@ -1,23 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
 import SidebarComponent from './sidebar-components';
 import DrawComponent from './draw-components';
-
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-
 import {
   RoomInfo,
   RoomUsers,
   UserProfileInfo,
 } from './interfaces/socket-interfaces';
 import { Layer } from './interfaces/draw-components-interfaces';
-
 import axios from 'axios';
 import io from 'socket.io-client';
 // import { v4 as uuid } from 'uuid';
-
 function LiveDrawing() {
   const { roomId } = useParams<{ roomId: string }>();
   const [roomInfo, setRoomInfo] = useState<RoomInfo>({
@@ -35,13 +30,11 @@ function LiveDrawing() {
   const [topLayer, setTopLayer] = useState<Layer | null>(null);
   const [layers, setLayers] = useState<Layer[]>([]);
   const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
-
   const MySwal = withReactContent(Swal);
   const headers = {
     'Content-Type': 'application/json',
     Authorization: `${localStorage.getItem('token')}`,
   };
-
   const dummyUsersProfileInfo: UserProfileInfo[] = [
     {
       userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
@@ -67,8 +60,13 @@ function LiveDrawing() {
         'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
       username: '김형우',
     },
+    {
+      userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+      userImage:
+        'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
+      username: '김형우',
+    },
   ];
-
   const dummyRoomInfo = {
     roomId: roomId,
     roomHostId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
@@ -115,7 +113,7 @@ function LiveDrawing() {
     //   })
     // .then((res) => {
     // setRoomInfo({ ...roomInfo, ...res.data });
-    setRoomInfo({ ...roomInfo, ...dummyRoomUsers });
+    setRoomInfo(dummyRoomInfo);
 
     const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
       transports: ['websocket'],
@@ -130,17 +128,17 @@ function LiveDrawing() {
       token: localStorage.getItem('token'),
     });
     socketIo.on('error', (message: { error: string }) => {
-      MySwal.fire({
-        title: <p>{`${message.error}`}</p>,
-        text: '홈으로 돌아갑니다.',
-      });
+      // MySwal.fire({
+      //   title: <p>{`${message.error}`}</p>,
+      //   text: '홈으로 돌아갑니다.',
+      // });
       // .then(
       // () =>
       // (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
       // );
     });
     socketIo.on('update-room-users', (message: RoomUsers) => {
-      setRoomUsers(message);
+      setRoomUsers(dummyRoomUsers);
     });
     socketIo.on('connect', () => {
       setSocket(socketIo);
@@ -164,7 +162,6 @@ function LiveDrawing() {
       );
     });
   }, []);
-
   //@ Function: Recieve Close Event
   useEffect(() => {
     if (!isLiveClosed) return;
@@ -182,10 +179,8 @@ function LiveDrawing() {
       }
     });
   }, [isLiveClosed]);
-
   useEffect(() => {
     setUserProfileInfos(dummyUsersProfileInfo);
-
     // axios
     //   .get(`${process.env.REACT_APP_API_URL}/live/${roomId}/users`, {
     //     params: { userId: roomInfo.userId },
@@ -195,7 +190,6 @@ function LiveDrawing() {
     //     setUserProfileInfos(res.data);
     //   });
   }, [roomUsers]);
-
   return (
     <>
       <SidebarComponent
@@ -222,5 +216,4 @@ function LiveDrawing() {
     </>
   );
 }
-
 export default LiveDrawing;

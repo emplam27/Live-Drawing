@@ -5,9 +5,12 @@ import { ChatComponentProps } from './interfaces/chat-component-props-interface'
 
 function ChatComponent(props: ChatComponentProps) {
   const [isChatOpened, setIsChatOpened] = useState<boolean>(false);
-  const chatButtonStyle = 'flex justify-center items-center w-20 h-20';
+
+  const chatButtonStyle =
+    'flex justify-center items-center w-20 h-20 cursor-pointer';
   const activeStyle = 'text-blue-500 hover:text-blue-600';
   const inactiveStyle = 'text-gray-500 hover:text-blue-600';
+
   return (
     <>
       {isChatOpened ? (

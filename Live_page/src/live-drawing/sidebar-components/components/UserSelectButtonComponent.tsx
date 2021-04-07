@@ -17,24 +17,22 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
               <div
                 key={layer.canvasId}
                 onClick={() => props.setTopLayer(layer)}
-                className={`flex flex-col items-center 
+                className={`flex flex-col items-center cursor-pointer
                   ${
                     layer.canvasId === props.roomInfo.roomHostId
-                      ? ' order-first py-6 flex flex-col'
-                      : ' py-6 flex flex-col'
+                      ? 'order-first py-6 flex flex-col'
+                      : 'py-6 flex flex-col'
                   }
                   ${
                     layer.canvasId === props.topLayer?.canvasId
-                      ? ' bg-blue-500 text-white shadow-inner '
-                      : ' hover:bg-gray-200'
+                      ? 'bg-blue-500 text-white shadow-inner '
+                      : 'hover:bg-gray-200'
                   }
                 `}
               >
                 <div
                   className={
-                    layer.canvasId === props.roomInfo.roomHostId
-                      ? ''
-                      : ' hidden'
+                    layer.canvasId === props.roomInfo.roomHostId ? '' : 'hidden'
                   }
                 >
                   HOST

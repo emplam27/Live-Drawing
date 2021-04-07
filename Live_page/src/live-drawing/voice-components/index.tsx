@@ -131,9 +131,9 @@ function VoiceChatComponent() {
   }, []);
 
   const speakerButtonStyle =
-    'flex justify-center items-center w-20 h-16 mt-2 mb-2 hover:text-blue-500';
+    'flex justify-center items-center w-20 h-16 mt-2 mb-2 hover:text-blue-500 cursor-pointer';
   const micButtonStyle =
-    'flex justify-center items-center w-20 h-16 mb-2 hover:text-blue-500';
+    'flex justify-center items-center w-20 h-16 mb-2 hover:text-blue-500 cursor-pointer';
   const activeStyle = 'text-blue-500 hover:text-blue-600';
   const inactiveStyle = 'text-gray-500 hover:text-blue-600';
 

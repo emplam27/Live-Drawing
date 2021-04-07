@@ -1,6 +1,7 @@
 import React from 'react';
 import UserSelectButtonComponent from './components/UserSelectButtonComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
+import SaveImageComponent from './components/SaveImageComponent';
 import VoiceChatComponent from '../voice-components/';
 import ChatComponent from '../chat-components';
 
@@ -23,6 +24,7 @@ function SidebarComponent(props: SidebarComponentProps) {
       <VoiceChatComponent />
       <ChatComponent roomInfo={props.roomInfo} socket={props.socket} />
       <div className='flex-grow'></div>
+      <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} />
       <CloseButtonComponent
         roomInfo={props.roomInfo}
         setIsLiveClosed={props.setIsLiveClosed}
