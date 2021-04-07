@@ -83,10 +83,10 @@ export function FeedbackComponent() {
                 className='px-4 pt-2 w-10/12 h-72 rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
                 maxLength={1000}
               />
-              <div className='textLength'>{textLength} / 1000</div>
+              <div className='text-gray-500 Length text-base '>{textLength} / 1000</div>
               <button
                 onClick={onClick}
-                className='w-10/12 h-14 mt-5 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
+                className='w-10/12 h-14 mt-1 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
               >
                 감사합니다 :)
               </button>

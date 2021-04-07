@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-// import './room-list.css';
+import './room-list.css';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { EntranceProps } from '../interfaces/entrance-props-interface';
@@ -62,12 +62,10 @@ export function EntranceComponent(props: EntranceProps) {
 
   return (
     // <button className='focus:ring-2 focus:ring-red-500'>
-    <div onClick={onClick} className={'roomMetadata flex justify-center mb-20 cursor-pointer '}>
-      <div className='p-0 '>
-        <div className='rounded-3xl h-60 w-60 bg-bird-pattern bg-contain hover:bg-red-700 hover:opacity-50'></div>
-        <div className={'roomTitle pt-4 text-blue-400 font-semibold'}>{props.roomTitle}</div>
-        <div className='text-gray-400 font-normal'>{`${props.roomHostname}`}</div>
-      </div>
+    <div onClick={onClick} className={' flex flex-col items-center w-full mb-20 cursor-pointer'}>
+      <div className='square rounded-3xl h-full w-full bg-bird-pattern bg-cover hover:bg-red-700 hover:opacity-50'></div>
+      <div className={'roomTitle pt-4 text-blue-400 font-semibold w-full truncate'}>{props.roomTitle}</div>
+      <div className='text-gray-400 w-full font-normal truncate'>{`${props.roomHostname}`}</div>
       {/* <div className={'roomInfo mt-1'}> */}
       {/* <div className={'buttonandImage'}> */}
       {/* <img src='/profile.jpeg' alt=''></img> */}

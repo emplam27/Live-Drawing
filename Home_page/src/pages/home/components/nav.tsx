@@ -8,7 +8,6 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import jwt_decode from 'jwt-decode';
 import { DecodedToken } from '../interfaces/decoded-token-interface';
-import './nav.css';
 
 export function NavBarComponent() {
   const [isToken, setIsToken] = useState(localStorage.getItem('token'));
@@ -102,23 +101,21 @@ export function NavBarComponent() {
                 {/* <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' /> */}
                 {/* <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' /> */}
               </div>
-              <div className='hidden sm:block sm:ml-6 pt-6 px-0'>
-                <div className='flex px-40'>
+              <div className='hidden sm:block sm:ml-6 pt-8 px-1 w-7/12'>
+                <div className='flex '>
                   <Link
                     to='/room'
-                    className='text-gray-400  hover:text-blue-400 px-10 py-2 rounded-md text-md font-medium'
+                    className='text-gray-400  hover:text-blue-400 px-10 py-2 rounded-md text-lg truncate font-medium '
                   >
-                    <div>
-                      라이브강의 만들기 &nbsp;
-                      <i className='ri-artboard-line'></i>
-                    </div>
+                    라이브강의 만들기 &nbsp;
+                    <i className='ri-artboard-line'></i>
                   </Link>
 
                   <Link
                     to='/feedback'
-                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-md font-medium'
+                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-lg font-medium'
                   >
-                    <div>
+                    <div className='truncate'>
                       피드백 남기기 &nbsp;
                       <i className='ri-chat-smile-2-line'></i>
                     </div>
@@ -129,7 +126,8 @@ export function NavBarComponent() {
             <div className='absolute inset-y-0 right-0 pt-6 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               {isToken ? (
                 <>
-                  <div className='mr-5'>{`${userState.name}님 환영합니다.`}</div> <LogoutComponent />
+                  <div className='mr-5 text-gray-400 font-medium text-lg'>{`${userState.name}`}</div>{' '}
+                  <LogoutComponent />
                 </>
               ) : (
                 <GoogleLogin
