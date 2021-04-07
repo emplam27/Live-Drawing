@@ -8,11 +8,11 @@ function ChatComponent(props: ChatComponentProps) {
   return (
     <div className='col-start-2 col-end-3 absolute'>
       <ChatScreenComponent
-        userName={props.userName}
+        username={props.username}
         socket={props.socket}
       ></ChatScreenComponent>
       <ChatInputComponent
-        userName={props.userName}
+        username={props.username}
         socket={props.socket}
       ></ChatInputComponent>
     </div>

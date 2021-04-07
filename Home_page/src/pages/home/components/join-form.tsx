@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 export function JoinComponent() {
   const [password1, setPassword1] = useState<string>('');
   const [password2, setPassword2] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [classFlag1, setClassFlag1] = useState<string>('text-red-700');
   const [classFlag2, setClassFlag2] = useState<string>('text-red-700');
@@ -23,8 +23,8 @@ export function JoinComponent() {
   const onChangePassword2 = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword2(e.target.value);
   };
-  const onChangeUserName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName(e.target.value);
+  const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(e.target.value);
   };
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -61,7 +61,7 @@ export function JoinComponent() {
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     axios
-      .post(`${process.env.REACT_APP_API_URL}/join`, { username: userName, email: email, password: password1 })
+      .post(`${process.env.REACT_APP_API_URL}/join`, { username: username, email: email, password: password1 })
       .then((res) => {
         if (res.data === 'success')
           MySwal.fire({
@@ -89,7 +89,7 @@ export function JoinComponent() {
               <input
                 type='text'
                 placeholder='이름을 입력하세요.'
-                onChange={onChangeUserName}
+                onChange={onChangeUsername}
                 className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
               />
               <input

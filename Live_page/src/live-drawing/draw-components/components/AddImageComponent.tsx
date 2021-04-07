@@ -40,7 +40,10 @@ function AddImageComponent(props: AddImageComponentProps) {
 
   return (
     <>
-      <label className={'icon-link center '} htmlFor='file-input'>
+      <label
+        className={'hover:text-blue-500 flex items-center '}
+        htmlFor='file-input'
+      >
         <i className={'ri-2x ri-image-add-line'}></i>
       </label>
       <input
@@ -49,7 +52,10 @@ function AddImageComponent(props: AddImageComponentProps) {
         onChange={addImage}
         style={{ display: 'none' }}
       />
-      <label className={'icon-link center '} htmlFor='save-button'>
+      <label
+        className={'hover:text-blue-500 flex items-center '}
+        htmlFor='save-button'
+      >
         <i className={'ri-2x ri-save-3-line'}></i>
       </label>
       <button id='save-button' onClick={saveImage} style={{ display: 'none' }}>

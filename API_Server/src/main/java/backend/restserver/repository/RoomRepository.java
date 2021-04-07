@@ -13,7 +13,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
 //    private EntityManager entityManager;
 
-    List<Room> findByRoomKey(String roomKey);
+    List<Room> findByRoomId(String roomId);
 
 //    @Override
 //    List<Room> findOrderedByRoomPkLimitedTo(int limit) {

@@ -1,9 +1,12 @@
 package backend.restserver.config.jwt;
 
 import backend.restserver.config.auth.PrincipalDetails;
+import backend.restserver.controller.IndexController;
 import backend.restserver.entity.User;
 import backend.restserver.repository.UserRepository;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 import com.auth0.jwt.JWT;
 
@@ -37,17 +41,19 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-
-        System.out.println("인증이나 권한이 필요한 주소 요청이 됨");
+        Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class.getSimpleName());
+        logger.info("인증이나 권한이 필요한 주소 요청이 됨");
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
-        System.out.println("header Authorization : " + jwtHeader);
+        logger.info("header Authorization : " + jwtHeader);
 
         //! header가 있는지 확인
         if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
-            chain.doFilter(request, response); //! 없으면 다시 필터를 타게함. 밑에 로직이 실행 안됨.
             //? 추가 이슈 발생. 필터에서 짤려서 컨트롤러로 가면 안되는데
             //? doFilter함수는 이 필터 다음으로 넘겨지므로 컨트롤러로 넘겨짐. 그래서 여기서 짤라주는 구문을 추가해야함
-            return;
+            response.setStatus(401);
+//            chain.doFilter(request, response); //! 없으면 다시 필터를 타게함. 밑에 로직이 실행 안됨.
+            throw new AccessDeniedException("권한이 없습니다.");
+//            return;
         }
 
         //! JWT 토큰을 검증을 해서 정상적인 사용자인지 확인
@@ -55,8 +61,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //! 토큰 검증 (이게 인증이기 때문에 AuthenticationManager도 필요 없음)
         //! 내가 SecurityContext에 직접 접근해서 세션을 만들때 자동으로 UserDetailsService에 있는
         //! loadByUsername이 호출됨.
+        logger.info("----------------------->1");
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
                 .getClaim("username").asString();
+        logger.info("----------------------->2");
         //! 서명이 정상적으로 됨
         if (username != null) {
             User userEntity = userRepo.findByUsername(username);
@@ -71,7 +79,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             //! 강제로 시큐리티의 세션에 접근하여 Authentication 객체를 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        System.out.println("권한이 있는 유저임");
+        logger.info("권한이 있는 유저임");
         chain.doFilter(request, response);
     }
 }

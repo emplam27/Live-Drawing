@@ -7,11 +7,15 @@ import { useHistory } from 'react-router';
 import { useCustomState } from '../../../context';
 
 export function FeedbackComponent() {
-  const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({ userName: localStorage.getItem('name'), text: '' });
+  const [feedbackForm, setFeedbackForm] = useState<FeedbackForm>({
+    userId: localStorage.getItem('userId'),
+    text: '',
+  });
   const MySwal = withReactContent(Swal);
   const userState = useCustomState;
   const [token, setToken] = useState(localStorage.getItem('token'));
-  const [userName, setUserName] = useState(localStorage.getItem('name'));
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
+  const [textLength, setTextLength] = useState<number>(0);
   const history = useHistory();
 
   const headers = {
@@ -21,33 +25,46 @@ export function FeedbackComponent() {
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
-    setUserName(localStorage.getItem('name'));
+    setUserId(localStorage.getItem('userId'));
   }, [userState]);
 
+  useEffect(() => {
+    setTextLength(feedbackForm.text.length);
+  }, [feedbackForm]);
+
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFeedbackForm({ userName: userName, text: e.target.value });
+    if (feedbackForm.text.length <= 1000) {
+      setFeedbackForm({ userId: userId, text: e.target.value });
+    } else
+      MySwal.fire({
+        title: <p>허용 글자수를 초과했습니다.</p>,
+        text: '허용 글자수 : 1000자',
+      });
   };
 
   const onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    if (token === null || userName === null) {
+    if (token === null || userId === null) {
       MySwal.fire({
         title: '로그인을 해주세요.',
       });
       return;
     }
-    axios.post(`${process.env.REACT_APP_API_URL}/feedback`, feedbackForm, { headers: headers }).then((response) => {
-      if (response.status === 200)
-        MySwal.fire({
-          title: <p>피드백 등록이 완료되었습니다. 감사합니다.</p>,
-          text: '홈으로 돌아갑니다.',
-        }).then(() => history.push(''));
-      else
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/feedback`, feedbackForm, { headers: headers })
+      .then((response) => {
+        if (response.status === 200)
+          MySwal.fire({
+            title: <p>피드백 등록이 완료되었습니다. 감사합니다.</p>,
+            text: '홈으로 돌아갑니다.',
+          }).then(() => history.push(''));
+      })
+      .catch(() =>
         MySwal.fire({
           title: <p>피드백 등록이 실패했습니다.</p>,
           text: '다시 시도해주세요.',
-        });
-    });
+        }),
+      );
   };
   return (
     <div>
@@ -64,7 +81,9 @@ export function FeedbackComponent() {
                 onChange={onChange}
                 placeholder='피드백을 작성해주세요.'
                 className='px-4 pt-2 w-10/12 h-72 rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+                maxLength={1000}
               />
+              <div className='textLength'>{textLength} / 1000</div>
               <button
                 onClick={onClick}
                 className='w-10/12 h-14 mt-5 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'

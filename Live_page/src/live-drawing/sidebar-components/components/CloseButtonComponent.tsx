@@ -2,6 +2,7 @@ import React from 'react';
 import '../index.css';
 import { CloseButtonComponentProps } from '../interfaces/close-button-interfaces';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 function CloseButtonComponent(props: CloseButtonComponentProps) {
   function closeLive() {
@@ -15,7 +16,17 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
       confirmButtonText: 'Yes',
     }).then((result) => {
       if (result.isConfirmed) {
-        props.setIsLiveClosed(true);
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('token')}`,
+        };
+        axios.post(
+          `${process.env.REACT_APP_API_URL}/live/${props.roomInfo.roomId}/inactive`,
+          { roomId: props.roomInfo.roomId },
+          { headers: headers },
+        );
+        if (!props.socket) return;
+        props.socket.emit('live-closed');
         window.location.replace(`${process.env.REACT_APP_HOMEPAGE_URL}`);
       }
     });

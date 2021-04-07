@@ -19,8 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="userPk")
     private Long userPk;
-    @Column(name="userKey")
-    private String userKey; // uuid
+    @Column(name="userId")
+    private String userId; // uuid
     @Column(name="username")
     private String username;
     @Column(name="password")
@@ -29,6 +29,8 @@ public class User {
     private String email;
     @Column(name="roles")
     private String roles; //ROLE_USER, ROLE_ADMIN, ROLE_MANAGER
+    @Column(name="profileImage")
+    private String profileImage;
 
     public List<String> getRoleList() {
         if(this.roles.length() > 0) {
@@ -68,7 +70,7 @@ public class User {
     }
 
     @Builder
-    public User(String username, String password, String email, String roles, String provider, String providerId, Timestamp createDate) {
+    public User(String username, String password, String email, String roles, String provider, String providerId, Timestamp createDate, String profileImage) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -76,6 +78,7 @@ public class User {
         this.provider = provider;
         this.providerId = providerId;
         this.createDate = createDate;
+        this.profileImage = profileImage;
     }
 
     //    public User(String name, Room room) {

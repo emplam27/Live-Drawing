@@ -1,16 +1,23 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { MessageForm } from '../interfaces/message-form-interface';
 import { ChatComponentProps } from '../interfaces/chat-component-props-interface';
 
 export function ChatInputComponent(props: ChatComponentProps) {
   const [messageForm, setMessageForm] = useState<MessageForm>({
-    user: props.userName,
+    user: props.username,
     text: '',
   });
+  const [textLength, setTextLength] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    setTextLength(messageForm.text.length);
+  }, [messageForm]);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessageForm({ user: props.userName, text: e.target.value });
+    if (messageForm.text.length <= 200) {
+      setMessageForm({ user: props.username, text: e.target.value });
+    }
   };
 
   const sendMessage = (
@@ -25,7 +32,7 @@ export function ChatInputComponent(props: ChatComponentProps) {
       if (messageForm.text) {
         props.socket.emit('chat-send-message', messageForm);
         setMessageForm({
-          user: props.userName,
+          user: props.username,
           text: '',
         });
         if (inputRef.current) {

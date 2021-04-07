@@ -5,11 +5,14 @@ import AgoraRTC, {
   ILocalAudioTrack,
   UID,
 } from 'agora-rtc-sdk-ng';
-import { Rtc } from '../interfaces/voice-component-props-interface';
+import { VoiceToolComponentProps } from '../interfaces/voice-component-props-interface';
 
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
 
-export function VoiceToolComponent(props: Rtc) {
+// AgoraRTC.disableLogUpload();
+AgoraRTC.setLogLevel(4);
+
+export function VoiceToolComponent(props: VoiceToolComponentProps) {
   const [speaker, setSpeaker] = useState<boolean | null>(null);
   const [mic, setMic] = useState<boolean | null>(null);
   const [toggleSpeakerSignal, setToggleSpeakerSignal] = useState<
@@ -36,7 +39,6 @@ export function VoiceToolComponent(props: Rtc) {
     if (!localAudioTrack || !client) return;
     client.publish([localAudioTrack]);
     client.on('user-published', async (user, mediaType) => {
-      //   console.log('**********', user, mediaType);
       if (user && mediaType === 'audio') {
         await client.subscribe(user, mediaType);
         // console.log('!!!!!!!클라이언트의 리모트 유저스다!!!!!!!!!!');
@@ -99,14 +101,7 @@ export function VoiceToolComponent(props: Rtc) {
   useEffect(() => {
     const appID = `${process.env.REACT_APP_AGORA_APP_ID}`;
     const appCertificate = `${process.env.REACT_APP_AGORA_APP_CER}`;
-
-    // const channelName = `${process.env.REACT_APP_AGORA_CH_NAME}`;
-    // console.log(`${useParams<{ roomId: string }>()}`);
-    // const roomId = document.location.href.split('/')[4];
-    // const channelName = 'live';
-
     const channelName = roomId;
-    console.log('channel name = ', channelName);
     const role = RtcRole.PUBLISHER;
     const expirationTimeInSeconds = 3600;
     const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -125,14 +120,11 @@ export function VoiceToolComponent(props: Rtc) {
     async function startBasicCall() {
       if (!client) return;
       setLocalAudiotrack(await AgoraRTC.createMicrophoneAudioTrack());
-      console.log('local audio track = ', localAudioTrack);
       setUid(await client.join(appID, channelName, tokenA, null));
       setToggleSpeakerSignal(false);
       setSpeaker(false);
       setToggleMicSignal(false);
       setMic(false);
-
-      //   console.log(roomId);
     }
     startBasicCall();
   }, []);
@@ -140,35 +132,43 @@ export function VoiceToolComponent(props: Rtc) {
   return (
     <>
       {speaker ? (
-        <p className={'icon-link center'}>
-          <i
-            className={'ri-2x ri-volume-up-line'}
-            onClick={() => toggleSpeaker(!speaker)}
-          ></i>
-        </p>
+        <div
+          className={
+            'flex justify-center items-center w-20 h-20 hover:text-blue-500'
+          }
+          onClick={() => toggleSpeaker(!speaker)}
+        >
+          <i className={'ri-2x ri-volume-up-line'}></i>
+        </div>
       ) : (
-        <p className={'icon-link center'}>
-          <i
-            className={'ri-2x ri-volume-mute-line'}
-            onClick={() => toggleSpeaker(!speaker)}
-          ></i>
-        </p>
+        <div
+          className={
+            'flex justify-center items-center w-20 h-20 hover:text-blue-500'
+          }
+          onClick={() => toggleSpeaker(!speaker)}
+        >
+          <i className={'ri-2x ri-volume-mute-line'}></i>
+        </div>
       )}
 
       {mic ? (
-        <p className={'icon-link center'}>
-          <i
-            className={'ri-2x ri-mic-line'}
-            onClick={() => toggleMic(!mic)}
-          ></i>
-        </p>
+        <div
+          className={
+            'flex justify-center items-center w-20 h-20 hover:text-blue-500'
+          }
+          onClick={() => toggleMic(!mic)}
+        >
+          <i className={'ri-2x ri-mic-line'}></i>
+        </div>
       ) : (
-        <p className={'icon-link center'}>
-          <i
-            className={'ri-2x ri-mic-off-line'}
-            onClick={() => toggleMic(!mic)}
-          ></i>
-        </p>
+        <div
+          className={
+            'flex justify-center items-center w-20 h-20 hover:text-blue-500'
+          }
+          onClick={() => toggleMic(!mic)}
+        >
+          <i className={'ri-2x ri-mic-off-line'}></i>
+        </div>
       )}
     </>
   );

@@ -51,7 +51,7 @@ export function EntranceComponent(props: EntranceProps) {
                 Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
                 return;
               }
-              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/room/${props.roomId}`;
+              window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${props.roomId}`;
             } else throw new Error();
           })
           .catch((err) => Swal.showValidationMessage('오류가 발생했습니다.'));
