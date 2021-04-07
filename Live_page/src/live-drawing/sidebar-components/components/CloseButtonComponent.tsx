@@ -1,5 +1,4 @@
 import React from 'react';
-import '../index.css';
 import { CloseButtonComponentProps } from '../interfaces/close-button-interfaces';
 import Swal from 'sweetalert2';
 
@@ -37,21 +36,18 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
     });
   }
 
+  const closeButtonStyle =
+    'w-20 h-20 bg-gray-100 hover:bg-gray-50 font-bold focus:outline-none';
+
   return (
     <>
       {props.roomInfo.roomHostId === props.roomInfo.userId ? (
-        <button
-          className='w-20 h-20 bg-gray-350 hover:bg-gray-300 text-white font-bold'
-          onClick={closeLive}
-        >
+        <button className={closeButtonStyle} onClick={closeLive}>
           <p>라이브</p>
           <p>종료</p>
         </button>
       ) : (
-        <button
-          className='w-20 h-20 bg-gray-350 hover:bg-gray-300 text-white font-bold'
-          onClick={exitLive}
-        >
+        <button className={closeButtonStyle} onClick={exitLive}>
           <p>라이브</p>
           <p>나가기</p>
         </button>

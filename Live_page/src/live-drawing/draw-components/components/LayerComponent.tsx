@@ -22,7 +22,7 @@ function LayerComponent(props: LayerComponentProps) {
 
     const newLayers = props.roomUsers.users.map((user: UserInfo) => {
       const newLayer: Layer = {
-        name: user.userName,
+        name: user.username,
         canvasId: user.userId,
         buttonId: `${user.userId}-button`,
         canvasCtx: null,
