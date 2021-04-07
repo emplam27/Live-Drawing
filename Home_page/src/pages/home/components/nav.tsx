@@ -8,10 +8,6 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import jwt_decode from 'jwt-decode';
 import { DecodedToken } from '../interfaces/decoded-token-interface';
-<<<<<<< HEAD
-=======
-
->>>>>>> 57f2322a09a93c0925b8e13f6f559c9a931d945d
 export function NavBarComponent() {
   const [isToken, setIsToken] = useState(localStorage.getItem('token'));
   const userState = useCustomState();

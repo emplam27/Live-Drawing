@@ -77,11 +77,7 @@ export function FeedbackComponent() {
                 className='px-4 pt-2 w-10/12 h-32 rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
                 maxLength={1000}
               />
-<<<<<<< HEAD
-              <p className='text-gray-500 Length text-base text-sm'>{textLength} / 1000</p>
-=======
               <div className='text-gray-500 Length text-base '>{textLength} / 1000</div>
->>>>>>> 57f2322a09a93c0925b8e13f6f559c9a931d945d
               <button
                 onClick={onClick}
                 className='w-10/12 h-14 mt-1 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'

@@ -13,11 +13,7 @@ export function RoomListComponent() {
   }, []);
   return (
     <>
-<<<<<<< HEAD
-      <div className='roomList grid grid-cols-4 gap-1 pt-10 flex-justify-center'>
-=======
       <div className='roomList grid grid-cols-4 gap-5 pt-10 flex-justify-center w-full'>
->>>>>>> 57f2322a09a93c0925b8e13f6f559c9a931d945d
         {rooms.map((room: EntranceProps, index: number) => {
           return (
             <div key={index}>
