@@ -2,6 +2,7 @@ import { RoomUsers, RoomInfo, UserInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
   isLiveClosed: boolean;
+  isModifiedMode: boolean;
   layers: Layer[];
   modifiedLayers: Layer[];
   modifiedTargetUser: UserInfo | null;
@@ -10,6 +11,7 @@ export interface DrawComponentProps {
   socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
   setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setModifiedTargetUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;

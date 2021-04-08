@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ColorPaletteComponentProps } from '../interfaces/color-palette-interfaces';
-import '../index.css';
+import '../../DrawComponent.css';
 
 function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   const [swatch] = useState<string[][]>([

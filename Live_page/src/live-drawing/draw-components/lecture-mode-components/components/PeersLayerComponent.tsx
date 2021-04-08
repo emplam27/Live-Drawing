@@ -2,15 +2,10 @@ import React from 'react';
 
 import GuestLayerBadgeComponent from './GuestLayerBadgeComponent';
 import HostLayerBadgeComponent from './HostLayerBadgeComponent';
+import UndrawableCanvasComponent from '../../components/UndrawableCanvasComponent';
 
-import { Layer } from '../../interfaces/draw-components-interfaces';
+import { Layer } from '../../../interfaces/draw-components-interfaces';
 import { PeersLayerComponentProps } from '../interfaces/peers-layer-interfaces';
-
-import {
-  mouseDown,
-  mouseMove,
-  mouseUp,
-} from '../functions/mouse-event-functions';
 
 function PeersLayerComponent(props: PeersLayerComponentProps) {
   const badgeStyle =
@@ -31,6 +26,7 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
             roomInfo={props.roomInfo}
             topLayer={props.topLayer}
             setTopLayer={props.setTopLayer}
+            setIsModifiedMode={props.setIsModifiedMode}
             badgeStyle={badgeStyle}
             buttonStyle={buttonStyle}
           />
@@ -46,33 +42,11 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
         )}
 
         {props.layers.map((layer: Layer) => {
-          if (layer.canvasId !== props.roomInfo.userId) {
+          if (props.topLayer && layer.canvasId !== props.roomInfo.userId) {
             return (
-              <canvas
-                key={layer.canvasId}
-                id={layer.canvasId}
-                className={`${
-                  props.topLayer !== null &&
-                  props.topLayer.canvasId !== layer.canvasId
-                    ? 'hidden z-0'
-                    : 'z-10'
-                }`}
-                width={(window.innerWidth - 60) * 0.5}
-                height={window.innerHeight}
-                onMouseDown={(e) => mouseDown(e)}
-                onMouseUp={mouseUp}
-                onMouseMove={(e) =>
-                  mouseMove(
-                    e,
-                    props.activeTool,
-                    props.color,
-                    props.lineWidth,
-                    props.eraserWidth,
-                    props.canvasCtxTable,
-                    props.socket,
-                    props.roomInfo,
-                  )
-                }
+              <UndrawableCanvasComponent
+                topLayer={props.topLayer}
+                canvasId={layer.canvasId}
               />
             );
           }

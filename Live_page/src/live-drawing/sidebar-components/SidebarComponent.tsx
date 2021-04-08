@@ -2,8 +2,8 @@ import React from 'react';
 import UserSelectButtonComponent from './components/UserSelectButtonComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
 import SaveImageComponent from './components/SaveImageComponent';
-import VoiceChatComponent from '../voice-components/';
-import ChatComponent from '../chat-components';
+import VoiceChatComponent from '../voice-components/VoiceChatComponent';
+import ChatComponent from '../chat-components/ChatComponent';
 
 import { SidebarComponentProps } from '../interfaces/sidebar-components-interfaces';
 

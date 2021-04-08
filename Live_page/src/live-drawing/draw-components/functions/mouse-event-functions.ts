@@ -1,10 +1,11 @@
+import { draw, erase } from './draw-functions';
+
 import {
   DrawData,
   EraseData,
   Point,
   CanvasCtxTable,
 } from '../../interfaces/draw-components-interfaces';
-import { draw, erase } from './draw-functions';
 import { RoomInfo } from '../../interfaces/socket-interfaces';
 
 let lastPoint: Point | null;
@@ -20,12 +21,12 @@ export function mouseDown(e: any): void {
 export function mouseMove(
   e: any,
   activeTool: string,
-  color: string,
-  lineWidth: number,
-  eraserWidth: number,
   canvasCtxTable: CanvasCtxTable,
-  socket: SocketIOClient.Socket | null,
+  color: string,
+  eraserWidth: number,
+  lineWidth: number,
   roomInfo: RoomInfo,
+  socket: SocketIOClient.Socket | null,
 ): void {
   // if (!canvasCtxTable || !socket) return;
 

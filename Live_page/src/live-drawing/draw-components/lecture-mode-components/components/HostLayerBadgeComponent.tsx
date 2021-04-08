@@ -1,14 +1,10 @@
 import React from 'react';
 
-import { Layer } from '../../interfaces/draw-components-interfaces';
 import { HostLayerBadgeComponentProps } from '../interfaces/host-layer-badge-interfaces';
 
 function HostLayerBadgeComponent(props: HostLayerBadgeComponentProps) {
   function startModifiedMode() {
-    // const hostLayer = props.layers.find((layer: Layer) => {
-    //   return layer.canvasId === props.roomInfo.roomHostId;
-    // });
-    // if (hostLayer) props.setTopLayer(hostLayer);
+    props.setIsModifiedMode(true);
   }
 
   return (

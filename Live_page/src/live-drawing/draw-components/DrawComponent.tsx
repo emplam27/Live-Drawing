@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import CursorComponent from './components/CursorComponent';
+import CursorComponent from './cursor-components/components/CursorComponent';
+import ToolbarComponent from './components/ToolbarComponent';
 import LayerGridComponent from './components/LayerGridComponent';
 
 import { draw, erase } from './functions/draw-functions';
@@ -15,7 +16,11 @@ import { UserInfo } from '../interfaces/socket-interfaces';
 
 function DrawComponent(props: DrawComponentProps) {
   //@ Drawing's States
+  const [activeTool, setActiveTool] = useState<string>('');
+  const [color, setColor] = useState('#000000');
   const [cursorWidth, setCursorWidth] = useState(5);
+  const [eraserWidth, setEraserWidth] = useState(30);
+  const [lineWidth, setLineWidth] = useState(5);
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
 
   //@ Connection's States
@@ -167,16 +172,38 @@ function DrawComponent(props: DrawComponentProps) {
   return (
     <>
       <CursorComponent cursorWidth={cursorWidth} />
-      <LayerGridComponent
-        canvasCtxTable={canvasCtxTable}
+      <ToolbarComponent
+        activeTool={activeTool}
+        color={color}
         cursorWidth={cursorWidth}
+        eraserWidth={eraserWidth}
+        lineWidth={lineWidth}
+        setActiveTool={setActiveTool}
+        setColor={setColor}
+        setCursorWidth={setCursorWidth}
+        setEraserWidth={setEraserWidth}
+        setLineWidth={setLineWidth}
+      />
+      <LayerGridComponent
+        activeTool={activeTool}
+        canvasCtxTable={canvasCtxTable}
+        color={color}
+        cursorWidth={cursorWidth}
+        eraserWidth={eraserWidth}
+        isModifiedMode={props.isModifiedMode}
         layers={props.layers}
+        lineWidth={lineWidth}
         modifiedLayers={props.modifiedLayers}
         modifiedTargetUser={props.modifiedTargetUser}
         roomInfo={props.roomInfo}
         socket={props.socket}
         topLayer={props.topLayer}
+        setActiveTool={setActiveTool}
+        setColor={setColor}
         setCursorWidth={setCursorWidth}
+        setEraserWidth={setEraserWidth}
+        setIsModifiedMode={props.setIsModifiedMode}
+        setLineWidth={setLineWidth}
         setModifiedTargetUser={props.setModifiedTargetUser}
         setModifiedLayers={props.setModifiedLayers}
         setTopLayer={props.setTopLayer}

@@ -1,5 +1,5 @@
-import { RoomInfo } from '../../interfaces/socket-interfaces';
-import { Layer } from '../../interfaces/draw-components-interfaces';
+import { RoomInfo } from '../../../interfaces/socket-interfaces';
+import { Layer } from '../../../interfaces/draw-components-interfaces';
 
 export interface GuestLayerBadgeComponentProps {
   layers: Layer[];

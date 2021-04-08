@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import SidebarComponent from './sidebar-components';
-import DrawComponent from './draw-components';
+import SidebarComponent from './sidebar-components/SidebarComponent';
+import DrawComponent from './draw-components/DrawComponent';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import {
@@ -15,7 +15,7 @@ import axios from 'axios';
 import io from 'socket.io-client';
 // import { v4 as uuid } from 'uuid';
 
-function LiveDrawing() {
+function LiveDrawingComponent() {
   const { roomId } = useParams<{ roomId: string }>();
 
   //@ Socket State
@@ -40,6 +40,7 @@ function LiveDrawing() {
   const [layers, setLayers] = useState<Layer[]>([]);
 
   //@ Modified Mode & Layers States
+  const [isModifiedMode, setIsModifiedMode] = useState<boolean>(false);
   const [modifiedTargetUser, setModifiedTargetUser] = useState<UserInfo | null>(
     null,
   );
@@ -217,6 +218,7 @@ function LiveDrawing() {
       />
       <DrawComponent
         isLiveClosed={isLiveClosed}
+        isModifiedMode={isModifiedMode}
         layers={layers}
         modifiedLayers={modifiedLayers}
         modifiedTargetUser={modifiedTargetUser}
@@ -225,6 +227,7 @@ function LiveDrawing() {
         socket={socket}
         topLayer={topLayer}
         setIsLiveClosed={setIsLiveClosed}
+        setIsModifiedMode={setIsModifiedMode}
         setLayers={setLayers}
         setModifiedTargetUser={setModifiedTargetUser}
         setModifiedLayers={setModifiedLayers}
@@ -233,4 +236,4 @@ function LiveDrawing() {
     </>
   );
 }
-export default LiveDrawing;
+export default LiveDrawingComponent;

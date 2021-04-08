@@ -4,7 +4,7 @@ import {
   CanvasCtxTable,
 } from '../../interfaces/draw-components-interfaces';
 
-export interface LayerGridComponentProps {
+export interface ModifiedModeComponentProps {
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;

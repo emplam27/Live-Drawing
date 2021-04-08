@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Layer } from '../../interfaces/draw-components-interfaces';
+import { Layer } from '../../../interfaces/draw-components-interfaces';
 import { GuestLayerBadgeComponentProps } from '../interfaces/guest-layer-badge-interfaces';
 
 function GuestLayerBadgeComponent(props: GuestLayerBadgeComponentProps) {

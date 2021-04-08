@@ -1,8 +1,8 @@
-import { RoomInfo, RoomUsers } from '../../interfaces/socket-interfaces';
+import { RoomInfo } from '../../../interfaces/socket-interfaces';
 import {
   Layer,
   CanvasCtxTable,
-} from '../../interfaces/draw-components-interfaces';
+} from '../../../interfaces/draw-components-interfaces';
 
 export interface PeersLayerComponentProps {
   activeTool: string;
@@ -14,5 +14,6 @@ export interface PeersLayerComponentProps {
   roomInfo: RoomInfo;
   socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
+  setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
 }

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { CursorComponentProps } from '../interfaces/cursor-interfaces';
-import '../index.css';
+import '../../DrawComponent.css';
 
 function CursorComponent(props: CursorComponentProps) {
   const [hidden, setHidden] = useState(false);
   const [position, setPosition] = useState({
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
+    x: window.innerWidth,
+    y: window.innerHeight,
   });
 
   const onMouseMove = (e: MouseEvent): void => {
@@ -23,7 +23,7 @@ function CursorComponent(props: CursorComponentProps) {
 
   const addEventListeners = (): void => {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
-      'canvasContainer',
+      'drawable-canvas',
     );
     targetCanvasContainer?.addEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.addEventListener('mouseenter', onMouseEnter);
@@ -32,7 +32,7 @@ function CursorComponent(props: CursorComponentProps) {
 
   const removeEventListeners = (): void => {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
-      'canvasContainer',
+      'drawable-canvas',
     );
     targetCanvasContainer?.removeEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.removeEventListener('mouseenter', onMouseEnter);
