@@ -37,23 +37,25 @@ function ChatScreenComponent(props: ChatComponentProps) {
     <div className='flex-auto flex flex-col bg-white bg-opacity-75 border overflow-auto pt-4'>
       {screen.map((message: MessageForm, index: number) => {
         return (
-          <div
-            key={index}
-            className={`
+          <>
+            {message.user !== 'admin' &&
+            message.user !== props.roomInfo.username ? (
+              <p className='text-sm text-left px-8'>{message.user}</p>
+            ) : null}
+            <div
+              key={index}
+              className={`
             ${
               message.user === props.roomInfo.username
                 ? `${messageStyle} ${myMessageStyle}`
                 : `${messageStyle} ${peerMessageStyle}`
             } 
             ${message.user === 'admin' ? `${adminMessageStyle}` : null}`}
-          >
-            {message.user === 'admin' ||
-            message.user === props.roomInfo.username ? null : (
-              <p className='text-sm'>{message.user}</p>
-            )}
-            <div className='break-all'>{message.text}</div>
-            <div ref={scrollRef} />
-          </div>
+            >
+              <div className='break-all'>{message.text}</div>
+              <div ref={scrollRef} />
+            </div>
+          </>
         );
       })}
     </div>

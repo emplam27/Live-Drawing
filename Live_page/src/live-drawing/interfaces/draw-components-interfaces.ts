@@ -1,15 +1,19 @@
-import { RoomUsers, RoomInfo } from './socket-interfaces';
+import { RoomUsers, RoomInfo, UserInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
-  topLayer: Layer | null;
   isLiveClosed: boolean;
   layers: Layer[];
+  modifiedLayers: Layer[];
+  modifiedTargetUser: UserInfo | null;
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
-  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
-  setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  topLayer: Layer | null;
   setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
+  setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  setModifiedTargetUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
+  setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
 }
 
 export interface Point {
@@ -39,7 +43,7 @@ export interface CanvasCtxTable {
 }
 
 export interface Layer {
-  name: string;
+  username: string;
   canvasId: string;
   buttonId: string;
   canvasCtx: CanvasRenderingContext2D | null;

@@ -1,11 +1,11 @@
 import React from 'react';
+
 import ColorPaletteComponent from './ColorPaletteComponent';
 import EraseSizeComponent from './EraseSizeComponent';
 import LineSizeComponent from './LineSizeComponent';
 import ToolSelectComponent from './ToolSelectComponent';
 
 import { ToolbarComponentProps } from '../interfaces/toolbar-interfaces';
-import '../index.css';
 
 function ToolbarComponent(props: ToolbarComponentProps) {
   return (

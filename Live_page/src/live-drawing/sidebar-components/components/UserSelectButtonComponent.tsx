@@ -9,8 +9,9 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
       <div className='flex flex-col'>
         {props.layers.map((layer: Layer) => {
           const user = props.userProfileInfos.find(
-            (userProfileInfo: UserProfileInfo) =>
-              userProfileInfo.userId === layer.canvasId,
+            (userProfileInfo: UserProfileInfo) => {
+              return userProfileInfo.userId === layer.canvasId;
+            },
           );
           if (layer.canvasId !== props.roomInfo.userId)
             return (
@@ -46,7 +47,7 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
                   src={`${user?.userImage}`}
                   alt={`${user?.username}`}
                 />
-                <p>{`${user?.username}`}</p>
+                <p className={'w-full truncate px-2'}>{`${user?.username}`}</p>
               </div>
             );
         })}

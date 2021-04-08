@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { EraseSizeComponentProps } from '../interfaces/erase-size-interfaces';
-import '../index.css';
 
 function EraseSizeComponent(props: EraseSizeComponentProps) {
   function changeEraserSize(e: React.ChangeEvent<HTMLInputElement>): void {

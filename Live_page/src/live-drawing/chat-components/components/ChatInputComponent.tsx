@@ -52,6 +52,7 @@ function ChatInputComponent(props: ChatComponentProps) {
         ref={inputRef}
         onKeyPress={(e) => (e.key === 'Enter' ? sendMessage(e) : null)}
         className='px-4 py-1 w-full border text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+        autoComplete='off'
       />
       <button
         onClick={sendMessage}

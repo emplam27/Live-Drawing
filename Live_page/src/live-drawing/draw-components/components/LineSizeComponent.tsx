@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
+
 import { LineSizeComponentProps } from '../interfaces/line-size-interfaces';
-import '../index.css';
 
 function LineSizeComponent(props: LineSizeComponentProps) {
   function changeLineSize(e: React.ChangeEvent<HTMLInputElement>): void {

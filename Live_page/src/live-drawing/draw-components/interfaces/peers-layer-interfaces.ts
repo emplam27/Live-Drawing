@@ -14,4 +14,5 @@ export interface PeersLayerComponentProps {
   roomInfo: RoomInfo;
   socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
 }

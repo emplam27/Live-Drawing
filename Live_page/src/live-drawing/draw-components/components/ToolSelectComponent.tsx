@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
+
 import {
   ToolSelectComponentProps,
   Tool,
 } from '../interfaces/tool-select-interfaces';
-import '../index.css';
 
 function ToolSelectComponent(props: ToolSelectComponentProps) {
   const Tools: Tool[] = [

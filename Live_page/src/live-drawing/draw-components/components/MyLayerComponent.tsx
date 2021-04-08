@@ -1,7 +1,6 @@
 import React from 'react';
 
 import ToolbarComponent from './ToolbarComponent';
-import '../index.css';
 
 import { MyLayerComponentProps } from '../interfaces/my-layer-interfaces';
 
@@ -12,13 +11,11 @@ import {
 } from '../functions/mouse-event-functions';
 
 function MyLayerComponent(props: MyLayerComponentProps) {
-  // if (!props.roomInfo.userId) return <></>;
   return (
     <>
       <canvas
         key={props.roomInfo.userId}
         id={props.roomInfo.userId === null ? undefined : props.roomInfo.userId}
-        className={''}
         width={(window.innerWidth - 60) * 0.5}
         height={window.innerHeight}
         onMouseDown={(e) => mouseDown(e)}
