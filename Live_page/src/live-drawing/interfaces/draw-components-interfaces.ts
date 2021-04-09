@@ -23,7 +23,7 @@ export interface DrawData {
   canvasId: string;
   currentPoint: Point;
   color: string;
-  // count: number;
+  count: number;
   lastPoint: Point;
   lineWidth: number;
 }
