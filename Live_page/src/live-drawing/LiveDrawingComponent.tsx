@@ -46,6 +46,7 @@ function LiveDrawingComponent() {
   );
   const [modifiedLayers, setModifiedLayers] = useState<Layer[]>([]);
 
+  //@ Dummy Data
   const dummyUsersProfileInfo: UserProfileInfo[] = [
     {
       userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',

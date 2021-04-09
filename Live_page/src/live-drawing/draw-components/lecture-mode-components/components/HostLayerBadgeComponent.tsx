@@ -1,10 +1,15 @@
+import { UserInfo } from '../../../interfaces/socket-interfaces';
 import React from 'react';
 
 import { HostLayerBadgeComponentProps } from '../interfaces/host-layer-badge-interfaces';
 
 function HostLayerBadgeComponent(props: HostLayerBadgeComponentProps) {
-  function startModifiedMode() {
+  function startModifiedMode(canvasId: string | undefined) {
     props.setIsModifiedMode(true);
+    const targetUser = props.roomUsers?.users.find((user: UserInfo) => {
+      return user.userId === canvasId;
+    });
+    if (targetUser) props.setModifiedTargetUser(targetUser);
   }
 
   return (
@@ -16,7 +21,10 @@ function HostLayerBadgeComponent(props: HostLayerBadgeComponentProps) {
           </span>
           <span className={'text-2xl'}>&nbsp;님의 그림</span>
         </div>
-        <div className={props.buttonStyle} onClick={startModifiedMode}>
+        <div
+          className={props.buttonStyle}
+          onClick={() => startModifiedMode(props.topLayer?.canvasId)}
+        >
           <span className={'font-bold'}>그림첨삭 시작하기&nbsp;&nbsp;</span>
           <i className='ri-lg ri-pencil-line'></i>
         </div>

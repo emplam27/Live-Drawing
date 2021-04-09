@@ -1,10 +1,14 @@
-import { RoomInfo, UserInfo } from '../../interfaces/socket-interfaces';
+import {
+  RoomInfo,
+  RoomUsers,
+  UserInfo,
+} from '../../../interfaces/socket-interfaces';
 import {
   Layer,
   CanvasCtxTable,
-} from '../../interfaces/draw-components-interfaces';
+} from '../../../interfaces/draw-components-interfaces';
 
-export interface LayerGridComponentProps {
+export interface GuestOriginLayerComponentProps {
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;
@@ -16,6 +20,7 @@ export interface LayerGridComponentProps {
   modifiedLayers: Layer[];
   modifiedTargetUser: UserInfo | null;
   roomInfo: RoomInfo;
+  roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
   setActiveTool: React.Dispatch<React.SetStateAction<string>>;
@@ -27,4 +32,5 @@ export interface LayerGridComponentProps {
   setModifiedTargetUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  layerContainerGridStyle: string;
 }

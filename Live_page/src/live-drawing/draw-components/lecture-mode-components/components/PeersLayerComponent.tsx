@@ -24,9 +24,11 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
           <HostLayerBadgeComponent
             layers={props.layers}
             roomInfo={props.roomInfo}
+            roomUsers={props.roomUsers}
             topLayer={props.topLayer}
             setTopLayer={props.setTopLayer}
             setIsModifiedMode={props.setIsModifiedMode}
+            setModifiedTargetUser={props.setModifiedTargetUser}
             badgeStyle={badgeStyle}
             buttonStyle={buttonStyle}
           />

@@ -1,31 +1,130 @@
 import React, { useState } from 'react';
 
+import GuestOriginLayerComponent from '../modified-mode-components/components/GuestOriginLayerComponent';
+import GuestModifiedLayerComponent from '../modified-mode-components/components/GuestModifiedLayerComponent';
+
 import { ModifiedModeComponentProps } from '../interfaces/modified-mode-interfaces';
 
 function ModifiedModeComponent(props: ModifiedModeComponentProps) {
   return (
     <>
       {props.roomInfo.roomHostId === props.roomInfo.userId ? (
-        <div
-          id='canvasContainer'
-          className='w-full grid grid-cols-2 divide-x-4 divide-dashed divide-gray-300'
-        >
+        <div className={props.layerContainerGridStyle}>
           <div className='cols-start-1 cols-end-2 relative'>
-            학생 첨삭 레이어
+            <GuestOriginLayerComponent
+              activeTool={props.activeTool}
+              canvasCtxTable={props.canvasCtxTable}
+              color={props.color}
+              cursorWidth={props.cursorWidth}
+              eraserWidth={props.eraserWidth}
+              isModifiedMode={props.isModifiedMode}
+              layers={props.layers}
+              lineWidth={props.lineWidth}
+              modifiedLayers={props.modifiedLayers}
+              modifiedTargetUser={props.modifiedTargetUser}
+              roomInfo={props.roomInfo}
+              roomUsers={props.roomUsers}
+              socket={props.socket}
+              topLayer={props.topLayer}
+              setActiveTool={props.setActiveTool}
+              setColor={props.setColor}
+              setCursorWidth={props.setCursorWidth}
+              setEraserWidth={props.setEraserWidth}
+              setIsModifiedMode={props.setIsModifiedMode}
+              setLineWidth={props.setLineWidth}
+              setModifiedTargetUser={props.setModifiedTargetUser}
+              setModifiedLayers={props.setModifiedLayers}
+              setTopLayer={props.setTopLayer}
+              layerContainerGridStyle={props.layerContainerGridStyle}
+            />
           </div>
           <div className='cols-start-2 cols-end-3 relative'>
-            선생님 본인 레이어
+            <GuestModifiedLayerComponent
+              activeTool={props.activeTool}
+              canvasCtxTable={props.canvasCtxTable}
+              color={props.color}
+              cursorWidth={props.cursorWidth}
+              eraserWidth={props.eraserWidth}
+              isModifiedMode={props.isModifiedMode}
+              layers={props.layers}
+              lineWidth={props.lineWidth}
+              modifiedLayers={props.modifiedLayers}
+              modifiedTargetUser={props.modifiedTargetUser}
+              roomInfo={props.roomInfo}
+              roomUsers={props.roomUsers}
+              socket={props.socket}
+              topLayer={props.topLayer}
+              setActiveTool={props.setActiveTool}
+              setColor={props.setColor}
+              setCursorWidth={props.setCursorWidth}
+              setEraserWidth={props.setEraserWidth}
+              setIsModifiedMode={props.setIsModifiedMode}
+              setLineWidth={props.setLineWidth}
+              setModifiedTargetUser={props.setModifiedTargetUser}
+              setModifiedLayers={props.setModifiedLayers}
+              setTopLayer={props.setTopLayer}
+              layerContainerGridStyle={props.layerContainerGridStyle}
+            />
           </div>
         </div>
       ) : (
-        <div
-          id='canvasContainer'
-          className='w-full grid grid-cols-2 divide-x-4 divide-dashed divide-gray-300'
-        >
+        <div className={props.layerContainerGridStyle}>
           <div className='cols-start-1 cols-end-2 relative'>
-            선생님 첨삭 레이어
+            <GuestModifiedLayerComponent
+              activeTool={props.activeTool}
+              canvasCtxTable={props.canvasCtxTable}
+              color={props.color}
+              cursorWidth={props.cursorWidth}
+              eraserWidth={props.eraserWidth}
+              isModifiedMode={props.isModifiedMode}
+              layers={props.layers}
+              lineWidth={props.lineWidth}
+              modifiedLayers={props.modifiedLayers}
+              modifiedTargetUser={props.modifiedTargetUser}
+              roomInfo={props.roomInfo}
+              roomUsers={props.roomUsers}
+              socket={props.socket}
+              topLayer={props.topLayer}
+              setActiveTool={props.setActiveTool}
+              setColor={props.setColor}
+              setCursorWidth={props.setCursorWidth}
+              setEraserWidth={props.setEraserWidth}
+              setIsModifiedMode={props.setIsModifiedMode}
+              setLineWidth={props.setLineWidth}
+              setModifiedTargetUser={props.setModifiedTargetUser}
+              setModifiedLayers={props.setModifiedLayers}
+              setTopLayer={props.setTopLayer}
+              layerContainerGridStyle={props.layerContainerGridStyle}
+            />
           </div>
-          <div className='cols-start-2 cols-end-3 relative'>본인 레이어</div>
+          <div className='cols-start-2 cols-end-3 relative'>
+            <GuestOriginLayerComponent
+              activeTool={props.activeTool}
+              canvasCtxTable={props.canvasCtxTable}
+              color={props.color}
+              cursorWidth={props.cursorWidth}
+              eraserWidth={props.eraserWidth}
+              isModifiedMode={props.isModifiedMode}
+              layers={props.layers}
+              lineWidth={props.lineWidth}
+              modifiedLayers={props.modifiedLayers}
+              modifiedTargetUser={props.modifiedTargetUser}
+              roomInfo={props.roomInfo}
+              roomUsers={props.roomUsers}
+              socket={props.socket}
+              topLayer={props.topLayer}
+              setActiveTool={props.setActiveTool}
+              setColor={props.setColor}
+              setCursorWidth={props.setCursorWidth}
+              setEraserWidth={props.setEraserWidth}
+              setIsModifiedMode={props.setIsModifiedMode}
+              setLineWidth={props.setLineWidth}
+              setModifiedTargetUser={props.setModifiedTargetUser}
+              setModifiedLayers={props.setModifiedLayers}
+              setTopLayer={props.setTopLayer}
+              layerContainerGridStyle={props.layerContainerGridStyle}
+            />
+          </div>
         </div>
       )}
     </>

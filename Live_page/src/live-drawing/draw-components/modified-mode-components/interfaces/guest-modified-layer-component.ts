@@ -2,13 +2,13 @@ import {
   RoomInfo,
   RoomUsers,
   UserInfo,
-} from '../../interfaces/socket-interfaces';
+} from '../../../interfaces/socket-interfaces';
 import {
   Layer,
   CanvasCtxTable,
-} from '../../interfaces/draw-components-interfaces';
+} from '../../../interfaces/draw-components-interfaces';
 
-export interface ModifiedModeComponentProps {
+export interface GuestModifiedLayerComponentProps {
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;

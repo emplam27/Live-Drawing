@@ -1,4 +1,8 @@
-import { RoomInfo, UserInfo } from '../../interfaces/socket-interfaces';
+import {
+  RoomInfo,
+  RoomUsers,
+  UserInfo,
+} from '../../interfaces/socket-interfaces';
 import {
   Layer,
   CanvasCtxTable,
@@ -16,6 +20,7 @@ export interface LectureModeComponentProps {
   modifiedLayers: Layer[];
   modifiedTargetUser: UserInfo | null;
   roomInfo: RoomInfo;
+  roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
   setActiveTool: React.Dispatch<React.SetStateAction<string>>;
@@ -27,4 +32,5 @@ export interface LectureModeComponentProps {
   setModifiedTargetUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  layerContainerGridStyle: string;
 }

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import CursorComponent from './cursor-components/components/CursorComponent';
 import ToolbarComponent from './components/ToolbarComponent';
-import LayerGridComponent from './components/LayerGridComponent';
+import LectureModeComponent from './components/LectureModeComponent';
+import ModifiedModeComponent from './components/ModifiedModeComponent';
 
 import { draw, erase } from './functions/draw-functions';
 import {
@@ -169,6 +170,9 @@ function DrawComponent(props: DrawComponentProps) {
     setCanvasCtxTable(tmpCanvasCtxTable);
   }, [newLayerCtxSignal]);
 
+  const layerContainerGridStyle =
+    'w-full grid grid-cols-2 divide-x-4 divide-dashed divide-gray-300';
+
   return (
     <>
       <CursorComponent cursorWidth={cursorWidth} />
@@ -184,30 +188,61 @@ function DrawComponent(props: DrawComponentProps) {
         setEraserWidth={setEraserWidth}
         setLineWidth={setLineWidth}
       />
-      <LayerGridComponent
-        activeTool={activeTool}
-        canvasCtxTable={canvasCtxTable}
-        color={color}
-        cursorWidth={cursorWidth}
-        eraserWidth={eraserWidth}
-        isModifiedMode={props.isModifiedMode}
-        layers={props.layers}
-        lineWidth={lineWidth}
-        modifiedLayers={props.modifiedLayers}
-        modifiedTargetUser={props.modifiedTargetUser}
-        roomInfo={props.roomInfo}
-        socket={props.socket}
-        topLayer={props.topLayer}
-        setActiveTool={setActiveTool}
-        setColor={setColor}
-        setCursorWidth={setCursorWidth}
-        setEraserWidth={setEraserWidth}
-        setIsModifiedMode={props.setIsModifiedMode}
-        setLineWidth={setLineWidth}
-        setModifiedTargetUser={props.setModifiedTargetUser}
-        setModifiedLayers={props.setModifiedLayers}
-        setTopLayer={props.setTopLayer}
-      />
+      {props.isModifiedMode ? (
+        <ModifiedModeComponent
+          activeTool={activeTool}
+          canvasCtxTable={canvasCtxTable}
+          color={color}
+          cursorWidth={cursorWidth}
+          eraserWidth={eraserWidth}
+          isModifiedMode={props.isModifiedMode}
+          layers={props.layers}
+          lineWidth={lineWidth}
+          modifiedLayers={props.modifiedLayers}
+          modifiedTargetUser={props.modifiedTargetUser}
+          roomInfo={props.roomInfo}
+          roomUsers={props.roomUsers}
+          socket={props.socket}
+          topLayer={props.topLayer}
+          setActiveTool={setActiveTool}
+          setColor={setColor}
+          setCursorWidth={setCursorWidth}
+          setEraserWidth={setEraserWidth}
+          setIsModifiedMode={props.setIsModifiedMode}
+          setLineWidth={setLineWidth}
+          setModifiedTargetUser={props.setModifiedTargetUser}
+          setModifiedLayers={props.setModifiedLayers}
+          setTopLayer={props.setTopLayer}
+          layerContainerGridStyle={layerContainerGridStyle}
+        />
+      ) : (
+        <LectureModeComponent
+          activeTool={activeTool}
+          canvasCtxTable={canvasCtxTable}
+          color={color}
+          cursorWidth={cursorWidth}
+          eraserWidth={eraserWidth}
+          isModifiedMode={props.isModifiedMode}
+          layers={props.layers}
+          lineWidth={lineWidth}
+          modifiedLayers={props.modifiedLayers}
+          modifiedTargetUser={props.modifiedTargetUser}
+          roomInfo={props.roomInfo}
+          roomUsers={props.roomUsers}
+          socket={props.socket}
+          topLayer={props.topLayer}
+          setActiveTool={setActiveTool}
+          setColor={setColor}
+          setCursorWidth={setCursorWidth}
+          setEraserWidth={setEraserWidth}
+          setIsModifiedMode={props.setIsModifiedMode}
+          setLineWidth={setLineWidth}
+          setModifiedTargetUser={props.setModifiedTargetUser}
+          setModifiedLayers={props.setModifiedLayers}
+          setTopLayer={props.setTopLayer}
+          layerContainerGridStyle={layerContainerGridStyle}
+        />
+      )}
     </>
   );
 }
