@@ -17,7 +17,12 @@ export function RoomListComponent() {
         {rooms.map((room: EntranceProps, index: number) => {
           return (
             <div key={index}>
-              <EntranceComponent roomHostname={room.roomHostname} roomId={room.roomId} roomTitle={room.roomTitle} />
+              <EntranceComponent
+                roomHostname={room.roomHostname}
+                roomId={room.roomId}
+                roomTitle={room.roomTitle}
+                setRooms={setRooms}
+              />
               <br />
             </div>
           );

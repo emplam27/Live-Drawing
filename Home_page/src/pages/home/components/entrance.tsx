@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { EntranceProps } from '../interfaces/entrance-props-interface';
 import { useCustomState } from '../../../context';
+import { ResponseRoomInfo } from '../interfaces/room-info-interface';
 
 export function EntranceComponent(props: EntranceProps) {
   const MySwal = withReactContent(Swal);
@@ -16,6 +17,12 @@ export function EntranceComponent(props: EntranceProps) {
     setToken(localStorage.getItem('token'));
     setUserId(localStorage.getItem('userId'));
   }, [userState]);
+
+  const getRooms = () => {
+    axios.get(`${process.env.REACT_APP_API_URL}`).then((res: ResponseRoomInfo) => {
+      props.setRooms(res.data);
+    });
+  };
 
   const headers = {
     'Content-Type': 'application/json',
@@ -46,21 +53,24 @@ export function EntranceComponent(props: EntranceProps) {
             if (res.status === 200) {
               if (res.data === 'refresh') {
                 Swal.showValidationMessage('삭제된 방입니다. 다시 홈으로 이동합니다.');
-                window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
+                getRooms();
                 return;
               }
 
               if (res.data === 'fail') {
                 Swal.showValidationMessage('비밀번호를 입력해주세요.');
+                getRooms();
                 return;
               }
 
               if (res.data === 'already exist') {
                 Swal.showValidationMessage('잘못된 접근입니다. 이미 방에 입장한 유저입니다.');
+                getRooms();
                 return;
               }
               if (res.data === 'password fail') {
                 Swal.showValidationMessage('비밀번호가 일치하지 않습니다.');
+                getRooms();
                 return;
               }
               window.location.href = `${process.env.REACT_APP_DRAWING_URL}/${props.roomId}`;
