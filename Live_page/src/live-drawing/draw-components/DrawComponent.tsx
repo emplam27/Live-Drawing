@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import CursorComponent from './cursor-components/components/CursorComponent';
+import CursorComponent from './draw-cursor-components/components/CursorComponent';
 import ToolbarComponent from './components/ToolbarComponent';
-import LectureModeComponent from './components/LectureModeComponent';
-import ModifiedModeComponent from './components/ModifiedModeComponent';
+import HostModeComponent from './components/HostModeComponent';
+import GuestModeComponent from './components/GuestModeComponent';
 
 import { draw, erase } from './functions/draw-functions';
 import {
@@ -188,18 +188,18 @@ function DrawComponent(props: DrawComponentProps) {
         setEraserWidth={setEraserWidth}
         setLineWidth={setLineWidth}
       />
-      {props.isModifiedMode ? (
-        <ModifiedModeComponent
+      {props.roomInfo.roomHostId === props.roomInfo.userId ? (
+        <HostModeComponent
           activeTool={activeTool}
           canvasCtxTable={canvasCtxTable}
           color={color}
           cursorWidth={cursorWidth}
           eraserWidth={eraserWidth}
+          isLectureStarted={props.isLectureStarted}
           isModifiedMode={props.isModifiedMode}
           layers={props.layers}
           lineWidth={lineWidth}
           modifiedLayers={props.modifiedLayers}
-          modifiedTargetUser={props.modifiedTargetUser}
           roomInfo={props.roomInfo}
           roomUsers={props.roomUsers}
           socket={props.socket}
@@ -208,25 +208,25 @@ function DrawComponent(props: DrawComponentProps) {
           setColor={setColor}
           setCursorWidth={setCursorWidth}
           setEraserWidth={setEraserWidth}
+          setIsLectureStarted={props.setIsLectureStarted}
           setIsModifiedMode={props.setIsModifiedMode}
           setLineWidth={setLineWidth}
-          setModifiedTargetUser={props.setModifiedTargetUser}
           setModifiedLayers={props.setModifiedLayers}
           setTopLayer={props.setTopLayer}
           layerContainerGridStyle={layerContainerGridStyle}
         />
       ) : (
-        <LectureModeComponent
+        <GuestModeComponent
           activeTool={activeTool}
           canvasCtxTable={canvasCtxTable}
           color={color}
           cursorWidth={cursorWidth}
           eraserWidth={eraserWidth}
+          isLectureStarted={props.isLectureStarted}
           isModifiedMode={props.isModifiedMode}
           layers={props.layers}
           lineWidth={lineWidth}
           modifiedLayers={props.modifiedLayers}
-          modifiedTargetUser={props.modifiedTargetUser}
           roomInfo={props.roomInfo}
           roomUsers={props.roomUsers}
           socket={props.socket}
@@ -235,9 +235,9 @@ function DrawComponent(props: DrawComponentProps) {
           setColor={setColor}
           setCursorWidth={setCursorWidth}
           setEraserWidth={setEraserWidth}
+          setIsLectureStarted={props.setIsLectureStarted}
           setIsModifiedMode={props.setIsModifiedMode}
           setLineWidth={setLineWidth}
-          setModifiedTargetUser={props.setModifiedTargetUser}
           setModifiedLayers={props.setModifiedLayers}
           setTopLayer={props.setTopLayer}
           layerContainerGridStyle={layerContainerGridStyle}

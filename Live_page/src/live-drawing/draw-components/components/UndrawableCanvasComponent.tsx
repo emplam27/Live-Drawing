@@ -4,19 +4,12 @@ import { UndrawableCanvasComponentProps } from '../interfaces/undrawable-canvas-
 
 function UndrawableCanvasComponent(props: UndrawableCanvasComponentProps) {
   return (
-    <>
-      <canvas
-        key={props.canvasId}
-        id={props.canvasId}
-        className={`${
-          props.topLayer !== null && props.topLayer.canvasId !== props.canvasId
-            ? 'hidden z-0'
-            : 'z-10'
-        }`}
-        width={(window.innerWidth - 60) * 0.5}
-        height={window.innerHeight}
-      />
-    </>
+    <canvas
+      id={props.canvasId}
+      className={props.undrawableCanvasclassName}
+      width={(window.innerWidth - 60) * 0.5}
+      height={window.innerHeight}
+    />
   );
 }
 

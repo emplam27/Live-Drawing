@@ -41,10 +41,10 @@ function LiveDrawingComponent() {
 
   //@ Modified Mode & Layers States
   const [isModifiedMode, setIsModifiedMode] = useState<boolean>(false);
-  const [modifiedTargetUser, setModifiedTargetUser] = useState<UserInfo | null>(
-    null,
-  );
   const [modifiedLayers, setModifiedLayers] = useState<Layer[]>([]);
+
+  //@ Lecture Start Mode State
+  const [isLectureStarted, setIsLectureStarted] = useState<boolean>(false);
 
   //@ Dummy Data
   const dummyUsersProfileInfo: UserProfileInfo[] = [
@@ -210,27 +210,29 @@ function LiveDrawingComponent() {
     <>
       <SidebarComponent
         isLiveClosed={isLiveClosed}
+        isModifiedMode={isModifiedMode}
         layers={layers}
         roomInfo={roomInfo}
         topLayer={topLayer}
         socket={socket}
         userProfileInfos={userProfileInfos}
         setTopLayer={setTopLayer}
+        setIsModifiedMode={setIsModifiedMode}
       />
       <DrawComponent
+        isLectureStarted={isLectureStarted}
         isLiveClosed={isLiveClosed}
         isModifiedMode={isModifiedMode}
         layers={layers}
         modifiedLayers={modifiedLayers}
-        modifiedTargetUser={modifiedTargetUser}
         roomInfo={roomInfo}
         roomUsers={roomUsers}
         socket={socket}
         topLayer={topLayer}
+        setIsLectureStarted={setIsLectureStarted}
         setIsLiveClosed={setIsLiveClosed}
         setIsModifiedMode={setIsModifiedMode}
         setLayers={setLayers}
-        setModifiedTargetUser={setModifiedTargetUser}
         setModifiedLayers={setModifiedLayers}
         setTopLayer={setTopLayer}
       />

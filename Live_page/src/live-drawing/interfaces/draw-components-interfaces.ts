@@ -1,19 +1,19 @@
-import { RoomUsers, RoomInfo, UserInfo } from './socket-interfaces';
+import { RoomUsers, RoomInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
+  isLectureStarted: boolean;
   isLiveClosed: boolean;
   isModifiedMode: boolean;
   layers: Layer[];
   modifiedLayers: Layer[];
-  modifiedTargetUser: UserInfo | null;
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
+  setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
-  setModifiedTargetUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
 }

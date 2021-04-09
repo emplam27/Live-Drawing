@@ -6,7 +6,7 @@ import { UserProfileInfo } from '../../interfaces/socket-interfaces';
 function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
   return (
     <>
-      <div className='flex flex-col'>
+      <div className={`flex flex-col ${!props.isModifiedMode ? '' : 'hidden'}`}>
         {props.layers.map((layer: Layer) => {
           const user = props.userProfileInfos.find(
             (userProfileInfo: UserProfileInfo) => {

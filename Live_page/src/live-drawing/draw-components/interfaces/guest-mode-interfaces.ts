@@ -1,24 +1,20 @@
-import {
-  RoomInfo,
-  RoomUsers,
-  UserInfo,
-} from '../../interfaces/socket-interfaces';
+import { RoomInfo, RoomUsers } from '../../interfaces/socket-interfaces';
 import {
   Layer,
   CanvasCtxTable,
 } from '../../interfaces/draw-components-interfaces';
 
-export interface ModifiedModeComponentProps {
+export interface GuestModeComponentProps {
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;
   cursorWidth: number;
   eraserWidth: number;
+  isLectureStarted: boolean;
   isModifiedMode: boolean;
   layers: Layer[];
   lineWidth: number;
   modifiedLayers: Layer[];
-  modifiedTargetUser: UserInfo | null;
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
@@ -27,9 +23,9 @@ export interface ModifiedModeComponentProps {
   setColor: React.Dispatch<React.SetStateAction<string>>;
   setCursorWidth: React.Dispatch<React.SetStateAction<number>>;
   setEraserWidth: React.Dispatch<React.SetStateAction<number>>;
+  setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setLineWidth: React.Dispatch<React.SetStateAction<number>>;
-  setModifiedTargetUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   layerContainerGridStyle: string;

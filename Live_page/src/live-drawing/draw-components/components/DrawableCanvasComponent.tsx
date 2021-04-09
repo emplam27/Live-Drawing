@@ -12,8 +12,8 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
   return (
     <>
       <canvas
-        key={props.canvasId}
         id={props.canvasId}
+        className={props.drawableCanvasclassName}
         width={(window.innerWidth - 60) * 0.5}
         height={window.innerHeight}
         onMouseDown={(e) => mouseDown(e)}

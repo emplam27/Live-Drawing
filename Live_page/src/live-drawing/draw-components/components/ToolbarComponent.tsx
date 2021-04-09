@@ -1,9 +1,9 @@
 import React from 'react';
 
-import ColorPaletteComponent from '../toolbar-components/components/ColorPaletteComponent';
-import EraseSizeComponent from '../toolbar-components/components/EraseSizeComponent';
-import LineSizeComponent from '../toolbar-components/components/LineSizeComponent';
-import ToolSelectComponent from '../toolbar-components/components/ToolSelectComponent';
+import ColorPaletteComponent from '../draw-toolbar-components/components/ColorPaletteComponent';
+import EraseSizeComponent from '../draw-toolbar-components/components/EraseSizeComponent';
+import LineSizeComponent from '../draw-toolbar-components/components/LineSizeComponent';
+import ToolSelectComponent from '../draw-toolbar-components/components/ToolSelectComponent';
 
 import { ToolbarComponentProps } from '../interfaces/toolbar-interfaces';
 

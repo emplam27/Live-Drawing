@@ -3,10 +3,12 @@ import { Layer } from './draw-components-interfaces';
 
 export interface SidebarComponentProps {
   isLiveClosed: boolean;
+  isModifiedMode: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;
   topLayer: Layer | null;
   socket: SocketIOClient.Socket | null;
   userProfileInfos: UserProfileInfo[];
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
