@@ -82,15 +82,6 @@ io.on("connection", (socket) => {
     io.to(user.roomId).emit("chat-message", message);
   });
 
-  //@ Draw Event
-  socket.on("draw-start", (message) => {
-    const user = getUser(socket.id);
-    if (!user) return;
-    // history 어떡하지?
-    console.log(message);
-    socket.broadcast.to(user.roomId).emit("draw-start", message);
-  });
-
   socket.on("draw-pencil", (message) => {
     const user = getUser(socket.id);
     if (!user) return;
