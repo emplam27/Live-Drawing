@@ -113,7 +113,7 @@ export function NavBarComponent() {
 
                   <Link
                     to='/feedback'
-                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-lg font-medium'
+                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-lg truncate font-medium'
                   >
                     <div className='truncate'>
                       피드백 남기기 &nbsp;

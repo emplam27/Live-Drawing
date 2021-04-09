@@ -77,10 +77,10 @@ export default function RoomCreateComponent() {
             <p className='mb-2 text-white text-xl hidden md:block'>당신도 화가가 될 수 있습니다.</p>
           </div>
           <div className='w-full h-full md:w-1/2 flex flex-col items-center bg-white py-5 md:py-8 px-4'>
-            <h3 className='mb-16 my font-bold text-4xl flex items-center text-blue-400'>방 만들기</h3>
+            <h3 className='mb-16 my font-bold text-4xl flex items-center text-blue-400'>라이브강의 만들기</h3>
             <form action='#' className='px-3 flex flex-col justify-center items-center w-full gap-10'>
               <label className='text-left w-10/12 text-blue-400 font-bold '>
-                방 제목
+                강의 제목
                 <input
                   type='text'
                   name='roomTitle'
@@ -103,7 +103,7 @@ export default function RoomCreateComponent() {
                 onClick={onClick}
                 className='w-10/12 h-14 mt-5 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
               >
-                들어갈래요 :)
+                강의 시작하기
               </button>
             </form>
           </div>
