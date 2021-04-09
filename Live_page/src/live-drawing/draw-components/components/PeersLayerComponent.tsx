@@ -29,8 +29,18 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
               }`}
               width={(window.innerWidth - 60) * 0.5}
               height={window.innerHeight}
-              onMouseDown={(e) => mouseDown(e)}
-              onMouseUp={mouseUp}
+              onMouseDown={(e) =>
+                mouseDown(
+                  e,
+                  props.activeTool,
+                  props.color,
+                  props.eraserWidth,
+                  props.lineWidth,
+                  props.roomInfo,
+                  props.socket,
+                )
+              }
+              onMouseUp={(e) => mouseUp(e, props.canvasCtxTable)}
               onMouseMove={(e) =>
                 mouseMove(
                   e,

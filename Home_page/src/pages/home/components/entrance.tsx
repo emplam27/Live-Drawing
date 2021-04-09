@@ -46,7 +46,7 @@ export function EntranceComponent(props: EntranceProps) {
             if (res.status === 200) {
               if (res.data === 'refresh') {
                 Swal.showValidationMessage('삭제된 방입니다. 다시 홈으로 이동합니다.');
-                window.location.href = `${process.env.REACT_APP_API_URL}`;
+                window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
                 return;
               }
 

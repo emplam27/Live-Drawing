@@ -8,7 +8,7 @@ import CursorComponent from './components/CursorComponent';
 import LayerComponent from './components/LayerComponent';
 // import UndoRedoComponent from './components/UndoRedoComponent';
 
-import { draw, erase } from './functions/draw-functions';
+import { draw, erase, setStart } from './functions/draw-functions';
 import {
   CanvasCtxTable,
   Layer,
@@ -26,6 +26,9 @@ function DrawComponent(props: DrawComponentProps) {
   //@ Connection's States
   const [pencilSignal, setPencilSignal] = useState<DrawData | null>(null);
   const [eraserSignal, setEraserSignal] = useState<EraseData | null>(null);
+  const [startSignal, setStartSignal] = useState<DrawData | EraseData | null>(
+    null,
+  );
   const [newLayerCtxSignal, setNewLayerCtxSignal] = useState<number | null>(
     null,
   );
@@ -33,6 +36,9 @@ function DrawComponent(props: DrawComponentProps) {
   //@ Function: Socket Connect Init
   useEffect(() => {
     if (!props.socket) return;
+    props.socket.on('draw-start', (message: DrawData | EraseData | null) =>
+      setStartSignal(message),
+    );
     props.socket.on('draw-pencil', (message: DrawData) =>
       setPencilSignal(message),
     );
@@ -40,6 +46,12 @@ function DrawComponent(props: DrawComponentProps) {
       setEraserSignal(message),
     );
   }, [props.socket]);
+
+  //@ Function: Recieve Start Event
+  useEffect(() => {
+    if (startSignal === null || startSignal === null) return;
+    setStart(startSignal);
+  }, [startSignal]);
 
   //@ Function: Recieve Pencil Event
   useEffect(() => {
@@ -56,7 +68,7 @@ function DrawComponent(props: DrawComponentProps) {
     const canvasCtx: CanvasRenderingContext2D =
       canvasCtxTable[eraserSignal.canvasId];
     if (!canvasCtx) return;
-    erase(eraserSignal, canvasCtx);
+    draw(eraserSignal, canvasCtx);
   }, [eraserSignal]);
 
   return (

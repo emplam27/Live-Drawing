@@ -21,9 +21,10 @@ export interface Point {
 export interface DrawData {
   event: string;
   canvasId: string;
-  lastPoint: Point;
   currentPoint: Point;
   color: string;
+  // count: number;
+  lastPoint: Point;
   lineWidth: number;
 }
 
