@@ -9,12 +9,17 @@ import { RoomInfo } from '../../interfaces/socket-interfaces';
 
 let lastPoint: Point | null;
 
-export function mouseDown(e: any): void {
+export function mouseDown(e: any, canvasCtxTable: CanvasCtxTable): void {
+  if (!canvasCtxTable) return;
   lastPoint = {
     x: e.nativeEvent.offsetX,
     y: e.nativeEvent.offsetY,
     c: e.target.id,
   };
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  targetCanvasCtx.beginPath();
+  targetCanvasCtx.moveTo(lastPoint.x, lastPoint.y);
 }
 
 export function mouseMove(
@@ -92,6 +97,10 @@ export function mouseMove(
   };
 }
 
-export function mouseUp(): void {
+export function mouseUp(canvasCtxTable: CanvasCtxTable): void {
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (lastPoint) targetCanvasCtx.lineTo(lastPoint.x, lastPoint.y);
+  targetCanvasCtx.closePath();
   lastPoint = null;
 }
