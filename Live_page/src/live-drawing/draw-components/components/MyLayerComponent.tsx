@@ -5,12 +5,10 @@ import { MyLayerComponentProps } from '../interfaces/my-layer-interfaces';
 import DrawableCanvasComponent from './DrawableCanvasComponent';
 
 function MyLayerComponent(props: MyLayerComponentProps) {
-  const drawableCanvasclassName = !props.isModifiedMode ? '' : 'hidden';
   return (
     <>
       {props.roomInfo.userId ? (
         <DrawableCanvasComponent
-          key={props.roomInfo.userId}
           activeTool={props.activeTool}
           canvasCtxTable={props.canvasCtxTable}
           color={props.color}
@@ -19,7 +17,7 @@ function MyLayerComponent(props: MyLayerComponentProps) {
           roomInfo={props.roomInfo}
           socket={props.socket}
           canvasId={props.roomInfo.userId}
-          drawableCanvasclassName={drawableCanvasclassName}
+          hidden={props.displayHidden}
         />
       ) : (
         <div className='flex flex-col justify-center h-full'>

@@ -1,9 +1,11 @@
 import React from 'react';
 
 import { Layer } from '../../../interfaces/draw-components-interfaces';
-import { GuestLayerBadgeComponentProps } from '../interfaces/guest-layer-badge-interfaces';
+import { GuestModifiedModeBadgeComponentProps } from '../interfaces/guest-modified-mode-badge-interfaces';
 
-function GuestLayerBadgeComponent(props: GuestLayerBadgeComponentProps) {
+function GuestModifiedModeBadgeComponent(
+  props: GuestModifiedModeBadgeComponentProps,
+) {
   function moveToHostLayer() {
     const hostLayer = props.layers.find((layer: Layer) => {
       return layer.canvasId === props.roomInfo.roomHostId;
@@ -14,7 +16,11 @@ function GuestLayerBadgeComponent(props: GuestLayerBadgeComponentProps) {
   return (
     <>
       {props.topLayer?.canvasId === props.roomInfo.roomHostId ? (
-        <div className={props.badgeStyle}>
+        <div
+          className={`${props.badgeStyle} ${
+            props.displayHidden ? 'hidden' : ''
+          }`}
+        >
           <div className={'flex items-end px-8'}>
             <span className={'font-bold text-3xl'}>
               {props.topLayer?.username}
@@ -23,7 +29,11 @@ function GuestLayerBadgeComponent(props: GuestLayerBadgeComponentProps) {
           </div>
         </div>
       ) : (
-        <div className={props.badgeStyle}>
+        <div
+          className={`${props.badgeStyle} ${
+            props.displayHidden ? 'hidden' : ''
+          }`}
+        >
           <div className={'flex items-end px-8'}>
             <span className={'font-bold text-3xl'}>
               {props.topLayer?.username}
@@ -42,4 +52,4 @@ function GuestLayerBadgeComponent(props: GuestLayerBadgeComponentProps) {
   );
 }
 
-export default GuestLayerBadgeComponent;
+export default GuestModifiedModeBadgeComponent;

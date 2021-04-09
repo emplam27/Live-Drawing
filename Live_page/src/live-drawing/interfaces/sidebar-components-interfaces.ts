@@ -10,5 +10,6 @@ export interface SidebarComponentProps {
   socket: SocketIOClient.Socket | null;
   userProfileInfos: UserProfileInfo[];
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
 }

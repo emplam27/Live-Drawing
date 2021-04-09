@@ -17,4 +17,5 @@ export interface PeersLayerComponentProps {
   topLayer: Layer | null;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  displayHidden: boolean;
 }

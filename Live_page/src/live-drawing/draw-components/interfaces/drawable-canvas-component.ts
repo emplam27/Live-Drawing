@@ -3,8 +3,8 @@ import { CanvasCtxTable } from '../../interfaces/draw-components-interfaces';
 
 export interface DrawableCanvasComponentProps {
   canvasId: string;
+  hidden: boolean;
   activeTool: string;
-  drawableCanvasclassName: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;
   eraserWidth: number;

@@ -3,7 +3,7 @@ import React from 'react';
 import PeersLayerComponent from './PeersLayerComponent';
 import LectureStartComponent from '../draw-lecture-start-components/components/LectureStartComponent';
 import MyLayerComponent from './MyLayerComponent';
-import GuestLayerBadgeComponent from '../draw-guest-mode-components/components/GuestLayerBadgeComponent';
+import GuestLectureModeBadgeComponent from '../draw-guest-mode-components/components/GuestLectureModeBadgeComponent';
 
 import { GuestModeComponentProps } from '../interfaces/guest-mode-interfaces';
 
@@ -25,34 +25,33 @@ function GuestModeComponent(props: GuestModeComponentProps) {
               roomInfo={props.roomInfo}
               setIsLectureStarted={props.setIsLectureStarted}
             />
-          ) : (
-            <>
-              <div className={'relative flex flex-col items-center'}>
-                <GuestLayerBadgeComponent
-                  layers={props.layers}
-                  roomInfo={props.roomInfo}
-                  topLayer={props.topLayer}
-                  setTopLayer={props.setTopLayer}
-                  badgeStyle={badgeStyle}
-                  buttonStyle={buttonStyle}
-                />
-              </div>
-              <PeersLayerComponent
-                activeTool={props.activeTool}
-                canvasCtxTable={props.canvasCtxTable}
-                color={props.color}
-                eraserWidth={props.eraserWidth}
-                layers={props.layers}
-                lineWidth={props.lineWidth}
-                roomInfo={props.roomInfo}
-                roomUsers={props.roomUsers}
-                socket={props.socket}
-                topLayer={props.topLayer}
-                setIsModifiedMode={props.setIsModifiedMode}
-                setTopLayer={props.setTopLayer}
-              />
-            </>
-          )}
+          ) : null}
+          <div className={'relative flex flex-col items-center'}>
+            <GuestLectureModeBadgeComponent
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
+              layers={props.layers}
+              roomInfo={props.roomInfo}
+              topLayer={props.topLayer}
+              setTopLayer={props.setTopLayer}
+              displayHidden={props.isModifiedMode}
+            />
+          </div>
+          <PeersLayerComponent
+            activeTool={props.activeTool}
+            canvasCtxTable={props.canvasCtxTable}
+            color={props.color}
+            eraserWidth={props.eraserWidth}
+            layers={props.layers}
+            lineWidth={props.lineWidth}
+            roomInfo={props.roomInfo}
+            roomUsers={props.roomUsers}
+            socket={props.socket}
+            topLayer={props.topLayer}
+            setIsModifiedMode={props.setIsModifiedMode}
+            setTopLayer={props.setTopLayer}
+            displayHidden={props.isModifiedMode}
+          />
         </div>
         <div id='drawable-canvas' className='cols-start-2 cols-end-3 relative'>
           <MyLayerComponent
@@ -64,6 +63,7 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             lineWidth={props.lineWidth}
             roomInfo={props.roomInfo}
             socket={props.socket}
+            displayHidden={false}
           />
         </div>
       </div>

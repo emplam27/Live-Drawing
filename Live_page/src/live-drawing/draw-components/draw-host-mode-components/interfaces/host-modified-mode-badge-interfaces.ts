@@ -1,7 +1,7 @@
 import { RoomInfo, RoomUsers } from '../../../interfaces/socket-interfaces';
 import { Layer } from '../../../interfaces/draw-components-interfaces';
 
-export interface HostLayerBadgeComponentProps {
+export interface HostModifiedModeBadgeComponentProps {
   isModifiedMode: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;
@@ -11,4 +11,5 @@ export interface HostLayerBadgeComponentProps {
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   badgeStyle: string;
   buttonStyle: string;
+  displayHidden: boolean;
 }

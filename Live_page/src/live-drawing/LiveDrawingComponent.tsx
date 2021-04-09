@@ -217,6 +217,7 @@ function LiveDrawingComponent() {
         socket={socket}
         userProfileInfos={userProfileInfos}
         setTopLayer={setTopLayer}
+        setIsLectureStarted={setIsLectureStarted}
         setIsModifiedMode={setIsModifiedMode}
       />
       <DrawComponent

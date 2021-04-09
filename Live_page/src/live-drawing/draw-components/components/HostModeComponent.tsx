@@ -2,8 +2,10 @@ import React from 'react';
 
 import PeersLayerComponent from './PeersLayerComponent';
 import LectureStartComponent from '../draw-lecture-start-components/components/LectureStartComponent';
+import HostLectureModeBadgeComponent from '../draw-host-mode-components/components/HostLectureModeBadgeComponent';
+import HostModifiedModeBadgeComponent from '../draw-host-mode-components/components/HostModifiedModeBadgeComponent';
 import MyLayerComponent from './MyLayerComponent';
-import HostLayerBadgeComponent from '../draw-host-mode-components/components/HostLayerBadgeComponent';
+import HostModifiedModeLayerComponent from '../draw-host-mode-components/components/HostModifiedModeLayerComponent';
 
 import { HostModeComponentProps } from '../interfaces/host-mode-interfaces';
 
@@ -25,37 +27,48 @@ function HostModeComponent(props: HostModeComponentProps) {
               roomInfo={props.roomInfo}
               setIsLectureStarted={props.setIsLectureStarted}
             />
-          ) : (
-            <>
-              <div className={'relative flex flex-col items-center'}>
-                <HostLayerBadgeComponent
-                  isModifiedMode={props.isModifiedMode}
-                  layers={props.layers}
-                  roomInfo={props.roomInfo}
-                  roomUsers={props.roomUsers}
-                  topLayer={props.topLayer}
-                  setTopLayer={props.setTopLayer}
-                  setIsModifiedMode={props.setIsModifiedMode}
-                  badgeStyle={badgeStyle}
-                  buttonStyle={buttonStyle}
-                />
-              </div>
-              <PeersLayerComponent
-                activeTool={props.activeTool}
-                canvasCtxTable={props.canvasCtxTable}
-                color={props.color}
-                eraserWidth={props.eraserWidth}
-                layers={props.layers}
-                lineWidth={props.lineWidth}
-                roomInfo={props.roomInfo}
-                roomUsers={props.roomUsers}
-                socket={props.socket}
-                topLayer={props.topLayer}
-                setIsModifiedMode={props.setIsModifiedMode}
-                setTopLayer={props.setTopLayer}
-              />
-            </>
-          )}
+          ) : null}
+          <div className={'relative flex flex-col items-center'}>
+            <HostLectureModeBadgeComponent
+              isModifiedMode={props.isModifiedMode}
+              layers={props.layers}
+              roomInfo={props.roomInfo}
+              roomUsers={props.roomUsers}
+              topLayer={props.topLayer}
+              setTopLayer={props.setTopLayer}
+              setIsModifiedMode={props.setIsModifiedMode}
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
+              displayHidden={props.isModifiedMode}
+            />
+            <HostModifiedModeBadgeComponent
+              isModifiedMode={props.isModifiedMode}
+              layers={props.layers}
+              roomInfo={props.roomInfo}
+              roomUsers={props.roomUsers}
+              topLayer={props.topLayer}
+              setTopLayer={props.setTopLayer}
+              setIsModifiedMode={props.setIsModifiedMode}
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
+              displayHidden={!props.isModifiedMode}
+            />
+          </div>
+          <PeersLayerComponent
+            activeTool={props.activeTool}
+            canvasCtxTable={props.canvasCtxTable}
+            color={props.color}
+            eraserWidth={props.eraserWidth}
+            layers={props.layers}
+            lineWidth={props.lineWidth}
+            roomInfo={props.roomInfo}
+            roomUsers={props.roomUsers}
+            socket={props.socket}
+            topLayer={props.topLayer}
+            setIsModifiedMode={props.setIsModifiedMode}
+            setTopLayer={props.setTopLayer}
+            displayHidden={false}
+          />
         </div>
         <div id='drawable-canvas' className='cols-start-2 cols-end-3 relative'>
           <MyLayerComponent
@@ -67,6 +80,20 @@ function HostModeComponent(props: HostModeComponentProps) {
             lineWidth={props.lineWidth}
             roomInfo={props.roomInfo}
             socket={props.socket}
+            displayHidden={props.isModifiedMode}
+          />
+          <HostModifiedModeLayerComponent
+            activeTool={props.activeTool}
+            canvasCtxTable={props.canvasCtxTable}
+            color={props.color}
+            eraserWidth={props.eraserWidth}
+            isModifiedMode={props.isModifiedMode}
+            lineWidth={props.lineWidth}
+            modifiedLayers={props.modifiedLayers}
+            roomInfo={props.roomInfo}
+            socket={props.socket}
+            topLayer={props.topLayer}
+            displayHidden={!props.isModifiedMode}
           />
         </div>
       </div>
