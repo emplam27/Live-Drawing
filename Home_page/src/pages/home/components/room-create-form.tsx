@@ -47,6 +47,18 @@ export default function RoomCreateComponent() {
       });
       return;
     }
+    if (values.roomPassword.length === 0 || values.roomPassword === '') {
+      MySwal.fire({
+        title: '비밀번호를 입력해주세요.',
+      });
+      return;
+    }
+    if (values.roomTitle.length === 0 || values.roomTitle === '') {
+      MySwal.fire({
+        title: '방제목을 입력해주세요.',
+      });
+      return;
+    }
     axios
       .post(`${process.env.REACT_APP_API_URL}/room`, values, { headers: headers })
       .then((response) => {

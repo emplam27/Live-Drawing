@@ -76,9 +76,7 @@ public class EntityController {
                 map.put("userNumber", newUserList.size());
                 giveRoomList.add(map);
             } else {}
-
         }
-
         return giveRoomList;
     }
 
@@ -97,14 +95,15 @@ public class EntityController {
     @PostMapping("/api/room/entrance")
     public String joinRoom(@RequestBody Map<String, Object> roomJson) {
         String roomId = roomJson.get("roomId").toString(); //! 여기서 roomId를 못받아서 116번쨰에서 null exception이 뜸 왜?????????????????????????????
-//        Long roomPk = Long.parseLong(roomJson.get("roomPk").toString());
         logger.info("[joinRoom] : roomId is " + roomId);
-        String userId = roomJson.get("userId").toString(); 
+        String userId = roomJson.get("userId").toString();
         String password = roomJson.get("password").toString();
 
         List<Room> target = roomRepo.findByRoomId(roomId);
+        if(target.isEmpty()) {
+            return "refresh";
+        }
         logger.info("[joinRoom] : target is " + target);
-//        User newUser = findByUsername(username);
         User user = userRepo.findByUserId(userId);
 
         System.out.println("!!!!!!!!!!!!!!!!!!!!" + user.getRoom());
@@ -122,8 +121,8 @@ public class EntityController {
                 return "already exist";
             } else {
                 logger.info("패스워드가 일치합니다. 방으로 입장합니다.");
-                target.get(0).add(user);
-                roomRepo.save(target.get(0)); //! 이렇게 save 까지 하면 foreign key, 즉 맵핑이 성립됨
+//                target.get(0).add(user);
+//                roomRepo.save(target.get(0)); //! 이렇게 save 까지 하면 foreign key, 즉 맵핑이 성립됨
                 return "success";
             }
         }
@@ -139,7 +138,6 @@ public class EntityController {
         String roomTitle = roomJson.get("roomTitle").toString();
         String roomPassword = roomJson.get("roomPassword").toString();
         String roomHostId = roomJson.get("roomHostId").toString();
-//        logger.info("")
         User host = userRepo.findByUserId(roomHostId);
         if(host.getRoom() != null) {
             logger.info("잘못된 접근 입니다. (이미 호스트로서 방에 접속되어 있습니다.)");
@@ -147,7 +145,7 @@ public class EntityController {
             return null;
         }
         Room newRoom = new Room(roomTitle, roomIdValue, roomPassword, roomHostId, host.getUsername(), true);
-        newRoom.add(host);
+//        newRoom.add(host);
 
         logger.info("create new room");
 
@@ -160,6 +158,9 @@ public class EntityController {
                                             @RequestParam String userId) {
         List<Room> newRoom = roomRepo.findByRoomId(roomId);
         User newUser = userRepo.findByUserId(userId);
+
+        newRoom.get(0).add(newUser);
+        roomRepo.save(newRoom.get(0));
 
         Map<String, Object> json = new HashMap<>();
         json.put("roomTitle", newRoom.get(0).getRoomTitle());
@@ -204,7 +205,7 @@ public class EntityController {
                            @RequestBody Map<String, Object> req) {
 //        System.out.println("-------------------->여기로 들어오는가?!?!?!?");
         String userId = req.get("userId").toString();
-        System.out.println("user id is : " + userId);
+        logger.info("user id is : " + userId);
         User user = userRepo.findByUserId(userId);
         user.setRoom(null);
         userRepo.save(user);
@@ -214,7 +215,7 @@ public class EntityController {
 
         List<User> newUserList = userRepo.findByRoom_RoomPk(roomPk);
 
-        System.out.println("유저 몇명? : " + newUserList.size());
+        logger.info("현재 방에 존재하는 사람의 수 : " + newUserList.size());
         if ( newUserList.size() == 0) {
             roomRepo.delete(newRoom.get(0));
         }

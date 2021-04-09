@@ -44,6 +44,12 @@ export function EntranceComponent(props: EntranceProps) {
           .post(`${process.env.REACT_APP_API_URL}/room/entrance/`, values, { headers: headers })
           .then((res) => {
             if (res.status === 200) {
+              if (res.data === 'refresh') {
+                Swal.showValidationMessage('삭제된 방입니다. 다시 홈으로 이동합니다.');
+                window.location.href = `${process.env.REACT_APP_API_URL}`;
+                return;
+              }
+
               if (res.data === 'fail') {
                 Swal.showValidationMessage('비밀번호를 입력해주세요.');
                 return;
