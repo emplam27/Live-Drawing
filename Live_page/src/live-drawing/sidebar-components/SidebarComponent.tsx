@@ -4,7 +4,7 @@ import CloseButtonComponent from './components/CloseButtonComponent';
 import SaveImageComponent from './components/SaveImageComponent';
 import VoiceChatComponent from '../voice-components/VoiceChatComponent';
 import ChatComponent from '../chat-components/ChatComponent';
-
+import ClearCanvasComponent from './components/ClearCanvasComponent';
 import { SidebarComponentProps } from '../interfaces/sidebar-components-interfaces';
 
 function SidebarComponent(props: SidebarComponentProps) {
@@ -35,6 +35,7 @@ function SidebarComponent(props: SidebarComponentProps) {
       <div className='flex-grow'></div>
       <VoiceChatComponent />
       <ChatComponent roomInfo={props.roomInfo} socket={props.socket} />
+      <ClearCanvasComponent layers={props.layers} roomInfo={props.roomInfo} />
       <div className='flex-grow'></div>
       <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} />
       <CloseButtonComponent roomInfo={props.roomInfo} socket={props.socket} />
