@@ -8,10 +8,11 @@ function SaveImageComponent(props: SaveImageComponentProps) {
     const saveCanvas: any = document.getElementById(userId);
     if (saveCanvas) {
       const saveImage = saveCanvas.toDataURL('image/png');
-      const a = document.createElement('a');
+      const a: any = document.createElement('a');
       a.download = 'image.png';
       a.href = saveImage;
       a.click();
+      a.delete;
     }
   }
 
