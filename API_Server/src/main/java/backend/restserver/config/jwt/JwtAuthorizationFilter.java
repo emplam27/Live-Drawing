@@ -30,18 +30,19 @@ import com.auth0.jwt.JWT;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UserRepository userRepo;
-    
+    private final Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class.getSimpleName());
+
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepo) {
         super(authenticationManager);
         this.userRepo = userRepo;
     }
 
 
-    //! 인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 됨. 
+    //! 인증이나 권한이 필요한 주소요청이 있을 때 해당 필터를 타게 됨.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        Logger logger = LoggerFactory.getLogger(JwtAuthorizationFilter.class.getSimpleName());
+        logger.info("--------------------------------------시작---------------------------------------");
         logger.info("인증이나 권한이 필요한 주소 요청이 됨");
         String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
         logger.info("header Authorization : " + jwtHeader);
@@ -61,10 +62,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         //! 토큰 검증 (이게 인증이기 때문에 AuthenticationManager도 필요 없음)
         //! 내가 SecurityContext에 직접 접근해서 세션을 만들때 자동으로 UserDetailsService에 있는
         //! loadByUsername이 호출됨.
-        logger.info("----------------------->1");
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
                 .getClaim("username").asString();
-        logger.info("----------------------->2");
         //! 서명이 정상적으로 됨
         if (username != null) {
             User userEntity = userRepo.findByUsername(username);
@@ -80,6 +79,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         logger.info("권한이 있는 유저임");
+        logger.info("--------------------------------------끝---------------------------------------");
         chain.doFilter(request, response);
     }
 }

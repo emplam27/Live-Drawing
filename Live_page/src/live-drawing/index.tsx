@@ -1,42 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
 import SidebarComponent from './sidebar-components';
 import DrawComponent from './draw-components';
-import ChatComponent from './chat-components';
-
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-
-import {
-  RoomInfo,
-  RoomUsers,
-  UserProfileInfo,
-} from './interfaces/socket-interfaces';
+import { RoomInfo, RoomUsers } from './interfaces/socket-interfaces';
 import { Layer } from './interfaces/draw-components-interfaces';
-
 import axios from 'axios';
 import io from 'socket.io-client';
 // import { v4 as uuid } from 'uuid';
-
 function LiveDrawing() {
   const { roomId } = useParams<{ roomId: string }>();
   const [roomInfo, setRoomInfo] = useState<RoomInfo>({
-    roomId: roomId,
     username: null,
-    roomTitle: null,
     userId: localStorage.getItem('userId'),
+    userImage: null,
+    roomId: roomId,
+    roomTitle: null,
     roomHostId: null,
   });
   const [socket, setSocket] = useState<SocketIOClient.Socket | null>(null);
   const [roomUsers, setRoomUsers] = useState<RoomUsers | null>(null);
-  const [userProfileInfos, setUserProfileInfos] = useState<UserProfileInfo[]>(
-    [],
-  );
   const [topLayer, setTopLayer] = useState<Layer | null>(null);
   const [layers, setLayers] = useState<Layer[]>([]);
   const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
-
   const MySwal = withReactContent(Swal);
   const headers = {
     'Content-Type': 'application/json',
@@ -125,6 +112,7 @@ function LiveDrawing() {
           username: res.data.username,
           // username: roomInfo.username,
           userId: roomInfo.userId,
+          userImage: res.data.userImage,
           roomId: roomId,
           roomTitle: res.data.roomTitle,
           // roomTitle: roomInfo.roomTitle,
@@ -180,31 +168,15 @@ function LiveDrawing() {
     //   );
     // });
   }, []);
-
-  useEffect(() => {
-    //   setUserProfileInfos(dummyUsersProfileInfo);
-
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/live/${roomId}/users`, {
-        params: { userId: roomInfo.userId },
-        headers: headers,
-      })
-      .then((res) => {
-        setUserProfileInfos(res.data);
-      });
-  }, [roomUsers]);
-
   return (
     <>
       <SidebarComponent
-        isLiveClosed={isLiveClosed}
         layers={layers}
         roomInfo={roomInfo}
         topLayer={topLayer}
-        userProfileInfos={userProfileInfos}
         setTopLayer={setTopLayer}
-        // setIsLiveClosed={setIsLiveClosed}
         socket={socket}
+        roomUsers={roomUsers}
       />
       <DrawComponent
         isLiveClosed={isLiveClosed}
@@ -224,5 +196,4 @@ function LiveDrawing() {
     </>
   );
 }
-
 export default LiveDrawing;

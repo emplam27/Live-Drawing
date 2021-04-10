@@ -4,8 +4,6 @@ import {
   Point,
 } from '../../interfaces/draw-components-interfaces';
 
-let count = 0;
-
 function midPointBtw(p1: Point, p2: Point) {
   return {
     x: p1.x + (p2.x - p1.x) / 2,
@@ -17,7 +15,6 @@ export function draw(
   data: DrawData,
   canvasCtx: CanvasRenderingContext2D,
 ): void {
-  count++;
   if (!canvasCtx) return;
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
@@ -30,7 +27,8 @@ export function draw(
   );
   canvasCtx.strokeStyle = data.color;
   canvasCtx.lineWidth = data.lineWidth;
-  if (count % 5 === 0) canvasCtx.stroke();
+  // if (data.count % 3 === 0)
+  canvasCtx.stroke();
 }
 
 export function erase(

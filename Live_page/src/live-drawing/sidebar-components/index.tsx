@@ -1,7 +1,9 @@
 import React from 'react';
 import UserSelectButtonComponent from './components/UserSelectButtonComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
+import SaveImageComponent from './components/SaveImageComponent';
 import VoiceChatComponent from '../voice-components/';
+import ChatComponent from '../chat-components';
 
 import { SidebarComponentProps } from '../interfaces/sidebar-components-interfaces';
 
@@ -9,26 +11,21 @@ function SidebarComponent(props: SidebarComponentProps) {
   return (
     <div className='flex-initial w-20 flex flex-col border-r divide-y'>
       <div className='h-20 flex flex-wrap justify-center content-center'>
-        <div className=''>
-          <i className='ri-2x ri-leaf-fill text-blue-500'></i>
-        </div>
+        <i className='ri-2x ri-leaf-fill text-blue-500'></i>
       </div>
       <UserSelectButtonComponent
-        topLayer={props.topLayer}
-        userProfileInfos={props.userProfileInfos}
-        roomInfo={props.roomInfo}
         layers={props.layers}
+        roomInfo={props.roomInfo}
+        roomUsers={props.roomUsers}
+        topLayer={props.topLayer}
         setTopLayer={props.setTopLayer}
       />
       <div className='flex-grow'></div>
       <VoiceChatComponent />
-      <p>유저, 채팅 버튼</p>
+      <ChatComponent roomInfo={props.roomInfo} socket={props.socket} />
       <div className='flex-grow'></div>
-      <CloseButtonComponent
-        roomInfo={props.roomInfo}
-        // setIsLiveClosed={props.setIsLiveClosed}
-        socket={props.socket}
-      />
+      <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} />
+      <CloseButtonComponent roomInfo={props.roomInfo} socket={props.socket} />
     </div>
   );
 }

@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageForm } from '../interfaces/message-form-interface';
 import { ChatComponentProps } from '../interfaces/chat-component-props-interface';
 
-export function ChatInputComponent(props: ChatComponentProps) {
+function ChatInputComponent(props: ChatComponentProps) {
   const [messageForm, setMessageForm] = useState<MessageForm>({
-    user: props.username,
+    user: props.roomInfo.username,
     text: '',
   });
   const [textLength, setTextLength] = useState<number>(0);
@@ -16,7 +16,7 @@ export function ChatInputComponent(props: ChatComponentProps) {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (messageForm.text.length <= 200) {
-      setMessageForm({ user: props.username, text: e.target.value });
+      setMessageForm({ user: props.roomInfo.username, text: e.target.value });
     }
   };
 
@@ -32,7 +32,7 @@ export function ChatInputComponent(props: ChatComponentProps) {
       if (messageForm.text) {
         props.socket.emit('chat-send-message', messageForm);
         setMessageForm({
-          user: props.username,
+          user: props.roomInfo.username,
           text: '',
         });
         if (inputRef.current) {
@@ -44,21 +44,24 @@ export function ChatInputComponent(props: ChatComponentProps) {
   };
 
   return (
-    <div className='input-container flex'>
+    <div className='flex-none flex bottom-0 overflow-auto'>
       <input
+        maxLength={200}
         type='text'
         placeholder='메세지를 입력하세요.'
         onChange={onChange}
         ref={inputRef}
         onKeyPress={(e) => (e.key === 'Enter' ? sendMessage(e) : null)}
-        className='px-4 py-1 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+        className='px-4 py-1 w-full border text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
       />
       <button
-        onClick={(e) => sendMessage}
-        className='justify-center items-center bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold focus:outline-none focus:ring rounded px-3 py-1'
+        onClick={sendMessage}
+        className='w-12 h-12 flex justify-center items-center text-white bg-blue-500 hover:bg-blue-600 focus:outline-none'
       >
-        <i className='ri-send-plane-fill'></i>
+        <i className='ri-xl ri-send-plane-fill'></i>
       </button>
     </div>
   );
 }
+
+export default ChatInputComponent;

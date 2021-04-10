@@ -11,7 +11,6 @@ import LayerComponent from './components/LayerComponent';
 import { draw, erase } from './functions/draw-functions';
 import {
   CanvasCtxTable,
-  Layer,
   DrawComponentProps,
   DrawData,
   EraseData,

@@ -3,15 +3,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      theme: {
-        // container: {
-        //   center: true,
-        //   padding: '2rem',
-        // },
-        // fontFamily: {
-        //   body: ['Gamja Flower', 'cursive'],
-        // },
-      },
+      backgroundImage: (theme) => ({
+        'bird-pattern': "url('./images/profile.jpeg')",
+        // 'footer-texture': "url('/img/footer-texture.png')",
+      }),
     },
   },
   variants: {

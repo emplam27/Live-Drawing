@@ -9,6 +9,9 @@ import {
   mouseDown,
   mouseMove,
   mouseUp,
+  touchMove,
+  touchStart,
+  touchEnd,
 } from '../functions/mouse-event-functions';
 
 function MyLayerComponent(props: MyLayerComponentProps) {
@@ -21,10 +24,24 @@ function MyLayerComponent(props: MyLayerComponentProps) {
         className={''}
         width={(window.innerWidth - 60) * 0.5}
         height={window.innerHeight}
-        onMouseDown={(e) => mouseDown(e)}
-        onMouseUp={mouseUp}
+        onMouseDown={(e) => mouseDown(e, props.canvasCtxTable)}
+        onTouchStart={(e) => touchStart(e, props.canvasCtxTable)}
+        onMouseUp={(e) => mouseUp(e, props.canvasCtxTable)}
+        onTouchEnd={(e) => touchEnd(e, props.canvasCtxTable)}
         onMouseMove={(e) =>
           mouseMove(
+            e,
+            props.activeTool,
+            props.color,
+            props.lineWidth,
+            props.eraserWidth,
+            props.canvasCtxTable,
+            props.socket,
+            props.roomInfo,
+          )
+        }
+        onTouchMove={(e) =>
+          touchMove(
             e,
             props.activeTool,
             props.color,

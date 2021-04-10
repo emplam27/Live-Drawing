@@ -1,4 +1,6 @@
+import { RoomInfo } from '../../interfaces/socket-interfaces';
+
 export interface ChatComponentProps {
-  username: string | null;
+  roomInfo: RoomInfo;
   socket: SocketIOClient.Socket | null;
 }
