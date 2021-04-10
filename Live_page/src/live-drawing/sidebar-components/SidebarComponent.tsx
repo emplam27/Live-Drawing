@@ -25,8 +25,8 @@ function SidebarComponent(props: SidebarComponentProps) {
         isModifiedMode={props.isModifiedMode}
         layers={props.layers}
         roomInfo={props.roomInfo}
+        roomUsers={props.roomUsers}
         topLayer={props.topLayer}
-        userProfileInfos={props.userProfileInfos}
         setTopLayer={props.setTopLayer}
       />
       <div className='flex-grow'></div>

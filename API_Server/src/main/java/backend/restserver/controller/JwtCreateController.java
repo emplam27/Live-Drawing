@@ -9,6 +9,8 @@ import backend.restserver.entity.User;
 import backend.restserver.repository.UserRepository;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,14 +26,16 @@ import com.auth0.jwt.JWT;
 @RestController
 @RequiredArgsConstructor
 public class JwtCreateController {
-//    Logger logger = LoggerFactory.getLogger(JwtCreateController.class.getSimpleName());
+    private final Logger logger = LoggerFactory.getLogger(JwtCreateController.class.getSimpleName());
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/api/oauth/jwt/google")
     public Map<String, Object> jwtCreate(@RequestBody Map<String, Object> data) {
-        System.out.println("jwtCreate 실행됨");
-        System.out.println(data.get("profileObj"));
+//        Logger logger = LoggerFactory.getLogger(JwtCreateController.class.getSimpleName());
+        logger.info("--------------------------------------시작---------------------------------------");
+        logger.info("jwtCreate 실행됨");
+        logger.info(""+data.get("profileObj"));
         OAuth2UserInfo googleUser =
                 new GoogleUserInfo((Map<String, Object>)data.get("profileObj"));
 
@@ -50,13 +54,13 @@ public class JwtCreateController {
                     .providerId(googleUser.getProviderId())
                     .profileImage(googleUser.getProfileImage())
                     .build();
-            System.out.println("username1 : " + userRequest.getUsername());
-            System.out.println("username2 : " + googleUser.getName());
+            logger.info("username1 : " + userRequest.getUsername());
+            logger.info("username2 : " + googleUser.getName());
             String userIdValue = UUID.randomUUID().toString();
             userRequest.setUserId(userIdValue);
             userEntity = userRepository.save(userRequest);
         } else {
-            System.out.println("로그인을 이미 한 적이 있습니다. 당신은 자동회원가입이 되어있습니다.");
+            logger.info("로그인을 이미 한 적이 있습니다. 당신은 자동회원가입이 되어있습니다.");
         }
 
         String jwtToken = JWT.create()
@@ -69,6 +73,7 @@ public class JwtCreateController {
         Map<String, Object> json = new HashMap<String, Object>();
         json.put(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
         json.put("userId", userEntity.getUserId());
+        logger.info("--------------------------------------끝---------------------------------------");
         return json;
     }
 }

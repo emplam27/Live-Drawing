@@ -4,10 +4,17 @@ import {
   Point,
 } from '../../interfaces/draw-components-interfaces';
 
-function midPointBtw(p1: Point, p2: Point) {
+function midPointBtw1(p1: Point, p2: Point) {
   return {
-    x: p1.x + (p2.x - p1.x) / 2,
-    y: p1.y + (p2.y - p1.y) / 2,
+    x: p1.x + (p2.x - p1.x) / 3,
+    y: p1.y + (p2.y - p1.y) / 3,
+  };
+}
+
+function midPointBtw2(p1: Point, p2: Point) {
+  return {
+    x: p1.x + ((p2.x - p1.x) / 3) * 2,
+    y: p1.y + ((p2.y - p1.y) / 3) * 2,
   };
 }
 
@@ -18,19 +25,27 @@ export function draw(
   if (!canvasCtx) return;
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
-  canvasCtx.beginPath();
-  canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
-  const midPoint = midPointBtw(data.lastPoint, data.currentPoint);
+  // if (data.count % 2 === 1) {
+  //   canvasCtx.beginPath();
+  //   canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
+  // }
+  const midPoint1 = midPointBtw1(data.lastPoint, data.currentPoint);
+  const midPoint2 = midPointBtw2(data.lastPoint, data.currentPoint);
   canvasCtx.quadraticCurveTo(
-    midPoint.x,
-    midPoint.y,
+    data.lastPoint.x,
+    data.lastPoint.y,
+    midPoint1.x,
+    midPoint1.y,
+  );
+  canvasCtx.quadraticCurveTo(
+    midPoint2.x,
+    midPoint2.y,
     data.currentPoint.x,
     data.currentPoint.y,
   );
   canvasCtx.strokeStyle = data.color;
   canvasCtx.lineWidth = data.lineWidth;
-  canvasCtx.stroke();
-  canvasCtx.closePath();
+  if (data.count % 2 === 0) canvasCtx.stroke();
 }
 
 export function erase(

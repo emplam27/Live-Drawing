@@ -1,14 +1,13 @@
-import { RoomInfo, UserProfileInfo } from './socket-interfaces';
+import { RoomInfo, RoomUsers } from './socket-interfaces';
 import { Layer } from './draw-components-interfaces';
 
 export interface SidebarComponentProps {
-  isLiveClosed: boolean;
   isModifiedMode: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;
-  topLayer: Layer | null;
+  roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
-  userProfileInfos: UserProfileInfo[];
+  topLayer: Layer | null;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;

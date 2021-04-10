@@ -13,6 +13,13 @@ function CursorComponent(props: CursorComponentProps) {
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
+  const onTouchMove = (e: TouchEvent): void => {
+    setPosition({
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
+    });
+  };
+
   const onMouseLeave = (): void => {
     setHidden(true);
   };
@@ -26,6 +33,7 @@ function CursorComponent(props: CursorComponentProps) {
       'drawable-canvas',
     );
     targetCanvasContainer?.addEventListener('mousemove', onMouseMove);
+    targetCanvasContainer?.addEventListener('touchmove', onTouchMove);
     targetCanvasContainer?.addEventListener('mouseenter', onMouseEnter);
     targetCanvasContainer?.addEventListener('mouseleave', onMouseLeave);
   };
@@ -35,6 +43,7 @@ function CursorComponent(props: CursorComponentProps) {
       'drawable-canvas',
     );
     targetCanvasContainer?.removeEventListener('mousemove', onMouseMove);
+    targetCanvasContainer?.removeEventListener('touchmove', onTouchMove);
     targetCanvasContainer?.removeEventListener('mouseenter', onMouseEnter);
     targetCanvasContainer?.removeEventListener('mouseleave', onMouseLeave);
   };

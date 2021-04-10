@@ -22,7 +22,7 @@ function MyLayerComponent(props: MyLayerComponentProps) {
       ) : (
         <div className='flex flex-col justify-center h-full'>
           <p>
-            <i className='ri-loader-4-line text-8xl text-gray-300 animate-spin'></i>
+            <i className='ri-loader-4-line text-8xl text-gray-300'></i>
           </p>
           <p className='text-xl'>로딩중입니다.</p>
           <p className='text-xl'>잠시만 기다려주세요.</p>

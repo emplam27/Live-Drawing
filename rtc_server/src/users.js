@@ -1,6 +1,14 @@
 let users = [];
 
-const addUser = ({ socketId, username, userId, roomId, token, roomTitle }) => {
+const addUser = ({
+  socketId,
+  username,
+  userId,
+  userImage,
+  roomId,
+  token,
+  roomTitle,
+}) => {
   const existingUser = users.find(
     (user) => user.roomId === roomId && user.userId === userId
   );
@@ -9,7 +17,15 @@ const addUser = ({ socketId, username, userId, roomId, token, roomTitle }) => {
     return { error: "이미 접속 중 입니다." };
   }
 
-  const user = { socketId, username, userId, roomId, token, roomTitle };
+  const user = {
+    socketId,
+    username,
+    userId,
+    userImage,
+    roomId,
+    token,
+    roomTitle,
+  };
   console.log("users", user);
   users.push(user);
   return user;

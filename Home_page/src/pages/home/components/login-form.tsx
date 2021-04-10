@@ -86,12 +86,14 @@ export function SignInComponent() {
             <h3 className='mb-4 py-15 font-bold text-4xl py-10 flex items-center text-blue-400'>로그인</h3>
             <form action='#' className='px-3 py-2 flex flex-col justify-center items-center w-full gap-3'>
               <input
+                autoComplete='off'
                 type='email'
                 onChange={onChangeUserId}
                 placeholder='이메일..'
                 className='px-4 h-12 w-7/12 rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
               />
               <input
+                autoComplete='off'
                 type='password'
                 name='password'
                 onChange={onChangePassword}

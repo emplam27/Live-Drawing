@@ -4,11 +4,7 @@ import SidebarComponent from './sidebar-components/SidebarComponent';
 import DrawComponent from './draw-components/DrawComponent';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import {
-  RoomInfo,
-  RoomUsers,
-  UserProfileInfo,
-} from './interfaces/socket-interfaces';
+import { RoomInfo, RoomUsers } from './interfaces/socket-interfaces';
 import { Layer } from './interfaces/draw-components-interfaces';
 import axios from 'axios';
 import io from 'socket.io-client';
@@ -25,16 +21,11 @@ function LiveDrawingComponent() {
     roomId: roomId,
     roomTitle: null,
     roomHostId: null,
-    username: null,
     userId: localStorage.getItem('userId'),
+    userImage: null,
+    username: null,
   });
   const [roomUsers, setRoomUsers] = useState<RoomUsers | null>(null);
-  const [userProfileInfos, setUserProfileInfos] = useState<UserProfileInfo[]>(
-    [],
-  );
-  const [isLiveClosed, setIsLiveClosed] = useState<boolean>(false);
-
-  //@ User's Layers States
   const [topLayer, setTopLayer] = useState<Layer | null>(null);
   const [layers, setLayers] = useState<Layer[]>([]);
 
@@ -139,6 +130,7 @@ function LiveDrawingComponent() {
           username: res.data.username,
           // username: roomInfo.username,
           userId: roomInfo.userId,
+          userImage: res.data.userImage,
           roomId: roomId,
           roomTitle: res.data.roomTitle,
           // roomTitle: roomInfo.roomTitle,
@@ -196,29 +188,15 @@ function LiveDrawingComponent() {
       );
     });
   }, []);
-
-  useEffect(() => {
-    // setUserProfileInfos(dummyUsersProfileInfo);
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/live/${roomId}/users`, {
-        params: { userId: roomInfo.userId },
-        headers: headers,
-      })
-      .then((res) => {
-        setUserProfileInfos(res.data);
-      });
-  }, [roomUsers]);
-
   return (
     <>
       <SidebarComponent
-        isLiveClosed={isLiveClosed}
         isModifiedMode={isModifiedMode}
         layers={layers}
         roomInfo={roomInfo}
+        roomUsers={roomUsers}
         topLayer={topLayer}
         socket={socket}
-        userProfileInfos={userProfileInfos}
         setTopLayer={setTopLayer}
         setIsLectureStarted={setIsLectureStarted}
         setIsModifiedMode={setIsModifiedMode}
@@ -226,7 +204,6 @@ function LiveDrawingComponent() {
       <DrawComponent
         copyModifiedCanvasSignal={copyModifiedCanvasSignal}
         isLectureStarted={isLectureStarted}
-        isLiveClosed={isLiveClosed}
         isModifiedMode={isModifiedMode}
         layers={layers}
         modifiedLayers={modifiedLayers}
@@ -236,7 +213,6 @@ function LiveDrawingComponent() {
         topLayer={topLayer}
         setCopyModifiedCanvasSignal={setCopyModifiedCanvasSignal}
         setIsLectureStarted={setIsLectureStarted}
-        setIsLiveClosed={setIsLiveClosed}
         setIsModifiedMode={setIsModifiedMode}
         setLayers={setLayers}
         setModifiedLayers={setModifiedLayers}

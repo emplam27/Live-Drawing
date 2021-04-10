@@ -3,7 +3,6 @@ import { RoomUsers, RoomInfo } from './socket-interfaces';
 export interface DrawComponentProps {
   copyModifiedCanvasSignal: number | null;
   isLectureStarted: boolean;
-  isLiveClosed: boolean;
   isModifiedMode: boolean;
   layers: Layer[];
   modifiedLayers: Layer[];
@@ -15,7 +14,6 @@ export interface DrawComponentProps {
     React.SetStateAction<number | null>
   >;
   setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
@@ -31,10 +29,16 @@ export interface Point {
 export interface DrawData {
   event: string;
   canvasId: string;
-  lastPoint: Point;
   currentPoint: Point;
   color: string;
+  count: number;
+  lastPoint: Point;
   lineWidth: number;
+}
+
+export interface StartData {
+  point: Point;
+  canvasId: string;
 }
 
 export interface EraseData {

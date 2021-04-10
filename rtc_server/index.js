@@ -29,6 +29,7 @@ io.on('connection', (socket) => {
       socketId: socket.id,
       username: message.username,
       userId: message.userId,
+      userImage: message.userImage,
       roomId: message.roomId,
       roomTitle: message.roomTitle,
       token: message.token,
@@ -82,6 +83,13 @@ io.on('connection', (socket) => {
   });
 
   //@ Draw Event
+  socket.on('draw-start', (message) => {
+    const user = getUser(socket.id);
+    if (!user) return;
+    historyData.push(user.roomId, message);
+    socket.broadcast.to(user.roomId).emit('draw-start', message);
+  });
+
   socket.on('draw-pencil', (message) => {
     const user = getUser(socket.id);
     if (!user) return;

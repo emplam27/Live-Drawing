@@ -47,6 +47,7 @@ function ChatInputComponent(props: ChatComponentProps) {
   return (
     <div className='flex-none flex bottom-0 overflow-auto'>
       <input
+        maxLength={200}
         type='text'
         placeholder='메세지를 입력하세요.'
         onChange={onChange}
