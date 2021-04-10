@@ -18,6 +18,8 @@ export function draw(
   if (!canvasCtx) return;
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
+  canvasCtx.beginPath();
+  canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
   const midPoint = midPointBtw(data.lastPoint, data.currentPoint);
   canvasCtx.quadraticCurveTo(
     data.lastPoint.x,
