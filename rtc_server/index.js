@@ -120,25 +120,28 @@ io.on('connection', (socket) => {
   });
 
   //@ Modified Mode Events
-  socket.on('modified-mode-start', (message) => {
+  socket.on('modified-mode-start', () => {
     console.log('modified-mode-start');
-    if (!message || !message.socketId) return;
+    const user = getUser(socket.id);
+    if (!user) return;
     console.log('modified-mode-start');
-    socket[message.socketId].emit('modified-mode-start');
+    socket.broadcast.to(user.roomId).emit('modified-mode-start');
   });
 
-  socket.on('modified-mode-end', (message) => {
+  socket.on('modified-mode-end', () => {
     console.log('modified-mode-end');
-    if (!message || !message.socketId) return;
+    const user = getUser(socket.id);
+    if (!user) return;
     console.log('modified-mode-end');
-    socket[message.socketId].emit('modified-mode-end');
+    socket.broadcast.to(user.roomId).emit('modified-mode-end');
   });
 
-  socket.on('modified-mode-copy-canvas', (message) => {
+  socket.on('modified-mode-copy-canvas', () => {
     console.log('modified-mode-copy-canvas');
-    if (!message || !message.socketId) return;
+    const user = getUser(socket.id);
+    if (!user) return;
     console.log('modified-mode-copy-canvas');
-    socket[message.socketId].emit('modified-mode-copy-canvas');
+    socket.broadcast.to(user.roomId).emit('modified-mode-copy-canvas');
   });
 
   //@ Live Close Event
