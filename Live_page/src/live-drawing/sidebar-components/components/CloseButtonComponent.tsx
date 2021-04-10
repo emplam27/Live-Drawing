@@ -25,7 +25,7 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
           { headers: headers },
         );
         if (!props.socket) return;
-        props.socket.emit('live-closed');
+        props.socket.emit('lecture-close');
         window.location.replace(`${process.env.REACT_APP_HOMEPAGE_URL}`);
       }
     });

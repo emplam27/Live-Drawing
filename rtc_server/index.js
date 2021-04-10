@@ -144,12 +144,19 @@ io.on('connection', (socket) => {
     socket.broadcast.to(user.roomId).emit('modified-mode-copy-canvas');
   });
 
-  //@ Live Close Event
-  socket.on('live-closed', () => {
-    console.log('live-closed');
+  //@ Lecture Start & Close Event
+  socket.on('lecture-start', () => {
+    console.log('lecture-start');
     const user = getUser(socket.id);
     if (!user) return;
-    socket.broadcast.to(user.roomId).emit('live-closed');
+    socket.broadcast.to(user.roomId).emit('lecture-start');
+  });
+
+  socket.on('lecture-close', () => {
+    console.log('lecture-close');
+    const user = getUser(socket.id);
+    if (!user) return;
+    socket.broadcast.to(user.roomId).emit('lecture-close');
   });
 
   socket.on('disconnect', () => {
