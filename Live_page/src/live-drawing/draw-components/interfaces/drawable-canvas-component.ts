@@ -2,8 +2,6 @@ import { RoomInfo } from '../../interfaces/socket-interfaces';
 import { CanvasCtxTable } from '../../interfaces/draw-components-interfaces';
 
 export interface DrawableCanvasComponentProps {
-  canvasId: string;
-  hidden: boolean;
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;
@@ -11,4 +9,6 @@ export interface DrawableCanvasComponentProps {
   lineWidth: number;
   roomInfo: RoomInfo;
   socket: SocketIOClient.Socket | null;
+  canvasId: string;
+  displayHidden: boolean;
 }

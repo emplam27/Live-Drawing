@@ -8,6 +8,7 @@ export interface GuestModeComponentProps {
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;
+  copyModifiedCanvasSignal: number | null;
   cursorWidth: number;
   eraserWidth: number;
   isLectureStarted: boolean;
@@ -21,6 +22,9 @@ export interface GuestModeComponentProps {
   topLayer: Layer | null;
   setActiveTool: React.Dispatch<React.SetStateAction<string>>;
   setColor: React.Dispatch<React.SetStateAction<string>>;
+  setCopyModifiedCanvasSignal: React.Dispatch<
+    React.SetStateAction<number | null>
+  >;
   setCursorWidth: React.Dispatch<React.SetStateAction<number>>;
   setEraserWidth: React.Dispatch<React.SetStateAction<number>>;
   setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;

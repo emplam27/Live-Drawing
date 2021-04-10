@@ -8,7 +8,7 @@ function LectureStartComponent(props: LectureStartComponentProps) {
   }
 
   return (
-    <div className='flex flex-col justify-center h-full bg-gray-100'>
+    <div className='absolute z-40 w-full h-full flex flex-col justify-center bg-gray-100'>
       <div className='my-auto'>
         <p className='text-5xl text-blue-400 '>
           아직 수업이 시작되지 않았어요!

@@ -2,10 +2,19 @@ import React from 'react';
 
 import { HostModifiedModeBadgeComponentProps } from '../interfaces/host-modified-mode-badge-interfaces';
 
+import { sendModifiedModeMessage } from '../../functions/modified-mode-functions';
+
 function HostModifiedModeBadgeComponent(
   props: HostModifiedModeBadgeComponentProps,
 ) {
   function endModifiedMode() {
+    if (!props.topLayer || !props.roomUsers || !props.socket) return;
+    sendModifiedModeMessage(
+      'modified-mode-end',
+      props.roomUsers,
+      props.topLayer,
+      props.socket,
+    );
     props.setIsModifiedMode(false);
   }
 

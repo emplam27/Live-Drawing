@@ -17,7 +17,7 @@ function MyLayerComponent(props: MyLayerComponentProps) {
           roomInfo={props.roomInfo}
           socket={props.socket}
           canvasId={props.roomInfo.userId}
-          hidden={props.displayHidden}
+          displayHidden={props.displayHidden}
         />
       ) : (
         <div className='flex flex-col justify-center h-full'>

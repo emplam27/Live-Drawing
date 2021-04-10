@@ -6,6 +6,7 @@ export interface HostModifiedModeBadgeComponentProps {
   layers: Layer[];
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
+  socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;

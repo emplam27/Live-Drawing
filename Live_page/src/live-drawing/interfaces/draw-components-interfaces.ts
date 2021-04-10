@@ -1,6 +1,7 @@
 import { RoomUsers, RoomInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
+  copyModifiedCanvasSignal: number | null;
   isLectureStarted: boolean;
   isLiveClosed: boolean;
   isModifiedMode: boolean;
@@ -10,6 +11,9 @@ export interface DrawComponentProps {
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
   topLayer: Layer | null;
+  setCopyModifiedCanvasSignal: React.Dispatch<
+    React.SetStateAction<number | null>
+  >;
   setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;

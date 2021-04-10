@@ -35,6 +35,7 @@ function HostModeComponent(props: HostModeComponentProps) {
               roomInfo={props.roomInfo}
               roomUsers={props.roomUsers}
               topLayer={props.topLayer}
+              socket={props.socket}
               setTopLayer={props.setTopLayer}
               setIsModifiedMode={props.setIsModifiedMode}
               badgeStyle={badgeStyle}
@@ -47,6 +48,7 @@ function HostModeComponent(props: HostModeComponentProps) {
               roomInfo={props.roomInfo}
               roomUsers={props.roomUsers}
               topLayer={props.topLayer}
+              socket={props.socket}
               setTopLayer={props.setTopLayer}
               setIsModifiedMode={props.setIsModifiedMode}
               badgeStyle={badgeStyle}
@@ -91,6 +93,7 @@ function HostModeComponent(props: HostModeComponentProps) {
             lineWidth={props.lineWidth}
             modifiedLayers={props.modifiedLayers}
             roomInfo={props.roomInfo}
+            roomUsers={props.roomUsers}
             socket={props.socket}
             topLayer={props.topLayer}
             displayHidden={!props.isModifiedMode}

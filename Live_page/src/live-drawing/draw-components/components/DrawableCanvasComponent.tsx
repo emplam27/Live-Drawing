@@ -13,7 +13,7 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
     <>
       <canvas
         id={props.canvasId}
-        className={`${props.hidden ? 'hidden' : 'z-10'}`}
+        className={`${props.displayHidden ? 'hidden' : 'z-10'}`}
         width={(window.innerWidth - 60) * 0.5}
         height={window.innerHeight}
         onMouseDown={(e) => mouseDown(e)}

@@ -41,6 +41,18 @@ function DrawComponent(props: DrawComponentProps) {
     props.socket.on('draw-eraser', (message: EraseData) =>
       setEraserSignal(message),
     );
+    props.socket.on('modified-mode-start', () => {
+      console.log(`modified-mode-start 이벤트가 왔음`);
+      props.setIsModifiedMode(true);
+    });
+    props.socket.on('modified-mode-end', () => {
+      console.log(`modified-mode-end 이벤트가 왔음`);
+      props.setIsModifiedMode(false);
+    });
+    props.socket.on('modified-mode-copy-canvas', () => {
+      console.log(`modified-mode-copy-canvas 이벤트가 왔음`);
+      props.setCopyModifiedCanvasSignal(new Date().getTime());
+    });
   }, [props.socket]);
 
   //@ Function: Recieve Pencil Event
@@ -145,7 +157,7 @@ function DrawComponent(props: DrawComponentProps) {
 
   //@ layer가 생성되면, canvasContext를 가지고 있지 않은 layer를 찾아 연결
   useEffect(() => {
-    // 마지막에 추가되는 canvas에 대해서 layers에 ctx 저장하기
+    // User Layer 중 Ctx가 없는 Layer를 찾아 ctx 추가
     const layersLength: number = props.layers.length;
     if (layersLength === 0 || newLayerCtxSignal === null) return;
 
@@ -164,12 +176,12 @@ function DrawComponent(props: DrawComponentProps) {
       );
       if (!ctx) continue;
 
-      // layer와 CanvasCtxTable에 ctx 추가하기
       layer.canvasCtx = ctx;
       tmpCanvasCtxTable[layer.canvasId] = layer.canvasCtx;
     }
     props.setLayers(userlayers);
 
+    // Modified Layer 중 Ctx가 없는 Layer를 찾아 ctx 추가
     const modifiedLayers = [...props.modifiedLayers];
     for (const layer of modifiedLayers) {
       if (layer.canvasCtx) continue;
@@ -184,7 +196,6 @@ function DrawComponent(props: DrawComponentProps) {
       );
       if (!ctx) continue;
 
-      // layer와 CanvasCtxTable에 ctx 추가하기
       layer.canvasCtx = ctx;
       tmpCanvasCtxTable[layer.canvasId] = layer.canvasCtx;
     }
@@ -243,6 +254,7 @@ function DrawComponent(props: DrawComponentProps) {
           activeTool={activeTool}
           canvasCtxTable={canvasCtxTable}
           color={color}
+          copyModifiedCanvasSignal={props.copyModifiedCanvasSignal}
           cursorWidth={cursorWidth}
           eraserWidth={eraserWidth}
           isLectureStarted={props.isLectureStarted}
@@ -256,6 +268,7 @@ function DrawComponent(props: DrawComponentProps) {
           topLayer={props.topLayer}
           setActiveTool={setActiveTool}
           setColor={setColor}
+          setCopyModifiedCanvasSignal={props.setCopyModifiedCanvasSignal}
           setCursorWidth={setCursorWidth}
           setEraserWidth={setEraserWidth}
           setIsLectureStarted={props.setIsLectureStarted}
