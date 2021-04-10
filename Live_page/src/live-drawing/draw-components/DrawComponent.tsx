@@ -48,15 +48,18 @@ function DrawComponent(props: DrawComponentProps) {
     props.socket.on('setStart', (message: StartData) =>
       setStartSignal(message),
     );
-    props.socket.on('modified-mode-start', () => {
+    props.socket.on('modified-mode-start', (message: any) => {
+      if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-start 이벤트가 왔음`);
       props.setIsModifiedMode(true);
     });
-    props.socket.on('modified-mode-end', () => {
+    props.socket.on('modified-mode-end', (message: any) => {
+      if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-end 이벤트가 왔음`);
       props.setIsModifiedMode(false);
     });
-    props.socket.on('modified-mode-copy-canvas', () => {
+    props.socket.on('modified-mode-copy-canvas', (message: any) => {
+      if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-copy-canvas 이벤트가 왔음`);
       props.setCopyModifiedCanvasSignal(new Date().getTime());
     });

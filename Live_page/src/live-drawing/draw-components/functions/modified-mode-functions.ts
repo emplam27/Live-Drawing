@@ -8,9 +8,13 @@ export function copyImageToModifiedCanvas(
   topLayer: Layer,
   canvasCtxTable: CanvasCtxTable,
 ) {
+  console.log(topLayer);
+  console.log(canvasCtxTable);
+
   const userCanvas: HTMLElement | null = document.getElementById(
     topLayer.canvasId,
   );
+  console.log(userCanvas);
   if (!userCanvas) return;
   const modifiedCanvasCtx: CanvasRenderingContext2D | null =
     canvasCtxTable[`modified-${topLayer.canvasId}`];
@@ -37,8 +41,8 @@ export function sendModifiedModeMessage(
   );
   if (!targetUser) return;
   const message: any = {
-    socketId: targetUser.socketId,
+    userId: targetUser.userId,
   };
-  console.log(`${message.socketId}에게 ${event} 이벤트 발생`);
+  console.log(`${message.userId}에게 ${event} 이벤트 발생`);
   socket.emit(event, message);
 }
