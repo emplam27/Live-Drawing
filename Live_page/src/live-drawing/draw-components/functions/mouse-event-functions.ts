@@ -9,6 +9,7 @@ import { RoomInfo } from '../../interfaces/socket-interfaces';
 
 let lastPoint: Point | null;
 let count = 0;
+let touches = [];
 
 export function mouseDown(e: any, canvasCtxTable: CanvasCtxTable): void {
   if (!canvasCtxTable) return;
@@ -22,6 +23,100 @@ export function mouseDown(e: any, canvasCtxTable: CanvasCtxTable): void {
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
   targetCanvasCtx.beginPath();
   targetCanvasCtx.moveTo(lastPoint.x, lastPoint.y);
+}
+
+export function touchStart(e: any, canvasCtxTable: CanvasCtxTable): void {
+  if (!canvasCtxTable) return;
+  touches = e.changedTouches;
+  const touchesLength = touches.length;
+  lastPoint = {
+    x: e.touches[touchesLength - 1].clientX,
+    y: e.touches[touchesLength - 1].clientY,
+    c: e.target.id,
+  };
+  count = 0;
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  targetCanvasCtx.beginPath();
+  targetCanvasCtx.moveTo(lastPoint.x, lastPoint.y);
+}
+
+export function touchMove(
+  e: any,
+  activeTool: string,
+  color: string,
+  lineWidth: number,
+  eraserWidth: number,
+  canvasCtxTable: CanvasCtxTable,
+  socket: SocketIOClient.Socket | null,
+  roomInfo: RoomInfo,
+): void {
+  if (!canvasCtxTable || !socket) return;
+  touches = e.changedTouches;
+  const touchesLength = touches.length;
+  // if (!e.buttons) {
+  //   lastPoint = null;
+  //   return;
+  // }
+
+  if (!lastPoint) {
+    lastPoint = {
+      x: e.touches[touchesLength - 1].clientX,
+      y: e.touches[touchesLength - 1].clientY,
+      c: e.target.id,
+    };
+    return;
+  }
+
+  // 호스트가 아니면 다른 레이어에 접근 금지
+  if (
+    roomInfo.roomHostId !== roomInfo.userId &&
+    e.target.id !== roomInfo.userId
+  )
+    return;
+
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (!targetCanvasId || !targetCanvasCtx) return;
+
+  const currentPoint: Point = {
+    x: e.touches[touchesLength - 1].clientX,
+    y: e.touches[touchesLength - 1].clientY,
+    c: e.target.id,
+  };
+  if (lastPoint.c !== currentPoint.c) return;
+  switch (activeTool) {
+    case 'pencil':
+      const drawData: DrawData = {
+        event: 'pencil',
+        canvasId: targetCanvasId,
+        currentPoint: currentPoint,
+        color: color,
+        count: count,
+        lastPoint: lastPoint,
+        lineWidth: lineWidth,
+      };
+      draw(drawData, targetCanvasCtx);
+      socket.emit('draw-pencil', drawData);
+      count++;
+      break;
+
+    case 'eraser':
+      const eraserData: EraseData = {
+        event: 'eraser',
+        canvasId: targetCanvasId,
+        currentPoint: currentPoint,
+        r: eraserWidth,
+      };
+      erase(eraserData, targetCanvasCtx);
+      socket.emit('draw-eraser', eraserData);
+      break;
+  }
+  lastPoint = {
+    x: e.touches[touchesLength - 1].clientX,
+    y: e.touches[touchesLength - 1].clientY,
+    c: e.target.id,
+  };
 }
 
 export function mouseMove(
@@ -102,6 +197,14 @@ export function mouseMove(
 }
 
 export function mouseUp(e: any, canvasCtxTable: CanvasCtxTable): void {
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (lastPoint) targetCanvasCtx.lineTo(lastPoint.x, lastPoint.y);
+  targetCanvasCtx.closePath();
+  lastPoint = null;
+}
+
+export function touchEnd(e: any, canvasCtxTable: CanvasCtxTable): void {
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
   if (lastPoint) targetCanvasCtx.lineTo(lastPoint.x, lastPoint.y);

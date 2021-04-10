@@ -27,7 +27,8 @@ export function draw(
   );
   canvasCtx.strokeStyle = data.color;
   canvasCtx.lineWidth = data.lineWidth;
-  if (data.count % 3 === 0) canvasCtx.stroke();
+  // if (data.count % 3 === 0)
+  canvasCtx.stroke();
 }
 
 export function erase(
