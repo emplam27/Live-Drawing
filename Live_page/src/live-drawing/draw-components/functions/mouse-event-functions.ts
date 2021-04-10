@@ -14,6 +14,7 @@ let touches = [];
 export function setStart(ctx: CanvasRenderingContext2D, point: Point) {
   ctx.beginPath();
   ctx.moveTo(point.x, point.y);
+  lastPoint = point;
 }
 
 export function mouseDown(
