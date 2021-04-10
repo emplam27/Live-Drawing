@@ -29,7 +29,7 @@ function ChatComponent(props: ChatComponentProps) {
         </div>
       )}
       <div
-        className={`absolute flex flex-col bottom-0 left-20 w-1/4 h-2/3 shadow-md z-40 
+        className={`absolute flex flex-col bottom-0 left-20 w-1/4 h-2/3 shadow-md z-50 
       ${isChatOpened ? null : 'hidden'}`}
       >
         <ChatScreenComponent roomInfo={props.roomInfo} socket={props.socket} />

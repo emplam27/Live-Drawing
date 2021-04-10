@@ -25,6 +25,7 @@ function GuestModeComponent(props: GuestModeComponentProps) {
           {!props.isLectureStarted ? (
             <LectureStartComponent
               roomInfo={props.roomInfo}
+              socket={props.socket}
               setIsLectureStarted={props.setIsLectureStarted}
             />
           ) : null}
