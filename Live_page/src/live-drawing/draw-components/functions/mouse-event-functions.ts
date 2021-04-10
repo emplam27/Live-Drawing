@@ -96,7 +96,7 @@ export function mouseMove(
   };
 }
 
-export function mouseUp(canvasCtxTable: CanvasCtxTable): void {
+export function mouseUp(e: any, canvasCtxTable: CanvasCtxTable): void {
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
   if (lastPoint) targetCanvasCtx.lineTo(lastPoint.x, lastPoint.y);
