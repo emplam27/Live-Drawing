@@ -12,13 +12,9 @@ export function copyImageToModifiedCanvasForHostMode(
   topLayer: Layer,
   canvasCtxTable: CanvasCtxTable,
 ) {
-  console.log(topLayer);
-  console.log(canvasCtxTable);
-
   const userCanvas: HTMLElement | null = document.getElementById(
     topLayer.canvasId,
   );
-  console.log(userCanvas);
   if (!userCanvas) return;
   const modifiedCanvasCtx: CanvasRenderingContext2D | null =
     canvasCtxTable[`modified-${topLayer.canvasId}`];

@@ -151,7 +151,7 @@ function LiveDrawingComponent() {
           setRoomUsers(message);
         });
 
-        socketIo.on('live-closed', () => {
+        socketIo.on('lecture-close', () => {
           Swal.fire({
             title: '라이브가 종료되었습니다.',
             text: '홈 화면으로 이동합니다.',

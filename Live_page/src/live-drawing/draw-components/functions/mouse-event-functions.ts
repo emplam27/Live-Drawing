@@ -37,7 +37,7 @@ export function mouseDown(
 
 export function touchStart(e: any, canvasCtxTable: CanvasCtxTable): void {
   if (!canvasCtxTable) return;
-  console.log(e.touches[0].x, e.touches[0].y);
+  console.log(e.touches[0]);
   lastPoint = {
     x: e.touches[0].clientX,
     y: e.touches[0].clientY,
@@ -61,7 +61,7 @@ export function touchMove(
   socket: SocketIOClient.Socket | null,
 ): void {
   if (!canvasCtxTable || !socket) return;
-  console.log(e.touches[0].x, e.touches[0].y);
+  console.log(e.touches[0]);
 
   // if (!e.buttons) {
   //   lastPoint = null;

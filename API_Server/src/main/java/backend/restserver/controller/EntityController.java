@@ -211,9 +211,14 @@ public class EntityController {
         userRepo.save(user);
 
         List<Room> newRoom = roomRepo.findByRoomId(roomId);
+        if(!newRoom.isEmpty()) {
+            return;
+        }
         Long roomPk = newRoom.get(0).getRoomPk();
 
+
         List<User> newUserList = userRepo.findByRoom_RoomPk(roomPk);
+
 
         logger.info("현재 방에 존재하는 사람의 수 : " + newUserList.size());
         if ( newUserList.size() == 0) {

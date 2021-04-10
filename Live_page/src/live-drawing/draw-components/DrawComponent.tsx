@@ -45,7 +45,7 @@ function DrawComponent(props: DrawComponentProps) {
     props.socket.on('draw-eraser', (message: EraseData) =>
       setEraserSignal(message),
     );
-    props.socket.on('setStart', (message: StartData) =>
+    props.socket.on('draw-start', (message: StartData) =>
       setStartSignal(message),
     );
     props.socket.on('modified-mode-start', (message: any) => {
@@ -72,6 +72,26 @@ function DrawComponent(props: DrawComponentProps) {
       canvasCtxTable[startSignal.canvasId];
     setStart(canvasCtx, startSignal.point);
   }, [startSignal]);
+
+  //!
+  useEffect(() => {
+    document.body.addEventListener('touchstart', (e) => {
+      props.roomUsers?.users.forEach((user) => {
+        if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
+      });
+    });
+    document.body.addEventListener('touchmove', (e) => {
+      props.roomUsers?.users.forEach((user) => {
+        if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
+      });
+    });
+    document.body.addEventListener('touchend', (e) => {
+      props.roomUsers?.users.forEach((user) => {
+        if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
+      });
+    });
+  }, [props.roomUsers]);
+  //!
 
   //@ Function: Recieve Pencil Event
   useEffect(() => {
