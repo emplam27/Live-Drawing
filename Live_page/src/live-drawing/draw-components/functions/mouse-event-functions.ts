@@ -61,12 +61,6 @@ export function touchMove(
   socket: SocketIOClient.Socket | null,
 ): void {
   if (!canvasCtxTable || !socket) return;
-  console.log(e.touches[0]);
-
-  // if (!e.buttons) {
-  //   lastPoint = null;
-  //   return;
-  // }
 
   if (!lastPoint) {
     lastPoint = {
@@ -76,13 +70,6 @@ export function touchMove(
     };
     return;
   }
-
-  // 호스트가 아니면 다른 레이어에 접근 금지
-  if (
-    roomInfo.roomHostId !== roomInfo.userId &&
-    e.target.id !== roomInfo.userId
-  )
-    return;
 
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
@@ -153,13 +140,6 @@ export function mouseMove(
     };
     return;
   }
-
-  // 호스트가 아니면 다른 레이어에 접근 금지
-  // if (
-  //   roomInfo.roomHostId !== roomInfo.userId &&
-  //   e.target.id !== roomInfo.userId
-  // )
-  //   return;
 
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];

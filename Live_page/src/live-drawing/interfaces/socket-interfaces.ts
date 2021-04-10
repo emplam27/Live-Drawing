@@ -1,9 +1,9 @@
 export interface RoomInfo {
-  roomTitle: string | null;
-  roomId: string | null;
   username: string | null;
   userId: string | null;
   userImage: string | null;
+  roomId: string | null;
+  roomTitle: string | null;
   roomHostId: string | null;
 }
 

@@ -40,70 +40,57 @@ function LiveDrawingComponent() {
   const [isLectureStarted, setIsLectureStarted] = useState<boolean>(false);
 
   //@ Dummy Data
-  // const dummyUsersProfileInfo: UserProfileInfo[] = [
-  //   {
-  //     userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
-  //     userImage:
-  //       'https://lh3.googleusercontent.com/a-/AOh14Ggzk1sZlAeI4hnd0bZyYd7yS1Nqq04glqSQlywLpg=s96-c',
-  //     username: '김용욱',
-  //   },
-  //   {
-  //     userId: '73dd814c-8026-459b-a2ed-4863ddb79750',
-  //     userImage:
-  //       'https://lh6.googleusercontent.com/-h-I_zB0DmFk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnE3WNy2c7s-MYKHpFFSQgdcAifNg/s96-c/photo.jpg',
-  //     username: '김유석',
-  //   },
-  //   {
-  //     userId: 'b02fcfc9-c8d2-4900-8b8b-a7e2b3fa342c',
-  //     userImage:
-  //       'https://lh5.googleusercontent.com/-0XZwgDcb5yU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnyQd6S3wBQrFAPoAVUkdUO3q6nMA/s96-c/photo.jpg',
-  //     username: 'M K',
-  //   },
-  //   {
-  //     userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
-  //     userImage:
-  //       'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
-  //     username: '김형우',
-  //   },
-  // ];
+  const dummyRoomInfo = {
+    username: '김형우',
+    userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
+    userImage:
+      'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
+    roomId: roomId,
+    roomHostId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+    roomTitle: '12312421',
+  };
 
-  // const dummyRoomInfo = {
-  //   roomId: roomId,
-  //   roomHostId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
-  //   roomTitle: '12312421',
-  //   userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
-  //   username: '김형우',
-  // };
-
-  // const dummyRoomUsers: RoomUsers = {
-  //   roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
-  //   users: [
-  //     {
-  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
-  //       socketId: null,
-  //       username: '김용욱',
-  //       userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
-  //     },
-  //     {
-  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
-  //       socketId: null,
-  //       username: '김유석',
-  //       userId: '73dd814c-8026-459b-a2ed-4863ddb79750',
-  //     },
-  //     {
-  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
-  //       socketId: null,
-  //       username: 'M K',
-  //       userId: 'b02fcfc9-c8d2-4900-8b8b-a7e2b3fa342c',
-  //     },
-  //     {
-  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
-  //       socketId: null,
-  //       username: '김형우',
-  //       userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
-  //     },
-  //   ],
-  // };
+  const dummyRoomUsers: RoomUsers = {
+    roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+    users: [
+      {
+        username: '김용욱',
+        userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
+        userImage:
+          'https://lh3.googleusercontent.com/a-/AOh14Ggzk1sZlAeI4hnd0bZyYd7yS1Nqq04glqSQlywLpg=s96-c',
+        roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+        roomTitle: '12312421',
+        socketId: null,
+      },
+      {
+        username: '김유석',
+        userId: '73dd814c-8026-459b-a2ed-4863ddb79750',
+        userImage:
+          'https://lh6.googleusercontent.com/-h-I_zB0DmFk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnE3WNy2c7s-MYKHpFFSQgdcAifNg/s96-c/photo.jpg',
+        roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+        roomTitle: '12312421',
+        socketId: null,
+      },
+      {
+        username: 'M K',
+        userId: 'b02fcfc9-c8d2-4900-8b8b-a7e2b3fa342c',
+        userImage:
+          'https://lh5.googleusercontent.com/-0XZwgDcb5yU/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnyQd6S3wBQrFAPoAVUkdUO3q6nMA/s96-c/photo.jpg',
+        roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+        roomTitle: '12312421',
+        socketId: null,
+      },
+      {
+        username: '김형우',
+        userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+        userImage:
+          'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
+        roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+        roomTitle: '12312421',
+        socketId: null,
+      },
+    ],
+  };
 
   const MySwal = withReactContent(Swal);
   const headers = {
