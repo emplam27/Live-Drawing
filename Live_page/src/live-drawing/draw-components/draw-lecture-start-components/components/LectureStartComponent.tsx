@@ -4,8 +4,10 @@ import { LectureStartComponentProps } from '../interfaces/lecture-start-interfac
 
 function LectureStartComponent(props: LectureStartComponentProps) {
   function lectureStart() {
+    if (!props.socket) return;
     console.log('class started');
     props.setIsLectureStarted(true);
+    props.socket.emit('lecture-start');
   }
 
   return (
