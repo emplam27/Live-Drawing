@@ -9,7 +9,6 @@ import { RoomInfo } from '../../interfaces/socket-interfaces';
 
 let lastPoint: Point | null;
 let count = 0;
-let touches = [];
 
 export function setStart(ctx: CanvasRenderingContext2D, point: Point) {
   ctx.beginPath();
@@ -37,11 +36,9 @@ export function mouseDown(
 
 export function touchStart(e: any, canvasCtxTable: CanvasCtxTable): void {
   if (!canvasCtxTable) return;
-  touches = e.changedTouches;
-  const touchesLength = touches.length;
   lastPoint = {
-    x: e.touches[touchesLength - 1].clientX,
-    y: e.touches[touchesLength - 1].clientY,
+    x: e.changedTouches[0].clientX,
+    y: e.changedTouches[0].clientY,
     c: e.target.id,
   };
   count = 0;
@@ -62,8 +59,6 @@ export function touchMove(
   roomInfo: RoomInfo,
 ): void {
   if (!canvasCtxTable || !socket) return;
-  touches = e.changedTouches;
-  const touchesLength = touches.length;
   // if (!e.buttons) {
   //   lastPoint = null;
   //   return;
@@ -71,8 +66,8 @@ export function touchMove(
 
   if (!lastPoint) {
     lastPoint = {
-      x: e.touches[touchesLength - 1].clientX,
-      y: e.touches[touchesLength - 1].clientY,
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
       c: e.target.id,
     };
     return;
@@ -90,8 +85,8 @@ export function touchMove(
   if (!targetCanvasId || !targetCanvasCtx) return;
 
   const currentPoint: Point = {
-    x: e.touches[touchesLength - 1].clientX,
-    y: e.touches[touchesLength - 1].clientY,
+    x: e.changedTouches[0].clientX,
+    y: e.changedTouches[0].clientY,
     c: e.target.id,
   };
   if (lastPoint.c !== currentPoint.c) return;
@@ -123,8 +118,8 @@ export function touchMove(
       break;
   }
   lastPoint = {
-    x: e.touches[touchesLength - 1].clientX,
-    y: e.touches[touchesLength - 1].clientY,
+    x: e.changedTouches[0].clientX,
+    y: e.changedTouches[0].clientY,
     c: e.target.id,
   };
 }

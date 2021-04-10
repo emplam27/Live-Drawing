@@ -14,11 +14,9 @@ function CursorComponent(props: CursorComponentProps) {
   };
 
   const onTouchMove = (e: TouchEvent): void => {
-    const touches = e.changedTouches;
-    const touchesLength = touches.length;
     setPosition({
-      x: touches[touchesLength - 1].clientX,
-      y: touches[touchesLength - 1].clientY,
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
     });
   };
 
