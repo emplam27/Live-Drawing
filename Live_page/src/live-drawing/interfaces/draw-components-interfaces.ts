@@ -28,6 +28,11 @@ export interface DrawData {
   lineWidth: number;
 }
 
+export interface StartData {
+  point: Point;
+  canvasId: string;
+}
+
 export interface EraseData {
   event: string;
   canvasId: string;

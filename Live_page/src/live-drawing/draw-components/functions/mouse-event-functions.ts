@@ -11,8 +11,17 @@ let lastPoint: Point | null;
 let count = 0;
 let touches = [];
 
-export function mouseDown(e: any, canvasCtxTable: CanvasCtxTable): void {
-  if (!canvasCtxTable) return;
+export function setStart(ctx: CanvasRenderingContext2D, point: Point) {
+  ctx.beginPath();
+  ctx.moveTo(point.x, point.y);
+}
+
+export function mouseDown(
+  e: any,
+  canvasCtxTable: CanvasCtxTable,
+  socket: SocketIOClient.Socket | null,
+): void {
+  if (!canvasCtxTable || !socket) return;
   lastPoint = {
     x: e.nativeEvent.offsetX,
     y: e.nativeEvent.offsetY,
@@ -21,8 +30,8 @@ export function mouseDown(e: any, canvasCtxTable: CanvasCtxTable): void {
   count = 0;
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
-  targetCanvasCtx.beginPath();
-  targetCanvasCtx.moveTo(lastPoint.x, lastPoint.y);
+  setStart(targetCanvasCtx, lastPoint);
+  socket.emit('draw-start', { point: lastPoint, canvasId: targetCanvasId });
 }
 
 export function touchStart(e: any, canvasCtxTable: CanvasCtxTable): void {
