@@ -15,6 +15,7 @@
     "@types/socket.io-client": "^1.4.36",
     "agora-access-token": "^2.0.4",
     "agora-rtc-sdk-ng": "^4.3.0",
+    "agora-rtm-sdk": "^1.4.2",
     "axios": "^0.21.1",
     "ejs": "^3.1.6",
     "express": "^4.17.1",

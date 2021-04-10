@@ -5,20 +5,27 @@ import AgoraRTC, {
   ILocalAudioTrack,
   UID,
 } from 'agora-rtc-sdk-ng';
-// import { VoiceToolComponentProps } from './interfaces/voice-component-props-interface';
+import axios from 'axios';
+// import { VoicetProps } from './interfaces/voice-component-props-interfaces';
+import {
+  VoiceUIDTable,
+  VoiceChatComponentProps,
+} from './interfaces/voice-components-interfaces';
 
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
-
 // AgoraRTC.disableLogUpload();
 AgoraRTC.setLogLevel(4);
 
-function VoiceChatComponent() {
+function VoiceChatComponent(props: VoiceChatComponentProps) {
+  const [voiceUIDTable, setVoiceUIDTable] = useState<VoiceUIDTable>({});
   const [speaker, setSpeaker] = useState<boolean | null>(null);
   const [mic, setMic] = useState<boolean | null>(null);
   const [toggleSpeakerSignal, setToggleSpeakerSignal] = useState<
     boolean | null
   >(null);
   const [toggleMicSignal, setToggleMicSignal] = useState<boolean | null>(null);
+
+  const [uidSignal, setUidSignal] = useState<boolean | null>(null);
 
   const [
     localAudioTrack,
@@ -33,16 +40,50 @@ function VoiceChatComponent() {
       mode: 'rtc',
     }),
   );
+
   const [uid, setUid] = useState<UID | number>(0);
+
+  useEffect(() => {
+    console.log('props.socket', props.socket);
+    if (props.socket)
+      props.socket.on('send-agora-id', () => {
+        console.log('socket');
+      });
+  }, [props.socket]);
+
+  useEffect(() => {
+    if (uidSignal === true) {
+      console.log('======== uid : ', uid, props.socket);
+    }
+  }, [uidSignal]);
 
   useEffect(() => {
     if (!localAudioTrack || !client) return;
     client.publish([localAudioTrack]);
+    client.enableAudioVolumeIndicator();
+    // client.on('user-joined', async (user) => {
+    //   console.log('---------', user);
+    // });
+    // client.on('volume-indicator', (volumes) => {
+    //   volumes.forEach((volume, index) => {
+    //     console.log(
+    //       `${index} UID ${volume.uid} Level ${volume.level} `,
+    //       // props.roomInfo.userId
+    //     );
+    //   });
+    // });
+
+    // // rtmClient.on('')
+
+    // client.on('user-left', async (user) => {f
+    //   console.log('left person', user.uid);
+    // });
+
     client.on('user-published', async (user, mediaType) => {
-      // console.log('**********', user, mediaType);
+      // console.log('**********', user, mediaType, props);
+
       if (user && mediaType === 'audio') {
         await client.subscribe(user, mediaType);
-        // console.log('!!!!!!!클라이언트의 리모트 유저스다!!!!!!!!!!');
         setNewUserSignal(new Date().getTime());
       }
     });
@@ -63,7 +104,6 @@ function VoiceChatComponent() {
       client.remoteUsers.forEach((user) => {
         user.audioTrack?.setVolume(0);
       });
-
       setSpeaker(false);
     } else if (toggleSpeakerSignal === true) {
       client.remoteUsers.forEach((user) => {
@@ -92,11 +132,6 @@ function VoiceChatComponent() {
       if (speaker === false) remoteUser.audioTrack?.setVolume(0);
     });
     if (mic === false) client.unpublish([localAudioTrack]);
-    // console.log('친구들', client.remoteUsers);
-    // console.log('내 스피커 상황', speaker);
-    // console.log('내 마이크 상황', mic);
-    // console.log('토글 스피커 시그널', toggleSpeakerSignal);
-    // console.log('토글 마이크 시그널', toggleMicSignal);
   }, [newUserSignal]);
 
   useEffect(() => {
@@ -126,7 +161,9 @@ function VoiceChatComponent() {
       setSpeaker(false);
       setToggleMicSignal(false);
       setMic(false);
+      setUidSignal(true);
     }
+
     startBasicCall();
   }, []);
 

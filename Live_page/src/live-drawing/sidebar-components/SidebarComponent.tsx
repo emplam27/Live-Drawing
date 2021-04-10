@@ -33,7 +33,7 @@ function SidebarComponent(props: SidebarComponentProps) {
       <button onClick={changeModifiedMode}>첨삭모드전환</button>
       <button onClick={startLecture}>강의시작</button>
       <div className='flex-grow'></div>
-      <VoiceChatComponent />
+      <VoiceChatComponent roomInfo={props.roomInfo} socket={props.socket} />
       <ChatComponent roomInfo={props.roomInfo} socket={props.socket} />
       <ClearCanvasComponent layers={props.layers} roomInfo={props.roomInfo} />
       <div className='flex-grow'></div>
