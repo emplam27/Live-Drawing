@@ -37,8 +37,8 @@ export function mouseDown(
 export function touchStart(e: any, canvasCtxTable: CanvasCtxTable): void {
   if (!canvasCtxTable) return;
   lastPoint = {
-    x: e.changedTouches[0].clientX,
-    y: e.changedTouches[0].clientY,
+    x: e.touches[0].clientX,
+    y: e.touches[0].clientY,
     c: e.target.id,
   };
   count = 0;
@@ -66,8 +66,8 @@ export function touchMove(
 
   if (!lastPoint) {
     lastPoint = {
-      x: e.changedTouches[0].clientX,
-      y: e.changedTouches[0].clientY,
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
       c: e.target.id,
     };
     return;
@@ -85,8 +85,8 @@ export function touchMove(
   if (!targetCanvasId || !targetCanvasCtx) return;
 
   const currentPoint: Point = {
-    x: e.changedTouches[0].clientX,
-    y: e.changedTouches[0].clientY,
+    x: e.touches[0].clientX,
+    y: e.touches[0].clientY,
     c: e.target.id,
   };
   if (lastPoint.c !== currentPoint.c) return;
@@ -118,8 +118,8 @@ export function touchMove(
       break;
   }
   lastPoint = {
-    x: e.changedTouches[0].clientX,
-    y: e.changedTouches[0].clientY,
+    x: e.touches[0].clientX,
+    y: e.touches[0].clientY,
     c: e.target.id,
   };
 }
