@@ -120,34 +120,43 @@ io.on("connection", (socket) => {
   });
 
   //@ Modified Mode Events
-  socket.on("modified-mode-start", (message) => {
+  socket.on("modified-mode-start", () => {
     console.log("modified-mode-start");
     const user = getUser(socket.id);
     if (!user) return;
     console.log("modified-mode-start");
-    socket.broadcast.to(user.roomId).emit("modified-mode-start", message);
-  });
-  socket.on("modified-mode-end", (message) => {
-    console.log("modified-mode-end");
-    const user = getUser(socket.id);
-    if (!user) return;
-    console.log("modified-mode-end");
-    socket.broadcast.to(user.roomId).emit("modified-mode-end", message);
-  });
-  socket.on("modified-mode-copy-canvas", (message) => {
-    console.log("modified-mode-copy-canvas");
-    const user = getUser(socket.id);
-    if (!user) return;
-    console.log("modified-mode-copy-canvas");
-    socket.broadcast.to(user.roomId).emit("modified-mode-copy-canvas", message);
+    socket.broadcast.to(user.roomId).emit("modified-mode-start");
   });
 
-  //@ Live Close Event
-  socket.on("live-closed", () => {
-    console.log("live-closed");
+  socket.on("modified-mode-end", () => {
+    console.log("modified-mode-end");
     const user = getUser(socket.id);
     if (!user) return;
-    socket.broadcast.to(user.roomId).emit("live-closed");
+    console.log("modified-mode-end");
+    socket.broadcast.to(user.roomId).emit("modified-mode-end");
+  });
+
+  socket.on("modified-mode-copy-canvas", () => {
+    console.log("modified-mode-copy-canvas");
+    const user = getUser(socket.id);
+    if (!user) return;
+    console.log("modified-mode-copy-canvas");
+    socket.broadcast.to(user.roomId).emit("modified-mode-copy-canvas");
+  });
+
+  //@ Lecture Start & Close Event
+  socket.on("lecture-start", () => {
+    console.log("lecture-start");
+    const user = getUser(socket.id);
+    if (!user) return;
+    socket.broadcast.to(user.roomId).emit("lecture-start");
+  });
+
+  socket.on("lecture-close", () => {
+    console.log("lecture-close");
+    const user = getUser(socket.id);
+    if (!user) return;
+    socket.broadcast.to(user.roomId).emit("lecture-close");
   });
 
   socket.on("disconnect", () => {

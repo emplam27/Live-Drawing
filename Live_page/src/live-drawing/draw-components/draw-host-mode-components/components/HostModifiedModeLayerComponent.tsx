@@ -7,7 +7,7 @@ import { Layer } from '../../../interfaces/draw-components-interfaces';
 
 import {
   sendModifiedModeMessage,
-  copyImageToModifiedCanvas,
+  copyImageToModifiedCanvasForHostMode,
 } from '../../functions/modified-mode-functions';
 
 import Swal from 'sweetalert2';
@@ -51,7 +51,10 @@ function HostModifiedModeLayerComponent(
         );
 
         //@ Copy Modified Canvas
-        copyImageToModifiedCanvas(props.topLayer, props.canvasCtxTable);
+        copyImageToModifiedCanvasForHostMode(
+          props.topLayer,
+          props.canvasCtxTable,
+        );
       }
     });
   }

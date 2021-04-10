@@ -5,15 +5,15 @@ import DrawableCanvasComponent from '../../components/DrawableCanvasComponent';
 
 import { GuestModifiedModeLayerComponentProps } from '../interfaces/guest-modified-mode-layer-interfaces';
 
-import { copyImageToModifiedCanvas } from '../../functions/modified-mode-functions';
+import { copyImageToModifiedCanvasForGuestMode } from '../../functions/modified-mode-functions';
 
 function GuestModifiedModeLayerComponent(
   props: GuestModifiedModeLayerComponentProps,
 ) {
   //@ Copy Modified Canvas
   useEffect(() => {
-    if (!props.copyModifiedCanvasSignal || !props.topLayer) return;
-    copyImageToModifiedCanvas(props.topLayer, props.canvasCtxTable);
+    if (!props.copyModifiedCanvasSignal || !props.roomInfo) return;
+    copyImageToModifiedCanvasForGuestMode(props.roomInfo, props.canvasCtxTable);
   }, [props.copyModifiedCanvasSignal]);
 
   return (

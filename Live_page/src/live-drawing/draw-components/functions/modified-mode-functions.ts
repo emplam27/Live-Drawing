@@ -2,9 +2,13 @@ import {
   CanvasCtxTable,
   Layer,
 } from '../../interfaces/draw-components-interfaces';
-import { RoomUsers, UserInfo } from '../../interfaces/socket-interfaces';
+import {
+  RoomInfo,
+  RoomUsers,
+  UserInfo,
+} from '../../interfaces/socket-interfaces';
 
-export function copyImageToModifiedCanvas(
+export function copyImageToModifiedCanvasForHostMode(
   topLayer: Layer,
   canvasCtxTable: CanvasCtxTable,
 ) {
@@ -18,6 +22,27 @@ export function copyImageToModifiedCanvas(
   if (!userCanvas) return;
   const modifiedCanvasCtx: CanvasRenderingContext2D | null =
     canvasCtxTable[`modified-${topLayer.canvasId}`];
+  if (!modifiedCanvasCtx) return;
+  modifiedCanvasCtx.clearRect(
+    0,
+    0,
+    (window.innerWidth - 60) * 0.5,
+    window.innerHeight,
+  );
+  modifiedCanvasCtx.drawImage(userCanvas as HTMLCanvasElement, 0, 0);
+}
+
+export function copyImageToModifiedCanvasForGuestMode(
+  roomInfo: RoomInfo,
+  canvasCtxTable: CanvasCtxTable,
+) {
+  if (!roomInfo.userId) return;
+  const userCanvas: HTMLElement | null = document.getElementById(
+    roomInfo.userId,
+  );
+  if (!userCanvas) return;
+  const modifiedCanvasCtx: CanvasRenderingContext2D | null =
+    canvasCtxTable[`modified-${roomInfo.userId}`];
   if (!modifiedCanvasCtx) return;
   modifiedCanvasCtx.clearRect(
     0,
