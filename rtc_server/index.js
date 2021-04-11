@@ -6,7 +6,14 @@ const bluebird = require('bluebird')
 const cors = require('cors')
 const socket = require('socket.io')
 const axios = require('axios')
-const { addUser, removeUser, getUsersInRoom, getUser } = require('./src/users')
+const {
+  addUser,
+  removeUser,
+  getUsersInRoom,
+  getUser,
+  addUID,
+  getUserId,
+} = require('./src/users')
 const defaultDict = require('./src/default-dict')
 const historyData = defaultDict()
 
@@ -74,6 +81,21 @@ io.on('connection', socket => {
           break
       }
     }
+  })
+
+  socket.on('volume-message', (uid, volume, roomId) => {
+    // console.log(uid, volume, roomId)
+    const userId = getUserId(uid)
+    io.to(roomId).emit('volume-uid-userId', userId, volume)
+  })
+
+  socket.on('send-agora-id', (uid, targetUserId, roomId) => {
+    console.log('send-agora-id')
+    addUID(uid, targetUserId)
+    io.to(roomId).emit('update-room-users', {
+      roomId: roomId,
+      users: getUsersInRoom(roomId),
+    })
   })
 
   //@ Chat Event
