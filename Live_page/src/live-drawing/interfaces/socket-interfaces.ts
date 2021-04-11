@@ -18,6 +18,7 @@ export interface UserInfo {
   roomId: string;
   roomTitle: string;
   socketId: SocketIOClient.Socket | null;
+  agoraId: string | null;
 }
 
 export interface RoomUsers {

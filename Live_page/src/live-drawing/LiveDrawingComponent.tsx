@@ -61,6 +61,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
       {
         username: '김유석',
@@ -70,6 +71,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
       {
         username: 'M K',
@@ -79,6 +81,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
       {
         username: '김형우',
@@ -88,6 +91,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
     ],
   };
@@ -100,80 +104,119 @@ function LiveDrawingComponent() {
 
   useEffect(() => {
     // setRoomUsers(dummyRoomUsers);
-    // setRoomInfo(dummyRoomInfo);
-    axios
-      .get(`${process.env.REACT_APP_API_URL}/live/${roomId}`, {
-        params: { userId: roomInfo.userId },
-        headers: headers,
-      })
-      .then((res) => {
-        setRoomInfo({ ...roomInfo, ...res.data });
+    setRoomInfo(dummyRoomInfo);
 
-        const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
-          transports: ['websocket'],
-        });
+    const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
+      transports: ['websocket'],
+    });
 
-        socketIo.emit('join', {
-          username: res.data.username,
-          // username: roomInfo.username,
-          userId: roomInfo.userId,
-          userImage: res.data.userImage,
-          roomId: roomId,
-          roomTitle: res.data.roomTitle,
-          // roomTitle: roomInfo.roomTitle,
-          token: localStorage.getItem('token'),
-        });
+    socketIo.emit('join', dummyRoomInfo);
 
-        socketIo.on('error', (message: { error: string }) => {
-          MySwal.fire({
-            title: <p>{`${message.error}`}</p>,
-            text: '홈으로 돌아갑니다.',
-          }).then(
-            () =>
-              (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-          );
-        });
-
-        socketIo.on('update-room-users', (message: RoomUsers) => {
-          setRoomUsers(message);
-        });
-
-        socketIo.on('lecture-close', () => {
-          Swal.fire({
-            title: '라이브가 종료되었습니다.',
-            text: '홈 화면으로 이동합니다.',
-            icon: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: '  이동',
-            allowOutsideClick: false,
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
-            }
-          });
-        });
-
-        socketIo.on('connect', () => {
-          setSocket(socketIo);
-        });
-      })
-      .catch(() =>
-        MySwal.fire({
-          title: <p>{'오류가 발생했습니다.'}</p>,
-          text: '홈으로 돌아갑니다.',
-        }).then(
-          () =>
-            (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
-        ),
-      );
-    window.addEventListener('beforeunload', (e: Event) => {
-      e.preventDefault();
-      axios.post(
-        `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
-        { userId: roomInfo.userId },
-        { headers: headers },
+    socketIo.on('error', (message: { error: string }) => {
+      MySwal.fire({
+        title: <p>{`${message.error}`}</p>,
+        text: '홈으로 돌아갑니다.',
+      }).then(
+        () => (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
       );
     });
+
+    socketIo.on('update-room-users', (message: RoomUsers) => {
+      setRoomUsers(message);
+    });
+
+    socketIo.on('lecture-close', () => {
+      Swal.fire({
+        title: '라이브가 종료되었습니다.',
+        text: '홈 화면으로 이동합니다.',
+        icon: 'warning',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: '  이동',
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
+        }
+      });
+    });
+
+    socketIo.on('connect', () => {
+      setSocket(socketIo);
+    });
+
+    // axios
+    //   .get(`${process.env.REACT_APP_API_URL}/live/${roomId}`, {
+    //     params: { userId: roomInfo.userId },
+    //     headers: headers,
+    //   })
+    //   .then((res) => {
+    //     setRoomInfo({ ...roomInfo, ...res.data });
+
+    //     const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
+    //       transports: ['websocket'],
+    //     });
+
+    //     socketIo.emit('join', {
+    //       username: res.data.username,
+    //       // username: roomInfo.username,
+    //       userId: roomInfo.userId,
+    //       userImage: res.data.userImage,
+    //       roomId: roomId,
+    //       roomTitle: res.data.roomTitle,
+    //       // roomTitle: roomInfo.roomTitle,
+    //       token: localStorage.getItem('token'),
+    //     });
+
+    //     socketIo.on('error', (message: { error: string }) => {
+    //       MySwal.fire({
+    //         title: <p>{`${message.error}`}</p>,
+    //         text: '홈으로 돌아갑니다.',
+    //       }).then(
+    //         () =>
+    //           (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
+    //       );
+    //     });
+
+    //     socketIo.on('update-room-users', (message: RoomUsers) => {
+    //       setRoomUsers(message);
+    //     });
+
+    //     socketIo.on('lecture-close', () => {
+    //       Swal.fire({
+    //         title: '라이브가 종료되었습니다.',
+    //         text: '홈 화면으로 이동합니다.',
+    //         icon: 'warning',
+    //         confirmButtonColor: '#3085d6',
+    //         confirmButtonText: '  이동',
+    //         allowOutsideClick: false,
+    //       }).then((result) => {
+    //         if (result.isConfirmed) {
+    //           window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
+    //         }
+    //       });
+    //     });
+
+    //     socketIo.on('connect', () => {
+    //       setSocket(socketIo);
+    //     });
+    //   });
+    // // .catch(() =>
+    // //   MySwal.fire({
+    // //     title: <p>{'오류가 발생했습니다.'}</p>,
+    // //     text: '홈으로 돌아갑니다.',
+    // //   }).then(
+    // //     () =>
+    // //       (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
+    // //   ),
+    // // );
+    // window.addEventListener('beforeunload', (e: Event) => {
+    //   e.preventDefault();
+    //   axios.post(
+    //     `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
+    //     { userId: roomInfo.userId },
+    //     { headers: headers },
+    //   );
+    // });
   }, []);
   return (
     <>

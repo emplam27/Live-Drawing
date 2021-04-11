@@ -5,21 +5,24 @@ import AgoraRTC, {
   ILocalAudioTrack,
   UID,
 } from 'agora-rtc-sdk-ng';
-// import { VoiceToolComponentProps } from './interfaces/voice-component-props-interface';
+import { VoiceChatComponentProps } from './interfaces/voice-chat-interface';
+import { Socket } from 'socket.io-client';
+import { RoomUsers } from '../interfaces/socket-interfaces';
 
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
 
 // AgoraRTC.disableLogUpload();
 AgoraRTC.setLogLevel(4);
 
-function VoiceChatComponent() {
+function VoiceChatComponent(props: VoiceChatComponentProps) {
   const [speaker, setSpeaker] = useState<boolean | null>(null);
   const [mic, setMic] = useState<boolean | null>(null);
   const [toggleSpeakerSignal, setToggleSpeakerSignal] = useState<
     boolean | null
   >(null);
   const [toggleMicSignal, setToggleMicSignal] = useState<boolean | null>(null);
-
+  const [uid, setUid] = useState<UID | number>(0);
+  const [uidSignal, setUidSignal] = useState<boolean | null>(null);
   const [
     localAudioTrack,
     setLocalAudiotrack,
@@ -33,16 +36,37 @@ function VoiceChatComponent() {
       mode: 'rtc',
     }),
   );
-  const [uid, setUid] = useState<UID | number>(0);
+
+  useEffect(() => {
+    if (uidSignal === true) {
+      if (props.socket) {
+        props.socket.emit('send-agora-id', uid, props.roomInfo.userId, roomId);
+      }
+    }
+  }, [uidSignal]);
 
   useEffect(() => {
     if (!localAudioTrack || !client) return;
     client.publish([localAudioTrack]);
+    client.enableAudioVolumeIndicator();
+    client.on('volume-indicator', (volumes) => {
+      volumes.forEach((volume, index) => {
+        console.log(`${index} UID ${volume.uid} Level ${volume.level}`);
+        // console.log(props.roomUsers);
+        // 볼륨이 일정 수준 이상이라면
+        if (volume.level >= 7) {
+          if (!props.roomUsers) return;
+          const user = props.roomUsers.users.find(
+            (user) => user.agoraId === volume.uid,
+          );
+          if (!user) return;
+          const speakerUserId = user['userId'];
+        }
+      });
+    });
     client.on('user-published', async (user, mediaType) => {
-      // console.log('**********', user, mediaType);
       if (user && mediaType === 'audio') {
         await client.subscribe(user, mediaType);
-        // console.log('!!!!!!!클라이언트의 리모트 유저스다!!!!!!!!!!');
         setNewUserSignal(new Date().getTime());
       }
     });
@@ -126,6 +150,7 @@ function VoiceChatComponent() {
       setSpeaker(false);
       setToggleMicSignal(false);
       setMic(false);
+      setUidSignal(true);
     }
     startBasicCall();
   }, []);
