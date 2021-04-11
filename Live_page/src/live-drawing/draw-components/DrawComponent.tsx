@@ -18,6 +18,7 @@ import {
 } from '../interfaces/draw-components-interfaces';
 import { UserInfo } from '../interfaces/socket-interfaces';
 import { drawEnd, drawStart } from './functions/mouse-event-functions';
+import { HostCursorComponent } from './draw-cursor-components/components/HostCursorComponent';
 
 function DrawComponent(props: DrawComponentProps) {
   //@ Drawing's States
@@ -27,6 +28,7 @@ function DrawComponent(props: DrawComponentProps) {
   const [eraserWidth, setEraserWidth] = useState(30);
   const [lineWidth, setLineWidth] = useState(5);
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
+  const [cursorPoint, setCursorPoint] = useState<Point | null>(null);
 
   //@ Connection's States
   const [pencilSignal, setPencilSignal] = useState<DrawData | null>(null);
@@ -74,6 +76,11 @@ function DrawComponent(props: DrawComponentProps) {
   useEffect(() => {
     if (startSignal === null) return;
     drawStart(canvasCtxTable, startSignal.canvasId, startSignal.point);
+    if (
+      startSignal.canvasId === props.roomInfo.roomHostId ||
+      startSignal.canvasId === props.roomInfo.userId
+    )
+      setCursorPoint(startSignal.point);
   }, [startSignal]);
 
   //@ Function: Recieve End Event
@@ -85,6 +92,11 @@ function DrawComponent(props: DrawComponentProps) {
       endSignal.point,
       endSignal.isMoved,
     );
+    if (
+      endSignal.canvasId === props.roomInfo.roomHostId ||
+      endSignal.canvasId === props.roomInfo.userId
+    )
+      setCursorPoint(null);
   }, [endSignal]);
 
   //!
@@ -114,6 +126,11 @@ function DrawComponent(props: DrawComponentProps) {
       canvasCtxTable[pencilSignal.canvasId];
     if (!canvasCtx) return;
     draw(pencilSignal, canvasCtx);
+    if (
+      pencilSignal.canvasId === props.roomInfo.roomHostId ||
+      pencilSignal.canvasId === props.roomInfo.userId
+    )
+      setCursorPoint(pencilSignal.currentPoint);
   }, [pencilSignal]);
 
   //@ Function: Recieve Eraser Event
@@ -123,6 +140,11 @@ function DrawComponent(props: DrawComponentProps) {
       canvasCtxTable[eraserSignal.canvasId];
     if (!canvasCtx) return;
     erase(eraserSignal, canvasCtx);
+    if (
+      eraserSignal.canvasId === props.roomInfo.roomHostId ||
+      eraserSignal.canvasId === props.roomInfo.userId
+    )
+      setCursorPoint(eraserSignal.currentPoint);
   }, [eraserSignal]);
 
   //@ roomData가 업데이트 될 때마다 layers를 재구성, layer 추가&삭제 역할수행
@@ -262,6 +284,7 @@ function DrawComponent(props: DrawComponentProps) {
   return (
     <>
       <CursorComponent cursorWidth={cursorWidth} />
+      <HostCursorComponent point={cursorPoint} />
       <ToolbarComponent
         activeTool={activeTool}
         color={color}
