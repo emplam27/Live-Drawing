@@ -5,6 +5,7 @@ function ChatScreenComponent(props: ChatComponentProps) {
   const [screen, setScreen] = useState<MessageForm[]>([]);
   const [container, setContainer] = useState<MessageForm[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (props.socket)
       props.socket.on('chat-message', (message: MessageForm) => {

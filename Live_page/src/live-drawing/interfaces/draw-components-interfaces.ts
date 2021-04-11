@@ -48,7 +48,7 @@ export interface EraseData {
 }
 
 export interface EndData {
-  ctx: CanvasRenderingContext2D;
+  canvasId: string;
   point: Point;
   isMoved: boolean;
 }

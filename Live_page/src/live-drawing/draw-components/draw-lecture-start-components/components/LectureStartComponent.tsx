@@ -28,7 +28,7 @@ function LectureStartComponent(props: LectureStartComponentProps) {
             </p>
             <p className='pb-5 text-3xl'>
               <span className='text-blue-400 font-bold'> 음성, 채팅 </span>
-              기능을 사용하시면 좋습니다
+              기능을 사용하시면 좋습니다.
             </p>
           </div>
           <div className='mt-52 mb-20'>
