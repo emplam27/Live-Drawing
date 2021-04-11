@@ -23,6 +23,7 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
   const [toggleMicSignal, setToggleMicSignal] = useState<boolean | null>(null);
   const [uid, setUid] = useState<UID | number>(0);
   const [uidSignal, setUidSignal] = useState<boolean | null>(null);
+
   const [
     localAudioTrack,
     setLocalAudiotrack,
@@ -30,6 +31,8 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
 
   const { roomId } = useParams<{ roomId: string }>();
   const [newUserSignal, setNewUserSignal] = useState<number | null>(null);
+  const [speakUserSiganl, setSpeakUserSignal] = useState<number | null>(null);
+
   const [client, setClient] = useState<IAgoraRTCClient | null>(
     AgoraRTC.createClient({
       codec: 'vp8',
@@ -50,19 +53,40 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
     client.publish([localAudioTrack]);
     client.enableAudioVolumeIndicator();
     client.on('volume-indicator', (volumes) => {
+      const makeSoundUsers: any = [];
       volumes.forEach((volume, index) => {
-        console.log(`${index} UID ${volume.uid} Level ${volume.level}`);
-        // console.log(props.roomUsers);
         // 볼륨이 일정 수준 이상이라면
-        if (volume.level >= 7) {
-          if (!props.roomUsers) return;
-          const user = props.roomUsers.users.find(
-            (user) => user.agoraId === volume.uid,
-          );
-          if (!user) return;
-          const speakerUserId = user['userId'];
+        // console.log(`${index} UID ${volume.uid} Level ${volume.level}`);
+        if (volume.level >= 1) {
+          makeSoundUsers.push(volume.uid);
         }
+        // speakUsers.push([volume.uid]);
+        // // console.log('말하는 사람', speakerUserId);
+        // // console.log('loud');
+        // if (!props.roomUsers) return;
+        // console.log(props.roomUsers);
+        // // props.roomUsers.users.forEach((user) =>
+        // //   console.log('for each', user.roomId, user.agoraId),
+        // // );
+        // console.log('출력 : ', props.roomUsers.users[0].ag, volume.uid);
+        // const user = props.roomUsers.users.find(
+        //   (user) => user.agoraId === volume.uid,
+        // );
+        // console.log('user', user);
+        // if (!user) {
+        //   console.log('user not present');
+        //   return;
+        // }
+        // console.log('user present');
+        // // const speakerUserId = user['userId'];
+        // // speakUsers[...speakUsers, {volume.uid}]
+        // // props.setSpeakingUsers([...,])
+        // // }
+        // console.log(speakUsers);
       });
+      // console.log('push 잘됨? ', makeSoundUsers);
+      props.setSpeakingUsers(makeSoundUsers);
+      // setSpeakUserSignal(new Date().getTime());
     });
     client.on('user-published', async (user, mediaType) => {
       if (user && mediaType === 'audio') {
@@ -116,12 +140,11 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       if (speaker === false) remoteUser.audioTrack?.setVolume(0);
     });
     if (mic === false) client.unpublish([localAudioTrack]);
-    // console.log('친구들', client.remoteUsers);
-    // console.log('내 스피커 상황', speaker);
-    // console.log('내 마이크 상황', mic);
-    // console.log('토글 스피커 시그널', toggleSpeakerSignal);
-    // console.log('토글 마이크 시그널', toggleMicSignal);
   }, [newUserSignal]);
+
+  // userEffect(() => {
+  //   props.setSpeakingUsers();
+  // }, [speakUserSiganl]);
 
   useEffect(() => {
     const appID = `${process.env.REACT_APP_AGORA_APP_ID}`;

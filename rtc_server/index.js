@@ -40,7 +40,7 @@ io.on('connection', socket => {
       roomId: message.roomId,
       roomTitle: message.roomTitle,
       token: message.token,
-      agoraID: null,
+      agoraId: null,
     })
     console.log('server', user)
     if (user.error) {

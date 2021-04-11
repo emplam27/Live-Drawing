@@ -12,13 +12,13 @@ export interface ResponseData {
 }
 
 export interface UserInfo {
+  agoraId: number | null;
   username: string;
   userId: string;
   userImage: string;
   roomId: string;
   roomTitle: string;
   socketId: SocketIOClient.Socket | null;
-  agoraId: string | null;
 }
 
 export interface RoomUsers {

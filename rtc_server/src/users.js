@@ -49,10 +49,8 @@ const getUser = socketId => {
 const getUsersInRoom = roomId => users.filter(user => user.roomId === roomId)
 
 const addUID = (uid, targetUserId) => {
-  const index = users.findIndex(user => user.userId === targetUserId)
-  users[index]['agoraId'] = uid
-  // const roomUsers = users.fileter(user=>user.roomId === roomId)
-  // return roomUsers
+  const user = users.find(user => user.userId === targetUserId)
+  user.agoraId = uid
 }
 
 const getUserId = uid => {

@@ -104,7 +104,7 @@ function LiveDrawingComponent() {
 
   useEffect(() => {
     // setRoomUsers(dummyRoomUsers);
-    setRoomInfo(dummyRoomInfo);
+    // setRoomInfo(dummyRoomInfo);
 
     const socketIo = io(`${process.env.REACT_APP_RTC_URL}`, {
       transports: ['websocket'],
@@ -123,6 +123,7 @@ function LiveDrawingComponent() {
 
     socketIo.on('update-room-users', (message: RoomUsers) => {
       setRoomUsers(message);
+      console.log('update-room-users', message);
     });
 
     socketIo.on('lecture-close', () => {
