@@ -10,13 +10,14 @@ import {
   CanvasCtxTable,
   DrawComponentProps,
   DrawData,
+  EndData,
   EraseData,
   Layer,
   Point,
   StartData,
 } from '../interfaces/draw-components-interfaces';
 import { UserInfo } from '../interfaces/socket-interfaces';
-import { setStart } from './functions/mouse-event-functions';
+import { drawEnd, drawStart } from './functions/mouse-event-functions';
 
 function DrawComponent(props: DrawComponentProps) {
   //@ Drawing's States
@@ -31,6 +32,7 @@ function DrawComponent(props: DrawComponentProps) {
   const [pencilSignal, setPencilSignal] = useState<DrawData | null>(null);
   const [eraserSignal, setEraserSignal] = useState<EraseData | null>(null);
   const [startSignal, setStartSignal] = useState<StartData | null>(null);
+  const [endSignal, setEndSignal] = useState<EndData | null>(null);
   const [newLayerCtxSignal, setNewLayerCtxSignal] = useState<number | null>(
     null,
   );
@@ -48,6 +50,9 @@ function DrawComponent(props: DrawComponentProps) {
     props.socket.on('draw-start', (message: StartData) =>
       setStartSignal(message),
     );
+    props.socket.on('draw-end', (message: EndData) => {
+      setEndSignal(message);
+    });
     props.socket.on('modified-mode-start', (message: any) => {
       if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-start 이벤트가 왔음`);
@@ -70,8 +75,14 @@ function DrawComponent(props: DrawComponentProps) {
     if (startSignal === null) return;
     const canvasCtx: CanvasRenderingContext2D =
       canvasCtxTable[startSignal.canvasId];
-    setStart(canvasCtx, startSignal.point);
+    drawStart(canvasCtx, startSignal.point);
   }, [startSignal]);
+
+  //@ Function: Recieve End Event
+  useEffect(() => {
+    if (endSignal === null) return;
+    drawEnd(endSignal.ctx, endSignal.point, endSignal.isMoved);
+  }, [endSignal]);
 
   //!
   useEffect(() => {
