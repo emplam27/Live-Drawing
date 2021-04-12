@@ -7,12 +7,10 @@ function GuestCompareModeLayerComponent(
   props: GuestCompareModeLayerComponentProps,
 ) {
   return (
-    <div className={`${props.displayHidden ? 'hidden' : ''}`}>
-      <UndrawableCanvasComponent
-        canvasId={`compare-${props.roomInfo.userId}`}
-        displayHidden={false}
-      />
-    </div>
+    <UndrawableCanvasComponent
+      canvasId={`compare-${props.roomInfo.userId}`}
+      displayHidden={props.displayHidden}
+    />
   );
 }
 

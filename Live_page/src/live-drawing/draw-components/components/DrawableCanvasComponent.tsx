@@ -15,7 +15,7 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
     <canvas
       id={props.canvasId}
       className={props.displayHidden ? 'hidden' : ''}
-      width={window.innerWidth * 0.5}
+      width={(window.innerWidth - 60) * 0.5}
       height={window.innerHeight}
       onMouseDown={(e) => mouseDown(e, props.canvasCtxTable, props.socket)}
       onTouchStart={(e) => touchStart(e, props.canvasCtxTable, props.socket)}

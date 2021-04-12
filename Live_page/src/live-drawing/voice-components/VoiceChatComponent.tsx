@@ -6,8 +6,6 @@ import AgoraRTC, {
   UID,
 } from 'agora-rtc-sdk-ng';
 import { VoiceChatComponentProps } from './interfaces/voice-chat-interface';
-import { Socket } from 'socket.io-client';
-import { RoomUsers } from '../interfaces/socket-interfaces';
 
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
 
@@ -31,9 +29,8 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
 
   const { roomId } = useParams<{ roomId: string }>();
   const [newUserSignal, setNewUserSignal] = useState<number | null>(null);
-  const [speakUserSiganl, setSpeakUserSignal] = useState<number | null>(null);
 
-  const [client, setClient] = useState<IAgoraRTCClient | null>(
+  const [client] = useState<IAgoraRTCClient | null>(
     AgoraRTC.createClient({
       codec: 'vp8',
       mode: 'rtc',
@@ -54,35 +51,12 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
     client.enableAudioVolumeIndicator();
     client.on('volume-indicator', (volumes) => {
       const makeSoundUsers: any = [];
-      volumes.forEach((volume, index) => {
+      volumes.forEach((volume) => {
         // 볼륨이 일정 수준 이상이라면
         // console.log(`${index} UID ${volume.uid} Level ${volume.level}`);
-        if (volume.level >= 1) {
+        if (volume.level >= 2) {
           makeSoundUsers.push(volume.uid);
         }
-        // speakUsers.push([volume.uid]);
-        // // console.log('말하는 사람', speakerUserId);
-        // // console.log('loud');
-        // if (!props.roomUsers) return;
-        // console.log(props.roomUsers);
-        // // props.roomUsers.users.forEach((user) =>
-        // //   console.log('for each', user.roomId, user.agoraId),
-        // // );
-        // console.log('출력 : ', props.roomUsers.users[0].ag, volume.uid);
-        // const user = props.roomUsers.users.find(
-        //   (user) => user.agoraId === volume.uid,
-        // );
-        // console.log('user', user);
-        // if (!user) {
-        //   console.log('user not present');
-        //   return;
-        // }
-        // console.log('user present');
-        // // const speakerUserId = user['userId'];
-        // // speakUsers[...speakUsers, {volume.uid}]
-        // // props.setSpeakingUsers([...,])
-        // // }
-        // console.log(speakUsers);
       });
       // console.log('push 잘됨? ', makeSoundUsers);
       props.setSpeakingUsers(makeSoundUsers);

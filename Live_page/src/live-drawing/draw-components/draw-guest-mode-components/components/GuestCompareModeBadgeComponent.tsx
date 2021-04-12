@@ -14,14 +14,18 @@ function GuestCompareModeBadgeComponent(
 
   return (
     <div
-      className={`${props.badgeStyle} ${props.displayHidden ? 'hidden' : ''}`}
+      className={`relative flex flex-col items-center
+      ${props.displayHidden ? 'hidden' : ''}
+    `}
     >
-      <div className={'flex items-end px-8'}>
-        <span className={'text-2xl'}>내 그림</span>
-      </div>
-      <div className={props.buttonStyle} onClick={changeCompareMode}>
-        <span className={'font-bold'}>첨삭본과 비교하기&nbsp;</span>
-        <i className='ri-arrow-go-back-line'></i>
+      <div className={props.badgeStyle}>
+        <div className={'flex items-end px-8'}>
+          <span className={'text-2xl'}>내 그림</span>
+        </div>
+        <div className={props.buttonStyle} onClick={changeCompareMode}>
+          <span className={'font-bold'}>첨삭본과 비교하기&nbsp;</span>
+          <i className='ri-arrow-go-back-line'></i>
+        </div>
       </div>
     </div>
   );
