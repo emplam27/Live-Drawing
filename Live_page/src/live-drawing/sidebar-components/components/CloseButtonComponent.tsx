@@ -1,11 +1,15 @@
 import React from 'react';
 import { CloseButtonComponentProps } from '../interfaces/close-button-interfaces';
-import Swal from 'sweetalert2';
+
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 function CloseButtonComponent(props: CloseButtonComponentProps) {
+  const MySwal = withReactContent(Swal);
+
   function closeLive() {
-    Swal.fire({
+    MySwal.fire({
       title: '라이브를 종료하시겠습니까?',
       text: '저장하지 않은 그림은 사라집니다.',
       icon: 'warning',
@@ -32,7 +36,7 @@ function CloseButtonComponent(props: CloseButtonComponentProps) {
   }
 
   function exitLive() {
-    Swal.fire({
+    MySwal.fire({
       title: '라이브에서 나가시겠습니까?',
       text: '홈화면으로 이동합니다.',
       icon: 'warning',

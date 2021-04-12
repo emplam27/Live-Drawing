@@ -1,7 +1,11 @@
 import { RoomInfo, RoomUsers } from '../../../interfaces/socket-interfaces';
-import { Layer } from '../../../interfaces/draw-components-interfaces';
+import {
+  CanvasCtxTable,
+  Layer,
+} from '../../../interfaces/draw-components-interfaces';
 
-export interface HostModifiedModeBadgeComponentProps {
+export interface HostCopyImageButtonComponentProps {
+  canvasCtxTable: CanvasCtxTable;
   isModifiedMode: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;
@@ -10,7 +14,6 @@ export interface HostModifiedModeBadgeComponentProps {
   topLayer: Layer | null;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
-  badgeContainerStyle: string;
   badgeStyle: string;
   buttonStyle: string;
   displayHidden: boolean;

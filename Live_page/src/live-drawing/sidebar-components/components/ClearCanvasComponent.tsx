@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { ClearCanvasComponentProps } from '../interfaces/clear-canvas-interfaces';
 
 function ClearCanvasComponent(props: ClearCanvasComponentProps) {

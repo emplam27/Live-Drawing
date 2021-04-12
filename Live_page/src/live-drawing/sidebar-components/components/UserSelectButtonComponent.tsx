@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { UserSelectButtonComponentProps } from '../interfaces/user-select-button-interfaces';
 import { UserInfo } from '../../interfaces/socket-interfaces';
@@ -55,10 +56,10 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
                       ? 'ring-2 ring-white shadow-lg'
                       : ''
                   }`}
-                  src={`${user.userImage}`}
-                  alt={`${user.username}`}
+                  src={user.userImage}
+                  alt={user.username}
                 />
-                <p className={'w-full truncate px-2'}>{`${user?.username}`}</p>
+                <p className={'w-full truncate px-2'}>{user?.username}</p>
               </div>
             );
         })}

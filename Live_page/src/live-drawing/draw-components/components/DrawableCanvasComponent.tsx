@@ -8,7 +8,6 @@ import {
   touchMove,
   touchEnd,
 } from '../functions/mouse-event-functions';
-
 import { DrawableCanvasComponentProps } from '../interfaces/drawable-canvas-component';
 
 function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
@@ -16,7 +15,7 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
     <>
       <canvas
         id={props.canvasId}
-        className={`${props.displayHidden ? 'hidden' : 'z-10'}`}
+        className={props.displayHidden ? 'hidden' : ''}
         width={(window.innerWidth - 60) * 0.5}
         height={window.innerHeight}
         onMouseDown={(e) => mouseDown(e, props.canvasCtxTable, props.socket)}

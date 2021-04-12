@@ -6,8 +6,9 @@ import MyLayerComponent from './MyLayerComponent';
 import GuestLectureModeBadgeComponent from '../draw-guest-mode-components/components/GuestLectureModeBadgeComponent';
 import GuestModifiedModeBadgeComponent from '../draw-guest-mode-components/components/GuestModifiedModeBadgeComponent';
 import GuestModifiedModeLayerComponent from '../draw-guest-mode-components/components/GuestModifiedModeLayerComponent';
-
+import GuestCompareModeBadgeComponent from '../draw-guest-mode-components/components/GuestCompareModeBadgeComponent';
 import { GuestModeComponentProps } from '../interfaces/guest-mode-interfaces';
+import GuestCompareModeLayerComponent from '../draw-guest-mode-components/components/GuestCompareModeLayerComponent';
 
 function GuestModeComponent(props: GuestModeComponentProps) {
   const badgeStyle =
@@ -31,21 +32,21 @@ function GuestModeComponent(props: GuestModeComponentProps) {
           ) : null}
           <div className={'relative flex flex-col items-center'}>
             <GuestLectureModeBadgeComponent
-              badgeStyle={badgeStyle}
-              buttonStyle={buttonStyle}
               layers={props.layers}
               roomInfo={props.roomInfo}
               topLayer={props.topLayer}
               setTopLayer={props.setTopLayer}
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
               displayHidden={props.isModifiedMode}
             />
             <GuestModifiedModeBadgeComponent
-              badgeStyle={badgeStyle}
-              buttonStyle={buttonStyle}
               layers={props.layers}
               roomInfo={props.roomInfo}
               topLayer={props.topLayer}
               setTopLayer={props.setTopLayer}
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
               displayHidden={!props.isModifiedMode}
             />
           </div>
@@ -80,6 +81,16 @@ function GuestModeComponent(props: GuestModeComponentProps) {
           />
         </div>
         <div id='drawable-canvas' className='cols-start-2 cols-end-3 relative'>
+          <div className={'relative flex flex-col items-center'}>
+            <GuestCompareModeBadgeComponent
+              isCompareMode={props.isCompareMode}
+              roomInfo={props.roomInfo}
+              setIsCompareMode={props.setIsCompareMode}
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
+              displayHidden={props.isModifiedMode}
+            />
+          </div>
           <MyLayerComponent
             activeTool={props.activeTool}
             canvasCtxTable={props.canvasCtxTable}
@@ -89,7 +100,12 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             lineWidth={props.lineWidth}
             roomInfo={props.roomInfo}
             socket={props.socket}
-            displayHidden={false}
+            displayHidden={props.isCompareMode}
+          />
+          <GuestCompareModeLayerComponent
+            canvasCtxTable={props.canvasCtxTable}
+            roomInfo={props.roomInfo}
+            displayHidden={!props.isCompareMode}
           />
         </div>
       </div>

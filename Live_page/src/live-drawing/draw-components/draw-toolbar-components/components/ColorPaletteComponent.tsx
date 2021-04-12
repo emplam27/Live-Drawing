@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { ColorPaletteComponentProps } from '../interfaces/color-palette-interfaces';
 import '../../DrawComponent.css';
 

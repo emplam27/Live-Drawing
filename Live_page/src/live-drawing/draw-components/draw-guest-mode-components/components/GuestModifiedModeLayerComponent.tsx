@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 
 import DrawableCanvasComponent from '../../components/DrawableCanvasComponent';
 // import UndrawableCanvasComponent from '../../components/UndrawableCanvasComponent';
-
 import { GuestModifiedModeLayerComponentProps } from '../interfaces/guest-modified-mode-layer-interfaces';
-
 import { copyImageToModifiedCanvasForGuestMode } from '../../functions/modified-mode-functions';
 
 function GuestModifiedModeLayerComponent(

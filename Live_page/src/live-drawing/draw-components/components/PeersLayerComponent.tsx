@@ -2,7 +2,6 @@ import React from 'react';
 
 import UndrawableCanvasComponent from './UndrawableCanvasComponent';
 // import DrawableCanvasComponent from './DrawableCanvasComponent';
-
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { PeersLayerComponentProps } from '../interfaces/peers-layer-interfaces';
 

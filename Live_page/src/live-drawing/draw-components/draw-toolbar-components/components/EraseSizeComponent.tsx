@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+
 import { EraseSizeComponentProps } from '../interfaces/erase-size-interfaces';
 
 function EraseSizeComponent(props: EraseSizeComponentProps) {

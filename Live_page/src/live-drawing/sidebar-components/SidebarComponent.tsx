@@ -1,4 +1,5 @@
 import React from 'react';
+
 import UserSelectButtonComponent from './components/UserSelectButtonComponent';
 import CloseButtonComponent from './components/CloseButtonComponent';
 import SaveImageComponent from './components/SaveImageComponent';
