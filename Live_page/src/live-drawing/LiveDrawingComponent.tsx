@@ -63,6 +63,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
       {
         username: '김유석',
@@ -72,6 +73,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
       {
         username: 'M K',
@@ -81,6 +83,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
       {
         username: '김형우',
@@ -90,6 +93,7 @@ function LiveDrawingComponent() {
         roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
         roomTitle: '12312421',
         socketId: null,
+        agoraId: null,
       },
     ],
   };
