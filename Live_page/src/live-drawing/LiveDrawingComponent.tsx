@@ -146,7 +146,7 @@ function LiveDrawingComponent() {
         socketIo.on('lecture-start', () => {
           setIsLectureStarted(true);
           MySwal.fire({
-            title: `${roomInfo.roomTitle}수업이 시작되었습니다`,
+            title: `${res.data.roomTitle}수업이 시작되었습니다`,
             text: '2초 뒤어 수업이 시작됩니다.',
             icon: 'success',
             showConfirmButton: false,

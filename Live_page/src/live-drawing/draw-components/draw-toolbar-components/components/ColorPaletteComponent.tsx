@@ -108,8 +108,8 @@ function ColorPaletteComponent(props: ColorPaletteComponentProps) {
   }
 
   return (
-    <div className='icon-link flex items-center'>
-      <p className='icon-link flex items-center'>
+    <div className='hover:text-blue-500 flex items-center'>
+      <p className='pallete-icon flex items-center'>
         <i className='ri-2x ri-palette-line'></i>
         <i
           className='ri-2x ri-checkbox-blank-fill flex items-center'
