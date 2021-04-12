@@ -46,12 +46,12 @@ function ChatScreenComponent(props: ChatComponentProps) {
             <div
               key={index}
               className={`
-            ${
-              message.user === props.roomInfo.username
-                ? `${messageStyle} ${myMessageStyle}`
-                : `${messageStyle} ${peerMessageStyle}`
-            } 
-            ${message.user === 'admin' ? `${adminMessageStyle}` : null}`}
+              ${
+                message.user === props.roomInfo.username
+                  ? `${messageStyle} ${myMessageStyle}`
+                  : `${messageStyle} ${peerMessageStyle}`
+              } 
+              ${message.user === 'admin' ? `${adminMessageStyle}` : null}`}
             >
               <div className='break-all'>{message.text}</div>
               <div ref={scrollRef} />

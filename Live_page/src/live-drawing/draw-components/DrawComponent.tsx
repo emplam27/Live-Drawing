@@ -13,7 +13,6 @@ import {
   EndData,
   EraseData,
   Layer,
-  Point,
   StartData,
 } from '../interfaces/draw-components-interfaces';
 import { UserInfo } from '../interfaces/socket-interfaces';

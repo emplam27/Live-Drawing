@@ -15,6 +15,7 @@ function HostModifiedModeLayerComponent(
             layer.canvasId !== `modified-${props.topLayer.canvasId}`;
           return (
             <DrawableCanvasComponent
+              key={layer.canvasId}
               activeTool={props.activeTool}
               canvasCtxTable={props.canvasCtxTable}
               color={props.color}

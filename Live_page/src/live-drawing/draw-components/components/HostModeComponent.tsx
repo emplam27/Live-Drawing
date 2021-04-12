@@ -11,7 +11,7 @@ import { HostModeComponentProps } from '../interfaces/host-mode-interfaces';
 
 function HostModeComponent(props: HostModeComponentProps) {
   const badgeContainerStyle =
-    'absolute flex flex-col items-center w-full h-full bg-gray-300 bg-opacity-25 opacity-0 active:bg-gray-500 hover:opacity-100 transition duration-150 ease-in-out';
+    'absolute flex flex-col items-center w-full h-full hover:bg-gray-300 hover:bg-opacity-25 transition duration-150 ease-in-out';
   const badgeStyle =
     'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-20';
   const buttonStyle =
@@ -19,7 +19,10 @@ function HostModeComponent(props: HostModeComponentProps) {
 
   return (
     <div className={props.layerContainerGridStyle}>
-      <div id='undrawable-canvas' className='cols-start-1 cols-end-2 relative'>
+      <div
+        id='undrawable-canvas'
+        className='cols-start-1 cols-end-2 relative flex justify-center overflow-hidden'
+      >
         {!props.isLectureStarted ? (
           <LectureStartComponent
             roomInfo={props.roomInfo}
@@ -71,7 +74,10 @@ function HostModeComponent(props: HostModeComponentProps) {
           displayHidden={false}
         />
       </div>
-      <div id='drawable-canvas' className='cols-start-2 cols-end-3 relative'>
+      <div
+        id='drawable-canvas'
+        className='cols-start-2 cols-end-3 relative flex justify-center overflow-hidden'
+      >
         <HostCopyImageButtonComponent
           canvasCtxTable={props.canvasCtxTable}
           isModifiedMode={props.isModifiedMode}
