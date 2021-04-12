@@ -94,7 +94,7 @@ export function SignInComponent() {
               />
               <input
                 autoComplete='off'
-                type='password'
+                type='text'
                 name='password'
                 onChange={onChangePassword}
                 placeholder='비밀번호..'

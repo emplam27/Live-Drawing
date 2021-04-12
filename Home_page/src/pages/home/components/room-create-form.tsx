@@ -88,38 +88,38 @@ export default function RoomCreateComponent() {
             <h1 className='text-3xl md:text-4xl font-extrabold text-white my-2 md:my-0'>방구석 화방</h1>
             <p className='mb-2 text-white text-xl hidden md:block'>당신도 화가가 될 수 있습니다.</p>
           </div>
-          <div className='w-full h-full md:w-1/2 flex flex-col items-center bg-white py-5 md:py-8 px-4'>
-            <h3 className='mb-6 mt-3 my font-bold text-4xl flex items-center text-blue-400'>방 만들기</h3>
-            <form action='#' className='px-3 flex flex-col justify-center items-center w-full gap-3'>
-              <label className='text-left w-10/12 text-blue-400 font-bold text-xl '>
-                방 제목
+          <div className='w-full h-full md:w-1/2 flex flex-col items-center bg-white py-12 md:py-20 px-4'>
+            <h3 className='my font-bold text-4xl flex items-center text-blue-400'>라이브 강의 만들기</h3>
+            <form action='#' className='px-3 flex flex-col justify-around items-center w-full gap-3 h-full py-1'>
+              <label className='text-left flex-grow w-10/12 text-blue-400 font-bold text-xl mt-8'>
+                강의 제목
                 <input
                   maxLength={50}
                   autoComplete='off'
                   type='text'
                   name='roomTitle'
-                  placeholder='제목을 입력하세요.'
+                  placeholder='필수) 예) 형우의 필통그리기'
                   onChange={changeRoomTitle}
-                  className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+                  className='px-4 py-2 my-3 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
                 />
               </label>
-              <label className='text-left w-10/12 mt-1 text-blue-400 font-bold text-xl '>
-                비밀번호
+              <label className='text-left flex-grow w-10/12 mt-1 text-blue-400 font-bold text-xl '>
+                입력 코드
                 <input
                   maxLength={50}
                   autoComplete='off'
-                  type='password'
+                  type='text'
                   name='roomPassword'
-                  placeholder='비밀번호를 입력하세요.'
+                  placeholder='필수) 학생들이 입장할 때 사용할 코드입니다'
                   onChange={changeRoomPassword}
-                  className='px-4 py-2 mt-1 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
+                  className='px-4 py-2 my-3 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
                 />
               </label>
               <button
                 onClick={onClick}
-                className='w-10/12 h-14 mt-5 p5-20 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
+                className='w-10/12 h-14  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
               >
-                들어갈래요 :)
+                강의 시작
               </button>
             </form>
           </div>

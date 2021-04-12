@@ -44,10 +44,10 @@ export function NavBarComponent() {
     setIsToken(localStorage.getItem('token'));
   }, [userState]);
   return (
-    <div className='header'>
+    <div className='header h-full'>
       {/* // <!-- This example requires Tailwind CSS v2.0+ --> */}
-      <nav className='nav-bottom'>
-        <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8'>
+      <nav className='nav-bottom h-1/12 pt-1'>
+        <div className='max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 '>
           <div className='relative flex items-center justify-between h-nav'>
             <div className='absolute inset-y-0 left-0 flex items-center sm:hidden'>
               {/* <!-- Mobile menu button--> */}
@@ -90,16 +90,16 @@ export function NavBarComponent() {
                 </svg>
               </button>
             </div>
-            <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
-              <div className='flex-shrink-0 flex items-center text-4xl font-bold text-blue-400 pt-6'>
+            <div className='flex flex h-full w-10/12  items-center justify-center sm:items-stretch sm:justify-start'>
+              <div className='h-full flex-shrink-0 flex items-center text-4xl font-bold text-blue-400'>
                 <Link to='/'>
-                  <img src='/logo.png'></img>
+                  <img className='w-44 items-center' src='/logo.png'></img>
                 </Link>
                 {/* <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' /> */}
                 {/* <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' /> */}
               </div>
-              <div className='hidden sm:block sm:ml-6 pt-8 px-1 w-7/12'>
-                <div className='flex '>
+              <div className='hidden sm:block sm:ml-6 self-center px-1 w-7/12 h-full'>
+                <div className='flex flex-row py-4'>
                   <Link
                     to='/room'
                     className='text-gray-400  hover:text-blue-400 px-10 py-2 rounded-md text-lg truncate font-medium '
@@ -109,7 +109,7 @@ export function NavBarComponent() {
                   </Link>
                   <Link
                     to='/feedback'
-                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-lg font-medium'
+                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-lg truncate font-medium'
                   >
                     <div className='truncate'>
                       피드백 남기기 &nbsp;
@@ -119,7 +119,7 @@ export function NavBarComponent() {
                 </div>
               </div>
             </div>
-            <div className='absolute inset-y-0 right-0 pt-6 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+            <div className='absolute inset-y-0 mt-1 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               {isToken ? (
                 <>
                   <div className='mr-5 text-gray-400 font-medium text-lg'>{`${userState.name}`}</div>{' '}
@@ -137,9 +137,9 @@ export function NavBarComponent() {
                   render={(renderProps) => (
                     <button
                       onClick={renderProps.onClick}
-                      className='py-1 px-3 font-semibold  rounded-lg shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
+                      className='my-auto px-3 py-2 h-10 text-lg rounded-lg truncate shadow-md text-white bg-gradient-to-tr from-blue-300 to-blue-400 hover:bg-blue-500'
                     >
-                      로그인
+                      Google 로그인
                     </button>
                   )}
                   onSuccess={responseGoogle}
@@ -195,10 +195,10 @@ export function NavBarComponent() {
           </div>
         </div>
         {/* <!-- Mobile menu, show/hide based on menu state. --> */}
-        <div className='sm:hidden' id='mobile-menu'>
+        {/* {<div className='sm:hidden' id='mobile-menu'>
           <div className='px-2 pt-2 pb-3 space-y-1'>
             {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-            <a
+        {/* <a
               href='#'
               className='bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium'
               aria-current='page'
@@ -224,7 +224,7 @@ export function NavBarComponent() {
               피드백 작성하기
             </a>
           </div>
-        </div>
+        </div>}  */}
       </nav>
     </div>
   );
