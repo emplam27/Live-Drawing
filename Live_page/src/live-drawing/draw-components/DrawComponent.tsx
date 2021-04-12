@@ -73,35 +73,38 @@ function DrawComponent(props: DrawComponentProps) {
   //@ Function: Recieve Start Event
   useEffect(() => {
     if (startSignal === null) return;
-    const canvasCtx: CanvasRenderingContext2D =
-      canvasCtxTable[startSignal.canvasId];
-    drawStart(canvasCtx, startSignal.point);
+    drawStart(canvasCtxTable, startSignal.canvasId, startSignal.point);
   }, [startSignal]);
 
   //@ Function: Recieve End Event
   useEffect(() => {
     if (endSignal === null) return;
-    drawEnd(endSignal.ctx, endSignal.point, endSignal.isMoved);
+    drawEnd(
+      canvasCtxTable,
+      endSignal.canvasId,
+      endSignal.point,
+      endSignal.isMoved,
+    );
   }, [endSignal]);
 
   //!
-  useEffect(() => {
-    document.body.addEventListener('touchstart', (e) => {
-      props.roomUsers?.users.forEach((user) => {
-        if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
-      });
-    });
-    document.body.addEventListener('touchmove', (e) => {
-      props.roomUsers?.users.forEach((user) => {
-        if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
-      });
-    });
-    document.body.addEventListener('touchend', (e) => {
-      props.roomUsers?.users.forEach((user) => {
-        if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
-      });
-    });
-  }, [props.roomUsers]);
+  // useEffect(() => {
+  //   document.body.addEventListener('touchstart', (e) => {
+  //     props.roomUsers?.users.forEach((user) => {
+  //       if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
+  //     });
+  //   });
+  //   document.body.addEventListener('touchmove', (e) => {
+  //     props.roomUsers?.users.forEach((user) => {
+  //       if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
+  //     });
+  //   });
+  //   document.body.addEventListener('touchend', (e) => {
+  //     props.roomUsers?.users.forEach((user) => {
+  //       if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
+  //     });
+  //   });
+  // }, [props.roomUsers]);
   //!
 
   //@ Function: Recieve Pencil Event

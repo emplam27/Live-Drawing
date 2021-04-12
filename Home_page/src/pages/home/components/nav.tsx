@@ -92,7 +92,9 @@ export function NavBarComponent() {
             </div>
             <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
               <div className='flex-shrink-0 flex items-center text-4xl font-bold text-blue-400 pt-6'>
-                <Link to='/'>방구석 화방</Link>
+                <Link to='/'>
+                  <img src='/logo.png'></img>
+                </Link>
                 {/* <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' /> */}
                 {/* <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' /> */}
               </div>
