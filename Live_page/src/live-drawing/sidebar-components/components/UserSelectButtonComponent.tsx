@@ -1,56 +1,64 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { UserSelectButtonComponentProps } from '../interfaces/user-select-button-interfaces';
-import { UserProfileInfo } from '../../interfaces/socket-interfaces';
-
-import '../index.css';
+import { UserInfo } from '../../interfaces/socket-interfaces';
 
 function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
+  const [, updateState] = React.useState<number>(0);
+  const forceUpdate = React.useCallback(
+    () => updateState(new Date().getTime()),
+    [],
+  );
+  const selectTopLayer = (layer: Layer | undefined) => {
+    if (layer) props.setTopLayer(layer);
+  };
+  useEffect(() => {
+    forceUpdate();
+  }, [props.roomUsers]);
   return (
     <>
-      <div className='flex flex-col'>
-        {props.layers.map((layer: Layer) => {
-          const user = props.userProfileInfos.find(
-            (userProfileInfo: UserProfileInfo) =>
-              userProfileInfo.userId === layer.canvasId,
+      <div className={`flex flex-col ${!props.isModifiedMode ? '' : 'hidden'}`}>
+        {props.roomUsers?.users.map((user: UserInfo) => {
+          const userLayer = props.layers.find(
+            (layer) => layer.canvasId === user.userId,
           );
-          if (layer.canvasId !== props.roomInfo.userId)
+          if (user.userId !== props.roomInfo.userId)
             return (
               <div
-                key={layer.canvasId}
-                onClick={() => props.setTopLayer(layer)}
-                className={`flex flex-col items-center 
+                key={user.userId}
+                onClick={() => selectTopLayer(userLayer)}
+                className={`flex flex-col items-center cursor-pointer
                   ${
-                    layer.canvasId === props.roomInfo.roomHostId
-                      ? ' order-first py-6 flex flex-col'
-                      : ' py-6 flex flex-col'
+                    userLayer?.canvasId === props.roomInfo.roomHostId
+                      ? 'order-first py-6 flex flex-col'
+                      : 'py-6 flex flex-col'
                   }
                   ${
-                    layer.canvasId === props.topLayer?.canvasId
-                      ? ' bg-blue-500 text-white '
-                      : ''
+                    userLayer?.canvasId === props.topLayer?.canvasId
+                      ? 'bg-blue-500 text-white shadow-inner '
+                      : 'hover:bg-gray-200'
                   }
                 `}
               >
                 <div
                   className={
-                    layer.canvasId === props.roomInfo.roomHostId
+                    userLayer?.canvasId === props.roomInfo.roomHostId
                       ? ''
-                      : ' hidden'
+                      : 'hidden'
                   }
                 >
                   HOST
                 </div>
                 <img
                   className={`w-12 h-12 rounded-full my-2 ${
-                    layer.canvasId === props.topLayer?.canvasId
-                      ? 'ring-2 ring-white'
+                    userLayer?.canvasId === props.topLayer?.canvasId
+                      ? 'ring-2 ring-white shadow-lg'
                       : ''
                   }`}
-                  src={`${user?.userImage}`}
-                  alt={`${user?.username}`}
+                  src={`${user.userImage}`}
+                  alt={`${user.username}`}
                 />
-                <p>{`${user?.username}`}</p>
+                <p className={'w-full truncate px-2'}>{`${user?.username}`}</p>
               </div>
             );
         })}

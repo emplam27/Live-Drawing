@@ -1,53 +1,33 @@
 import React from 'react';
 
-import ToolbarComponent from './ToolbarComponent';
-import '../index.css';
-
 import { MyLayerComponentProps } from '../interfaces/my-layer-interfaces';
 
-import {
-  mouseDown,
-  mouseMove,
-  mouseUp,
-} from '../functions/mouse-event-functions';
+import DrawableCanvasComponent from './DrawableCanvasComponent';
 
 function MyLayerComponent(props: MyLayerComponentProps) {
-  // if (!props.roomInfo.userId) return <></>;
   return (
     <>
-      <canvas
-        key={props.roomInfo.userId}
-        id={props.roomInfo.userId === null ? undefined : props.roomInfo.userId}
-        className={''}
-        width={(window.innerWidth - 60) * 0.5}
-        height={window.innerHeight}
-        onMouseDown={(e) => mouseDown(e)}
-        onMouseUp={mouseUp}
-        onMouseMove={(e) =>
-          mouseMove(
-            e,
-            props.activeTool,
-            props.color,
-            props.lineWidth,
-            props.eraserWidth,
-            props.canvasCtxTable,
-            props.socket,
-            props.roomInfo,
-          )
-        }
-      />
-      <ToolbarComponent
-        activeTool={props.activeTool}
-        color={props.color}
-        cursorWidth={props.cursorWidth}
-        eraserWidth={props.eraserWidth}
-        lineWidth={props.lineWidth}
-        setActiveTool={props.setActiveTool}
-        setColor={props.setColor}
-        setCursorWidth={props.setCursorWidth}
-        setEraserWidth={props.setEraserWidth}
-        setLineWidth={props.setLineWidth}
-      />
+      {props.roomInfo.userId ? (
+        <DrawableCanvasComponent
+          activeTool={props.activeTool}
+          canvasCtxTable={props.canvasCtxTable}
+          color={props.color}
+          eraserWidth={props.eraserWidth}
+          lineWidth={props.lineWidth}
+          roomInfo={props.roomInfo}
+          socket={props.socket}
+          canvasId={props.roomInfo.userId}
+          displayHidden={props.displayHidden}
+        />
+      ) : (
+        <div className='flex flex-col justify-center h-full'>
+          <p>
+            <i className='ri-loader-4-line text-8xl text-gray-300'></i>
+          </p>
+          <p className='text-xl'>로딩중입니다.</p>
+          <p className='text-xl'>잠시만 기다려주세요.</p>
+        </div>
+      )}
     </>
   );
 }

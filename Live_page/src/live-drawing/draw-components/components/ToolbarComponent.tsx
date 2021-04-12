@@ -1,17 +1,16 @@
 import React from 'react';
-import ColorPaletteComponent from './ColorPaletteComponent';
-import EraseSizeComponent from './EraseSizeComponent';
-import LineSizeComponent from './LineSizeComponent';
-import ToolSelectComponent from './ToolSelectComponent';
+
+import ColorPaletteComponent from '../draw-toolbar-components/components/ColorPaletteComponent';
+import EraseSizeComponent from '../draw-toolbar-components/components/EraseSizeComponent';
+import LineSizeComponent from '../draw-toolbar-components/components/LineSizeComponent';
+import ToolSelectComponent from '../draw-toolbar-components/components/ToolSelectComponent';
 
 import { ToolbarComponentProps } from '../interfaces/toolbar-interfaces';
-import '../index.css';
 
 function ToolbarComponent(props: ToolbarComponentProps) {
   return (
     <>
-      <div className='absolute bottom-0 inset-x-1/2 z-40 w-2/3 h-20 shadow-3xl bg-white transform -translate-x-1/2 flex flex-row'>
-        {/* <AddImageComponent canvas={canvas} /> */}
+      <div className='absolute bottom-0 left-3/4 inset-x-1/2 z-40 w-1/3 h-20 shadow-3xl bg-white transform -translate-x-1/2 flex flex-row'>
         <div className='flex-grow'></div>
         <ToolSelectComponent
           activeTool={props.activeTool}

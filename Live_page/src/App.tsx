@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import LiveDrawing from './live-drawing';
+import LiveDrawingComponent from './live-drawing/LiveDrawingComponent';
 import './App.css';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <div className='App'>
       <main className='flex w-screen h-screen'>
         <Switch>
-          <Route path='/live/:roomId' component={LiveDrawing} />
+          <Route path='/live/:roomId' component={LiveDrawingComponent} />
         </Switch>
       </main>
     </div>

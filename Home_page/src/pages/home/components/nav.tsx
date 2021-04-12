@@ -8,20 +8,17 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import jwt_decode from 'jwt-decode';
 import { DecodedToken } from '../interfaces/decoded-token-interface';
-
 export function NavBarComponent() {
   const [isToken, setIsToken] = useState(localStorage.getItem('token'));
   const userState = useCustomState();
   const userDispatch = useCustomDispatch();
   const history = useHistory();
   const MySwal = withReactContent(Swal);
-
   const config = {
     headers: {
       'Content-Type': 'application/json; charset-utf-8',
     },
   };
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token !== null) {
@@ -29,7 +26,6 @@ export function NavBarComponent() {
       userDispatch({ type: 'SET_ID', name: decodedToken.username, token: token });
     }
   }, []);
-
   const responseGoogle = (res: GoogleLoginResponse | GoogleLoginResponseOffline) => {
     axios.post(`${process.env.REACT_APP_API_URL}/oauth/jwt/google`, JSON.stringify(res), config).then((res) => {
       const decodedToken: DecodedToken = jwt_decode(res.data.Authorization);
@@ -44,7 +40,6 @@ export function NavBarComponent() {
       }
     });
   };
-
   useEffect(() => {
     setIsToken(localStorage.getItem('token'));
   }, [userState]);
@@ -96,51 +91,37 @@ export function NavBarComponent() {
               </button>
             </div>
             <div className='flex-1 flex items-center justify-center sm:items-stretch sm:justify-start'>
-              <div className='flex-shrink-0 flex items-center text-blue-400 text-3xl font-bold'>
+              <div className='flex-shrink-0 flex items-center text-4xl font-bold text-blue-400 pt-6'>
                 <Link to='/'>방구석 화방</Link>
                 {/* <img className='block lg:hidden h-8 w-auto' src='' alt='방구석 화방' /> */}
                 {/* <img className='hidden lg:block h-8 w-auto' src='' alt='방구석 화방' /> */}
               </div>
-              <div className='hidden sm:block sm:ml-6'>
-                <div className='flex space-x-4'>
-                  {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-                  {/* <Link
-                    to='/'
-                    // className='bg-blue-400 text-white px-3 py-2 rounded-md text-md font-medium'
-                    className='text-blue-800 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-md font-medium'
-                    aria-current='page'
-                  >
-                    홈
-                  </Link> */}
-
+              <div className='hidden sm:block sm:ml-6 pt-8 px-1 w-7/12'>
+                <div className='flex '>
                   <Link
                     to='/room'
-                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
+                    className='text-gray-400  hover:text-blue-400 px-10 py-2 rounded-md text-lg truncate font-medium '
                   >
-                    {/* <i className='ri-live-line'></i> */}
-                    라이브강의 시작
+                    라이브강의 만들기 &nbsp;
+                    <i className='ri-artboard-line'></i>
                   </Link>
-
-                  {/* <Link
-                    to='#'
-                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
-                  >
-                    준비중
-                  </Link> */}
-
                   <Link
                     to='/feedback'
-                    className='text-gray-400 hover:text-blue-400 hover:text-white px-3 py-2 rounded-md text-md font-bold'
+                    className='text-gray-400 hover:text-blue-400 px-1 py-2 rounded-md text-lg font-medium'
                   >
-                    피드백 남기기
+                    <div className='truncate'>
+                      피드백 남기기 &nbsp;
+                      <i className='ri-chat-smile-2-line'></i>
+                    </div>
                   </Link>
                 </div>
               </div>
             </div>
-            <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+            <div className='absolute inset-y-0 right-0 pt-6 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               {isToken ? (
                 <>
-                  <div className='mr-5'>{`${userState.name}님 환영합니다.`}</div> <LogoutComponent />
+                  <div className='mr-5 text-gray-400 font-medium text-lg'>{`${userState.name}`}</div>{' '}
+                  <LogoutComponent />
                 </>
               ) : (
                 <GoogleLogin
@@ -182,7 +163,6 @@ export function NavBarComponent() {
                     <span className='sr-only'>Open user menu</span>
                   </button>
                 </div> */}
-
                 {/* <!--
             Dropdown menu, show/hide based on menu state.
             Entering: "transition ease-out duration-100"
@@ -212,7 +192,6 @@ export function NavBarComponent() {
             </div>
           </div>
         </div>
-
         {/* <!-- Mobile menu, show/hide based on menu state. --> */}
         <div className='sm:hidden' id='mobile-menu'>
           <div className='px-2 pt-2 pb-3 space-y-1'>
@@ -224,21 +203,18 @@ export function NavBarComponent() {
             >
               홈
             </a>
-
             <a
               href='#'
               className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
             >
               준비중
             </a>
-
             <a
               href='#'
               className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
             >
               준비중
             </a>
-
             <a
               href='#'
               className='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'
@@ -251,7 +227,6 @@ export function NavBarComponent() {
     </div>
   );
 }
-
 {
   /* <svg
                   className='h-6 w-6'

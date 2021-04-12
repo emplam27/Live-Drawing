@@ -87,12 +87,14 @@ export function JoinComponent() {
             <h3 className='mb-4 font-bold text-3xl flex items-center text-blue-500'>회원가입</h3>
             <form action='#' className='px-3 flex flex-col justify-center items-center w-full gap-3'>
               <input
+                autoComplete='off'
                 type='text'
                 placeholder='이름을 입력하세요.'
                 onChange={onChangeUsername}
                 className='px-4 py-2 w-full rounded border border-gray-300 shadow-sm text-base placeholder-gray-500 placeholder-opacity-50 focus:outline-none focus:border-blue-500'
               />
               <input
+                autoComplete='off'
                 type='email'
                 placeholder='이메일을 입력하세요.'
                 onChange={onChangeEmail}

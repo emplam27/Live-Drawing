@@ -29,6 +29,7 @@ io.on("connection", (socket) => {
       socketId: socket.id,
       username: message.username,
       userId: message.userId,
+      userImage: message.userImage,
       roomId: message.roomId,
       roomTitle: message.roomTitle,
       token: message.token,
@@ -82,6 +83,13 @@ io.on("connection", (socket) => {
   });
 
   //@ Draw Event
+  socket.on("draw-start", (message) => {
+    const user = getUser(socket.id);
+    if (!user) return;
+    historyData.push(user.roomId, message);
+    socket.broadcast.to(user.roomId).emit("draw-start", message);
+  });
+
   socket.on("draw-pencil", (message) => {
     const user = getUser(socket.id);
     if (!user) return;
@@ -96,6 +104,7 @@ io.on("connection", (socket) => {
     socket.broadcast.to(user.roomId).emit("draw-eraser", message);
   });
 
+  //@ Layer Events
   socket.on("create-layer", (message) => {
     console.log("create-layer");
     const user = getUser(socket.id);
@@ -110,11 +119,44 @@ io.on("connection", (socket) => {
     socket.broadcast.to(user.roomId).emit("delete-layer", message);
   });
 
-  socket.on("live-closed", () => {
-    console.log("live-closed");
+  //@ Modified Mode Events
+  socket.on("modified-mode-start", (message) => {
+    console.log("modified-mode-start");
     const user = getUser(socket.id);
     if (!user) return;
-    socket.broadcast.to(user.roomId).emit("live-closed");
+    console.log("modified-mode-start");
+    socket.broadcast.to(user.roomId).emit("modified-mode-start", message);
+  });
+
+  socket.on("modified-mode-end", (message) => {
+    console.log("modified-mode-end");
+    const user = getUser(socket.id);
+    if (!user) return;
+    console.log("modified-mode-end");
+    socket.broadcast.to(user.roomId).emit("modified-mode-end", message);
+  });
+
+  socket.on("modified-mode-copy-canvas", (message) => {
+    console.log("modified-mode-copy-canvas");
+    const user = getUser(socket.id);
+    if (!user) return;
+    console.log("modified-mode-copy-canvas");
+    socket.broadcast.to(user.roomId).emit("modified-mode-copy-canvas", message);
+  });
+
+  //@ Lecture Start & Close Event
+  socket.on("lecture-start", () => {
+    console.log("lecture-start");
+    const user = getUser(socket.id);
+    if (!user) return;
+    socket.broadcast.to(user.roomId).emit("lecture-start");
+  });
+
+  socket.on("lecture-close", () => {
+    console.log("lecture-close");
+    const user = getUser(socket.id);
+    if (!user) return;
+    socket.broadcast.to(user.roomId).emit("lecture-close");
   });
 
   socket.on("disconnect", () => {

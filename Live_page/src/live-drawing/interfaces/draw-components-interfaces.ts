@@ -1,15 +1,23 @@
 import { RoomUsers, RoomInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
-  topLayer: Layer | null;
-  isLiveClosed: boolean;
+  copyModifiedCanvasSignal: number | null;
+  isLectureStarted: boolean;
+  isModifiedMode: boolean;
   layers: Layer[];
+  modifiedLayers: Layer[];
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
   socket: SocketIOClient.Socket | null;
-  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
+  topLayer: Layer | null;
+  setCopyModifiedCanvasSignal: React.Dispatch<
+    React.SetStateAction<number | null>
+  >;
+  setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
-  setIsLiveClosed: React.Dispatch<React.SetStateAction<boolean>>;
+  setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
+  setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
 }
 
 export interface Point {
@@ -21,10 +29,15 @@ export interface Point {
 export interface DrawData {
   event: string;
   canvasId: string;
-  lastPoint: Point;
   currentPoint: Point;
   color: string;
+  lastPoint: Point;
   lineWidth: number;
+}
+
+export interface StartData {
+  point: Point;
+  canvasId: string;
 }
 
 export interface EraseData {
@@ -34,12 +47,18 @@ export interface EraseData {
   r: number;
 }
 
+export interface EndData {
+  canvasId: string;
+  point: Point;
+  isMoved: boolean;
+}
+
 export interface CanvasCtxTable {
   [key: string]: CanvasRenderingContext2D;
 }
 
 export interface Layer {
-  name: string;
+  username: string;
   canvasId: string;
   buttonId: string;
   canvasCtx: CanvasRenderingContext2D | null;
