@@ -5,7 +5,6 @@ import {
 } from '../../../interfaces/draw-components-interfaces';
 
 export interface HostModifiedModeLayerComponentProps {
-  displayHidden: boolean;
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;
@@ -17,4 +16,5 @@ export interface HostModifiedModeLayerComponentProps {
   roomUsers: RoomUsers | null;
   topLayer: Layer | null;
   socket: SocketIOClient.Socket | null;
+  displayHidden: boolean;
 }

@@ -2,6 +2,7 @@ import { RoomUsers, RoomInfo } from './socket-interfaces';
 
 export interface DrawComponentProps {
   copyModifiedCanvasSignal: number | null;
+  isCompareMode: boolean;
   isLectureStarted: boolean;
   isModifiedMode: boolean;
   layers: Layer[];
@@ -13,6 +14,7 @@ export interface DrawComponentProps {
   setCopyModifiedCanvasSignal: React.Dispatch<
     React.SetStateAction<number | null>
   >;
+  setIsCompareMode: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setLayers: React.Dispatch<React.SetStateAction<Layer[]>>;

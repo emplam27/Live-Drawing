@@ -19,6 +19,8 @@ import {
 import { UserInfo } from '../interfaces/socket-interfaces';
 import { drawEnd, drawStart } from './functions/mouse-event-functions';
 import { HostCursorComponent } from './draw-cursor-components/components/HostCursorComponent';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 function DrawComponent(props: DrawComponentProps) {
   //@ Drawing's States
@@ -40,6 +42,8 @@ function DrawComponent(props: DrawComponentProps) {
   );
   const [historyFlag, setHistoryFlag] = useState<boolean>(true);
 
+  const MySwal = withReactContent(Swal);
+
   //@ Function: Socket Connect Init
   useEffect(() => {
     if (!props.socket) return;
@@ -59,11 +63,28 @@ function DrawComponent(props: DrawComponentProps) {
       if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-start 이벤트가 왔음`);
       props.setIsModifiedMode(true);
+      props.setIsCompareMode(false);
+      MySwal.fire({
+        icon: 'success',
+        title: '선생님이 첨삭을 시작합니다.',
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        allowOutsideClick: false,
+      });
     });
     props.socket.on('modified-mode-end', (message: any) => {
       if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-end 이벤트가 왔음`);
       props.setIsModifiedMode(false);
+      MySwal.fire({
+        icon: 'success',
+        title: '선생님이 첨삭을 종료합니다.',
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+        allowOutsideClick: false,
+      });
     });
     props.socket.on('modified-mode-copy-canvas', (message: any) => {
       if (message.userId !== props.roomInfo.userId) return;
@@ -98,26 +119,6 @@ function DrawComponent(props: DrawComponentProps) {
     )
       setCursorPoint(null);
   }, [endSignal]);
-
-  //!
-  // useEffect(() => {
-  //   document.body.addEventListener('touchstart', (e) => {
-  //     props.roomUsers?.users.forEach((user) => {
-  //       if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
-  //     });
-  //   });
-  //   document.body.addEventListener('touchmove', (e) => {
-  //     props.roomUsers?.users.forEach((user) => {
-  //       if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
-  //     });
-  //   });
-  //   document.body.addEventListener('touchend', (e) => {
-  //     props.roomUsers?.users.forEach((user) => {
-  //       if (e.target === canvasCtxTable[user.userId].canvas) e.preventDefault();
-  //     });
-  //   });
-  // }, [props.roomUsers]);
-  //!
 
   //@ Function: Recieve Pencil Event
   useEffect(() => {
@@ -332,6 +333,7 @@ function DrawComponent(props: DrawComponentProps) {
           copyModifiedCanvasSignal={props.copyModifiedCanvasSignal}
           cursorWidth={cursorWidth}
           eraserWidth={eraserWidth}
+          isCompareMode={props.isCompareMode}
           isLectureStarted={props.isLectureStarted}
           isModifiedMode={props.isModifiedMode}
           layers={props.layers}
@@ -346,6 +348,7 @@ function DrawComponent(props: DrawComponentProps) {
           setCopyModifiedCanvasSignal={props.setCopyModifiedCanvasSignal}
           setCursorWidth={setCursorWidth}
           setEraserWidth={setEraserWidth}
+          setIsCompareMode={props.setIsCompareMode}
           setIsLectureStarted={props.setIsLectureStarted}
           setIsModifiedMode={props.setIsModifiedMode}
           setLineWidth={setLineWidth}

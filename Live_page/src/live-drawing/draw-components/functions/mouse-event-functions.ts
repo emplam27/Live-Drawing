@@ -140,12 +140,12 @@ export function mouseMove(
   socket: SocketIOClient.Socket | null,
 ): void {
   if (!canvasCtxTable || !socket) return;
-  console.log('1');
+  // console.log('1');
   if (!e.buttons) {
     lastPoint = null;
     return;
   }
-  console.log('2');
+  // console.log('2');
 
   if (!lastPoint) {
     lastPoint = {
@@ -155,12 +155,12 @@ export function mouseMove(
     };
     return;
   }
-  console.log('3');
+  // console.log('3');
 
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
   if (!targetCanvasId || !targetCanvasCtx) return;
-  console.log('4');
+  // console.log('4');
 
   const currentPoint: Point = {
     x: e.nativeEvent.offsetX,
@@ -168,7 +168,7 @@ export function mouseMove(
     c: e.target.id,
   };
   if (lastPoint.c !== currentPoint.c) return;
-  console.log('5');
+  // console.log('5');
 
   isMoved = true;
   switch (activeTool) {

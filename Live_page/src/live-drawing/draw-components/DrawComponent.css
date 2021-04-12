@@ -1,4 +1,5 @@
 /** cursor **/
+
 .cursor {
   /* width: 40px; */
   /* height: 40px; */
@@ -23,6 +24,7 @@
 
 
 /** Color Picker **/
+
 .box {
   width: 24px;
   height: 24px;

@@ -6,6 +6,8 @@ export interface UserSelectButtonComponentProps {
   layers: Layer[];
   roomInfo: RoomInfo;
   roomUsers: RoomUsers | null;
+  speakingUsers: number[] | null;
   topLayer: Layer | null;
+  setSpeakingUsers: React.Dispatch<React.SetStateAction<number[] | null>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
 }

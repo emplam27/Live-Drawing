@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { MyLayerComponentProps } from '../interfaces/my-layer-interfaces';
-
 import DrawableCanvasComponent from './DrawableCanvasComponent';
 
 function MyLayerComponent(props: MyLayerComponentProps) {

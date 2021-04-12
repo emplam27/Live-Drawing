@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { CursorComponentProps } from '../interfaces/cursor-interfaces';
 import '../../DrawComponent.css';
 

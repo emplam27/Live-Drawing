@@ -6,7 +6,7 @@ function UndrawableCanvasComponent(props: UndrawableCanvasComponentProps) {
   return (
     <canvas
       id={props.canvasId}
-      className={`${props.displayHidden ? 'hidden' : 'z-10'}`}
+      className={`${props.displayHidden ? 'hidden' : ''}`}
       width={(window.innerWidth - 60) * 0.5}
       height={window.innerHeight}
     />
