@@ -96,7 +96,9 @@ function DrawComponent(props: DrawComponentProps) {
   //@ Function: Recieve Start Event
   useEffect(() => {
     if (startSignal === null) return;
-    drawStart(canvasCtxTable, startSignal.canvasId, startSignal.point);
+    const canvasCtx = canvasCtxTable[startSignal.canvasId];
+    if (!canvasCtx) return;
+    drawStart(canvasCtx, startSignal.point);
     if (
       startSignal.canvasId === props.roomInfo.roomHostId ||
       startSignal.canvasId === props.roomInfo.userId
@@ -107,12 +109,8 @@ function DrawComponent(props: DrawComponentProps) {
   //@ Function: Recieve End Event
   useEffect(() => {
     if (endSignal === null) return;
-    drawEnd(
-      canvasCtxTable,
-      endSignal.canvasId,
-      endSignal.point,
-      endSignal.isMoved,
-    );
+    const canvasCtx = canvasCtxTable[endSignal.canvasId];
+    drawEnd(canvasCtx, endSignal.point, endSignal.isMoved);
     if (
       endSignal.canvasId === props.roomInfo.roomHostId ||
       endSignal.canvasId === props.roomInfo.userId

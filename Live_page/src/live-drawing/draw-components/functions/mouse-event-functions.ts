@@ -20,25 +20,17 @@ function getTouchPos(canvas: HTMLCanvasElement, touchEvent: any) {
   };
 }
 
-export function drawStart(
-  canvasCtxTable: CanvasCtxTable,
-  canvasId: string,
-  point: Point,
-) {
-  const ctx = canvasCtxTable[canvasId];
+export function drawStart(ctx: CanvasRenderingContext2D, point: Point) {
   ctx.beginPath();
   ctx.moveTo(point.x, point.y);
-  // lastPoint = point;
 }
 
 export function drawEnd(
-  canvasCtxTable: CanvasCtxTable,
-  canvasId: string,
+  ctx: CanvasRenderingContext2D,
   point: Point,
   isMoved: boolean,
 ) {
   if (!isMoved) {
-    const ctx = canvasCtxTable[canvasId];
     ctx.lineTo(point.x, point.y);
     ctx.stroke();
   }
@@ -58,7 +50,9 @@ export function mouseDown(
   e.preventDefault();
   isMoved = false;
   const targetCanvasId = e.target.id;
-  drawStart(canvasCtxTable, targetCanvasId, lastPoint);
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (!targetCanvasCtx) return;
+  drawStart(targetCanvasCtx, lastPoint);
   socket.emit('draw-start', { point: lastPoint, canvasId: targetCanvasId });
 }
 
@@ -73,8 +67,9 @@ export function touchStart(
   console.log(e.touches[0]);
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (!targetCanvasCtx) return;
   lastPoint = getTouchPos(targetCanvasCtx.canvas, e);
-  drawStart(canvasCtxTable, targetCanvasId, lastPoint);
+  drawStart(targetCanvasCtx, lastPoint);
   socket.emit('draw-start', { point: lastPoint, canvasId: targetCanvasId });
 }
 
@@ -91,12 +86,13 @@ export function touchMove(
   if (!canvasCtxTable || !socket) return;
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+
+  if (!targetCanvasId || !targetCanvasCtx) return;
+
   if (!lastPoint) {
     lastPoint = getTouchPos(targetCanvasCtx.canvas, e);
     return;
   }
-
-  if (!targetCanvasId || !targetCanvasCtx) return;
 
   const currentPoint: Point = getTouchPos(targetCanvasCtx.canvas, e);
   if (lastPoint.c !== currentPoint.c) return;
@@ -209,8 +205,9 @@ export function mouseUp(
   socket: SocketIOClient.Socket | null,
 ): void {
   const targetCanvasId = e.target.id;
-  if (!lastPoint) return;
-  drawEnd(canvasCtxTable, targetCanvasId, lastPoint, isMoved);
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (!lastPoint || !targetCanvasCtx) return;
+  drawEnd(targetCanvasCtx, lastPoint, isMoved);
   if (socket)
     socket.emit('draw-end', {
       canvasId: targetCanvasId,
@@ -226,8 +223,9 @@ export function touchEnd(
   socket: SocketIOClient.Socket | null,
 ): void {
   const targetCanvasId = e.target.id;
-  if (!lastPoint) return;
-  drawEnd(canvasCtxTable, targetCanvasId, lastPoint, isMoved);
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (!lastPoint || !targetCanvasCtx) return;
+  drawEnd(targetCanvasCtx, lastPoint, isMoved);
   if (socket)
     socket.emit('draw-end', {
       canvasId: targetCanvasId,
