@@ -10,13 +10,14 @@ import {
   CanvasCtxTable,
   DrawComponentProps,
   DrawData,
+  EndData,
   EraseData,
   Layer,
   Point,
   StartData,
 } from '../interfaces/draw-components-interfaces';
 import { UserInfo } from '../interfaces/socket-interfaces';
-import { setStart } from './functions/mouse-event-functions';
+import { drawEnd, drawStart } from './functions/mouse-event-functions';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -33,6 +34,7 @@ function DrawComponent(props: DrawComponentProps) {
   const [pencilSignal, setPencilSignal] = useState<DrawData | null>(null);
   const [eraserSignal, setEraserSignal] = useState<EraseData | null>(null);
   const [startSignal, setStartSignal] = useState<StartData | null>(null);
+  const [endSignal, setEndSignal] = useState<EndData | null>(null);
   const [newLayerCtxSignal, setNewLayerCtxSignal] = useState<number | null>(
     null,
   );
@@ -52,6 +54,9 @@ function DrawComponent(props: DrawComponentProps) {
     props.socket.on('draw-start', (message: StartData) =>
       setStartSignal(message),
     );
+    props.socket.on('draw-end', (message: EndData) => {
+      setEndSignal(message);
+    });
     props.socket.on('modified-mode-start', (message: any) => {
       if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-start 이벤트가 왔음`);
@@ -63,6 +68,7 @@ function DrawComponent(props: DrawComponentProps) {
         showConfirmButton: false,
         timer: 1500,
         timerProgressBar: true,
+        allowOutsideClick: false,
       });
     });
     props.socket.on('modified-mode-end', (message: any) => {
@@ -75,6 +81,7 @@ function DrawComponent(props: DrawComponentProps) {
         showConfirmButton: false,
         timer: 1500,
         timerProgressBar: true,
+        allowOutsideClick: false,
       });
     });
     props.socket.on('modified-mode-copy-canvas', (message: any) => {
@@ -87,10 +94,19 @@ function DrawComponent(props: DrawComponentProps) {
   //@ Function: Recieve Start Event
   useEffect(() => {
     if (startSignal === null) return;
-    const canvasCtx: CanvasRenderingContext2D =
-      canvasCtxTable[startSignal.canvasId];
-    setStart(canvasCtx, startSignal.point);
+    drawStart(canvasCtxTable, startSignal.canvasId, startSignal.point);
   }, [startSignal]);
+
+  //@ Function: Recieve End Event
+  useEffect(() => {
+    if (endSignal === null) return;
+    drawEnd(
+      canvasCtxTable,
+      endSignal.canvasId,
+      endSignal.point,
+      endSignal.isMoved,
+    );
+  }, [endSignal]);
 
   //@ Function: Recieve Pencil Event
   useEffect(() => {

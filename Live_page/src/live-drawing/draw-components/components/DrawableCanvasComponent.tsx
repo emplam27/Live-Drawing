@@ -19,9 +19,9 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
         width={(window.innerWidth - 60) * 0.5}
         height={window.innerHeight}
         onMouseDown={(e) => mouseDown(e, props.canvasCtxTable, props.socket)}
-        onTouchStart={(e) => touchStart(e, props.canvasCtxTable)}
-        onMouseUp={(e) => mouseUp(e, props.canvasCtxTable)}
-        onTouchEnd={(e) => touchEnd(e, props.canvasCtxTable)}
+        onTouchStart={(e) => touchStart(e, props.canvasCtxTable, props.socket)}
+        onMouseUp={(e) => mouseUp(e, props.canvasCtxTable, props.socket)}
+        onTouchEnd={(e) => touchEnd(e, props.canvasCtxTable, props.socket)}
         onMouseMove={(e) =>
           mouseMove(
             e,
