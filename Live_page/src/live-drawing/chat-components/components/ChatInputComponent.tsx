@@ -1,14 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { MessageForm } from '../interfaces/message-form-interface';
-import { ChatComponentProps } from '../interfaces/chat-component-props-interface';
+import {
+  ChatInputComponentProps,
+  MessageForm,
+} from '../interfaces/chat-component-props-interface';
 
-function ChatInputComponent(props: ChatComponentProps) {
+function ChatInputComponent(props: ChatInputComponentProps) {
   const [messageForm, setMessageForm] = useState<MessageForm>({
     user: props.roomInfo.username,
     text: '',
   });
-  const [textLength, setTextLength] = useState<number>(0);
+  const [, setTextLength] = useState<number>(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

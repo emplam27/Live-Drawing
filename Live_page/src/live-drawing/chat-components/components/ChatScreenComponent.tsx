@@ -1,27 +1,16 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import { ChatComponentProps } from '../interfaces/chat-component-props-interface';
-import { MessageForm } from '../interfaces/message-form-interface';
+import {
+  ChatScreenComponentProps,
+  MessageForm,
+} from '../interfaces/chat-component-props-interface';
 
-function ChatScreenComponent(props: ChatComponentProps) {
-  const [screen, setScreen] = useState<MessageForm[]>([]);
-  const [messageSignal, setMessageSignal] = useState<MessageForm[]>([]);
+function ChatScreenComponent(props: ChatScreenComponentProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scrollBottom = () => {
     scrollRef.current?.scrollIntoView();
   };
-
-  useEffect(() => {
-    if (props.socket)
-      props.socket.on('chat-message', (message: MessageForm) => {
-        setMessageSignal([message]);
-      });
-  }, [props.socket]);
-
-  useEffect(() => {
-    setScreen([...screen, ...messageSignal]);
-  }, [messageSignal]);
 
   useEffect(() => {
     scrollBottom();
@@ -36,7 +25,7 @@ function ChatScreenComponent(props: ChatComponentProps) {
 
   return (
     <div className='flex-auto flex flex-col bg-white bg-opacity-75 border overflow-auto pt-4'>
-      {screen.map((message: MessageForm, index: number) => {
+      {props.screen.map((message: MessageForm, index: number) => {
         return (
           <>
             {message.user !== 'admin' &&

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { useParams } from 'react-router-dom';
 import SidebarComponent from './sidebar-components/SidebarComponent';
@@ -104,6 +104,34 @@ function LiveDrawingComponent() {
     Authorization: `${localStorage.getItem('token')}`,
   };
 
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+  });
+
+  const _handleRoomUsersChange = useCallback((newRoomUsers) => {
+    setRoomUsers((roomUsers) => {
+      if (roomUsers === null) {
+        return newRoomUsers;
+      }
+
+      if (newRoomUsers.users.length > roomUsers.users.length) {
+        Toast.fire({
+          icon: 'success',
+          title: '새로운 사용자가 입장하였습니다.',
+        });
+      } else if (newRoomUsers.users.length < roomUsers.users.length) {
+        Toast.fire({
+          icon: 'success',
+          title: '사용자가 퇴장하였습니다.',
+        });
+      }
+      return newRoomUsers;
+    });
+  }, []);
+
   useEffect(() => {
     // setRoomUsers(dummyRoomUsers);
     // setRoomInfo(dummyRoomInfo);
@@ -140,7 +168,7 @@ function LiveDrawingComponent() {
         });
 
         socketIo.on('update-room-users', (message: RoomUsers) => {
-          setRoomUsers(message);
+          _handleRoomUsersChange(message);
         });
 
         socketIo.on('lecture-start', () => {
