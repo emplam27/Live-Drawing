@@ -34,12 +34,12 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.roomInfo,
           props.socket,
         );
-        HostMouseMove(
-          e,
-          props.canvasCtxTable,
-          props.socket,
-          props.roomInfo.roomHostId,
-        );
+        // HostMouseMove(
+        //   e,
+        //   props.canvasCtxTable,
+        //   props.socket,
+        //   props.roomInfo.roomHostId,
+        // );
       }}
       onTouchMove={(e) => {
         touchMove(

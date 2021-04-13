@@ -11,6 +11,7 @@ function CursorComponent(props: CursorComponentProps) {
   });
 
   const onMouseMove = (e: MouseEvent): void => {
+    console.log(e.clientX);
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
@@ -33,6 +34,7 @@ function CursorComponent(props: CursorComponentProps) {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'drawable-canvas',
     );
+    console.log(targetCanvasContainer);
     targetCanvasContainer?.addEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.addEventListener('touchmove', onTouchMove);
     targetCanvasContainer?.addEventListener('mouseenter', onMouseEnter);
