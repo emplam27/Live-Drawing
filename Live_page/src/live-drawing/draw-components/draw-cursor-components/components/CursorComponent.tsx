@@ -11,11 +11,12 @@ function CursorComponent(props: CursorComponentProps) {
   });
 
   const onMouseMove = (e: MouseEvent): void => {
-    console.log(e.clientX);
+    console.log('mousemove');
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
   const onTouchMove = (e: TouchEvent): void => {
+    console.log('touchmove');
     setPosition({
       x: e.changedTouches[0].clientX,
       y: e.changedTouches[0].clientY,
@@ -23,14 +24,17 @@ function CursorComponent(props: CursorComponentProps) {
   };
 
   const onMouseLeave = (): void => {
+    console.log('mouseleave');
     setHidden(true);
   };
 
   const onMouseEnter = (): void => {
+    console.log('mouseenter');
     setHidden(false);
   };
 
   const addEventListeners = (): void => {
+    console.log('in add event~');
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'drawable-canvas',
     );
@@ -45,6 +49,7 @@ function CursorComponent(props: CursorComponentProps) {
     const targetCanvasContainer: HTMLElement | null = document.getElementById(
       'drawable-canvas',
     );
+    console.log('remove', targetCanvasContainer);
     targetCanvasContainer?.removeEventListener('mousemove', onMouseMove);
     targetCanvasContainer?.removeEventListener('touchmove', onTouchMove);
     targetCanvasContainer?.removeEventListener('mouseenter', onMouseEnter);
@@ -53,6 +58,7 @@ function CursorComponent(props: CursorComponentProps) {
 
   useEffect(() => {
     addEventListeners();
+    console.log('add event~');
     return (): void => removeEventListeners();
   }, []);
 
