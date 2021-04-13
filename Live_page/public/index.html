@@ -14,10 +14,23 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" />
     <link rel="stylesheet" href="/static/index.css" />
     <script src="./scripts/script.js"></script>
+
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- iOS meta tag-->
+    <link rel="apple-touch-icon" href="/Live_page/public/logo/logo192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="방구석 화방" />
+
+    <!-- etc meta tag-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="온라인으로 진행하는 그림 그리기 수업" />
+    <meta name="theme-color" content="#f1718c" />
 
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
@@ -29,6 +42,13 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>React App</title>
+
+    <!-- add service worker-->
+    <script>
+      window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/service-worker.js");
+      });
+  </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
