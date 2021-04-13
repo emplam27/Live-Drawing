@@ -1,13 +1,26 @@
 import React from 'react';
 import { LectureStartComponentProps } from '../interfaces/lecture-start-interfaces';
-import loadingImg from 'src/jungle.svg';
+import loadingImg from '../../../../jungle.svg';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 function LectureStartComponent(props: LectureStartComponentProps) {
+  const MySwal = withReactContent(Swal);
+
   function lectureStart() {
     if (!props.socket) return;
     console.log('class started');
     props.setIsLectureStarted(true);
     props.socket.emit('lecture-start');
+    MySwal.fire({
+      title: `${props.roomInfo.roomTitle}수업이 시작되었습니다`,
+      text: '2초 뒤어 수업이 시작됩니다.',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      allowOutsideClick: false,
+    });
   }
   return (
     <div className='absolute z-40 flex flex-col justify-center w-full h-full bg-gray-100'>
