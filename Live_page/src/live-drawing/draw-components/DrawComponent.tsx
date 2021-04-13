@@ -35,6 +35,11 @@ function DrawComponent(props: DrawComponentProps) {
   const [cursorPosition, setCursorPosition] = useState<CursorPosition | null>(
     null,
   );
+  const [hidden, setHidden] = useState(false);
+  const [position, setPosition] = useState({
+    x: window.innerWidth,
+    y: window.innerHeight,
+  });
 
   //@ Connection's States
   const [pencilSignal, setPencilSignal] = useState<DrawData | null>(null);
@@ -312,7 +317,11 @@ function DrawComponent(props: DrawComponentProps) {
 
   return (
     <>
-      <CursorComponent cursorWidth={cursorWidth} />
+      <CursorComponent
+        cursorWidth={cursorWidth}
+        hidden={hidden}
+        position={position}
+      />
       <HostCursorComponent
         position={cursorPosition}
         roomInfo={props.roomInfo}
@@ -355,6 +364,8 @@ function DrawComponent(props: DrawComponentProps) {
           setModifiedLayers={props.setModifiedLayers}
           setTopLayer={props.setTopLayer}
           layerContainerGridStyle={layerContainerGridStyle}
+          setHidden={setHidden}
+          setPosition={setPosition}
         />
       ) : (
         <GuestModeComponent
@@ -386,6 +397,8 @@ function DrawComponent(props: DrawComponentProps) {
           setModifiedLayers={props.setModifiedLayers}
           setTopLayer={props.setTopLayer}
           layerContainerGridStyle={layerContainerGridStyle}
+          setHidden={setHidden}
+          setPosition={setPosition}
         />
       )}
     </>

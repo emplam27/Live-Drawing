@@ -135,8 +135,6 @@ export function mouseMove(
   roomInfo: RoomInfo,
   socket: SocketIOClient.Socket | null,
 ): void {
-  e.stopPropagation();
-  e.preventDefault();
   if (!canvasCtxTable || !socket) return;
   // console.log('1');
   if (!e.buttons) {
@@ -258,12 +256,9 @@ export function HostMouseMove(
   socket: SocketIOClient.Socket | null,
   hostId: string | null,
 ): void {
-  // e.stopPropagation();
-  e.preventDefault();
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
-  // targetCanvasId !== hostId ||
-  if (!targetCanvasCtx) return;
+  if (targetCanvasId !== hostId || !targetCanvasCtx) return;
   const point = {
     x: e.nativeEvent.offsetX,
     y: e.nativeEvent.offsetY,

@@ -37,7 +37,6 @@ const removeUser = socketId => {
   const index = users.findIndex(user => user.socketId === socketId)
 
   if (index !== -1) {
-    console.log('are you in??')
     return users.splice(index, 1)[0]
   }
 }

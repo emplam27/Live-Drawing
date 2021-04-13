@@ -17,4 +17,11 @@ export interface HostModifiedModeLayerComponentProps {
   topLayer: Layer | null;
   socket: SocketIOClient.Socket | null;
   displayHidden: boolean;
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>;
+  setPosition: React.Dispatch<
+    React.SetStateAction<{
+      x: number;
+      y: number;
+    }>
+  >;
 }

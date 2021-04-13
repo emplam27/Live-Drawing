@@ -25,6 +25,8 @@ function HostModifiedModeLayerComponent(
               socket={props.socket}
               canvasId={layer.canvasId}
               displayHidden={displayHidden}
+              setHidden={props.setHidden}
+              setPosition={props.setPosition}
             />
           );
         }

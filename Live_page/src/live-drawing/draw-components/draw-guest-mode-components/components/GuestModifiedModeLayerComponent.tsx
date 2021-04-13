@@ -26,6 +26,8 @@ function GuestModifiedModeLayerComponent(
         socket={props.socket}
         canvasId={`modified-${props.roomInfo.userId}`}
         displayHidden={false}
+        setHidden={props.setHidden}
+        setPosition={props.setPosition}
       />
       {/* <UndrawableCanvasComponent
         canvasId={`modified-${props.roomInfo.userId}`}
