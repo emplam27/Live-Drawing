@@ -85,15 +85,17 @@ function GuestModeComponent(props: GuestModeComponentProps) {
           id='drawable-canvas'
           className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden bg-gray-200'
         >
-          <GuestCompareModeBadgeComponent
-            isCompareMode={props.isCompareMode}
-            roomInfo={props.roomInfo}
-            setIsCompareMode={props.setIsCompareMode}
-            badgeContainerStyle={badgeContainerStyle}
-            badgeStyle={badgeStyle}
-            buttonStyle={buttonStyle}
-            displayHidden={props.isModifiedMode}
-          />
+          {props.isLectureStarted ? (
+            <GuestCompareModeBadgeComponent
+              isCompareMode={props.isCompareMode}
+              roomInfo={props.roomInfo}
+              setIsCompareMode={props.setIsCompareMode}
+              badgeContainerStyle={badgeContainerStyle}
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
+              displayHidden={props.isModifiedMode}
+            />
+          ) : null}
           <MyLayerComponent
             activeTool={props.activeTool}
             canvasCtxTable={props.canvasCtxTable}
