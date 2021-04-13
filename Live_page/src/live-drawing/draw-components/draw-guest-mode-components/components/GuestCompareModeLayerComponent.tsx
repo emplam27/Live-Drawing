@@ -10,6 +10,9 @@ function GuestCompareModeLayerComponent(
     <UndrawableCanvasComponent
       canvasId={`compare-${props.roomInfo.userId}`}
       displayHidden={props.displayHidden}
+      canvasCtxTable={props.canvasCtxTable}
+      socket={props.socket}
+      roomInfo={props.roomInfo}
     />
   );
 }

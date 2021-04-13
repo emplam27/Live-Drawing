@@ -2,16 +2,27 @@ import React, { useEffect, useRef } from 'react';
 import { HostCursorComponentProps } from '../interfaces/host-cursor-interfaces';
 
 export function HostCursorComponent(props: HostCursorComponentProps) {
+  if (!props.position || !props.position.canvas) return null;
+  const rect = props.position.canvas.getBoundingClientRect();
+  const revisionHeight =
+    2.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
   return (
-    <div
-      style={{
-        left: props.point ? `${props.point.x}px` : 0,
-        bottom: props.point ? `${props.point.y}px` : 0,
-        width: '10px',
-        height: '10px',
-        border: '1px solid black',
-        display: props.point ? 'block' : 'hidden',
-      }}
-    ></div>
+    <div>
+      <div
+        className={`${
+          props.position !== null ? 'fixed' : 'hidden'
+        } border-2 border-black w-10 h-10`}
+        style={{
+          left: props.position.point
+            ? `${rect.left + props.position.point.x}px`
+            : 'auto',
+          top: props.position.point
+            ? `${rect.top + props.position.point.y - revisionHeight}px`
+            : 'auto',
+        }}
+      >
+        <i className='ri-quill-pen-line'></i>
+      </div>
+    </div>
   );
 }

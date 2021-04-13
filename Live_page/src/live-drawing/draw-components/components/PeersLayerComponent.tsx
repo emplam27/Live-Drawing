@@ -28,6 +28,9 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
               key={layer.canvasId}
               canvasId={layer.canvasId}
               displayHidden={displayHidden}
+              canvasCtxTable={props.canvasCtxTable}
+              socket={props.socket}
+              roomInfo={props.roomInfo}
             />
           );
         }

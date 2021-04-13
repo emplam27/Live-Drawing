@@ -8,12 +8,14 @@ import GuestModeComponent from './components/GuestModeComponent';
 import { draw, erase } from './functions/draw-functions';
 import {
   CanvasCtxTable,
+  CursorPosition,
   DrawComponentProps,
   DrawData,
   EndData,
   EraseData,
+  HostMoveData,
   Layer,
-  Point,
+  // Point,
   StartData,
 } from '../interfaces/draw-components-interfaces';
 import { UserInfo } from '../interfaces/socket-interfaces';
@@ -30,7 +32,9 @@ function DrawComponent(props: DrawComponentProps) {
   const [eraserWidth, setEraserWidth] = useState(30);
   const [lineWidth, setLineWidth] = useState(5);
   const [canvasCtxTable, setCanvasCtxTable] = useState<CanvasCtxTable>({});
-  const [cursorPoint, setCursorPoint] = useState<Point | null>(null);
+  const [cursorPosition, setCursorPosition] = useState<CursorPosition | null>(
+    null,
+  );
 
   //@ Connection's States
   const [pencilSignal, setPencilSignal] = useState<DrawData | null>(null);
@@ -38,6 +42,9 @@ function DrawComponent(props: DrawComponentProps) {
   const [startSignal, setStartSignal] = useState<StartData | null>(null);
   const [endSignal, setEndSignal] = useState<EndData | null>(null);
   const [newLayerCtxSignal, setNewLayerCtxSignal] = useState<number | null>(
+    null,
+  );
+  const [hostMoveSignal, setHostMoveSignal] = useState<HostMoveData | null>(
     null,
   );
   const [historyFlag, setHistoryFlag] = useState<boolean>(true);
@@ -58,6 +65,9 @@ function DrawComponent(props: DrawComponentProps) {
     );
     props.socket.on('draw-end', (message: EndData) => {
       setEndSignal(message);
+    });
+    props.socket.on('host-move', (message: HostMoveData) => {
+      setHostMoveSignal(message);
     });
     props.socket.on('modified-mode-start', (message: any) => {
       if (message.userId !== props.roomInfo.userId) return;
@@ -99,11 +109,12 @@ function DrawComponent(props: DrawComponentProps) {
     const canvasCtx = canvasCtxTable[startSignal.canvasId];
     if (!canvasCtx) return;
     drawStart(canvasCtx, startSignal.point);
-    if (
-      startSignal.canvasId === props.roomInfo.roomHostId ||
-      startSignal.canvasId === props.roomInfo.userId
-    )
-      setCursorPoint(startSignal.point);
+    // if (
+    //   startSignal.canvasId === props.roomInfo.roomHostId ||
+    //   startSignal.canvasId === props.roomInfo.userId ||
+    //   startSignal.canvasId === 'modified-' + props.roomInfo.userId
+    // )
+    //   setCursorPosition({ point: startSignal.point, canvas: canvasCtx.canvas });
   }, [startSignal]);
 
   //@ Function: Recieve End Event
@@ -111,11 +122,12 @@ function DrawComponent(props: DrawComponentProps) {
     if (endSignal === null) return;
     const canvasCtx = canvasCtxTable[endSignal.canvasId];
     drawEnd(canvasCtx, endSignal.point, endSignal.isMoved);
-    if (
-      endSignal.canvasId === props.roomInfo.roomHostId ||
-      endSignal.canvasId === props.roomInfo.userId
-    )
-      setCursorPoint(null);
+    // if (
+    //   endSignal.canvasId === props.roomInfo.roomHostId ||
+    //   endSignal.canvasId === props.roomInfo.userId ||
+    //   endSignal.canvasId === 'modified-' + props.roomInfo.userId
+    // )
+    //   setCursorPosition(null);
   }, [endSignal]);
 
   //@ Function: Recieve Pencil Event
@@ -125,11 +137,15 @@ function DrawComponent(props: DrawComponentProps) {
       canvasCtxTable[pencilSignal.canvasId];
     if (!canvasCtx) return;
     draw(pencilSignal, canvasCtx);
-    if (
-      pencilSignal.canvasId === props.roomInfo.roomHostId ||
-      pencilSignal.canvasId === props.roomInfo.userId
-    )
-      setCursorPoint(pencilSignal.currentPoint);
+    // if (
+    //   pencilSignal.canvasId === props.roomInfo.roomHostId ||
+    //   pencilSignal.canvasId === props.roomInfo.userId ||
+    //   pencilSignal.canvasId === 'modified-' + props.roomInfo.userId
+    // )
+    //   setCursorPosition({
+    //     point: pencilSignal.currentPoint,
+    //     canvas: canvasCtx.canvas,
+    //   });
   }, [pencilSignal]);
 
   //@ Function: Recieve Eraser Event
@@ -139,12 +155,26 @@ function DrawComponent(props: DrawComponentProps) {
       canvasCtxTable[eraserSignal.canvasId];
     if (!canvasCtx) return;
     erase(eraserSignal, canvasCtx);
-    if (
-      eraserSignal.canvasId === props.roomInfo.roomHostId ||
-      eraserSignal.canvasId === props.roomInfo.userId
-    )
-      setCursorPoint(eraserSignal.currentPoint);
+    // if (
+    //   eraserSignal.canvasId === props.roomInfo.roomHostId ||
+    //   eraserSignal.canvasId === props.roomInfo.userId ||
+    //   eraserSignal.canvasId === 'modified-' + props.roomInfo.userId
+    // )
+    //   setCursorPosition({
+    //     point: eraserSignal.currentPoint,
+    //     canvas: canvasCtx.canvas,
+    //   });
   }, [eraserSignal]);
+
+  useEffect(() => {
+    if (hostMoveSignal === null) return;
+    const canvasCtx: CanvasRenderingContext2D =
+      canvasCtxTable[hostMoveSignal.canvasId];
+    setCursorPosition({
+      point: hostMoveSignal.point,
+      canvas: canvasCtx.canvas,
+    });
+  }, [hostMoveSignal]);
 
   //@ roomData가 업데이트 될 때마다 layers를 재구성, layer 추가&삭제 역할수행
   useEffect(() => {
@@ -283,7 +313,10 @@ function DrawComponent(props: DrawComponentProps) {
   return (
     <>
       <CursorComponent cursorWidth={cursorWidth} />
-      <HostCursorComponent point={cursorPoint} />
+      <HostCursorComponent
+        position={cursorPosition}
+        roomInfo={props.roomInfo}
+      />
       <ToolbarComponent
         activeTool={activeTool}
         color={color}

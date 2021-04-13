@@ -28,6 +28,16 @@ export interface Point {
   c: string;
 }
 
+export interface CursorPosition {
+  point: Point | null;
+  canvas: HTMLCanvasElement;
+}
+
+export interface HostMoveData {
+  canvasId: string;
+  point: Point;
+}
+
 export interface DrawData {
   event: string;
   canvasId: string;
