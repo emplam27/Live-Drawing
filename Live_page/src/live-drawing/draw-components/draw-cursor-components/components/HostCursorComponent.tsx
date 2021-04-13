@@ -18,6 +18,7 @@ export function HostCursorComponent(props: HostCursorComponentProps) {
         top: props.position.point
           ? `${rect.top + props.position.point.y - revisionHeight}px`
           : 'auto',
+        zIndex: 9999,
       }}
     >
       <i className='ri-quill-pen-line'></i>

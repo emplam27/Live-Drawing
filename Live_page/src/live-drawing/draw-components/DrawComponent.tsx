@@ -49,9 +49,9 @@ function DrawComponent(props: DrawComponentProps) {
   const [newLayerCtxSignal, setNewLayerCtxSignal] = useState<number | null>(
     null,
   );
-  const [hostMoveSignal, setHostMoveSignal] = useState<HostMoveData | null>(
-    null,
-  );
+  // const [hostMoveSignal, setHostMoveSignal] = useState<HostMoveData | null>(
+  //   null,
+  // );
   const [historyFlag, setHistoryFlag] = useState<boolean>(true);
 
   const MySwal = withReactContent(Swal);
@@ -71,9 +71,9 @@ function DrawComponent(props: DrawComponentProps) {
     props.socket.on('draw-end', (message: EndData) => {
       setEndSignal(message);
     });
-    props.socket.on('host-move', (message: HostMoveData) => {
-      setHostMoveSignal(message);
-    });
+    // props.socket.on('host-move', (message: HostMoveData) => {
+    //   setHostMoveSignal(message);
+    // });
     props.socket.on('modified-mode-start', (message: any) => {
       if (message.userId !== props.roomInfo.userId) return;
       console.log(`modified-mode-start 이벤트가 왔음`);

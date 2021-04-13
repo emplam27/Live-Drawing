@@ -12,9 +12,9 @@ export function UndrawableCanvasComponent(
   return (
     <canvas
       id={props.canvasId}
-      className={`${props.displayHidden ? 'hidden' : ''}`}
-      width={(window.innerWidth - 60) * 0.5}
-      height={window.innerHeight}
+      className={`bg-white ${props.displayHidden ? 'hidden' : ''}`}
+      width={(1920 - 60) * 0.5}
+      height={1080}
       // onMouseMove={(e) =>
       //   HostMouseMove(
       //     e,
