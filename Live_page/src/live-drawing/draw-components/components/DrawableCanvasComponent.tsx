@@ -13,8 +13,8 @@ import {
   touchStart,
   touchMove,
   touchEnd,
-  HostMouseMove,
-  HostTouchMove,
+  // HostMouseMove,
+  // HostTouchMove,
 } from '../functions/mouse-event-functions';
 import { DrawableCanvasComponentProps } from '../interfaces/drawable-canvas-component';
 
@@ -41,12 +41,12 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.roomInfo,
           props.socket,
         );
-        HostMouseMove(
-          e,
-          props.canvasCtxTable,
-          props.socket,
-          props.roomInfo.roomHostId,
-        );
+        // HostMouseMove(
+        //   e,
+        //   props.canvasCtxTable,
+        //   props.socket,
+        //   props.roomInfo.roomHostId,
+        // );
       }}
       onTouchMove={(e) => {
         onTouchMove(e, props.setPosition);
@@ -60,12 +60,12 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.roomInfo,
           props.socket,
         );
-        HostTouchMove(
-          e,
-          props.canvasCtxTable,
-          props.socket,
-          props.roomInfo.roomHostId,
-        );
+        // HostTouchMove(
+        //   e,
+        //   props.canvasCtxTable,
+        //   props.socket,
+        //   props.roomInfo.roomHostId,
+        // );
       }}
       onMouseEnter={() => onMouseEnter(props.setHidden)}
       onMouseLeave={() => onMouseLeave(props.setHidden)}

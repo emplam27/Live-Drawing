@@ -114,12 +114,12 @@ function DrawComponent(props: DrawComponentProps) {
     const canvasCtx = canvasCtxTable[startSignal.canvasId];
     if (!canvasCtx) return;
     drawStart(canvasCtx, startSignal.point);
-    // if (
-    //   startSignal.canvasId === props.roomInfo.roomHostId ||
-    //   startSignal.canvasId === props.roomInfo.userId ||
-    //   startSignal.canvasId === 'modified-' + props.roomInfo.userId
-    // )
-    //   setCursorPosition({ point: startSignal.point, canvas: canvasCtx.canvas });
+    if (
+      startSignal.canvasId === props.roomInfo.roomHostId ||
+      startSignal.canvasId === props.roomInfo.userId ||
+      startSignal.canvasId === 'modified-' + props.roomInfo.userId
+    )
+      setCursorPosition({ point: startSignal.point, canvas: canvasCtx.canvas });
   }, [startSignal]);
 
   //@ Function: Recieve End Event
@@ -127,12 +127,12 @@ function DrawComponent(props: DrawComponentProps) {
     if (endSignal === null) return;
     const canvasCtx = canvasCtxTable[endSignal.canvasId];
     drawEnd(canvasCtx, endSignal.point, endSignal.isMoved);
-    // if (
-    //   endSignal.canvasId === props.roomInfo.roomHostId ||
-    //   endSignal.canvasId === props.roomInfo.userId ||
-    //   endSignal.canvasId === 'modified-' + props.roomInfo.userId
-    // )
-    //   setCursorPosition(null);
+    if (
+      endSignal.canvasId === props.roomInfo.roomHostId ||
+      endSignal.canvasId === props.roomInfo.userId ||
+      endSignal.canvasId === 'modified-' + props.roomInfo.userId
+    )
+      setCursorPosition(null);
   }, [endSignal]);
 
   //@ Function: Recieve Pencil Event
@@ -142,15 +142,15 @@ function DrawComponent(props: DrawComponentProps) {
       canvasCtxTable[pencilSignal.canvasId];
     if (!canvasCtx) return;
     draw(pencilSignal, canvasCtx);
-    // if (
-    //   pencilSignal.canvasId === props.roomInfo.roomHostId ||
-    //   pencilSignal.canvasId === props.roomInfo.userId ||
-    //   pencilSignal.canvasId === 'modified-' + props.roomInfo.userId
-    // )
-    //   setCursorPosition({
-    //     point: pencilSignal.currentPoint,
-    //     canvas: canvasCtx.canvas,
-    //   });
+    if (
+      pencilSignal.canvasId === props.roomInfo.roomHostId ||
+      pencilSignal.canvasId === props.roomInfo.userId ||
+      pencilSignal.canvasId === 'modified-' + props.roomInfo.userId
+    )
+      setCursorPosition({
+        point: pencilSignal.currentPoint,
+        canvas: canvasCtx.canvas,
+      });
   }, [pencilSignal]);
 
   //@ Function: Recieve Eraser Event
@@ -160,26 +160,26 @@ function DrawComponent(props: DrawComponentProps) {
       canvasCtxTable[eraserSignal.canvasId];
     if (!canvasCtx) return;
     erase(eraserSignal, canvasCtx);
-    // if (
-    //   eraserSignal.canvasId === props.roomInfo.roomHostId ||
-    //   eraserSignal.canvasId === props.roomInfo.userId ||
-    //   eraserSignal.canvasId === 'modified-' + props.roomInfo.userId
-    // )
-    //   setCursorPosition({
-    //     point: eraserSignal.currentPoint,
-    //     canvas: canvasCtx.canvas,
-    //   });
+    if (
+      eraserSignal.canvasId === props.roomInfo.roomHostId ||
+      eraserSignal.canvasId === props.roomInfo.userId ||
+      eraserSignal.canvasId === 'modified-' + props.roomInfo.userId
+    )
+      setCursorPosition({
+        point: eraserSignal.currentPoint,
+        canvas: canvasCtx.canvas,
+      });
   }, [eraserSignal]);
 
-  useEffect(() => {
-    if (hostMoveSignal === null) return;
-    const canvasCtx: CanvasRenderingContext2D =
-      canvasCtxTable[hostMoveSignal.canvasId];
-    setCursorPosition({
-      point: hostMoveSignal.point,
-      canvas: canvasCtx.canvas,
-    });
-  }, [hostMoveSignal]);
+  // useEffect(() => {
+  //   if (hostMoveSignal === null) return;
+  //   const canvasCtx: CanvasRenderingContext2D =
+  //     canvasCtxTable[hostMoveSignal.canvasId];
+  //   setCursorPosition({
+  //     point: hostMoveSignal.point,
+  //     canvas: canvasCtx.canvas,
+  //   });
+  // }, [hostMoveSignal]);
 
   //@ roomData가 업데이트 될 때마다 layers를 재구성, layer 추가&삭제 역할수행
   useEffect(() => {

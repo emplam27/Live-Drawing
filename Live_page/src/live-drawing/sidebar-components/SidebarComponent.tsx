@@ -49,7 +49,7 @@ function SidebarComponent(props: SidebarComponentProps) {
       <ChatComponent roomInfo={props.roomInfo} socket={props.socket} />
       <ClearCanvasComponent layers={props.layers} roomInfo={props.roomInfo} />
       <div className='flex-grow'></div>
-      <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} />
+      {/* <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} /> */}
       <CloseButtonComponent roomInfo={props.roomInfo} socket={props.socket} />
     </div>
   );
