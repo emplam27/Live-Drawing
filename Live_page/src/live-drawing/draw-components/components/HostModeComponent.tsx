@@ -10,8 +10,7 @@ import HostModifiedModeLayerComponent from '../draw-host-mode-components/compone
 import { HostModeComponentProps } from '../interfaces/host-mode-interfaces';
 
 function HostModeComponent(props: HostModeComponentProps) {
-  const badgeContainerStyle =
-    'absolute flex flex-col items-center w-full h-full hover:bg-gray-300 hover:bg-opacity-25 transition duration-150 ease-in-out';
+  const badgeContainerStyle = 'absolute flex justify-center top-0 w-full';
   const badgeStyle =
     'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-20';
   const buttonStyle =
@@ -21,7 +20,7 @@ function HostModeComponent(props: HostModeComponentProps) {
     <div className={props.layerContainerGridStyle}>
       <div
         id='undrawable-canvas'
-        className='cols-start-1 cols-end-2 relative flex justify-center overflow-hidden'
+        className='cols-start-1 cols-end-2 relative flex justify-center items-center overflow-hidden bg-gray-200'
       >
         {!props.isLectureStarted ? (
           <LectureStartComponent
@@ -29,6 +28,14 @@ function HostModeComponent(props: HostModeComponentProps) {
             socket={props.socket}
             setIsLectureStarted={props.setIsLectureStarted}
           />
+        ) : props.layers.length <= 1 ? (
+          <div className='flex flex-col justify-center h-full'>
+            <p>
+              <i className='ri-group-line text-8xl text-gray-300'></i>
+            </p>
+            <p className='text-xl '>참여한 게스트가 없습니다!</p>
+            <p className='text-xl'>게스트가 참여하면 여기에 표시됩니다.</p>
+          </div>
         ) : null}
         <HostLectureModeBadgeComponent
           isModifiedMode={props.isModifiedMode}
@@ -76,7 +83,7 @@ function HostModeComponent(props: HostModeComponentProps) {
       </div>
       <div
         id='drawable-canvas'
-        className='cols-start-2 cols-end-3 relative flex justify-center overflow-hidden'
+        className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden bg-gray-200'
       >
         <HostCopyImageButtonComponent
           canvasCtxTable={props.canvasCtxTable}
@@ -88,6 +95,7 @@ function HostModeComponent(props: HostModeComponentProps) {
           socket={props.socket}
           setTopLayer={props.setTopLayer}
           setIsModifiedMode={props.setIsModifiedMode}
+          badgeContainerStyle={badgeContainerStyle}
           badgeStyle={badgeStyle}
           buttonStyle={buttonStyle}
           displayHidden={!props.isModifiedMode}
@@ -101,6 +109,8 @@ function HostModeComponent(props: HostModeComponentProps) {
           lineWidth={props.lineWidth}
           roomInfo={props.roomInfo}
           socket={props.socket}
+          badgeContainerStyle={badgeContainerStyle}
+          badgeStyle={badgeStyle}
           displayHidden={props.isModifiedMode}
           setHidden={props.setHidden}
           setPosition={props.setPosition}

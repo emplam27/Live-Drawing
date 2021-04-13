@@ -13,6 +13,7 @@ function HostLectureModeBadgeComponent(
 
   function startModifiedMode() {
     if (!props.topLayer || !props.roomUsers || !props.socket) return;
+
     sendModifiedModeMessage(
       'modified-mode-start',
       props.roomUsers,
@@ -20,6 +21,7 @@ function HostLectureModeBadgeComponent(
       props.socket,
     );
     props.setIsModifiedMode(true);
+
     MySwal.fire({
       icon: 'success',
       title: `${props.topLayer.username} 학생의 첨삭을 시작합니다.`,

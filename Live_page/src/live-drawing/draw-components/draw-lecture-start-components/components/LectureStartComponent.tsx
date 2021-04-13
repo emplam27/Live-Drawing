@@ -1,6 +1,7 @@
 import React from 'react';
 import { LectureStartComponentProps } from '../interfaces/lecture-start-interfaces';
-import loadingimg from '../../../../jungle.svg';
+import loadingImg from 'src/jungle.svg';
+
 function LectureStartComponent(props: LectureStartComponentProps) {
   function lectureStart() {
     if (!props.socket) return;
@@ -61,7 +62,7 @@ function LectureStartComponent(props: LectureStartComponentProps) {
           <div className='mt-60 self-center'>
             <img
               className='animate-bounce w-60 h-60 mx-auto text-gray-900'
-              src={loadingimg}
+              src={loadingImg}
             ></img>
           </div>
         </div>

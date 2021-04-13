@@ -2,7 +2,6 @@ import { RoomInfo } from '../../interfaces/socket-interfaces';
 import { CanvasCtxTable } from '../../interfaces/draw-components-interfaces';
 
 export interface MyLayerComponentProps {
-  displayHidden: boolean;
   activeTool: string;
   canvasCtxTable: CanvasCtxTable;
   color: string;
@@ -18,4 +17,7 @@ export interface MyLayerComponentProps {
       y: number;
     }>
   >;
+  badgeContainerStyle: string;
+  badgeStyle: string;
+  displayHidden: boolean;
 }

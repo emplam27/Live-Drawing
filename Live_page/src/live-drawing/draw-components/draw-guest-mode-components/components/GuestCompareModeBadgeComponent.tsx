@@ -14,9 +14,10 @@ function GuestCompareModeBadgeComponent(
 
   return (
     <div
-      className={`relative flex flex-col items-center
-      ${props.displayHidden ? 'hidden' : ''}
-    `}
+      className={`
+        ${props.badgeContainerStyle}
+        ${props.displayHidden ? 'hidden' : ''}
+      `}
     >
       <div className={props.badgeStyle}>
         <div className={'flex items-end px-8'}>

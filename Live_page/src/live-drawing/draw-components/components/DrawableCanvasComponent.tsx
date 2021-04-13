@@ -22,9 +22,9 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
   return (
     <canvas
       id={props.canvasId}
-      className={props.displayHidden ? 'hidden' : ''}
-      width={(window.innerWidth - 60) * 0.5}
-      height={window.innerHeight}
+      className={`bg-white ${props.displayHidden ? 'hidden' : ''}`}
+      width={(1920 - 60) * 0.5}
+      height={1080}
       onMouseDown={(e) => mouseDown(e, props.canvasCtxTable, props.socket)}
       onTouchStart={(e) => touchStart(e, props.canvasCtxTable, props.socket)}
       onMouseUp={(e) => mouseUp(e, props.canvasCtxTable, props.socket)}

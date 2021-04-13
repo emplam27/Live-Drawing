@@ -1,7 +1,4 @@
-import {
-  CursorPosition,
-  Point,
-} from '../../../interfaces/draw-components-interfaces';
+import { CursorPosition } from '../../../interfaces/draw-components-interfaces';
 import { RoomInfo } from '../../../interfaces/socket-interfaces';
 
 export interface HostCursorComponentProps {

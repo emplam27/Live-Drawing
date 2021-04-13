@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { useParams } from 'react-router-dom';
 import SidebarComponent from './sidebar-components/SidebarComponent';
@@ -44,11 +44,11 @@ function LiveDrawingComponent() {
   //@ Dummy Data
   // const dummyRoomInfo = {
   //   username: '김형우',
-  //   userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+  //   userId: '73dd814c-8026-459b-a2ed-4863ddb79750',
   //   userImage:
   //     'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
   //   roomId: roomId,
-  //   roomHostId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+  //   roomHostId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
   //   roomTitle: '12312421',
   // };
 
@@ -95,6 +95,36 @@ function LiveDrawingComponent() {
   //       socketId: null,
   //       agoraId: null,
   //     },
+  //     {
+  //       username: '1김형우',
+  //       userId: '776a10b4-03e7-455c-88d4-f9f908e9b847',
+  //       userImage:
+  //         'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
+  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //       roomTitle: '12312421',
+  //       socketId: null,
+  //       agoraId: null,
+  //     },
+  //     {
+  //       username: '2김형우',
+  //       userId: '776a10b4-03e7-455c-88d4-f9f908e9b848',
+  //       userImage:
+  //         'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
+  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //       roomTitle: '12312421',
+  //       socketId: null,
+  //       agoraId: null,
+  //     },
+  //     {
+  //       username: '3김형우',
+  //       userId: '776a10b4-03e7-455c-88d4-f9f908e9b849',
+  //       userImage:
+  //         'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
+  //       roomId: 'feda6c99-f05a-4fdd-88f6-fa13de0a9e12',
+  //       roomTitle: '12312421',
+  //       socketId: null,
+  //       agoraId: null,
+  //     },
   //   ],
   // };
 
@@ -103,6 +133,34 @@ function LiveDrawingComponent() {
     'Content-Type': 'application/json',
     Authorization: `${localStorage.getItem('token')}`,
   };
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 2000,
+  });
+
+  const _handleRoomUsersChange = useCallback((newRoomUsers) => {
+    setRoomUsers((roomUsers) => {
+      if (roomUsers === null) {
+        return newRoomUsers;
+      }
+
+      if (newRoomUsers.users.length > roomUsers.users.length) {
+        Toast.fire({
+          icon: 'success',
+          title: '새로운 사용자가 입장하였습니다.',
+        });
+      } else if (newRoomUsers.users.length < roomUsers.users.length) {
+        Toast.fire({
+          icon: 'success',
+          title: '사용자가 퇴장하였습니다.',
+        });
+      }
+      return newRoomUsers;
+    });
+  }, []);
 
   useEffect(() => {
     // setRoomUsers(dummyRoomUsers);
@@ -140,13 +198,13 @@ function LiveDrawingComponent() {
         });
 
         socketIo.on('update-room-users', (message: RoomUsers) => {
-          setRoomUsers(message);
+          _handleRoomUsersChange(message);
         });
 
         socketIo.on('lecture-start', () => {
           setIsLectureStarted(true);
           MySwal.fire({
-            title: `${roomInfo.roomTitle}수업이 시작되었습니다`,
+            title: `${res.data.roomTitle}수업이 시작되었습니다`,
             text: '2초 뒤어 수업이 시작됩니다.',
             icon: 'success',
             showConfirmButton: false,
@@ -155,6 +213,7 @@ function LiveDrawingComponent() {
             allowOutsideClick: false,
           });
         });
+
         socketIo.on('lecture-close', () => {
           MySwal.fire({
             title: '라이브가 종료되었습니다.',
@@ -193,6 +252,7 @@ function LiveDrawingComponent() {
       );
     });
   }, []);
+
   return (
     <>
       <SidebarComponent
