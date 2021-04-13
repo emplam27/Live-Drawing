@@ -10,7 +10,7 @@ export function HostCursorComponent(props: HostCursorComponentProps) {
     <div
       className={`${
         props.position !== null ? 'fixed' : 'hidden'
-      } border-2 border-black w-10 h-10`}
+      } border-2 border-black w-10 h-10 z-30`}
       style={{
         left: props.position.point
           ? `${rect.left + props.position.point.x}px`
@@ -18,7 +18,7 @@ export function HostCursorComponent(props: HostCursorComponentProps) {
         top: props.position.point
           ? `${rect.top + props.position.point.y - revisionHeight}px`
           : 'auto',
-        zIndex: 9999,
+        // zIndex: 9999,
       }}
     >
       <i className='ri-quill-pen-line'></i>

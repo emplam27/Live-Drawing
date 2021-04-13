@@ -2,7 +2,7 @@ import React from 'react';
 import { LectureStartComponentProps } from '../interfaces/lecture-start-interfaces';
 import loadingImg from '../../../../jungle.svg';
 
-function LectureStartComponent(props: LectureStartComponentProps) {
+export function LectureStartComponent(props: LectureStartComponentProps) {
   function lectureStart() {
     if (!props.socket) return;
     console.log('class started');
@@ -70,4 +70,3 @@ function LectureStartComponent(props: LectureStartComponentProps) {
     </div>
   );
 }
-export default LectureStartComponent;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PeersLayerComponent from './PeersLayerComponent';
-import LectureStartComponent from '../draw-lecture-start-components/components/LectureStartComponent';
+import { LectureStartComponent } from '../draw-lecture-start-components/components/LectureStartComponent';
 import MyLayerComponent from './MyLayerComponent';
 import GuestLectureModeBadgeComponent from '../draw-guest-mode-components/components/GuestLectureModeBadgeComponent';
 import GuestModifiedModeBadgeComponent from '../draw-guest-mode-components/components/GuestModifiedModeBadgeComponent';

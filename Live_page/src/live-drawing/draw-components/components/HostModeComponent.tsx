@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PeersLayerComponent from './PeersLayerComponent';
-import LectureStartComponent from '../draw-lecture-start-components/components/LectureStartComponent';
+import { LectureStartComponent } from '../draw-lecture-start-components/components/LectureStartComponent';
 import HostLectureModeBadgeComponent from '../draw-host-mode-components/components/HostLectureModeBadgeComponent';
 import HostModifiedModeBadgeComponent from '../draw-host-mode-components/components/HostModifiedModeBadgeComponent';
 import HostCopyImageButtonComponent from '../draw-host-mode-components/components/HostCopyImageButtonComponent';
