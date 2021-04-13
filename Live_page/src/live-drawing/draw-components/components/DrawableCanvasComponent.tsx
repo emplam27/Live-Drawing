@@ -7,6 +7,8 @@ import {
   touchStart,
   touchMove,
   touchEnd,
+  HostMouseMove,
+  HostTouchMove,
 } from '../functions/mouse-event-functions';
 import { DrawableCanvasComponentProps } from '../interfaces/drawable-canvas-component';
 
@@ -21,7 +23,7 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
       onTouchStart={(e) => touchStart(e, props.canvasCtxTable, props.socket)}
       onMouseUp={(e) => mouseUp(e, props.canvasCtxTable, props.socket)}
       onTouchEnd={(e) => touchEnd(e, props.canvasCtxTable, props.socket)}
-      onMouseMove={(e) =>
+      onMouseMove={(e) => {
         mouseMove(
           e,
           props.activeTool,
@@ -31,9 +33,15 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.lineWidth,
           props.roomInfo,
           props.socket,
-        )
-      }
-      onTouchMove={(e) =>
+        );
+        HostMouseMove(
+          e,
+          props.canvasCtxTable,
+          props.socket,
+          props.roomInfo.roomHostId,
+        );
+      }}
+      onTouchMove={(e) => {
         touchMove(
           e,
           props.activeTool,
@@ -43,8 +51,14 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.lineWidth,
           props.roomInfo,
           props.socket,
-        )
-      }
+        );
+        HostTouchMove(
+          e,
+          props.canvasCtxTable,
+          props.socket,
+          props.roomInfo.roomHostId,
+        );
+      }}
     />
   );
 }

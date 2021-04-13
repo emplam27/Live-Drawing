@@ -19,7 +19,6 @@ function HostModifiedModeBadgeComponent(
       props.socket,
     );
     props.setIsModifiedMode(false);
-    props.setIsModifiedMode(true);
     MySwal.fire({
       icon: 'success',
       title: `${props.topLayer.username} 학생의 첨삭을 종료합니다.`,

@@ -234,3 +234,35 @@ export function touchEnd(
     });
   lastPoint = null;
 }
+
+export function HostTouchMove(
+  e: any,
+  canvasCtxTable: CanvasCtxTable,
+  socket: SocketIOClient.Socket | null,
+  hostId: string | null,
+): void {
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (targetCanvasId !== hostId || !targetCanvasCtx) return;
+  const point = getTouchPos(targetCanvasCtx.canvas, e);
+  if (socket)
+    socket.emit('host-move', { canvasId: targetCanvasId, point: point });
+}
+
+export function HostMouseMove(
+  e: any,
+  canvasCtxTable: CanvasCtxTable,
+  socket: SocketIOClient.Socket | null,
+  hostId: string | null,
+): void {
+  const targetCanvasId = e.target.id;
+  const targetCanvasCtx = canvasCtxTable[targetCanvasId];
+  if (targetCanvasId !== hostId || !targetCanvasCtx) return;
+  const point = {
+    x: e.nativeEvent.offsetX,
+    y: e.nativeEvent.offsetY,
+    c: e.target.id,
+  };
+  if (socket)
+    socket.emit('host-move', { canvasId: targetCanvasId, point: point });
+}

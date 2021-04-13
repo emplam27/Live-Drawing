@@ -109,6 +109,7 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             canvasCtxTable={props.canvasCtxTable}
             roomInfo={props.roomInfo}
             displayHidden={!props.isCompareMode}
+            socket={props.socket}
           />
         </div>
       </div>

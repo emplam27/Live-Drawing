@@ -5,4 +5,5 @@ export interface GuestCompareModeLayerComponentProps {
   canvasCtxTable: CanvasCtxTable;
   roomInfo: RoomInfo;
   displayHidden: boolean;
+  socket: SocketIOClient.Socket | null;
 }
