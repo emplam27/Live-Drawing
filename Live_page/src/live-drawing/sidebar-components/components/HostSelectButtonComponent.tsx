@@ -1,21 +1,10 @@
 import React from 'react';
 
 import { Layer } from '../../interfaces/draw-components-interfaces';
-import { UserSelectButtonComponentProps } from '../interfaces/user-select-button-interfaces';
+import { HostSelectButtonComponentProps } from '../interfaces/host-select-button-interfaces';
 import { UserInfo } from '../../interfaces/socket-interfaces';
 
-function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
-  // const [, updateState] = React.useState<number>(0);
-
-  // const forceUpdate = React.useCallback(
-  //   () => updateState(new Date().getTime()),
-  //   [],
-  // );
-
-  // useEffect(() => {
-  //   forceUpdate();
-  // }, [props.roomUsers]);
-
+function HostSelectButtonComponent(props: HostSelectButtonComponentProps) {
   const selectTopLayer = (layer: Layer | undefined) => {
     if (layer) props.setTopLayer(layer);
   };
@@ -27,17 +16,12 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
           const userLayer = props.layers.find(
             (layer) => layer.canvasId === user.userId,
           );
-          if (user.userId !== props.roomInfo.userId)
+          if (user.userId === props.roomInfo.roomHostId)
             return (
               <div
                 key={user.userId}
                 onClick={() => selectTopLayer(userLayer)}
-                className={`flex flex-col items-center cursor-pointer
-                  ${
-                    userLayer?.canvasId === props.roomInfo.roomHostId
-                      ? 'order-first py-6 flex flex-col'
-                      : 'py-6 flex flex-col'
-                  }
+                className={`flex flex-col items-center py-6 cursor-pointer
                   ${
                     userLayer?.canvasId === props.topLayer?.canvasId
                       ? 'bg-blue-500 text-white shadow-inner '
@@ -71,7 +55,7 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
                   src={`${user.userImage}`}
                   alt={`${user.username}`}
                 />
-                <p className={'w-full truncate px-2'}>{`${user?.username}`}</p>
+                <p className={'w-full truncate px-2'}>{user?.username}</p>
               </div>
             );
         })}
@@ -80,4 +64,4 @@ function UserSelectButtonComponent(props: UserSelectButtonComponentProps) {
   );
 }
 
-export default UserSelectButtonComponent;
+export default HostSelectButtonComponent;

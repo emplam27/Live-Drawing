@@ -1,7 +1,7 @@
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { RoomInfo, RoomUsers } from '../../interfaces/socket-interfaces';
 
-export interface UserSelectButtonComponentProps {
+export interface HostSelectButtonComponentProps {
   isModifiedMode: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;

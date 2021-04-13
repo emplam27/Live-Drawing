@@ -7,22 +7,20 @@ export function HostCursorComponent(props: HostCursorComponentProps) {
   const revisionHeight =
     2.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
   return (
-    <div>
-      <div
-        className={`${
-          props.position !== null ? 'fixed' : 'hidden'
-        } border-2 border-black w-10 h-10`}
-        style={{
-          left: props.position.point
-            ? `${rect.left + props.position.point.x}px`
-            : 'auto',
-          top: props.position.point
-            ? `${rect.top + props.position.point.y - revisionHeight}px`
-            : 'auto',
-        }}
-      >
-        <i className='ri-quill-pen-line'></i>
-      </div>
+    <div
+      className={`${
+        props.position !== null ? 'fixed' : 'hidden'
+      } border-2 border-black w-10 h-10`}
+      style={{
+        left: props.position.point
+          ? `${rect.left + props.position.point.x}px`
+          : 'auto',
+        top: props.position.point
+          ? `${rect.top + props.position.point.y - revisionHeight}px`
+          : 'auto',
+      }}
+    >
+      <i className='ri-quill-pen-line'></i>
     </div>
   );
 }

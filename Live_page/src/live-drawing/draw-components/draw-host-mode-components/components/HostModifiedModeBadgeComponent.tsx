@@ -12,12 +12,14 @@ function HostModifiedModeBadgeComponent(
 
   function endModifiedMode() {
     if (!props.topLayer || !props.roomUsers || !props.socket) return;
+
     sendModifiedModeMessage(
       'modified-mode-end',
       props.roomUsers,
       props.topLayer,
       props.socket,
     );
+
     props.setIsModifiedMode(false);
     MySwal.fire({
       icon: 'success',
@@ -41,11 +43,11 @@ function HostModifiedModeBadgeComponent(
           <span className={'font-bold text-3xl'}>
             {props.topLayer?.username}
           </span>
-          <span className={'text-2xl'}>&nbsp;님의 그림</span>
+          <span className={'text-2xl'}>&nbsp;님의 그림 원본</span>
         </div>
         <div className={props.buttonStyle} onClick={endModifiedMode}>
           <span className={'font-bold'}>그림첨삭 종료하기&nbsp;&nbsp;</span>
-          <i className='ri-lg ri-pencil-line'></i>
+          <i className='ri-arrow-go-back-line'></i>
         </div>
       </div>
     </div>

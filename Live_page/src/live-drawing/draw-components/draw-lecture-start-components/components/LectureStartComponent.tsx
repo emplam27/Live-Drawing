@@ -64,7 +64,7 @@ function LectureStartComponent(props: LectureStartComponentProps) {
             <img
               className='animate-bounce w-60 h-60 mx-auto text-gray-900'
               src='../../jungle.svg'
-            ></img>
+            />
           </div>
         </div>
       )}

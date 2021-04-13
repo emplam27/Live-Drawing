@@ -15,7 +15,7 @@ function GuestModifiedModeLayerComponent(
   }, [props.copyModifiedCanvasSignal]);
 
   return (
-    <div className={`${props.displayHidden ? 'hidden' : ''}`}>
+    <div className={props.displayHidden ? 'hidden' : ''}>
       <DrawableCanvasComponent
         activeTool={props.activeTool}
         canvasCtxTable={props.canvasCtxTable}

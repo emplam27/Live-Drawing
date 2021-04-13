@@ -10,7 +10,8 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
     <div className={props.displayHidden ? 'hidden' : ''}>
       {props.layers.map((layer: Layer) => {
         if (props.topLayer && layer.canvasId !== props.roomInfo.userId) {
-          const displayHidden = props.topLayer.canvasId !== layer.canvasId;
+          const peersCanvasDisplayHidden =
+            props.topLayer.canvasId !== layer.canvasId;
           return (
             // <DrawableCanvasComponent
             //   key={layer.canvasId}
@@ -22,15 +23,15 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
             //   roomInfo={props.roomInfo}
             //   socket={props.socket}
             //   canvasId={layer.canvasId}
-            //   displayHidden={displayHidden}
+            //   displayHidden={peersCanvasDisplayHidden}
             // />
             <UndrawableCanvasComponent
-              key={layer.canvasId}
               canvasId={layer.canvasId}
-              displayHidden={displayHidden}
               canvasCtxTable={props.canvasCtxTable}
               socket={props.socket}
               roomInfo={props.roomInfo}
+              key={layer.canvasId}
+              displayHidden={peersCanvasDisplayHidden}
             />
           );
         }

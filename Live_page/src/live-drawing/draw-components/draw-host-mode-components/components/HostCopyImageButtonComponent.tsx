@@ -22,6 +22,7 @@ function HostCopyImageButtonComponent(
       !props.socket
     )
       return;
+
     MySwal.fire({
       title: `${props.topLayer.username}님의 원본 그림을 복제하시겠습니까?`,
       text: '기존에 복제된 그림은 사라집니다.',
@@ -59,33 +60,24 @@ function HostCopyImageButtonComponent(
 
   return (
     <div
-      className={`relative flex flex-col items-start
-      ${props.displayHidden ? 'hidden' : ''}
-    `}
+      className={`
+        ${props.badgeContainerStyle}
+        ${props.displayHidden ? 'hidden' : ''}
+      `}
     >
-      <div
-        className={
-          'absolute flex justify-center items-center h-20 p-3 mt-10 text-white rounded-r-full bg-blue-500 hover:bg-blue-400 shadow-md z-20 cursor-pointer'
-        }
-        onClick={copyImageFromUserCanvas}
-      >
+      <div className={props.badgeStyle}>
         <div className={'flex items-end px-8'}>
           <span className={'font-bold text-3xl'}>
             {props.topLayer?.username}
           </span>
-          <span className={'text-2xl'}>&nbsp;님의 그림 복사하기</span>
+          <span className={'text-2xl'}>&nbsp;님의 그림 첨삭페이지</span>
         </div>
-        {/* <div
-          className={
-            'flex items-center px-6 h-full text-xl text-white rounded-full bg-blue-500 hover:bg-blue-400 cursor-pointer'
-          }
-          
-        >
+        <div className={props.buttonStyle} onClick={copyImageFromUserCanvas}>
           <span className={'font-bold'}>
-            {props.topLayer?.username}님의 그림 복사하기&nbsp;&nbsp;
+            {props.topLayer?.username}&nbsp;님의 그림 복사하기&nbsp;&nbsp;
           </span>
-          <i className='ri-lg ri-pencil-line'></i>
-        </div> */}
+          <i className=' ri-file-copy-line'></i>
+        </div>
       </div>
     </div>
   );

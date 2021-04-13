@@ -1,8 +1,6 @@
 /** cursor **/
 
 .cursor {
-  /* width: 40px; */
-  /* height: 40px; */
   border: 1px solid #fefefe;
   border-radius: 100%;
   position: fixed;
@@ -10,16 +8,10 @@
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition-property: opacity, background-color, transform, mix-blend-mode;
 }
 
 .cursor--hidden {
   opacity: 0;
-}
-
-.cursor--width {
-  width: 100px;
-  height: 100px;
 }
 
 

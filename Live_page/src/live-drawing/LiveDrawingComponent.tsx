@@ -44,11 +44,11 @@ function LiveDrawingComponent() {
   //@ Dummy Data
   const dummyRoomInfo = {
     username: '김형우',
-    userId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+    userId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
     userImage:
       'https://lh5.googleusercontent.com/-UD1QQESYljk/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucntz6Rz06XZSwFKdXXnwkw2u24Ahw/s96-c/photo.jpg',
     roomId: roomId,
-    roomHostId: '776a10b4-03e7-455c-88d4-f9f908e9b846',
+    roomHostId: '47a064dd-ab37-4990-aef8-cca398b24b2b',
     roomTitle: '12312421',
   };
 
@@ -221,6 +221,7 @@ function LiveDrawingComponent() {
     //   );
     // });
   }, []);
+
   return (
     <>
       <SidebarComponent

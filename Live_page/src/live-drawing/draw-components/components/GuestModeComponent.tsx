@@ -11,8 +11,7 @@ import { GuestModeComponentProps } from '../interfaces/guest-mode-interfaces';
 import GuestCompareModeLayerComponent from '../draw-guest-mode-components/components/GuestCompareModeLayerComponent';
 
 function GuestModeComponent(props: GuestModeComponentProps) {
-  const badgeContainerStyle =
-    'absolute flex flex-col items-center w-full h-full hover:bg-gray-300 hover:bg-opacity-25 transition duration-150 ease-in-out';
+  const badgeContainerStyle = 'absolute flex justify-center top-0 w-full';
   const badgeStyle =
     'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-20';
   const buttonStyle =
@@ -90,6 +89,7 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             isCompareMode={props.isCompareMode}
             roomInfo={props.roomInfo}
             setIsCompareMode={props.setIsCompareMode}
+            badgeContainerStyle={badgeContainerStyle}
             badgeStyle={badgeStyle}
             buttonStyle={buttonStyle}
             displayHidden={props.isModifiedMode}
@@ -103,6 +103,8 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             lineWidth={props.lineWidth}
             roomInfo={props.roomInfo}
             socket={props.socket}
+            badgeContainerStyle={badgeContainerStyle}
+            badgeStyle={badgeStyle}
             displayHidden={props.isCompareMode}
           />
           <GuestCompareModeLayerComponent

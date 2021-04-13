@@ -10,8 +10,7 @@ import HostModifiedModeLayerComponent from '../draw-host-mode-components/compone
 import { HostModeComponentProps } from '../interfaces/host-mode-interfaces';
 
 function HostModeComponent(props: HostModeComponentProps) {
-  const badgeContainerStyle =
-    'absolute flex flex-col items-center w-full h-full hover:bg-gray-300 hover:bg-opacity-25 transition duration-150 ease-in-out';
+  const badgeContainerStyle = 'absolute flex justify-center top-0 w-full';
   const badgeStyle =
     'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-20';
   const buttonStyle =
@@ -88,6 +87,7 @@ function HostModeComponent(props: HostModeComponentProps) {
           socket={props.socket}
           setTopLayer={props.setTopLayer}
           setIsModifiedMode={props.setIsModifiedMode}
+          badgeContainerStyle={badgeContainerStyle}
           badgeStyle={badgeStyle}
           buttonStyle={buttonStyle}
           displayHidden={!props.isModifiedMode}
@@ -101,6 +101,8 @@ function HostModeComponent(props: HostModeComponentProps) {
           lineWidth={props.lineWidth}
           roomInfo={props.roomInfo}
           socket={props.socket}
+          badgeContainerStyle={badgeContainerStyle}
+          badgeStyle={badgeStyle}
           displayHidden={props.isModifiedMode}
         />
         <HostModifiedModeLayerComponent

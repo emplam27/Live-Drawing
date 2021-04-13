@@ -8,10 +8,10 @@ function HostModifiedModeLayerComponent(
   props: HostModifiedModeLayerComponentProps,
 ) {
   return (
-    <div className={`${props.displayHidden ? 'hidden' : ''}`}>
+    <div className={props.displayHidden ? 'hidden' : ''}>
       {props.modifiedLayers.map((layer: Layer) => {
         if (props.topLayer) {
-          const displayHidden =
+          const modifiedCanvasdisplayHidden =
             layer.canvasId !== `modified-${props.topLayer.canvasId}`;
           return (
             <DrawableCanvasComponent
@@ -24,7 +24,7 @@ function HostModifiedModeLayerComponent(
               roomInfo={props.roomInfo}
               socket={props.socket}
               canvasId={layer.canvasId}
-              displayHidden={displayHidden}
+              displayHidden={modifiedCanvasdisplayHidden}
             />
           );
         }
