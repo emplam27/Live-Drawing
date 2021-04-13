@@ -14,7 +14,7 @@ function ChatScreenComponent(props: ChatScreenComponentProps) {
 
   useEffect(() => {
     scrollBottom();
-  }, [screen]);
+  }, [props.screen]);
 
   const messageStyle =
     'inline-block rounded-xl shadow-md px-4 py-2.5 mx-4 my-1.5';

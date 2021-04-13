@@ -1,6 +1,6 @@
 import React from 'react';
 import { LectureStartComponentProps } from '../interfaces/lecture-start-interfaces';
-import loadingImg from '../jungle.svg';
+import loadingImg from 'src/jungle.svg';
 
 function LectureStartComponent(props: LectureStartComponentProps) {
   function lectureStart() {

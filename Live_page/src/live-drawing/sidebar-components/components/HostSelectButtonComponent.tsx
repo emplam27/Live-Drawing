@@ -58,8 +58,8 @@ function HostSelectButtonComponent(props: HostSelectButtonComponentProps) {
                     }`}
                     src={`${user.userImage}`}
                   />
-                  <p className={'w-full truncate px-2'}>{user?.username}</p>
                 </span>
+                <p className={'w-full truncate px-2'}>{user?.username}</p>
               </div>
             );
         })}

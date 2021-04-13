@@ -1,4 +1,3 @@
-import { Color } from 'fabric/fabric-impl';
 import React from 'react';
 
 import { MyLayerComponentProps } from '../interfaces/my-layer-interfaces';

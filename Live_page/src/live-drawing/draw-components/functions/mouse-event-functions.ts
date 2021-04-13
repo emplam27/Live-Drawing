@@ -66,7 +66,7 @@ export function mouseMove(
   roomInfo: RoomInfo,
   socket: SocketIOClient.Socket | null,
 ): void {
-  // if (!canvasCtxTable || !socket) return;
+  if (!canvasCtxTable || !socket) return;
 
   if (!e.buttons) {
     lastPoint = null;
@@ -105,7 +105,7 @@ export function mouseMove(
         lineWidth: lineWidth,
       };
       draw(drawData, targetCanvasCtx);
-      // socket.emit('draw-pencil', drawData);
+      socket.emit('draw-pencil', drawData);
       break;
 
     case 'eraser':
@@ -116,7 +116,7 @@ export function mouseMove(
         r: eraserWidth,
       };
       erase(eraserData, targetCanvasCtx);
-      // socket.emit('draw-eraser', eraserData);
+      socket.emit('draw-eraser', eraserData);
       break;
   }
   lastPoint = {

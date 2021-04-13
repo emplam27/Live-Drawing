@@ -15,6 +15,7 @@ function GuestSelectButtonComponent(props: GuestSelectButtonComponentProps) {
   };
 
   function GuestButtonComponent({ user, userLayer }) {
+    if (!user || !userLayer) return null;
     return (
       <div
         key={user.userId}
@@ -27,23 +28,19 @@ function GuestSelectButtonComponent(props: GuestSelectButtonComponentProps) {
           }
         `}
       >
-        <span className='flex h-3 w-3'>
-          {props.speakingUsers &&
-          user.agoraId &&
-          props.speakingUsers.includes(user.agoraId) ? (
-            <span className='animate-ping absolute inline-flex h-4 w-4 rounded-full bg-purple-400 opacity-75'></span>
+        <span className='flex justify-center items-center'>
+          {props.speakingUsers && props.speakingUsers.length >= 1 ? (
+            <span className='animate-ping absolute h-10 w-10 rounded-full bg-black opacity-75'></span>
           ) : null}
-          <span className='relative inline-flex rounded-full h-3 w-3 bg-purple-500'></span>
+          <img
+            className={`w-12 h-12 relative  rounded-full  my-2   ${
+              userLayer?.canvasId === props.topLayer?.canvasId
+                ? 'ring-2 ring-white shadow-lg'
+                : ''
+            }`}
+            src={`${user.userImage}`}
+          />
         </span>
-        <img
-          className={`w-12 h-12 rounded-full my-2 ${
-            userLayer?.canvasId === props.topLayer?.canvasId
-              ? 'ring-2 ring-white shadow-lg'
-              : ''
-          }`}
-          src={user.userImage}
-          alt={user.username}
-        />
         {props.roomInfo.userId === props.roomInfo.roomHostId ? (
           <p className={'w-full truncate px-2'}>{user.username}</p>
         ) : null}
@@ -69,6 +66,11 @@ function GuestSelectButtonComponent(props: GuestSelectButtonComponentProps) {
     };
 
     useEffect(() => {
+      if (users.length <= 3) {
+        setCarouselCandidate(users);
+        return;
+      }
+
       const tmp: any = [];
       for (let i = 0; i < 3; i++) {
         let index: number = activeIndex + i;
@@ -84,30 +86,29 @@ function GuestSelectButtonComponent(props: GuestSelectButtonComponentProps) {
       <div className='divide-y'>
         <button
           type='button'
-          className='w-full'
+          className='w-full focus:outline-none'
           onClick={() => handleClick('prev')}
         >
           <i className='ri-arrow-up-s-line'></i>
         </button>
 
-        <div className=''>
-          {carouselCandidate.map((user: UserInfo) => {
-            const userLayer = props.layers.find(
-              (layer) => user.userId === layer.canvasId,
-            );
-            return (
-              <GuestButtonComponent
-                key={user.userId}
-                user={user}
-                userLayer={userLayer}
-              />
-            );
-          })}
-        </div>
+        {carouselCandidate.map((user: UserInfo) => {
+          if (!user) return null;
+          const userLayer = props.layers.find(
+            (layer) => user.userId === layer.canvasId,
+          );
+          return (
+            <GuestButtonComponent
+              key={user.userId}
+              user={user}
+              userLayer={userLayer}
+            />
+          );
+        })}
 
         <button
           type='button'
-          className='w-full'
+          className='w-full focus:outline-none'
           onClick={() => handleClick('next')}
         >
           <i className='ri-arrow-down-s-line'></i>

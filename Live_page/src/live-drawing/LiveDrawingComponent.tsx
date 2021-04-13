@@ -213,6 +213,7 @@ function LiveDrawingComponent() {
             allowOutsideClick: false,
           });
         });
+
         socketIo.on('lecture-close', () => {
           MySwal.fire({
             title: '라이브가 종료되었습니다.',
