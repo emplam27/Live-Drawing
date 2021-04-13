@@ -239,6 +239,7 @@ export function HostMouseMove(
   socket: SocketIOClient.Socket | null,
   hostId: string | null,
 ): void {
+  e.stopPropagation();
   const targetCanvasId = e.target.id;
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
   if (targetCanvasId !== hostId || !targetCanvasCtx) return;

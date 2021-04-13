@@ -113,6 +113,13 @@ io.on('connection', socket => {
     socket.broadcast.to(user.roomId).emit('draw-start', message)
   })
 
+  socket.on('draw-end', message => {
+    const user = getUser(socket.id)
+    if (!user) return
+    historyData.push(user.roomId, message)
+    socket.broadcast.to(user.roomId).emit('draw-end', message)
+  })
+
   socket.on('draw-pencil', message => {
     const user = getUser(socket.id)
     if (!user) return
@@ -125,6 +132,13 @@ io.on('connection', socket => {
     if (!user) return
     historyData.push(user.roomId, message)
     socket.broadcast.to(user.roomId).emit('draw-eraser', message)
+  })
+
+  //@ Host Move Event
+  socket.on('host-move', message => {
+    const user = getUser(socket.id)
+    if (!user) return
+    socket.broadcast.to(user.roomId).emit('host-move', message)
   })
 
   //@ Layer Events
@@ -187,7 +201,6 @@ io.on('connection', socket => {
     console.log(user)
     console.log('유저의 연결이 끊어졌습니다.')
     if (user) {
-      console.log('im in!')
       const headers = {
         'Content-Type': 'application/json',
         Authorization: user.token,

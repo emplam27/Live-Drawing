@@ -1,6 +1,6 @@
 import React from 'react';
 
-import UndrawableCanvasComponent from '../../components/UndrawableCanvasComponent';
+import { UndrawableCanvasComponent } from '../../components/UndrawableCanvasComponent';
 import { GuestCompareModeLayerComponentProps } from '../interfaces/guest-compare-mode-layer-interfaces';
 
 function GuestCompareModeLayerComponent(

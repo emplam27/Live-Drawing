@@ -6,7 +6,9 @@ import {
 
 import { UndrawableCanvasComponentProps } from '../interfaces/undrawable-canvas-component';
 
-function UndrawableCanvasComponent(props: UndrawableCanvasComponentProps) {
+export function UndrawableCanvasComponent(
+  props: UndrawableCanvasComponentProps,
+) {
   return (
     <canvas
       id={props.canvasId}
@@ -29,8 +31,8 @@ function UndrawableCanvasComponent(props: UndrawableCanvasComponentProps) {
           props.roomInfo.roomHostId,
         )
       }
-    />
+    ></canvas>
   );
 }
 
-export default UndrawableCanvasComponent;
+// export default UndrawableCanvasComponent;

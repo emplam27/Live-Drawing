@@ -104,6 +104,8 @@ function HostModeComponent(props: HostModeComponentProps) {
           badgeContainerStyle={badgeContainerStyle}
           badgeStyle={badgeStyle}
           displayHidden={props.isModifiedMode}
+          setHidden={props.setHidden}
+          setPosition={props.setPosition}
         />
         <HostModifiedModeLayerComponent
           activeTool={props.activeTool}
@@ -118,6 +120,8 @@ function HostModeComponent(props: HostModeComponentProps) {
           socket={props.socket}
           topLayer={props.topLayer}
           displayHidden={!props.isModifiedMode}
+          setHidden={props.setHidden}
+          setPosition={props.setPosition}
         />
       </div>
     </div>

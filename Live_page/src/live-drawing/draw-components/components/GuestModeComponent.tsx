@@ -79,6 +79,8 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             socket={props.socket}
             topLayer={props.topLayer}
             displayHidden={!props.isModifiedMode}
+            setHidden={props.setHidden}
+            setPosition={props.setPosition}
           />
         </div>
         <div
@@ -108,6 +110,8 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             badgeContainerStyle={badgeContainerStyle}
             badgeStyle={badgeStyle}
             displayHidden={props.isCompareMode}
+            setHidden={props.setHidden}
+            setPosition={props.setPosition}
           />
           <GuestCompareModeLayerComponent
             canvasCtxTable={props.canvasCtxTable}

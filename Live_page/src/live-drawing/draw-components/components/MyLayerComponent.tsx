@@ -18,6 +18,8 @@ function MyLayerComponent(props: MyLayerComponentProps) {
           socket={props.socket}
           canvasId={props.roomInfo.userId}
           displayHidden={props.displayHidden}
+          setHidden={props.setHidden}
+          setPosition={props.setPosition}
         />
       ) : (
         <div className='flex flex-col justify-center items-center w-full h-full bg-gray-200'>

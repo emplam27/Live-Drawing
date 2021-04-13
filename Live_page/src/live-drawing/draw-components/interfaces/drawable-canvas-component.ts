@@ -11,4 +11,11 @@ export interface DrawableCanvasComponentProps {
   socket: SocketIOClient.Socket | null;
   canvasId: string;
   displayHidden: boolean;
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>;
+  setPosition: React.Dispatch<
+    React.SetStateAction<{
+      x: number;
+      y: number;
+    }>
+  >;
 }

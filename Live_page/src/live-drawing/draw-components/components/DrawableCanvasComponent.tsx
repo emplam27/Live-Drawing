@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  onMouseEnter,
+  onMouseLeave,
+  onMouseMove,
+  onTouchMove,
+} from '../functions/cursor-functions';
 
 import {
   mouseDown,
@@ -24,6 +30,7 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
       onMouseUp={(e) => mouseUp(e, props.canvasCtxTable, props.socket)}
       onTouchEnd={(e) => touchEnd(e, props.canvasCtxTable, props.socket)}
       onMouseMove={(e) => {
+        onMouseMove(e, props.setPosition);
         mouseMove(
           e,
           props.activeTool,
@@ -34,14 +41,15 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.roomInfo,
           props.socket,
         );
-        // HostMouseMove(
-        //   e,
-        //   props.canvasCtxTable,
-        //   props.socket,
-        //   props.roomInfo.roomHostId,
-        // );
+        HostMouseMove(
+          e,
+          props.canvasCtxTable,
+          props.socket,
+          props.roomInfo.roomHostId,
+        );
       }}
       onTouchMove={(e) => {
+        onTouchMove(e, props.setPosition);
         touchMove(
           e,
           props.activeTool,
@@ -59,6 +67,8 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.roomInfo.roomHostId,
         );
       }}
+      onMouseEnter={() => onMouseEnter(props.setHidden)}
+      onMouseLeave={() => onMouseLeave(props.setHidden)}
     />
   );
 }
