@@ -23,7 +23,7 @@ function GuestModeComponent(props: GuestModeComponentProps) {
       <div className={props.layerContainerGridStyle}>
         <div
           id='undrawable-canvas'
-          className='cols-start-1 cols-end-2 relative flex justify-center overflow-hidden'
+          className='cols-start-1 cols-end-2 relative flex justify-center items-center overflow-hidden bg-gray-200'
         >
           {!props.isLectureStarted ? (
             <LectureStartComponent
@@ -84,7 +84,7 @@ function GuestModeComponent(props: GuestModeComponentProps) {
         </div>
         <div
           id='drawable-canvas'
-          className='cols-start-2 cols-end-3 relative flex justify-center overflow-hidden'
+          className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden bg-gray-200'
         >
           <GuestCompareModeBadgeComponent
             isCompareMode={props.isCompareMode}

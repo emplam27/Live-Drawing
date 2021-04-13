@@ -21,7 +21,7 @@ function HostModeComponent(props: HostModeComponentProps) {
     <div className={props.layerContainerGridStyle}>
       <div
         id='undrawable-canvas'
-        className='cols-start-1 cols-end-2 relative flex justify-center overflow-hidden'
+        className='cols-start-1 cols-end-2 relative flex justify-center items-center overflow-hidden bg-gray-200'
       >
         {!props.isLectureStarted ? (
           <LectureStartComponent
@@ -76,7 +76,7 @@ function HostModeComponent(props: HostModeComponentProps) {
       </div>
       <div
         id='drawable-canvas'
-        className='cols-start-2 cols-end-3 relative flex justify-center overflow-hidden'
+        className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden bg-gray-200'
       >
         <HostCopyImageButtonComponent
           canvasCtxTable={props.canvasCtxTable}
