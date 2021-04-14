@@ -5,7 +5,6 @@ import {
   Point,
   CanvasCtxTable,
 } from '../../interfaces/draw-components-interfaces';
-import { RoomInfo } from '../../interfaces/socket-interfaces';
 
 const agent = navigator.userAgent.toLowerCase();
 const countDict = {};
@@ -27,6 +26,7 @@ export function drawStart(ctx: CanvasRenderingContext2D, point: Point) {
   if (!countDict[point.c]) countDict[point.c] = 0;
   ctx.beginPath();
   ctx.moveTo(point.x, point.y);
+  // lastPoint = point;
 }
 
 export function drawEnd(
@@ -62,7 +62,11 @@ export function mouseDown(
   const targetCanvasCtx = canvasCtxTable[targetCanvasId];
   if (!targetCanvasCtx || !lastPoint) return;
   drawStart(targetCanvasCtx, lastPoint);
-  socket.emit('draw-start', { point: lastPoint, canvasId: targetCanvasId });
+  socket.emit('draw-start', {
+    event: 'start',
+    point: lastPoint,
+    canvasId: targetCanvasId,
+  });
 }
 
 export function mouseMove(
@@ -148,6 +152,7 @@ export function mouseUp(
   drawEnd(targetCanvasCtx, lastPoint, isMoved, activeTool);
   if (socket)
     socket.emit('draw-end', {
+      event: 'end',
       canvasId: targetCanvasId,
       point: lastPoint,
       isMoved: isMoved,
@@ -171,7 +176,11 @@ export function touchStart(
   lastPoint = getTouchPos(targetCanvasCtx.canvas, e);
   if (!lastPoint) return;
   drawStart(targetCanvasCtx, lastPoint);
-  socket.emit('draw-start', { point: lastPoint, canvasId: targetCanvasId });
+  socket.emit('draw-start', {
+    event: 'start',
+    point: lastPoint,
+    canvasId: targetCanvasId,
+  });
 }
 
 export function touchMove(
@@ -240,6 +249,7 @@ export function touchEnd(
   drawEnd(targetCanvasCtx, lastPoint, isMoved, activeTool);
   if (socket)
     socket.emit('draw-end', {
+      event: 'end',
       canvasId: targetCanvasId,
       point: lastPoint,
       isMoved: isMoved,
