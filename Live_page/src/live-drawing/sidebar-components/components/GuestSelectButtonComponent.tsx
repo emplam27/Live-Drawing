@@ -95,7 +95,9 @@ function GuestSelectButtonComponent(props: GuestSelectButtonComponentProps) {
         {carouselCandidate.map((user: UserInfo) => {
           if (!user) return null;
           const userLayer = props.layers.find(
-            (layer) => user.userId === layer.canvasId,
+            (layer) =>
+              props.roomInfo.userId !== user.userId &&
+              user.userId === layer.canvasId,
           );
           return (
             <GuestButtonComponent
