@@ -1,6 +1,6 @@
 import React from 'react';
 import { LectureStartComponentProps } from '../interfaces/lecture-start-interfaces';
-import loadingImg from '../../../../jungle.svg';
+import { ReactComponent as Icon } from './jungle.svg';
 
 export function LectureStartComponent(props: LectureStartComponentProps) {
   function lectureStart() {
@@ -60,10 +60,7 @@ export function LectureStartComponent(props: LectureStartComponentProps) {
             </p>
           </div>
           <div className='mt-60 self-center'>
-            <img
-              className='animate-bounce w-60 h-60 mx-auto text-gray-900'
-              src={loadingImg}
-            ></img>
+            <Icon className='animate-bounce w-60 h-60 mx-auto text-gray-900'></Icon>
           </div>
         </div>
       )}

@@ -33,6 +33,7 @@ export function drawEnd(
     ctx.lineTo(point.x, point.y);
     ctx.stroke();
   }
+  // ctx.closePath();
 }
 
 //@ Mouse Event
