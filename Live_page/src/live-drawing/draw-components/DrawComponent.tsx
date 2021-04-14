@@ -127,7 +127,12 @@ function DrawComponent(props: DrawComponentProps) {
   useEffect(() => {
     if (endSignal === null) return;
     const canvasCtx = canvasCtxTable[endSignal.canvasId];
-    drawEnd(canvasCtx, endSignal.point, endSignal.isMoved);
+    drawEnd(
+      canvasCtx,
+      endSignal.point,
+      endSignal.isMoved,
+      endSignal.activeTool,
+    );
     if (
       (endSignal.canvasId === props.roomInfo.roomHostId &&
         endSignal.canvasId === props.topLayer?.canvasId) ||

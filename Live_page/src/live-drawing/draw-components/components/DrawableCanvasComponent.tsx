@@ -27,8 +27,12 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
       height={1080}
       onMouseDown={(e) => mouseDown(e, props.canvasCtxTable, props.socket)}
       onTouchStart={(e) => touchStart(e, props.canvasCtxTable, props.socket)}
-      onMouseUp={(e) => mouseUp(e, props.canvasCtxTable, props.socket)}
-      onTouchEnd={(e) => touchEnd(e, props.canvasCtxTable, props.socket)}
+      onMouseUp={(e) =>
+        mouseUp(e, props.canvasCtxTable, props.socket, props.activeTool)
+      }
+      onTouchEnd={(e) =>
+        touchEnd(e, props.canvasCtxTable, props.socket, props.activeTool)
+      }
       onMouseMove={(e) => {
         onMouseMove(e, props.setPosition);
         mouseMove(
@@ -38,7 +42,6 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.color,
           props.eraserWidth,
           props.lineWidth,
-          props.roomInfo,
           props.socket,
         );
         // HostMouseMove(
@@ -57,7 +60,6 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.color,
           props.eraserWidth,
           props.lineWidth,
-          props.roomInfo,
           props.socket,
         );
         // HostTouchMove(

@@ -196,6 +196,10 @@ function LiveDrawingComponent() {
           _handleRoomUsersChange(message);
         });
 
+        socketIo.on('already-start', () => {
+          setIsLectureStarted(true);
+        });
+
         socketIo.on('lecture-start', () => {
           setIsLectureStarted(true);
           // console.log('강의시작', MySwal, Swal);
