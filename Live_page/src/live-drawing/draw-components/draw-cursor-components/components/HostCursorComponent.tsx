@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { HostCursorComponentProps } from '../interfaces/host-cursor-interfaces';
-import brush from './paint-cursor.png';
 
 export function HostCursorComponent(props: HostCursorComponentProps) {
   if (!props.position || !props.position.canvas) return null;
@@ -11,7 +10,7 @@ export function HostCursorComponent(props: HostCursorComponentProps) {
     <div
       className={`${
         props.position !== null ? 'fixed' : 'hidden'
-      } border-2 border-black w-10 h-10 z-30`}
+      } w-10 h-10 z-30 text-blue-500`}
       style={{
         left: props.position.point
           ? `${rect.left + props.position.point.x}px`
@@ -22,7 +21,7 @@ export function HostCursorComponent(props: HostCursorComponentProps) {
         // zIndex: 9999,
       }}
     >
-      <img src={brush} />
+      <i className='ri-2x ri-quill-pen-line'></i>
     </div>
   );
 }

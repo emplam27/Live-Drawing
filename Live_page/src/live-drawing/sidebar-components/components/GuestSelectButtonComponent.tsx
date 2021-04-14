@@ -29,9 +29,9 @@ function GuestSelectButtonComponent(props: GuestSelectButtonComponentProps) {
         `}
       >
         <span className='flex justify-center items-center'>
-          {props.speakingUsers && props.speakingUsers.length >= 1 ? (
+          {/* {props.speakingUsers && props.speakingUsers.length >= 1 ? (
             <span className='animate-ping absolute h-10 w-10 rounded-full bg-black opacity-75'></span>
-          ) : null}
+          ) : null} */}
           <img
             className={`w-12 h-12 relative  rounded-full  my-2   ${
               userLayer?.canvasId === props.topLayer?.canvasId

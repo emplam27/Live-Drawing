@@ -49,8 +49,8 @@ function SidebarComponent(props: SidebarComponentProps) {
         setSpeakingUsers={setSpeakingUsers}
       />
       <div className='flex-grow'></div>
-      <button onClick={changeModifiedMode}>첨삭모드전환</button>
-      <button onClick={startLecture}>강의시작</button>
+      {/* <button onClick={changeModifiedMode}>첨삭모드전환</button>
+      <button onClick={startLecture}>강의시작</button> */}
       <div className='flex-grow'></div>
       <VoiceChatComponent
         roomInfo={props.roomInfo}

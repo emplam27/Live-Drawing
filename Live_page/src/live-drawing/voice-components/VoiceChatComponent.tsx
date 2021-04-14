@@ -46,7 +46,7 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       volumes.forEach((volume) => {
         // 볼륨이 일정 수준 이상이라면
         // console.log(`${index} UID ${volume.uid} Level ${volume.level}`);
-        if (volume.level >= 2) {
+        if (volume.level >= 6) {
           makeSoundUsers.push(volume.uid);
         }
       });

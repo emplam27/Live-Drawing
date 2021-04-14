@@ -115,7 +115,8 @@ function DrawComponent(props: DrawComponentProps) {
     if (!canvasCtx) return;
     drawStart(canvasCtx, startSignal.point);
     if (
-      startSignal.canvasId === props.roomInfo.roomHostId ||
+      (startSignal.canvasId === props.roomInfo.roomHostId &&
+        startSignal.canvasId === props.topLayer?.canvasId) ||
       startSignal.canvasId === props.roomInfo.userId ||
       startSignal.canvasId === 'modified-' + props.roomInfo.userId
     )
@@ -128,7 +129,8 @@ function DrawComponent(props: DrawComponentProps) {
     const canvasCtx = canvasCtxTable[endSignal.canvasId];
     drawEnd(canvasCtx, endSignal.point, endSignal.isMoved);
     if (
-      endSignal.canvasId === props.roomInfo.roomHostId ||
+      (endSignal.canvasId === props.roomInfo.roomHostId &&
+        endSignal.canvasId === props.topLayer?.canvasId) ||
       endSignal.canvasId === props.roomInfo.userId ||
       endSignal.canvasId === 'modified-' + props.roomInfo.userId
     )
@@ -143,7 +145,8 @@ function DrawComponent(props: DrawComponentProps) {
     if (!canvasCtx) return;
     draw(pencilSignal, canvasCtx);
     if (
-      pencilSignal.canvasId === props.roomInfo.roomHostId ||
+      (pencilSignal.canvasId === props.roomInfo.roomHostId &&
+        pencilSignal.canvasId === props.topLayer?.canvasId) ||
       pencilSignal.canvasId === props.roomInfo.userId ||
       pencilSignal.canvasId === 'modified-' + props.roomInfo.userId
     )
@@ -161,7 +164,8 @@ function DrawComponent(props: DrawComponentProps) {
     if (!canvasCtx) return;
     erase(eraserSignal, canvasCtx);
     if (
-      eraserSignal.canvasId === props.roomInfo.roomHostId ||
+      (eraserSignal.canvasId === props.roomInfo.roomHostId &&
+        eraserSignal.canvasId === props.topLayer?.canvasId) ||
       eraserSignal.canvasId === props.roomInfo.userId ||
       eraserSignal.canvasId === 'modified-' + props.roomInfo.userId
     )

@@ -152,11 +152,6 @@ function LiveDrawingComponent() {
           icon: 'success',
           title: '새로운 사용자가 입장하였습니다.',
         });
-      } else if (newRoomUsers.users.length < roomUsers.users.length) {
-        Toast.fire({
-          icon: 'success',
-          title: '사용자가 퇴장하였습니다.',
-        });
       }
       return newRoomUsers;
     });
@@ -216,8 +211,7 @@ function LiveDrawingComponent() {
         });
 
         socketIo.on('lecture-close', () => {
-          // console.log('강의종료', MySwal, Swal);
-          Swal.fire({
+          MySwal.fire({
             title: '라이브가 종료되었습니다.',
             text: '홈 화면으로 이동합니다.',
             icon: 'warning',
@@ -229,7 +223,6 @@ function LiveDrawingComponent() {
               window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
             }
           });
-          // console.log('fuck!!!');
         });
 
         socketIo.on('connect', () => {
