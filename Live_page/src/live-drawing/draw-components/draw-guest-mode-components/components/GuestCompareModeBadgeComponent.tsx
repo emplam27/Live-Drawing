@@ -18,6 +18,7 @@ function GuestCompareModeBadgeComponent(
       className={`
         ${props.badgeContainerStyle}
         ${props.displayHidden ? 'hidden' : ''}
+        z-30
       `}
     >
       <div className={props.badgeStyle}>

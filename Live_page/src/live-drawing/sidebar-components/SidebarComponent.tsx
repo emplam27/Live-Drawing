@@ -22,7 +22,7 @@ function SidebarComponent(props: SidebarComponentProps) {
   }
 
   return (
-    <div className='flex-initial w-20 flex flex-col border-r divide-y'>
+    <div className='flex-initial w-20 flex flex-col border-r divide-y z-50 bg-white'>
       <div className='h-20 flex flex-wrap justify-center content-center'>
         <i className='ri-2x ri-leaf-fill text-blue-500'></i>
       </div>

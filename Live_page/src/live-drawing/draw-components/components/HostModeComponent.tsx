@@ -13,7 +13,7 @@ function HostModeComponent(props: HostModeComponentProps) {
   const badgeContainerStyle =
     'absolute flex justify-center top-0 w-full bg-gray-200';
   const badgeStyle =
-    'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-20';
+    'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-30';
   const buttonStyle =
     'flex items-center px-6 h-full text-xl text-white rounded-full bg-blue-500 hover:bg-blue-400 cursor-pointer';
 

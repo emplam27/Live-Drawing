@@ -22,7 +22,7 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
   return (
     <canvas
       id={props.canvasId}
-      className={`bg-white ${props.displayHidden ? 'hidden' : ''}`}
+      className={`bg-white ${props.displayHidden ? 'hidden' : ''} z-20`}
       width={(1920 - 60) * 0.5}
       height={1080}
       onMouseDown={(e) => mouseDown(e, props.canvasCtxTable, props.socket)}

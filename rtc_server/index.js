@@ -77,23 +77,47 @@ io.on('connection', socket => {
   socket.on('require-history', () => {
     // console.log('require-history')
     const user = getUser(socket.id)
-    if (!user || !historyData.dict[user.roomId]) return
-    for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
-      switch (historyData.dict[user.roomId][i].event) {
-        case 'pencil':
-          socket.emit('draw-pencil', historyData.dict[user.roomId][i])
-          break
-        case 'eraser':
-          socket.emit('draw-eraser', historyData.dict[user.roomId][i])
-          break
-        case 'start':
-          socket.emit('draw-start', historyData.dict[user.roomId][i])
-          break
-        case 'end':
-          socket.emit('draw-end', historyData.dict[user.roomId][i])
-          break
+    if (
+      !user ||
+      !historyData.dict[user.roomId] ||
+      !historyData.dict[user.roomId][user.userId]
+    )
+      return
+    for (
+      let keyIndex = 0, keys = Object.keys(historyData.dict[user.roomId]);
+      keyIndex < keys.length;
+      keyIndex++
+    )
+      for (let dataIndex = 0; dataIndex < keys[keyIndex].length; dataIndex++) {
+        switch (
+          historyData.dict[user.roomId][keys[keyIndex]][dataIndex].event
+        ) {
+          case 'pencil':
+            socket.emit(
+              'draw-pencil',
+              historyData.dict[user.roomId][keys[keyIndex]][dataIndex]
+            )
+            break
+          case 'eraser':
+            socket.emit(
+              'draw-eraser',
+              historyData.dict[user.roomId][keys[keyIndex]][dataIndex]
+            )
+            break
+          case 'start':
+            socket.emit(
+              'draw-start',
+              historyData.dict[user.roomId][keys[keyIndex]][dataIndex]
+            )
+            break
+          case 'end':
+            socket.emit(
+              'draw-end',
+              historyData.dict[user.roomId][keys[keyIndex]][dataIndex]
+            )
+            break
+        }
       }
-    }
   })
 
   socket.on('volume-message', (uid, volume, roomId) => {
@@ -122,28 +146,28 @@ io.on('connection', socket => {
   socket.on('draw-start', message => {
     const user = getUser(socket.id)
     if (!user) return
-    historyData.push(user.roomId, message)
+    historyData.push(user.roomId, message.canvasId, message)
     socket.broadcast.to(user.roomId).emit('draw-start', message)
   })
 
   socket.on('draw-end', message => {
     const user = getUser(socket.id)
     if (!user) return
-    historyData.push(user.roomId, message)
+    historyData.push(user.roomId, message.canvasId, message)
     socket.broadcast.to(user.roomId).emit('draw-end', message)
   })
 
   socket.on('draw-pencil', message => {
     const user = getUser(socket.id)
     if (!user) return
-    historyData.push(user.roomId, message)
+    historyData.push(user.roomId, message.canvasId, message)
     socket.broadcast.to(user.roomId).emit('draw-pencil', message)
   })
 
   socket.on('draw-eraser', message => {
     const user = getUser(socket.id)
     if (!user) return
-    historyData.push(user.roomId, message)
+    historyData.push(user.roomId, message.canvasId, message)
     socket.broadcast.to(user.roomId).emit('draw-eraser', message)
   })
 

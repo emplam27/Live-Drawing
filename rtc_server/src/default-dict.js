@@ -18,11 +18,14 @@
 module.exports = function defaultDict() {
   let dict = {}
   return {
-    push: function (roomId, message) {
+    push: function (roomId, userId, message) {
       if (!dict[roomId]) {
-        dict[roomId] = []
+        dict[roomId] = {}
       }
-      dict[roomId].push(message)
+      if (!dict[roomId][userId]) {
+        dict[roomId][userId] = []
+      }
+      dict[roomId][userId].push(message)
     },
     dict: dict,
   }

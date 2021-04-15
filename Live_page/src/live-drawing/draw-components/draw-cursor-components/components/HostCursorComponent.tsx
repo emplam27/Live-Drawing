@@ -10,7 +10,7 @@ export function HostCursorComponent(props: HostCursorComponentProps) {
     <div
       className={`${
         props.position !== null ? 'fixed' : 'hidden'
-      } w-12 h-12 z-30`}
+      } w-12 h-12 z-10`}
       style={{
         left: props.position.point
           ? `${rect.left + props.position.point.x}px`

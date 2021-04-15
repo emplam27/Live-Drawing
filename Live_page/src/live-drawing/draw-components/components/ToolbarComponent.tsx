@@ -9,7 +9,7 @@ import { ToolbarComponentProps } from '../interfaces/toolbar-interfaces';
 function ToolbarComponent(props: ToolbarComponentProps) {
   return (
     <>
-      <div className='absolute bottom-0 left-3/4 inset-x-1/2 z-40 w-1/3 h-20 shadow-3xl bg-white transform -translate-x-1/2 flex flex-row'>
+      <div className='absolute bottom-0 left-3/4 inset-x-1/2 z-50 w-1/3 h-20 shadow-3xl bg-white transform -translate-x-1/2 flex flex-row'>
         <div className='flex-grow'></div>
         <ToolSelectComponent
           activeTool={props.activeTool}

@@ -9,12 +9,7 @@ function ClearCanvasComponent(props: ClearCanvasComponentProps) {
     const userCanvas: any = document.getElementById(userId);
     if (userCanvas) {
       const userCtx = userCanvas.getContext('2d');
-      userCtx.clearRect(
-        0,
-        0,
-        (window.innerWidth - 60) * 0.5,
-        window.innerHeight,
-      );
+      userCtx.clearRect(0, 0, (1920 - 60) * 0.5, 1080);
       //   const saveImage = saveCanvas.toDataURL('image/png');
       //   const a: any = document.createElement('a');
       //   a.download = 'image.png';

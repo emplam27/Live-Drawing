@@ -19,12 +19,7 @@ export function copyImageToModifiedCanvasForHostMode(
   const modifiedCanvasCtx: CanvasRenderingContext2D | null =
     canvasCtxTable[`modified-${topLayer.canvasId}`];
   if (!modifiedCanvasCtx) return;
-  modifiedCanvasCtx.clearRect(
-    0,
-    0,
-    (window.innerWidth - 60) * 0.5,
-    window.innerHeight,
-  );
+  modifiedCanvasCtx.clearRect(0, 0, (1920 - 60) * 0.5, 1080);
   modifiedCanvasCtx.drawImage(userCanvas as HTMLCanvasElement, 0, 0);
 }
 
@@ -40,12 +35,7 @@ export function copyImageToModifiedCanvasForGuestMode(
   const modifiedCanvasCtx: CanvasRenderingContext2D | null =
     canvasCtxTable[`modified-${roomInfo.userId}`];
   if (!modifiedCanvasCtx) return;
-  modifiedCanvasCtx.clearRect(
-    0,
-    0,
-    (window.innerWidth - 60) * 0.5,
-    window.innerHeight,
-  );
+  modifiedCanvasCtx.clearRect(0, 0, (1920 - 60) * 0.5, 1080);
   modifiedCanvasCtx.drawImage(userCanvas as HTMLCanvasElement, 0, 0);
 }
 
@@ -61,12 +51,7 @@ export function copyImageToCompareCanvasForGuestMode(roomInfo: RoomInfo) {
     '2d',
   );
   if (!compareCanvasCtx) return;
-  compareCanvasCtx.clearRect(
-    0,
-    0,
-    (window.innerWidth - 60) * 0.5,
-    window.innerHeight,
-  );
+  compareCanvasCtx.clearRect(0, 0, (1920 - 60) * 0.5, 1080);
   compareCanvasCtx.drawImage(modifiedCanvas as HTMLCanvasElement, 0, 0);
 }
 
@@ -85,6 +70,6 @@ export function sendModifiedModeMessage(
   const message: any = {
     userId: targetUser.userId,
   };
-  console.log(`${message.userId}에게 ${event} 이벤트 발생`);
+  // console.log(`${message.userId}에게 ${event} 이벤트 발생`);
   socket.emit(event, message);
 }
