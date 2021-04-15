@@ -33,7 +33,7 @@ io.on('connection', socket => {
   console.log('소켓 연결 완료')
 
   socket.on('join', message => {
-    console.log('message', message)
+    // console.log('message', message)
     const user = addUser({
       socketId: socket.id,
       username: message.username,
@@ -44,7 +44,7 @@ io.on('connection', socket => {
       token: message.token,
       agoraId: null,
     })
-    console.log('server', user)
+    // console.log('server', user)
     if (user.error) {
       socket.emit('error', user)
       return
@@ -88,7 +88,16 @@ io.on('connection', socket => {
       keyIndex < keys.length;
       keyIndex++
     )
-      for (let dataIndex = 0; dataIndex < keys[keyIndex].length; dataIndex++) {
+      for (
+        let dataIndex = 0;
+        dataIndex < historyData[user.roomId][keys[keyIndex]].length;
+        dataIndex++
+      ) {
+        console.log(keys[keyIndex])
+        console.log(
+          '------------',
+          historyData.dict[user.roomId][keys[keyIndex]][dataIndex].event
+        )
         switch (
           historyData.dict[user.roomId][keys[keyIndex]][dataIndex].event
         ) {
@@ -161,6 +170,7 @@ io.on('connection', socket => {
     const user = getUser(socket.id)
     if (!user) return
     historyData.push(user.roomId, message.canvasId, message)
+    // console.log(historyData.dict[user.roomId])
     socket.broadcast.to(user.roomId).emit('draw-pencil', message)
   })
 
