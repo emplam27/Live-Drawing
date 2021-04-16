@@ -1,7 +1,11 @@
 import { RoomInfo, RoomUsers } from '../../../interfaces/socket-interfaces';
-import { Layer } from '../../../interfaces/draw-components-interfaces';
+import {
+  CanvasCtxTable,
+  Layer,
+} from '../../../interfaces/draw-components-interfaces';
 
-export interface HostModifiedModeBadgeComponentProps {
+export interface HostCopyImageButtonComponentProps {
+  canvasCtxTable: CanvasCtxTable;
   isModifiedMode: boolean;
   layers: Layer[];
   roomInfo: RoomInfo;

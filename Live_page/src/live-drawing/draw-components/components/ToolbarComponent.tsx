@@ -4,7 +4,6 @@ import ColorPaletteComponent from '../draw-toolbar-components/components/ColorPa
 import EraseSizeComponent from '../draw-toolbar-components/components/EraseSizeComponent';
 import LineSizeComponent from '../draw-toolbar-components/components/LineSizeComponent';
 import ToolSelectComponent from '../draw-toolbar-components/components/ToolSelectComponent';
-
 import { ToolbarComponentProps } from '../interfaces/toolbar-interfaces';
 
 function ToolbarComponent(props: ToolbarComponentProps) {

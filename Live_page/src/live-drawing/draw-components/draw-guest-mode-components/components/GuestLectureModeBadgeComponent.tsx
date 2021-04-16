@@ -14,13 +14,14 @@ function GuestLectureModeBadgeComponent(
   }
 
   return (
-    <>
+    <div
+      className={`
+        ${props.badgeContainerStyle}
+        ${props.displayHidden ? 'hidden' : ''}
+      `}
+    >
       {props.topLayer?.canvasId === props.roomInfo.roomHostId ? (
-        <div
-          className={`${props.badgeStyle} ${
-            props.displayHidden ? 'hidden' : ''
-          }`}
-        >
+        <div className={props.badgeStyle}>
           <div className={'flex items-end px-8'}>
             <span className={'font-bold text-3xl'}>
               {props.topLayer?.username}
@@ -29,11 +30,7 @@ function GuestLectureModeBadgeComponent(
           </div>
         </div>
       ) : (
-        <div
-          className={`${props.badgeStyle} ${
-            props.displayHidden ? 'hidden' : ''
-          }`}
-        >
+        <div className={props.badgeStyle}>
           <div className={'flex items-end px-8'}>
             <span className={'font-bold text-3xl'}>
               {props.topLayer?.username}
@@ -48,7 +45,7 @@ function GuestLectureModeBadgeComponent(
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

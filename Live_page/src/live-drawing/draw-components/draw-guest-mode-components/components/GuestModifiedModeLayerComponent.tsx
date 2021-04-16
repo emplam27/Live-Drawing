@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 
-import DrawableCanvasComponent from '../../components/DrawableCanvasComponent';
-// import UndrawableCanvasComponent from '../../components/UndrawableCanvasComponent';
-
+// import DrawableCanvasComponent from '../../components/DrawableCanvasComponent';
+import { UndrawableCanvasComponent } from '../../components/UndrawableCanvasComponent';
 import { GuestModifiedModeLayerComponentProps } from '../interfaces/guest-modified-mode-layer-interfaces';
-
 import { copyImageToModifiedCanvasForGuestMode } from '../../functions/modified-mode-functions';
 
 function GuestModifiedModeLayerComponent(
@@ -17,8 +15,8 @@ function GuestModifiedModeLayerComponent(
   }, [props.copyModifiedCanvasSignal]);
 
   return (
-    <div className={`${props.displayHidden ? 'hidden' : ''}`}>
-      <DrawableCanvasComponent
+    <div className={props.displayHidden ? 'hidden' : ''}>
+      {/* <DrawableCanvasComponent
         activeTool={props.activeTool}
         canvasCtxTable={props.canvasCtxTable}
         color={props.color}
@@ -28,11 +26,16 @@ function GuestModifiedModeLayerComponent(
         socket={props.socket}
         canvasId={`modified-${props.roomInfo.userId}`}
         displayHidden={false}
-      />
-      {/* <UndrawableCanvasComponent
+        setHidden={props.setHidden}
+        setPosition={props.setPosition}
+      /> */}
+      <UndrawableCanvasComponent
         canvasId={`modified-${props.roomInfo.userId}`}
         displayHidden={false}
-      /> */}
+        canvasCtxTable={props.canvasCtxTable}
+        socket={props.socket}
+        roomInfo={props.roomInfo}
+      />
     </div>
   );
 }

@@ -11,6 +11,7 @@ export interface GuestModeComponentProps {
   copyModifiedCanvasSignal: number | null;
   cursorWidth: number;
   eraserWidth: number;
+  isCompareMode: boolean;
   isLectureStarted: boolean;
   isModifiedMode: boolean;
   layers: Layer[];
@@ -27,10 +28,18 @@ export interface GuestModeComponentProps {
   >;
   setCursorWidth: React.Dispatch<React.SetStateAction<number>>;
   setEraserWidth: React.Dispatch<React.SetStateAction<number>>;
+  setIsCompareMode: React.Dispatch<React.SetStateAction<boolean>>;
   setIsLectureStarted: React.Dispatch<React.SetStateAction<boolean>>;
   setIsModifiedMode: React.Dispatch<React.SetStateAction<boolean>>;
   setLineWidth: React.Dispatch<React.SetStateAction<number>>;
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   layerContainerGridStyle: string;
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>;
+  setPosition: React.Dispatch<
+    React.SetStateAction<{
+      x: number;
+      y: number;
+    }>
+  >;
 }

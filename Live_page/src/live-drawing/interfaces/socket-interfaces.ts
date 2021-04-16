@@ -12,6 +12,7 @@ export interface ResponseData {
 }
 
 export interface UserInfo {
+  agoraId: number | null;
   username: string;
   userId: string;
   userImage: string;

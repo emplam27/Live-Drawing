@@ -68,19 +68,30 @@ export function draw(
   if (!canvasCtx) return;
   canvasCtx.lineCap = 'round';
   canvasCtx.lineJoin = 'round';
-  canvasCtx.beginPath();
-  canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
+  if (data.count % 2 === 0) {
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(data.lastPoint.x, data.lastPoint.y);
+  }
   const midPoint = midPointBtw(data.lastPoint, data.currentPoint);
-  canvasCtx.quadraticCurveTo(
-    midPoint.x,
-    midPoint.y,
-    data.currentPoint.x,
-    data.currentPoint.y,
-  );
+  if (data.count % 2 === 1)
+    canvasCtx.quadraticCurveTo(
+      data.lastPoint.x,
+      data.lastPoint.y,
+      // midPoint.x,
+      // midPoint.y,
+      data.currentPoint.x,
+      data.currentPoint.y,
+    );
+  else {
+    canvasCtx.lineTo(midPoint.x, midPoint.y);
+  }
   canvasCtx.strokeStyle = data.color;
   canvasCtx.lineWidth = data.lineWidth;
-  canvasCtx.stroke();
-  canvasCtx.closePath();
+  if (data.count % 2 === 1) {
+    // canvasCtx.lineTo(data.currentPoint.x, data.currentPoint.y);
+    canvasCtx.stroke();
+    canvasCtx.closePath();
+  }
 }
 
 export function erase(

@@ -49,6 +49,27 @@ export function copyImageToModifiedCanvasForGuestMode(
   modifiedCanvasCtx.drawImage(userCanvas as HTMLCanvasElement, 0, 0);
 }
 
+export function copyImageToCompareCanvasForGuestMode(roomInfo: RoomInfo) {
+  const modifiedCanvas: HTMLElement | null = document.getElementById(
+    `modified-${roomInfo.userId}`,
+  );
+  const compareCanvas: HTMLElement | null = document.getElementById(
+    `compare-${roomInfo.userId}`,
+  );
+  if (!modifiedCanvas || !compareCanvas) return;
+  const compareCanvasCtx: CanvasRenderingContext2D | null = (compareCanvas as HTMLCanvasElement).getContext(
+    '2d',
+  );
+  if (!compareCanvasCtx) return;
+  compareCanvasCtx.clearRect(
+    0,
+    0,
+    (window.innerWidth - 60) * 0.5,
+    window.innerHeight,
+  );
+  compareCanvasCtx.drawImage(modifiedCanvas as HTMLCanvasElement, 0, 0);
+}
+
 export function sendModifiedModeMessage(
   event: string,
   roomUsers: RoomUsers,
