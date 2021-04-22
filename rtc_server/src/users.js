@@ -28,7 +28,7 @@ const addUser = ({
     roomTitle,
     agoraId,
   }
-  console.log('users', user)
+  // console.log('users', user)
   users.push(user)
   return user
 }

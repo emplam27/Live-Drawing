@@ -43,11 +43,13 @@ export interface DrawData {
   canvasId: string;
   currentPoint: Point;
   color: string;
+  count: number;
   lastPoint: Point;
   lineWidth: number;
 }
 
 export interface StartData {
+  event: string;
   point: Point;
   canvasId: string;
 }
@@ -60,9 +62,11 @@ export interface EraseData {
 }
 
 export interface EndData {
+  event: string;
   canvasId: string;
   point: Point;
   isMoved: boolean;
+  activeTool: string;
 }
 
 export interface CanvasCtxTable {

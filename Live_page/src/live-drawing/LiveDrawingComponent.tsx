@@ -196,11 +196,16 @@ function LiveDrawingComponent() {
           _handleRoomUsersChange(message);
         });
 
+        socketIo.on('already-start', () => {
+          setIsLectureStarted(true);
+        });
+
         socketIo.on('lecture-start', () => {
           setIsLectureStarted(true);
+          // console.log('강의시작', MySwal, Swal);
           MySwal.fire({
             title: `${res.data.roomTitle}수업이 시작되었습니다`,
-            text: '2초 뒤어 수업이 시작됩니다.',
+            text: '2초 뒤에 수업이 시작됩니다.',
             icon: 'success',
             showConfirmButton: false,
             timer: 2000,
@@ -210,20 +215,18 @@ function LiveDrawingComponent() {
         });
 
         socketIo.on('lecture-close', () => {
-          console.log('????????????????????????');
           MySwal.fire({
             title: '라이브가 종료되었습니다.',
             text: '홈 화면으로 이동합니다.',
             icon: 'warning',
             confirmButtonColor: '#3085d6',
-            confirmButtonText: '  이동',
+            confirmButtonText: '이동',
             allowOutsideClick: false,
           }).then((result) => {
             if (result.isConfirmed) {
               window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`;
             }
           });
-          console.log('????????????????????????');
         });
 
         socketIo.on('connect', () => {
@@ -240,14 +243,14 @@ function LiveDrawingComponent() {
             (window.location.href = `${process.env.REACT_APP_HOMEPAGE_URL}`),
         ),
       );
-    window.addEventListener('beforeunload', (e: Event) => {
-      e.preventDefault();
-      axios.post(
-        `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
-        { userId: roomInfo.userId },
-        { headers: headers },
-      );
-    });
+    // window.addEventListener('beforeunload', (e: Event) => {
+    //   e.preventDefault();
+    //   axios.post(
+    //     `${process.env.REACT_APP_API_URL}/${roomId}/disconnect`,
+    //     { userId: roomInfo.userId },
+    //     { headers: headers },
+    //   );
+    // });
   }, []);
 
   return (

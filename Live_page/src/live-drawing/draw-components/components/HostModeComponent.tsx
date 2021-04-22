@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PeersLayerComponent from './PeersLayerComponent';
-import LectureStartComponent from '../draw-lecture-start-components/components/LectureStartComponent';
+import { LectureStartComponent } from '../draw-lecture-start-components/components/LectureStartComponent';
 import HostLectureModeBadgeComponent from '../draw-host-mode-components/components/HostLectureModeBadgeComponent';
 import HostModifiedModeBadgeComponent from '../draw-host-mode-components/components/HostModifiedModeBadgeComponent';
 import HostCopyImageButtonComponent from '../draw-host-mode-components/components/HostCopyImageButtonComponent';
@@ -10,7 +10,8 @@ import HostModifiedModeLayerComponent from '../draw-host-mode-components/compone
 import { HostModeComponentProps } from '../interfaces/host-mode-interfaces';
 
 function HostModeComponent(props: HostModeComponentProps) {
-  const badgeContainerStyle = 'absolute flex justify-center top-0 w-full';
+  const badgeContainerStyle =
+    'absolute flex justify-center top-0 w-full bg-gray-200';
   const badgeStyle =
     'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-20';
   const buttonStyle =
@@ -20,7 +21,7 @@ function HostModeComponent(props: HostModeComponentProps) {
     <div className={props.layerContainerGridStyle}>
       <div
         id='undrawable-canvas'
-        className='cols-start-1 cols-end-2 relative flex justify-center items-center overflow-hidden bg-gray-200'
+        className='cols-start-1 cols-end-2 relative flex justify-center items-center overflow-hidden'
       >
         {!props.isLectureStarted ? (
           <LectureStartComponent
@@ -83,7 +84,7 @@ function HostModeComponent(props: HostModeComponentProps) {
       </div>
       <div
         id='drawable-canvas'
-        className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden bg-gray-200'
+        className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden'
       >
         <HostCopyImageButtonComponent
           canvasCtxTable={props.canvasCtxTable}
