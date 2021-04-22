@@ -8,31 +8,41 @@
 
 [1. 방구석 화방?](#1-방구석-화방)
 
-&nbsp;&nbsp;&nbsp;&nbsp;[1) 주제 선정 배경](#1-주제-선정-배경)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1) 주제 선정 배경](#1-주제-선정-배경)
 
-&nbsp;&nbsp;&nbsp;&nbsp;[2) TamTamLens 서비스 흐름도]()
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2) 서비스 정의](#2-서비스-정의)
 
-[2. TamTamLens?](https://github.com/emplam27/Live-Drawing/blob/README/README.md#2-TamTamLens)
+[2. 시스템 구조도](#2-시스템-구조도)
 
- [1) 추진 배경](https://github.com/emplam27/Live-Drawing/blob/README/README.md#1-추진-배경)
+[3. 주요 기능](#3-주요-기능)
 
- [2) TamTamLens 서비스 흐름도](https://github.com/emplam27/Live-Drawing/blob/README/README.md#2-TamTamLens-서비스-흐름도)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[1) 메인 페이지](#1-메인-페이지)
 
-[3. 주요기능](https://github.com/emplam27/Live-Drawing/blob/README/README.md#3-주요기능)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[2) 피드백](#2-피드백)
 
- [1) 서비스 소개 페이지](https://github.com/emplam27/Live-Drawing/blob/README/README.md#1-서비스-소개-페이지)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3) 선생님 모드](#3-🧑‍🏫-선생님-모드 )
 
- [2) 로그인](https://github.com/emplam27/Live-Drawing/blob/README/README.md#2-로그인)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) 강의 생성](#1-강의-생성)
 
- [3) 메인페이지](https://github.com/emplam27/Live-Drawing/blob/README/README.md#3-메인페이지)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 강의 시작 및 진행](#2-강의-시작-및-진행)
 
- [4) 채널페이지](https://github.com/emplam27/Live-Drawing/blob/README/README.md#4-채널페이지)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(3) 학생 그림 확인](#3-학생-그림-확인)
 
- [5) 동영상 재생 페이지](https://github.com/emplam27/Live-Drawing/blob/README/README.md#5-동영상-재생-페이지)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(4) 첨삭 모드](#4-첨삭-모드)
 
- [6) 내 기업 페이지](https://github.com/emplam27/Live-Drawing/blob/README/README.md#6-내-기업-페이지)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(5) 그 외 강의 도구](#5-그-외-강의-도구)
 
- [7) 마이페이지](https://github.com/emplam27/Live-Drawing/blob/README/7-마이페이지)
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(6) 강의 종료](#6-강의-종료)
+
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[4) 학생 모드](#4-🧑‍💻-학생-모드 )
+
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(1) 강의 입장](#1-강의-입장)
+
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(2) 강의 수강](#2-강의-수강)
+
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(3) 첨삭모드](#3-첨삭모드)
+
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[(4) 강의 종료](#4-강의-종료)
 
 <br/>
 
@@ -63,7 +73,7 @@
 
 <br/>
 
-[⬆️ 목차로](https://github.com/emplam27/Live-Drawing/blob/README/README.md#Table-of-Contents)
+[⬆️ 목차로](#Table-of-Contents)
 
 <br/>
 
@@ -77,7 +87,7 @@
 
 <br/>
 
-[⬆️ 목차로](https://github.com/emplam27/Live-Drawing/blob/README/README.md#Table-of-Contents)
+[⬆️ 목차로](#Table-of-Contents)
 
 <br/>
 
@@ -85,7 +95,7 @@
 
 <br/>
 
-## 3. 주요기능
+## 3. 주요 기능
 
 ### 1) 메인 페이지
 
@@ -104,7 +114,7 @@
 
 <br/>
 
-[⬆️ 목차로](https://github.com/emplam27/Live-Drawing/blob/README/README.md#Table-of-Contents)
+[⬆️ 목차로](#Table-of-Contents)
 
 <br/>
 
@@ -112,41 +122,45 @@
 
 <br/>
 
-## 🧑‍🏫 선생님 모드 
+## 3) 🧑‍🏫 선생님 모드 
 
-### 1) 강의 생성
+> 강의를 생성하여 학생들에게 수업을 진행할 수 있습니다.
 
-* 개설하고자 하는 강의 제목과 입장 코드를 입력 하고 "강의 시작" 버튼을 누르면 강의 공간으로 이동됩니다.  
+<br/>
+
+#### (1) 강의 생성
+
+- 개설하고자 하는 강의 제목과 입장 코드를 입력 하고 "강의 시작" 버튼을 누르면 강의 공간으로 이동됩니다.  
 
 ![주요기능-선생님-방생성](README.assets/주요기능-선생님-방생성.gif)
 
 <br/>
 
-### 2) 강의 시작 및 진행
+#### (2) 강의 시작 및 진행
 
-* 강의 진행 방법을 확인 후 "수업시작" 버튼을 누르면 강의 모드로 전환됩니다.  
+- 강의 진행 방법을 확인 후 "수업시작" 버튼을 누르면 강의 모드로 전환됩니다.  
 
 ![주요기능-선생님-그림그리기](README.assets/주요기능-선생님-그림그리기.gif)
 
 <br/>
 
-### 3) 학생 그림 확인
+#### (3) 학생 그림 확인
 
-* 학생들이 그린 그림들을 확인할 수 있습니다. 
+- 학생들이 그린 그림들을 확인할 수 있습니다. 
 
 ![주요기능-선생님-다른학생그림확인](README.assets/주요기능-선생님-다른학생그림확인.gif)
 
 <br/>
 
-### 4) 첨삭 모드 
+#### (4) 첨삭 모드 
 
-* 학생이 그린 그림을 복사 후 첨삭을 진행할 수 있습니다.
+- 학생이 그린 그림을 복사 후 첨삭을 진행할 수 있습니다.
 
 ![주요기능-선생님-그림첨삭](README.assets/주요기능-선생님-그림첨삭.gif)
 
 <br/>
 
-### 5) 그 외 강의 도구 
+#### (5) 그 외 강의 도구 
 
 * 학생들과 채팅을 통해 소통할 수 있습니다.  
 * 음성 대화 및 마이크, 스피커 on/off 기능을 지원합니다. 
@@ -158,7 +172,7 @@
 
 <br/>
 
-### 6) 강의 종료 
+#### (6) 강의 종료 
 
 * 수업을 마치면, 라이브 강의를 종료할 수 있습니다. 
 
@@ -166,7 +180,7 @@
 
 <br/>
 
-[⬆️ 목차로](https://github.com/emplam27/Live-Drawing/blob/README/README.md#Table-of-Contents)
+[⬆️ 목차로](#Table-of-Contents)
 
 <br/>
 
@@ -174,9 +188,13 @@
 
 <br/>
 
-## 🧑‍💻 학생 모드
+## 4) 🧑‍💻 학생 모드
 
-### 1) 강의 입장
+> 학생으로 수업에 참여하여 선생님에게 그림을 배울 수 있습니다.
+
+<br/>
+
+#### (1) 강의 입장
 
 * 개설 된 라이브 강의 중 수강하고 싶은 강의를 선택합니다.
 * 입장 코드가 일치할 경우, 해당 강의에 입장할 수 있습니다.
@@ -186,7 +204,7 @@
 
 <br/>
 
-### 2) 강의 수강
+#### (2) 강의 수강
 
 * 강의가 시작되면, 왼쪽의 선생님의 그림을 보며 드로잉을 공부합니다.   
 
@@ -194,11 +212,13 @@
 
 <br/>
 
-### 3) 첨삭모드
+#### (3) 첨삭모드
 
 * 선생님께서 내 그림을 복사하여 첨삭하는 과정을 확인할 수 있습니다. 
 
 ![주요기능-학생-첨삭받기](README.assets/주요기능-학생-첨삭받기.gif)
+
+<br/>
 
 * 첨삭이 종료되면, 첨삭 전/후의 그림을 비교해볼 수 있습니다. 
 
@@ -206,7 +226,7 @@
 
 <br/>
 
-### 4) 강의 종료
+#### (4) 강의 종료
 
 * 강의가 종료되면, 강의 종료 메시지와 함께 메인페이지로 이동됩니다.  
 
@@ -214,7 +234,7 @@
 
 <br/>
 
-[⬆️ 목차로](https://github.com/emplam27/Live-Drawing/blob/README/README.md#Table-of-Contents)
+[⬆️ 목차로](#Table-of-Contents)
 
 <br/>
 
