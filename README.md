@@ -6,7 +6,11 @@
 
 ## Table of Contents
 
-[1. 역할 및 기술](https://github.com/emplam27/Live-Drawing/blob/README/README.md#1-역할-및-기술)
+[1. 방구석 화방?](#1-방구석-화방)
+
+ 	[1) 주제 선정 배경](#1-주제-선정-배경)
+
+ 	[2) TamTamLens 서비스 흐름도](
 
 [2. TamTamLens?](https://github.com/emplam27/Live-Drawing/blob/README/README.md#2-TamTamLens)
 
@@ -36,21 +40,7 @@
 
 <br/>
 
-## 시스템 구조도
-
-[![슬라이드14](https://github.com/emplam27/Live-Drawing/raw/README/README.assets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%A1%B0%EB%8F%84.JPG)](https://github.com/emplam27/Live-Drawing/blob/README/README.assets/시스템구조도.JPG)
-
-<br/>
-
-[⬆️ 목차로](https://github.com/emplam27/Live-Drawing/blob/README/README.md#Table-of-Contents)
-
-<br/>
-
-<br/>
-
-<br/>
-
-## 2. 방구석 화방?
+## 1. 방구석 화방?
 
 - 방구석 화방은 라이브 드로잉 강의 공간을 제공하는 서비스 입니다.
 - 드로잉 강의를 위한 실시간 드로잉, 첨삭 기능 외 다양한 기능들을 제공합니다.
@@ -69,7 +59,21 @@
 
 ### 2) 서비스 정의
 
-![서비스 정의](README.assets/서비스 정의.png)
+![서비스 정의](README.assets/서비스정의.png)
+
+<br/>
+
+[⬆️ 목차로](https://github.com/emplam27/Live-Drawing/blob/README/README.md#Table-of-Contents)
+
+<br/>
+
+<br/>
+
+<br/>
+
+## 2. 시스템 구조도
+
+[![슬라이드14](https://github.com/emplam27/Live-Drawing/raw/README/README.assets/%EC%8B%9C%EC%8A%A4%ED%85%9C%EA%B5%AC%EC%A1%B0%EB%8F%84.JPG)](https://github.com/emplam27/Live-Drawing/blob/README/README.assets/시스템구조도.JPG)
 
 <br/>
 
