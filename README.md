@@ -8,9 +8,9 @@
 
 [1. 방구석 화방?](#1-방구석-화방)
 
- 	[1) 주제 선정 배경](#1-주제-선정-배경)
+  [1) 주제 선정 배경](#1-주제-선정-배경)
 
- 	[2) TamTamLens 서비스 흐름도](
+  [2) TamTamLens 서비스 흐름도]()
 
 [2. TamTamLens?](https://github.com/emplam27/Live-Drawing/blob/README/README.md#2-TamTamLens)
 
