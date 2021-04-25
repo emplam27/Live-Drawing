@@ -1,4 +1,4 @@
-# Live Drawing
+# 방구석 화방 - 라이브 드로잉 강의 공간
 
 서비스 주소: https://hwabang.site/
 
