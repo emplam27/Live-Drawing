@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class Room {
     @Id
     @GeneratedValue()
-    @Column(name = "roomPk") //Camel 표기법이 db에서 반영안되는듯;
+    @Column(name = "roomPk")
     private Long roomPk;
 
     @Column(name = "roomTitle")
@@ -32,13 +32,8 @@ public class Room {
     @Column(name = "roomHostId")
     private String roomHostId;
 
-    @Column(name = "isRoomActive")
-    private boolean isRoomActive;
-
-//    @OneToMany(mappedBy = "room")
-//    private List<Member> members = new ArrayList<>();
-
-//    public Room() {}
+    @Column(name = "roomActive")
+    private boolean roomActive;
 
     public Room(String roomTitle, String roomId, String roomHostId) {
         this.roomTitle = roomTitle;
@@ -47,13 +42,13 @@ public class Room {
 //        this.members = members;
     }
 
-    public Room(String roomTitle, String roomId, String roomPassword, String roomHostId, String roomHostname, boolean isRoomActive) {
+    public Room(String roomTitle, String roomId, String roomPassword, String roomHostId, String roomHostname, boolean roomActive) {
         this.roomTitle = roomTitle;
         this.roomId = roomId;
         this.roomPassword = roomPassword;
         this.roomHostId = roomHostId;
         this.roomHostname = roomHostname;
-        this.isRoomActive = isRoomActive;
+        this.roomActive = roomActive;
     }
 
     public void add(User user) {
@@ -61,9 +56,4 @@ public class Room {
 //        getMembers().add(member);
     }
 
-    //    public Room(String room_title, String room_key, List<Member> members) {
-//        this.room_title = room_title;
-//        this.room_key = room_key;
-//        this.members = members;
-//    }
 }

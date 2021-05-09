@@ -32,10 +32,6 @@ public class JwtCreateController {
 
     @PostMapping("/api/oauth/jwt/google")
     public Map<String, Object> jwtCreate(@RequestBody Map<String, Object> data) {
-//        Logger logger = LoggerFactory.getLogger(JwtCreateController.class.getSimpleName());
-        logger.info("--------------------------------------시작---------------------------------------");
-        logger.info("jwtCreate 실행됨");
-        logger.info(""+data.get("profileObj"));
         OAuth2UserInfo googleUser =
                 new GoogleUserInfo((Map<String, Object>)data.get("profileObj"));
 
@@ -43,7 +39,7 @@ public class JwtCreateController {
                 userRepository.findByUsername(googleUser.getName());
 
         if(userEntity == null) {
-            System.out.println("OAuth 로그인이 최초입니다.");
+            logger.info("OAuth 로그인이 최초입니다.");
             User userRequest = User.builder()
 //                    .username(googleUser.getProvider()+"_"+googleUser.getProviderId())
                     .username(googleUser.getName())
@@ -73,7 +69,6 @@ public class JwtCreateController {
         Map<String, Object> json = new HashMap<String, Object>();
         json.put(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX+jwtToken);
         json.put("userId", userEntity.getUserId());
-        logger.info("--------------------------------------끝---------------------------------------");
         return json;
     }
 }
