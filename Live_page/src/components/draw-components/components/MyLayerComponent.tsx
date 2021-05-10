@@ -1,4 +1,3 @@
-import { Color } from 'fabric/fabric-impl';
 import React from 'react';
 
 import { MyLayerComponentProps } from '../interfaces/my-layer-interfaces';
@@ -8,30 +7,23 @@ function MyLayerComponent(props: MyLayerComponentProps) {
   return (
     <>
       {props.roomInfo.userId ? (
-        <>
-          <div className={props.badgeContainerStyle}>
-            <div className={props.badgeStyle}>
-              <div className={'flex items-end px-8'}>
-                <span className={'text-2xl'}>내 그림</span>
-              </div>
-            </div>
-          </div>
-          <DrawableCanvasComponent
-            activeTool={props.activeTool}
-            canvasCtxTable={props.canvasCtxTable}
-            color={props.color}
-            eraserWidth={props.eraserWidth}
-            lineWidth={props.lineWidth}
-            roomInfo={props.roomInfo}
-            socket={props.socket}
-            canvasId={props.roomInfo.userId}
-            displayHidden={props.displayHidden}
-          />
-        </>
+        <DrawableCanvasComponent
+          activeTool={props.activeTool}
+          canvasCtxTable={props.canvasCtxTable}
+          color={props.color}
+          eraserWidth={props.eraserWidth}
+          lineWidth={props.lineWidth}
+          roomInfo={props.roomInfo}
+          socket={props.socket}
+          canvasId={props.roomInfo.userId}
+          displayHidden={props.displayHidden}
+          setHidden={props.setHidden}
+          setPosition={props.setPosition}
+        />
       ) : (
-        <div className='flex flex-col justify-center h-full'>
+        <div className='flex flex-col justify-center items-center w-full h-full bg-gray-200'>
           <svg
-            className='animate-spin'
+            className='animate-spin mb-2'
             viewBox='0 0 24 24'
             width='72'
             height='72'

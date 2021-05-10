@@ -35,4 +35,11 @@ export interface GuestModeComponentProps {
   setModifiedLayers: React.Dispatch<React.SetStateAction<Layer[]>>;
   setTopLayer: React.Dispatch<React.SetStateAction<Layer | null>>;
   layerContainerGridStyle: string;
+  setHidden: React.Dispatch<React.SetStateAction<boolean>>;
+  setPosition: React.Dispatch<
+    React.SetStateAction<{
+      x: number;
+      y: number;
+    }>
+  >;
 }

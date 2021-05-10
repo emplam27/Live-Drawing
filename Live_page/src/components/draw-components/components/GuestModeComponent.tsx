@@ -1,7 +1,7 @@
 import React from 'react';
 
 import PeersLayerComponent from './PeersLayerComponent';
-import LectureStartComponent from '../draw-lecture-start-components/components/LectureStartComponent';
+import { LectureStartComponent } from '../draw-lecture-start-components/components/LectureStartComponent';
 import MyLayerComponent from './MyLayerComponent';
 import GuestLectureModeBadgeComponent from '../draw-guest-mode-components/components/GuestLectureModeBadgeComponent';
 import GuestModifiedModeBadgeComponent from '../draw-guest-mode-components/components/GuestModifiedModeBadgeComponent';
@@ -11,7 +11,8 @@ import { GuestModeComponentProps } from '../interfaces/guest-mode-interfaces';
 import GuestCompareModeLayerComponent from '../draw-guest-mode-components/components/GuestCompareModeLayerComponent';
 
 function GuestModeComponent(props: GuestModeComponentProps) {
-  const badgeContainerStyle = 'absolute flex justify-center top-0 w-full';
+  const badgeContainerStyle =
+    'absolute flex justify-center top-0 w-full bg-gray-200';
   const badgeStyle =
     'absolute flex justify-center items-center h-20 p-3 mt-10 rounded-full bg-white shadow-md z-20';
   const buttonStyle =
@@ -22,7 +23,7 @@ function GuestModeComponent(props: GuestModeComponentProps) {
       <div className={props.layerContainerGridStyle}>
         <div
           id='undrawable-canvas'
-          className='cols-start-1 cols-end-2 relative flex justify-center items-center overflow-hidden bg-gray-200'
+          className='cols-start-1 cols-end-2 relative flex justify-center items-center overflow-hidden'
         >
           {!props.isLectureStarted ? (
             <LectureStartComponent
@@ -79,21 +80,25 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             socket={props.socket}
             topLayer={props.topLayer}
             displayHidden={!props.isModifiedMode}
+            setHidden={props.setHidden}
+            setPosition={props.setPosition}
           />
         </div>
         <div
           id='drawable-canvas'
-          className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden bg-gray-200'
+          className='cols-start-2 cols-end-3 relative flex justify-center items-center overflow-hidden'
         >
-          <GuestCompareModeBadgeComponent
-            isCompareMode={props.isCompareMode}
-            roomInfo={props.roomInfo}
-            setIsCompareMode={props.setIsCompareMode}
-            badgeContainerStyle={badgeContainerStyle}
-            badgeStyle={badgeStyle}
-            buttonStyle={buttonStyle}
-            displayHidden={props.isModifiedMode}
-          />
+          {props.isLectureStarted ? (
+            <GuestCompareModeBadgeComponent
+              isCompareMode={props.isCompareMode}
+              roomInfo={props.roomInfo}
+              setIsCompareMode={props.setIsCompareMode}
+              badgeContainerStyle={badgeContainerStyle}
+              badgeStyle={badgeStyle}
+              buttonStyle={buttonStyle}
+              displayHidden={props.isModifiedMode}
+            />
+          ) : null}
           <MyLayerComponent
             activeTool={props.activeTool}
             canvasCtxTable={props.canvasCtxTable}
@@ -106,6 +111,8 @@ function GuestModeComponent(props: GuestModeComponentProps) {
             badgeContainerStyle={badgeContainerStyle}
             badgeStyle={badgeStyle}
             displayHidden={props.isCompareMode}
+            setHidden={props.setHidden}
+            setPosition={props.setPosition}
           />
           <GuestCompareModeLayerComponent
             canvasCtxTable={props.canvasCtxTable}

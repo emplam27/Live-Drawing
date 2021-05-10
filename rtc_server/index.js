@@ -27,6 +27,8 @@ app.use('/static', express.static(`${__dirname}/static`))
 app.use(express.json())
 app.use(cors())
 
+const lectureStatusDict = {}
+
 io.on('connection', socket => {
   console.log('소켓 연결 완료')
 
@@ -47,7 +49,10 @@ io.on('connection', socket => {
       socket.emit('error', user)
       return
     }
+
     socket.join(user.roomId)
+
+    if (!lectureStatusDict[user.roomId]) lectureStatusDict[user.roomId] = false
 
     socket.emit('chat-message', {
       user: 'admin',
@@ -64,11 +69,13 @@ io.on('connection', socket => {
       roomId: user.roomId,
       users: getUsersInRoom(user.roomId),
     })
+
+    if (lectureStatusDict[user.roomId] === true) socket.emit('already-start')
   })
 
   //@ History Event
   socket.on('require-history', () => {
-    console.log('require-history')
+    // console.log('require-history')
     const user = getUser(socket.id)
     if (!user || !historyData.dict[user.roomId]) return
     for (let i = 0; i < historyData.dict[user.roomId].length; i++) {
@@ -78,6 +85,12 @@ io.on('connection', socket => {
           break
         case 'eraser':
           socket.emit('draw-eraser', historyData.dict[user.roomId][i])
+          break
+        case 'start':
+          socket.emit('draw-start', historyData.dict[user.roomId][i])
+          break
+        case 'end':
+          socket.emit('draw-end', historyData.dict[user.roomId][i])
           break
       }
     }
@@ -90,7 +103,7 @@ io.on('connection', socket => {
   })
 
   socket.on('send-agora-id', (uid, targetUserId, roomId) => {
-    console.log('send-agora-id')
+    // console.log('send-agora-id')
     addUID(uid, targetUserId)
     io.to(roomId).emit('update-room-users', {
       roomId: roomId,
@@ -113,6 +126,13 @@ io.on('connection', socket => {
     socket.broadcast.to(user.roomId).emit('draw-start', message)
   })
 
+  socket.on('draw-end', message => {
+    const user = getUser(socket.id)
+    if (!user) return
+    historyData.push(user.roomId, message)
+    socket.broadcast.to(user.roomId).emit('draw-end', message)
+  })
+
   socket.on('draw-pencil', message => {
     const user = getUser(socket.id)
     if (!user) return
@@ -127,16 +147,23 @@ io.on('connection', socket => {
     socket.broadcast.to(user.roomId).emit('draw-eraser', message)
   })
 
+  //@ Host Move Event
+  socket.on('host-move', message => {
+    const user = getUser(socket.id)
+    if (!user) return
+    socket.broadcast.to(user.roomId).emit('host-move', message)
+  })
+
   //@ Layer Events
   socket.on('create-layer', message => {
-    console.log('create-layer')
+    // console.log('create-layer')
     const user = getUser(socket.id)
     if (!user) return
     socket.broadcast.to(user.roomId).emit('create-layer', message)
   })
 
   socket.on('delete-layer', message => {
-    console.log('delete-layer')
+    // console.log('delete-layer')
     const user = getUser(socket.id)
     if (!user) return
     socket.broadcast.to(user.roomId).emit('delete-layer', message)
@@ -144,39 +171,40 @@ io.on('connection', socket => {
 
   //@ Modified Mode Events
   socket.on('modified-mode-start', message => {
-    console.log('modified-mode-start')
+    // console.log('modified-mode-start')
     const user = getUser(socket.id)
     if (!user) return
-    console.log('modified-mode-start')
+    // console.log('modified-mode-start')
     socket.broadcast.to(user.roomId).emit('modified-mode-start', message)
   })
 
   socket.on('modified-mode-end', message => {
-    console.log('modified-mode-end')
+    // console.log('modified-mode-end')
     const user = getUser(socket.id)
     if (!user) return
-    console.log('modified-mode-end')
+    // console.log('modified-mode-end')
     socket.broadcast.to(user.roomId).emit('modified-mode-end', message)
   })
 
   socket.on('modified-mode-copy-canvas', message => {
-    console.log('modified-mode-copy-canvas')
+    // console.log('modified-mode-copy-canvas')
     const user = getUser(socket.id)
     if (!user) return
-    console.log('modified-mode-copy-canvas')
+    // console.log('modified-mode-copy-canvas')
     socket.broadcast.to(user.roomId).emit('modified-mode-copy-canvas', message)
   })
 
   //@ Lecture Start & Close Event
   socket.on('lecture-start', () => {
-    console.log('lecture-start')
+    // console.log('lecture-start')
     const user = getUser(socket.id)
     if (!user) return
+    lectureStatusDict[user.roomId] = true
     socket.broadcast.to(user.roomId).emit('lecture-start')
   })
 
   socket.on('lecture-close', () => {
-    console.log('lecture-close')
+    // console.log('lecture-close')
     const user = getUser(socket.id)
     if (!user) return
     socket.broadcast.to(user.roomId).emit('lecture-close')
@@ -184,10 +212,9 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     const user = removeUser(socket.id)
-    console.log(user)
+    // console.log(user)
     console.log('유저의 연결이 끊어졌습니다.')
     if (user) {
-      console.log('im in!')
       const headers = {
         'Content-Type': 'application/json',
         Authorization: user.token,

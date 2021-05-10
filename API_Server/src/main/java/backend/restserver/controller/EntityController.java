@@ -52,7 +52,9 @@ public class EntityController {
 //        return selectRoomList;
         //!! 여기 나중에 쓸수도있음 (3/31)
         List<Room> newRoomList = roomRepo.findAll();
-
+//        for(int i = 0; i < newRoomList.size(); i++) {
+//            logger.info("new RoomList is : " + newRoomList.get(i));
+//        }
 
         List<Map<String, Object>> giveRoomList = new ArrayList<Map<String, Object>>();
 //        Map<String, Object> map = new HashMap<String, Object>();
@@ -61,20 +63,25 @@ public class EntityController {
 
         for (int i = 0 ; i < newRoomList.size(); i++) {
 //            RoomList.add("1234");
+            List<User> newUserList = userRepo.findByRoom_RoomPk(newRoomList.get(i).getRoomPk());
+//            if(newUserList.size() == 0 && !newRoomList.get(i).isRoomActive()) {
+//                roomRepo.delete(newRoomList.get(i));
+//            }
 
             if(newRoomList.get(i).isRoomActive()){
-                List<User> newUserList = userRepo.findByRoom_RoomPk(newRoomList.get(i).getRoomPk());
-                User userHost = userRepo.findByUserId(newRoomList.get(i).getRoomHostId());
+                if(newUserList.size() != 0) {
+                    User userHost = userRepo.findByUserId(newRoomList.get(i).getRoomHostId());
 
 
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("roomHostname", newRoomList.get(i).getRoomHostname());
-                map.put("roomId", newRoomList.get(i).getRoomId());
-                map.put("roomTitle", newRoomList.get(i).getRoomTitle());
-                //? 프로필 사진, 방마다 유저몇명인지 반환
-                map.put("userImage", userHost.getProfileImage());
-                map.put("userNumber", newUserList.size());
-                giveRoomList.add(map);
+                    Map<String, Object> map = new HashMap<String, Object>();
+                    map.put("roomHostname", newRoomList.get(i).getRoomHostname());
+                    map.put("roomId", newRoomList.get(i).getRoomId());
+                    map.put("roomTitle", newRoomList.get(i).getRoomTitle());
+                    //? 프로필 사진, 방마다 유저몇명인지 반환
+                    map.put("userImage", userHost.getProfileImage());
+                    map.put("userNumber", newUserList.size());
+                    giveRoomList.add(map);
+                }
             } else {}
         }
         return giveRoomList;
@@ -94,7 +101,7 @@ public class EntityController {
 
     @PostMapping("/api/room/entrance")
     public String joinRoom(@RequestBody Map<String, Object> roomJson) {
-        String roomId = roomJson.get("roomId").toString(); //! 여기서 roomId를 못받아서 116번쨰에서 null exception이 뜸 왜?????????????????????????????
+        String roomId = roomJson.get("roomId").toString();
         logger.info("[joinRoom] : roomId is " + roomId);
         String userId = roomJson.get("userId").toString();
         String password = roomJson.get("password").toString();
@@ -113,7 +120,7 @@ public class EntityController {
             logger.info("잘못된 접근 입니다.");
             return "fail";
         } else {
-            if(!target.get(0).getRoomPassword().equals(password)) { //! 얘가왜 null이 뜨지?
+            if(!target.get(0).getRoomPassword().equals(password)) {
                 System.out.println("패스워드가 틀립니다. 다시 입력해 주세요.");
                 return "password fail"; //! 이거도 사실 faulure면 status가 200이아니니까 에러? 같은 다른 방식으로 리스폰스줘야함
             } else if(user.getRoom() != null) {
@@ -170,40 +177,21 @@ public class EntityController {
         return json;
     }
 
-//    @GetMapping("/api/live/{roomId}/users")
-//    @ResponseBody
-//    public List<Map<String, Object>> roomInfoUsers(@PathVariable("roomId") String roomId) {
-//        List<Room> newRoom = roomRepo.findByRoomId(roomId);
-//        Long roomPk = newRoom.get(0).getRoomPk();
-//
-//        List<User> newUserList = userRepo.findByRoom_RoomPk(roomPk);
-//        List<Map<String, Object>> UserList = new ArrayList<>();
-//
-//        for (int i = 0; i < newUserList.size(); i++) {
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("username", newUserList.get(i).getUsername());
-//            map.put("userId", newUserList.get(i).getUserId());
-//            map.put("userImage", newUserList.get(i).getProfileImage());
-//            UserList.add(map);
-//        }
-//        return UserList;
-//    }
 
 
     @PostMapping("api/live/{roomId}/inactive")
     public void isInactiveRoom(@PathVariable String roomId,
                                @RequestBody String newRoomId) {
-        System.out.println("------------> newRoomId: " + newRoomId);
-//        System.out.println("------------> roomId: " + roomId);
+
         List<Room> newRoom = roomRepo.findByRoomId(roomId);
         newRoom.get(0).setRoomActive(false);
+
         roomRepo.save(newRoom.get(0));
     }
 
     @PostMapping("/api/{roomId}/disconnect")
     public void deleteUser(@PathVariable("roomId") String roomId,
                            @RequestBody Map<String, Object> req) {
-//        System.out.println("-------------------->여기로 들어오는가?!?!?!?");
         String userId = req.get("userId").toString();
         logger.info("user id is : " + userId);
         User user = userRepo.findByUserId(userId);
@@ -211,18 +199,17 @@ public class EntityController {
         userRepo.save(user);
 
         List<Room> newRoom = roomRepo.findByRoomId(roomId);
-        if(!newRoom.isEmpty()) {
-            return;
-        }
+
         Long roomPk = newRoom.get(0).getRoomPk();
 
 
         List<User> newUserList = userRepo.findByRoom_RoomPk(roomPk);
 
 
-        logger.info("현재 방에 존재하는 사람의 수 : " + newUserList.size());
         if ( newUserList.size() == 0) {
-            roomRepo.delete(newRoom.get(0));
+            if(!newRoom.isEmpty()) {
+                roomRepo.delete(newRoom.get(0));
+            }
         }
     }
 

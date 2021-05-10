@@ -1,6 +1,6 @@
 import React from 'react';
 
-import UndrawableCanvasComponent from './UndrawableCanvasComponent';
+import { UndrawableCanvasComponent } from './UndrawableCanvasComponent';
 // import DrawableCanvasComponent from './DrawableCanvasComponent';
 import { Layer } from '../../interfaces/draw-components-interfaces';
 import { PeersLayerComponentProps } from '../interfaces/peers-layer-interfaces';
@@ -23,7 +23,9 @@ function PeersLayerComponent(props: PeersLayerComponentProps) {
             //   roomInfo={props.roomInfo}
             //   socket={props.socket}
             //   canvasId={layer.canvasId}
-            //   displayHidden={peersCanvasDisplayHidden}
+            //   displayHidden={displayHidden}
+            //   setHidden={props.setHidden}
+            //   setPosition={props.setPosition}
             // />
             <UndrawableCanvasComponent
               canvasId={layer.canvasId}

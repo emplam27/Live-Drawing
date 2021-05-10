@@ -35,9 +35,6 @@ public class IndexController {
     public @ResponseBody
     Map<String, Object> logincheck(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         if (principalDetails != null) {
-            System.out.println(principalDetails.getUser().getUsername());
-//            return "redirect:http://localhost:3000";
-            System.out.println("여기 맞아?" + principalDetails.getAttributes());
             return principalDetails.getAttributes();
         } else {
             return null;
@@ -56,8 +53,6 @@ public class IndexController {
         //! 여기서 아이디 중복체크 검사해야함
         
         userRepo.save(user);
-//        return "redirect:http://localhost:3000/user/login-form";
-//        return "redirect: https://jungleroad.shop/user/login-form";
         return "success";
     }
 }

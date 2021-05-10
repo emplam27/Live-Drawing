@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  onMouseEnter,
+  onMouseLeave,
+  onMouseMove,
+  onTouchMove,
+} from '../functions/cursor-functions';
 
 import {
   mouseDown,
@@ -7,8 +13,8 @@ import {
   touchStart,
   touchMove,
   touchEnd,
-  HostMouseMove,
-  HostTouchMove,
+  // HostMouseMove,
+  // HostTouchMove,
 } from '../functions/mouse-event-functions';
 import { DrawableCanvasComponentProps } from '../interfaces/drawable-canvas-component';
 
@@ -21,9 +27,14 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
       height={1080}
       onMouseDown={(e) => mouseDown(e, props.canvasCtxTable, props.socket)}
       onTouchStart={(e) => touchStart(e, props.canvasCtxTable, props.socket)}
-      onMouseUp={(e) => mouseUp(e, props.canvasCtxTable, props.socket)}
-      onTouchEnd={(e) => touchEnd(e, props.canvasCtxTable, props.socket)}
+      onMouseUp={(e) =>
+        mouseUp(e, props.canvasCtxTable, props.socket, props.activeTool)
+      }
+      onTouchEnd={(e) =>
+        touchEnd(e, props.canvasCtxTable, props.socket, props.activeTool)
+      }
       onMouseMove={(e) => {
+        onMouseMove(e, props.setPosition);
         mouseMove(
           e,
           props.activeTool,
@@ -31,7 +42,6 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.color,
           props.eraserWidth,
           props.lineWidth,
-          props.roomInfo,
           props.socket,
         );
         // HostMouseMove(
@@ -42,6 +52,7 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
         // );
       }}
       onTouchMove={(e) => {
+        onTouchMove(e, props.setPosition);
         touchMove(
           e,
           props.activeTool,
@@ -49,16 +60,17 @@ function DrawableCanvasComponent(props: DrawableCanvasComponentProps) {
           props.color,
           props.eraserWidth,
           props.lineWidth,
-          props.roomInfo,
           props.socket,
         );
-        HostTouchMove(
-          e,
-          props.canvasCtxTable,
-          props.socket,
-          props.roomInfo.roomHostId,
-        );
+        // HostTouchMove(
+        //   e,
+        //   props.canvasCtxTable,
+        //   props.socket,
+        //   props.roomInfo.roomHostId,
+        // );
       }}
+      onMouseEnter={() => onMouseEnter(props.setHidden)}
+      onMouseLeave={() => onMouseLeave(props.setHidden)}
     />
   );
 }

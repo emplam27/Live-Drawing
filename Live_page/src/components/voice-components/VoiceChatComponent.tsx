@@ -6,12 +6,9 @@ import AgoraRTC, {
   UID,
 } from 'agora-rtc-sdk-ng';
 import { VoiceChatComponentProps } from './interfaces/voice-chat-interface';
-
 const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
-
 // AgoraRTC.disableLogUpload();
 AgoraRTC.setLogLevel(4);
-
 function VoiceChatComponent(props: VoiceChatComponentProps) {
   const [speaker, setSpeaker] = useState<boolean | null>(null);
   const [mic, setMic] = useState<boolean | null>(null);
@@ -21,22 +18,18 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
   const [toggleMicSignal, setToggleMicSignal] = useState<boolean | null>(null);
   const [uid, setUid] = useState<UID | number>(0);
   const [uidSignal, setUidSignal] = useState<boolean | null>(null);
-
   const [
     localAudioTrack,
     setLocalAudiotrack,
   ] = useState<ILocalAudioTrack | null>(null);
-
   const { roomId } = useParams<{ roomId: string }>();
   const [newUserSignal, setNewUserSignal] = useState<number | null>(null);
-
   const [client] = useState<IAgoraRTCClient | null>(
     AgoraRTC.createClient({
       codec: 'vp8',
       mode: 'rtc',
     }),
   );
-
   useEffect(() => {
     if (uidSignal === true) {
       if (props.socket) {
@@ -44,7 +37,6 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       }
     }
   }, [uidSignal]);
-
   useEffect(() => {
     if (!localAudioTrack || !client) return;
     client.publish([localAudioTrack]);
@@ -54,7 +46,7 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       volumes.forEach((volume) => {
         // 볼륨이 일정 수준 이상이라면
         // console.log(`${index} UID ${volume.uid} Level ${volume.level}`);
-        if (volume.level >= 2) {
+        if (volume.level >= 6) {
           makeSoundUsers.push(volume.uid);
         }
       });
@@ -69,15 +61,12 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       }
     });
   }, [localAudioTrack]);
-
   function toggleSpeaker(speaker: boolean | null) {
     setToggleSpeakerSignal(speaker);
   }
-
   function toggleMic(mic: boolean | null) {
     setToggleMicSignal(mic);
   }
-
   /* 스피커 on/off */
   useEffect(() => {
     if (!client || toggleSpeakerSignal === null) return;
@@ -85,7 +74,6 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       client.remoteUsers.forEach((user) => {
         user.audioTrack?.setVolume(0);
       });
-
       setSpeaker(false);
     } else if (toggleSpeakerSignal === true) {
       client.remoteUsers.forEach((user) => {
@@ -94,7 +82,6 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       setSpeaker(true);
     }
   }, [toggleSpeakerSignal]);
-
   /* 마이크 조절 */
   useEffect(() => {
     if (!client || !localAudioTrack) return;
@@ -106,7 +93,6 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       setMic(true);
     }
   }, [toggleMicSignal]);
-
   useEffect(() => {
     if (!client || !localAudioTrack || newUserSignal === null) return;
     client.remoteUsers.forEach((remoteUser) => {
@@ -115,11 +101,9 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
     });
     if (mic === false) client.unpublish([localAudioTrack]);
   }, [newUserSignal]);
-
   // userEffect(() => {
   //   props.setSpeakingUsers();
   // }, [speakUserSiganl]);
-
   useEffect(() => {
     const appID = `${process.env.REACT_APP_AGORA_APP_ID}`;
     const appCertificate = `${process.env.REACT_APP_AGORA_APP_CER}`;
@@ -138,7 +122,6 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
       role,
       privilegeExpiredTs,
     ); // 0 uid
-
     async function startBasicCall() {
       if (!client) return;
       setLocalAudiotrack(await AgoraRTC.createMicrophoneAudioTrack());
@@ -151,14 +134,12 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
     }
     startBasicCall();
   }, []);
-
   const speakerButtonStyle =
     'flex justify-center items-center w-20 h-16 mt-2 mb-2 hover:text-blue-500 cursor-pointer';
   const micButtonStyle =
     'flex justify-center items-center w-20 h-16 mb-2 hover:text-blue-500 cursor-pointer';
   const activeStyle = 'text-blue-500 hover:text-blue-600';
   const inactiveStyle = 'text-gray-500 hover:text-blue-600';
-
   return (
     <>
       <div>
@@ -177,7 +158,6 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
             <i className={'ri-2x ri-volume-mute-line'}></i>
           </div>
         )}
-
         {mic ? (
           <div
             className={`${micButtonStyle} ${activeStyle}`}
@@ -197,5 +177,4 @@ function VoiceChatComponent(props: VoiceChatComponentProps) {
     </>
   );
 }
-
 export default VoiceChatComponent;

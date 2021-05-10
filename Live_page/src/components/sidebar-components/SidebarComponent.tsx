@@ -49,8 +49,8 @@ function SidebarComponent(props: SidebarComponentProps) {
         setSpeakingUsers={setSpeakingUsers}
       />
       <div className='flex-grow'></div>
-      <button onClick={changeModifiedMode}>첨삭모드전환</button>
-      <button onClick={startLecture}>강의시작</button>
+      {/* <button onClick={changeModifiedMode}>첨삭모드전환</button>
+      <button onClick={startLecture}>강의시작</button> */}
       <div className='flex-grow'></div>
       <VoiceChatComponent
         roomInfo={props.roomInfo}
@@ -61,7 +61,7 @@ function SidebarComponent(props: SidebarComponentProps) {
       />
       <ChatComponent roomInfo={props.roomInfo} socket={props.socket} />
       <ClearCanvasComponent layers={props.layers} roomInfo={props.roomInfo} />
-      <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} />
+      {/* <SaveImageComponent layers={props.layers} roomInfo={props.roomInfo} /> */}
       <CloseButtonComponent roomInfo={props.roomInfo} socket={props.socket} />
     </div>
   );

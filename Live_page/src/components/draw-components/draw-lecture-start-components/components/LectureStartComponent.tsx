@@ -1,15 +1,29 @@
 import React from 'react';
-
 import { LectureStartComponentProps } from '../interfaces/lecture-start-interfaces';
+// import loadingImg from '../../../../jungle.svg';
+import { ReactComponent as Icon } from './jungle.svg';
 
-function LectureStartComponent(props: LectureStartComponentProps) {
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+export function LectureStartComponent(props: LectureStartComponentProps) {
+  const MySwal = withReactContent(Swal);
+
   function lectureStart() {
     if (!props.socket) return;
     console.log('class started');
     props.setIsLectureStarted(true);
     props.socket.emit('lecture-start');
+    MySwal.fire({
+      title: `${props.roomInfo.roomTitle}수업이 시작되었습니다`,
+      text: '2초 뒤어 수업이 시작됩니다.',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+      allowOutsideClick: false,
+    });
   }
-
   return (
     <div className='absolute z-40 flex flex-col justify-center w-full h-full bg-gray-100'>
       {props.roomInfo.roomHostId === props.roomInfo.userId ? (
@@ -22,13 +36,13 @@ function LectureStartComponent(props: LectureStartComponentProps) {
             </p>
           </div>
           <div className='pt-12 text-3xl'>
-            <p className='pb-5'>
-              <span className='text-blue-400 font-bold'>첨삭모드</span>은
-              첨삭모드에 대한 설명 기재
+            <p className='pb-12'>
+              <span className='text-blue-400 font-bold'>첨삭모드</span>로 학생의
+              그림을 첨삭할 수 있습니다.
             </p>
             <p className='pb-5 text-3xl'>
               <span className='text-blue-400 font-bold'> 음성, 채팅 </span>
-              기능을 사용하시면 좋습니다.
+              기능을 통해 학생과 소통할 수 있습니다.
             </p>
           </div>
           <div className='mt-52 mb-20'>
@@ -61,15 +75,10 @@ function LectureStartComponent(props: LectureStartComponentProps) {
             </p>
           </div>
           <div className='mt-60 self-center'>
-            <img
-              className='animate-bounce w-60 h-60 mx-auto text-gray-900'
-              src='../../jungle.svg'
-            />
+            <Icon className='animate-bounce w-60 h-60 mx-auto text-gray-900'></Icon>
           </div>
         </div>
       )}
     </div>
   );
 }
-
-export default LectureStartComponent;

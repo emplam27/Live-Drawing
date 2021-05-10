@@ -60,7 +60,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.4",
-    "@types/brainhubeu__react-carousel": "^2.0.2",
     "@types/classnames": "^2.2.11",
     "@types/jest": "^26.0.22",
     "@types/react": "^17.0.3",
