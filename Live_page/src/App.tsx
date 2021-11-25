@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Switch, Route } from 'react-router-dom';
-import LiveDrawingComponent from './components/LiveDrawingComponent';
+import LiveDrawingComponent from './live-drawing/LiveDrawingComponent';
 import './App.css';
 
 function App() {
